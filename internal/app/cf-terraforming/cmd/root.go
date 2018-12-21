@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile, zoneName, apiEmail, apiKey string
+var cfgFile, zoneName, apiEmail, apiKey, accountID string
 var api *cloudflare.API
 var zones []cloudflare.Zone
 
@@ -45,6 +45,9 @@ func init() {
 
 	// Zone selection
 	rootCmd.PersistentFlags().StringVarP(&zoneName, "zone", "z", "", "Limit the export to a single zone (name or ID)")
+
+	// Account
+	rootCmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for import")
 
 	// API credentials
 	rootCmd.PersistentFlags().StringVar(&apiEmail, "email", "", "API Email address associated with your account")

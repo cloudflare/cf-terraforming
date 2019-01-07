@@ -5,11 +5,39 @@ import (
 	"log"
 	"os"
 
+	"text/template"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 	"github.com/spf13/cobra"
 	terraformProviderCloudflare "github.com/terraform-providers/terraform-provider-cloudflare/cloudflare"
 )
+
+const zoneTemplate = `
+resource "cloudflare_zone" "{{replace .Zone.Name "." "_"}}" {
+    zone = "{{.Zone.Name}}"
+{{ if .Zone.Paused}}    paused = "true"{{end}}
+    plan = "{{.ZonePlan}}"
+}
+
+`
+
+// we enforce the use of the Cloudflare API 'legacy_id' field until the mapping of plan is fixed in cloudflare-go
+const (
+	planIDFree       = "free"
+	planIDPro        = "pro"
+	planIDBusiness   = "business"
+	planIDEnterprise = "enterprise"
+)
+
+// we keep a private map and we will have a function to check and validate the descriptive name from the RatePlan API with the legacy_id
+var idForName = map[string]string{
+	"Free Website":       planIDFree,
+	"Pro Website":        planIDPro,
+	"Business Website":   planIDBusiness,
+	"Enterprise Website": planIDEnterprise,
+}
 
 func init() {
 	rootCmd.AddCommand(zoneCmd)
@@ -52,6 +80,20 @@ var zoneCmd = &cobra.Command{
 			log.Printf("name servers %#v", resourceData.Get("name_servers"))
 
 			// log.Printf("access policy %#v", cloudflare.AccessPolicy)
+
+			zoneParse(zone)
 		}
 	},
+}
+
+func zoneParse(zone cloudflare.Zone) {
+	tmpl := template.Must(template.New("zone").Funcs(templateFuncMap).Parse(zoneTemplate))
+	tmpl.Execute(os.Stdout,
+		struct {
+			Zone     cloudflare.Zone
+			ZonePlan string
+		}{
+			Zone:     zone,
+			ZonePlan: idForName[zone.Plan.Name],
+		})
 }

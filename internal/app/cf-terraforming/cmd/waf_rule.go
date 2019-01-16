@@ -5,8 +5,19 @@ import (
 	"log"
 	"os"
 
+	"text/template"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
 )
+
+const wafRuleTemplate = `
+resource "cloudflare_waf_rule" "{{replace .Zone.Name "." "_"}}_{{.Rule.ID}}" {
+    rule_id = "{{.Rule.ID}}"
+    zone = "{{.Zone.Name}}"
+    mode = "{{.Rule.Mode}}"
+}
+`
 
 func init() {
 	rootCmd.AddCommand(wafRuleCmd)
@@ -43,9 +54,26 @@ var wafRuleCmd = &cobra.Command{
 
 				for _, rule := range wafRules {
 					log.Printf("[DEBUG] Processing WAF Rule: ID %s, Description %s", rule.ID, rule.Description)
-					// TODO: Process
+					wafRuleParse(zone, wafPackage, rule)
 				}
 			}
 		}
 	},
+}
+
+func wafRuleParse(zone cloudflare.Zone, wafPackage cloudflare.WAFPackage, wafRule cloudflare.WAFRule) {
+	tmpl := template.Must(template.New("waf_rule").Funcs(templateFuncMap).Parse(wafRuleTemplate))
+	if err := tmpl.Execute(os.Stdout,
+		struct {
+			Zone    cloudflare.Zone
+			Package cloudflare.WAFPackage
+			Rule    cloudflare.WAFRule
+		}{
+			Zone:    zone,
+			Package: wafPackage,
+			Rule:    wafRule,
+		}); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }

@@ -4,10 +4,20 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
 )
+
+const customPagesTemplate = `
+resource "cloudflare_custom_pages" "{{.CustomPage.ID}}" {
+  zone_id = "{{.Zone.ID}}"
+  type    = "{{.CustomPage.ID}}"
+  {{if .CustomPage.URL}}url     = "{{.CustomPage.URL}}"{{end}}
+  state   = "{{.CustomPage.State}}"
+}
+`
 
 func init() {
 	rootCmd.AddCommand(customPagesCmd)
@@ -31,8 +41,20 @@ var customPagesCmd = &cobra.Command{
 
 			for _, r := range customPages {
 				log.Printf("[DEBUG] Custom Page ID %s, URL %s, Description %s\n", r.ID, r.URL, r.Description)
-				// TODO: Process
+				customPagesParse(zone, r)
 			}
 		}
 	},
+}
+
+func customPagesParse(zone cloudflare.Zone, customPage cloudflare.CustomPage) {
+	tmpl := template.Must(template.New("custom_pages").Funcs(templateFuncMap).Parse(customPagesTemplate))
+	tmpl.Execute(os.Stdout,
+		struct {
+			Zone       cloudflare.Zone
+			CustomPage cloudflare.CustomPage
+		}{
+			Zone:       zone,
+			CustomPage: customPage,
+		})
 }

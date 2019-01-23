@@ -4,10 +4,21 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
 )
+
+const filterTemplate = `
+resource "cloudflare_filter" "{{.Filter.ID}}" {
+  zone_id = "{{.Zone.ID}}"
+  description = "{{.Filter.Description}}"
+  expression = "{{js .Filter.Expression}}"
+  {{if .Filter.Paused}}paused = {{.Filter.Paused}}{{end}}
+  {{if .Filter.Ref}}ref = "{{.Filter.Ref}}"{{end}}
+}
+`
 
 func init() {
 	rootCmd.AddCommand(filterCmd)
@@ -34,8 +45,20 @@ var filterCmd = &cobra.Command{
 
 			for _, r := range filters {
 				log.Printf("[DEBUG] Filter ID %s, Expression %s, Description %s\n", r.ID, r.Expression, r.Description)
-				// TODO: Process
+				filterParse(zone, r)
 			}
 		}
 	},
+}
+
+func filterParse(zone cloudflare.Zone, filter cloudflare.Filter) {
+	tmpl := template.Must(template.New("filter").Funcs(templateFuncMap).Parse(filterTemplate))
+	tmpl.Execute(os.Stdout,
+		struct {
+			Zone   cloudflare.Zone
+			Filter cloudflare.Filter
+		}{
+			Zone:   zone,
+			Filter: filter,
+		})
 }

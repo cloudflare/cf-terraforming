@@ -4,10 +4,23 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
 )
+
+const accessRuleTemplate = `
+resource "cloudflare_access_rule" "{{.AccessRule.ID}}" {
+  notes = "{{.AccessRule.Notes}}"
+  mode = "{{.AccessRule.Mode}}"
+  configuration {
+    target = "{{.AccessRule.Configuration.Target}}"
+    value = "{{.AccessRule.Configuration.Value}}"
+  }
+  {{if eq .AccessRule.Scope.Type "zone"}}zone_id = "{{.Zone.ID}}"{{end}}
+}
+`
 
 func init() {
 	rootCmd.AddCommand(accessRuleCmd)
@@ -35,10 +48,22 @@ var accessRuleCmd = &cobra.Command{
 				totalPages = accessRules.TotalPages
 
 				for _, r := range accessRules.Result {
-					log.Printf("[DEBUG] Filter ID %s, Notes %s, Configuration %s, Scope %s\n", r.ID, r.Notes, r.Configuration, r.Scope)
-					// TODO: Process
+					log.Printf("[DEBUG] Access Rule ID %s, Notes %s, Configuration %s, Scope %s\n", r.ID, r.Notes, r.Configuration, r.Scope)
+					accessRuleParse(zone, r)
 				}
 			}
 		}
 	},
+}
+
+func accessRuleParse(zone cloudflare.Zone, accessRule cloudflare.AccessRule) {
+	tmpl := template.Must(template.New("access_rule").Funcs(templateFuncMap).Parse(accessRuleTemplate))
+	tmpl.Execute(os.Stdout,
+		struct {
+			Zone       cloudflare.Zone
+			AccessRule cloudflare.AccessRule
+		}{
+			Zone:       zone,
+			AccessRule: accessRule,
+		})
 }

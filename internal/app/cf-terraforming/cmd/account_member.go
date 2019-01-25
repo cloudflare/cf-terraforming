@@ -5,9 +5,18 @@ import (
 	"log"
 	"os"
 
+	"text/template"
+
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
 )
+
+const accountMemberTemplate = `
+resource "cloudflare_account_member" "{{.Member.ID}}" {
+    email_address = "{{.Member.User.Email}}"
+    role_ids = [{{range .Member.Roles}}"{{.ID}}",{{end}}]
+}
+`
 
 func init() {
 	rootCmd.AddCommand(accountMemberCmd)
@@ -36,8 +45,17 @@ var accountMemberCmd = &cobra.Command{
 
 		for _, r := range accountMembers {
 			log.Printf("[DEBUG] Account Member ID %s, Status %s, User.ID %s, User.Email %s\n", r.ID, r.Status, r.User.ID, r.User.Email)
-			// TODO: Process
+			memberParse(r)
 		}
-
 	},
+}
+
+func memberParse(member cloudflare.AccountMember) {
+	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(accountMemberTemplate))
+	tmpl.Execute(os.Stdout,
+		struct {
+			Member cloudflare.AccountMember
+		}{
+			Member: member,
+		})
 }

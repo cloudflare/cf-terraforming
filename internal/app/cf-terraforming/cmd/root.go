@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-var cfgFile, zoneName, apiEmail, apiKey, accountID string
+var cfgFile, zoneName, apiEmail, apiKey, accountID, orgID string
 var api *cloudflare.API
 var zones []cloudflare.Zone
 
@@ -53,8 +53,12 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&apiEmail, "email", "", "API Email address associated with your account")
 	rootCmd.PersistentFlags().StringVar(&apiKey, "key", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile")
 
+	// [Optional] Organization ID
+	rootCmd.PersistentFlags().StringVar(&orgID, "organization", "", "Use specific organization ID for import")
+
 	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
 	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
+	viper.BindPFlag("organization", rootCmd.PersistentFlags().Lookup("organization"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -98,8 +102,20 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 	log.Printf("[DEBUG] API Email = %s\n", apiEmail)
 
 	log.Print("[DEBUG] Initializing cloudflare-go")
+
+	var options cloudflare.Option
+	if orgID = viper.GetString("organization"); orgID != "" {
+		log.Printf("[DEBUG] configuring Cloudflare API with organization ID: %s\n", orgID)
+		// Organization ID was passed, use it to configure the API
+		options = cloudflare.UsingOrganization(orgID)
+	}
+
 	var err error
-	api, err = cloudflare.New(apiKey, apiEmail)
+	if options != nil {
+		api, err = cloudflare.New(apiKey, apiEmail, options)
+	} else {
+		api, err = cloudflare.New(apiKey, apiEmail)
+	}
 	if err != nil {
 		log.Fatal(err)
 	}

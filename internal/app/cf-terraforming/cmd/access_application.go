@@ -6,9 +6,20 @@ import (
 	"os"
 	"strings"
 
+	"text/template"
+
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
 )
+
+const accessApplicationTemplate = `
+resource "cloudflare_access_application" "{{.App.ID}}" {
+ 	zone_id = "{{.Zone.ID}}"
+ 	name = "{{.App.Name}}"
+ 	domain = "{{.App.Domain}}"
+ 	session_duration = "{{.App.SessionDuration}}"
+}
+`
 
 func init() {
 	rootCmd.AddCommand(accessApplicationCmd)
@@ -38,11 +49,23 @@ var accessApplicationCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			for _, r := range accessApplications {
-				log.Printf("[DEBUG] Access Application ID %s, Name %s, Domain %s\n", r.ID, r.Name, r.Domain)
-				// TODO: Process
+			for _, app := range accessApplications {
+
+				accessApplicationParse(app, zone)
 			}
 
 		}
 	},
+}
+
+func accessApplicationParse(app cloudflare.AccessApplication, zone cloudflare.Zone) {
+	tmpl := template.Must(template.New("access_rule").Funcs(templateFuncMap).Parse(accessApplicationTemplate))
+	tmpl.Execute(os.Stdout,
+		struct {
+			App  cloudflare.AccessApplication
+			Zone cloudflare.Zone
+		}{
+			App:  app,
+			Zone: zone,
+		})
 }

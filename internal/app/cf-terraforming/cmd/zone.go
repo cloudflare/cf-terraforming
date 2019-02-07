@@ -8,10 +8,7 @@ import (
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/hashicorp/terraform/terraform"
 	"github.com/spf13/cobra"
-	terraformProviderCloudflare "github.com/terraform-providers/terraform-provider-cloudflare/cloudflare"
 )
 
 const zoneTemplate = `
@@ -49,19 +46,6 @@ var zoneCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Print("Importing zones' data")
 
-		provider := terraformProviderCloudflare.Provider()
-		resource := provider.(*schema.Provider).ResourcesMap["cloudflare_zone"]
-		providerSchema, err := provider.(*schema.Provider).GetSchema(&terraform.ProviderSchemaRequest{ResourceTypes: []string{"cloudflare_zone"}})
-		resourceSchema := resource.Schema
-
-		log.Printf("resourceSchema %#v", resourceSchema)
-
-		log.Printf("providerSchema %#v", providerSchema)
-		log.Printf("providerSchema err %#v", err)
-
-		log.Printf("resourceCloudflareZone: %#v", provider)
-		log.Printf("%#v", resource)
-
 		for _, zone := range zones {
 			zoneDetails, err := api.ZoneDetails(zone.ID)
 
@@ -71,15 +55,6 @@ var zoneCmd = &cobra.Command{
 			}
 
 			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zoneDetails.ID, zoneDetails.Name)
-			// TODO: Process
-
-			resourceData := schema.ResourceData{}
-			resourceData.SetId(zoneDetails.ID)
-			resource.Read(&resourceData, api)
-			log.Printf("resourceData %#v", &resourceData)
-			log.Printf("name servers %#v", resourceData.Get("name_servers"))
-
-			// log.Printf("access policy %#v", cloudflare.AccessPolicy)
 
 			zoneParse(zone)
 		}

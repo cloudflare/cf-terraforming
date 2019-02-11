@@ -44,7 +44,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cf-terraforming.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.cf-terraforming.yaml)")
 
 	// Zone selection
 	rootCmd.PersistentFlags().StringVarP(&zoneName, "zone", "z", "", "Limit the export to a single zone (name or ID)")
@@ -53,11 +53,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for import")
 
 	// API credentials
-	rootCmd.PersistentFlags().StringVar(&apiEmail, "email", "", "API Email address associated with your account")
-	rootCmd.PersistentFlags().StringVar(&apiKey, "key", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile")
+	rootCmd.PersistentFlags().StringVarP(&apiEmail, "email", "e", "", "API Email address associated with your account")
+	rootCmd.PersistentFlags().StringVarP(&apiKey, "key", "k", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile")
 
 	// [Optional] Organization ID
-	rootCmd.PersistentFlags().StringVar(&orgID, "organization", "", "Use specific organization ID for import")
+	rootCmd.PersistentFlags().StringVarP(&orgID, "organization", "o", "", "Use specific organization ID for import")
 
 	// Debug logging mode
 	rootCmd.PersistentFlags().StringVarP(&logLevel, "loglevel", "l", "", "Specify logging level")

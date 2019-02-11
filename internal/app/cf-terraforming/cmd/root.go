@@ -60,7 +60,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&orgID, "organization", "o", "", "Use specific organization ID for import")
 
 	// Debug logging mode
-	rootCmd.PersistentFlags().StringVarP(&logLevel, "loglevel", "l", "", "Specify logging level")
+	rootCmd.PersistentFlags().StringVarP(&logLevel, "loglevel", "l", "", "Specify logging level: (trace, debug, info, warn, error, fatal, panic)")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Specify verbose output (same as setting log level to debug)")
 
 	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))

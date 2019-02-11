@@ -7,11 +7,55 @@ cf-terraforming is a command line utility to facilitate terraforming your existi
 
 This tool is ideal if you already have Cloudflare resources defined but want to start managing them via Terraform, and don't want to spend the time to manually write the Terraform configuration to describe them.
 
+## Usage
+```
+Usage:
+  cf-terraforming [command]
+
+Available Commands:
+  access_application     Import Access Application data into Terraform
+  access_policy          Import Access Policy data into Terraform
+  access_rule            Import Access Rule data into Terraform
+  account_member         Import Account Member data into Terraform
+  custom_pages           Import Custom Pages data into Terraform
+  filter                 Import Filter data into Terraform
+  firewall_rule          Import Firewall Rule data into Terraform
+  help                   Help about any command
+  load_balancer          Import a load balancer into Terraform
+  load_balancer_pool     Import a load balancer pool into Terraform
+  page_rule              Import Page Rule data into Terraform
+  rate_limit             Import Rate Limit data into Terraform
+  record                 Import Record data into Terraform
+  spectrum_application   Import a spectrum application into Terraform
+  version                Print the version number of cf-terraforming
+  waf_rule               Import WAF Rule data into Terraform
+  worker_route           Import a worker route into Terraform
+  worker_script          Import a worker script into Terraform
+  zone                   Import zone data into Terraform
+  zone_lockdown          Import Zone Lockdown data into Terraform
+  zone_settings_override Import Zone Settings Override data into Terraform
+
+Flags:
+  -a, --account string        Use specific account ID for import
+  -c, --config string         config file (default is $HOME/.cf-terraforming.yaml)
+  -e, --email string          API Email address associated with your account
+  -h, --help                  help for cf-terraforming
+  -k, --key string            API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile
+  -l, --loglevel string       Specify logging level: (trace, debug, info, warn, error, fatal, panic)
+  -o, --organization string   Use specific organization ID for import
+  -v, --verbose               Specify verbose output (same as setting log level to debug)
+  -z, --zone string           Limit the export to a single zone (name or ID)
+
+Use "cf-terraforming [command] --help" for more information about a command.
+```
+
 ## Example
+
+**A note on storing your credentials securely:** We recommend that you store your Cloudflare credentials (API key, email, account ID, etc) as environment variables as demonstrated below.
 
 Running: 
 
-```go run cmd/cf-terraforming/main.go --email <your-cloudflare-account-email> --key <your-cloudflare-api-key> -a <your-cloudflare-account-id> spectrum_application```
+```go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY --account $CLOUDFLARE_ACCOUNT_ID spectrum_application```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform configuration representing the resource you requested:
 
@@ -45,13 +89,14 @@ This will fetch the cf-terraforming tool as well as its dependencies, updating t
 You can use ```go run``` to build and execute the binary in a single command like so: 
 
 ```
-go run cmd/cf-terraforming/main.go --email <your-cloudflare-account-email> --key <your-cloudflare-api-key> -z <your-cloudflare-zone> -a <your-cloudflare-account-id> <resource>
+go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY --zone example.com --account $CLOUDFLARE_ACCOUNT_ID <resource>
 ```
 where ```resource``` is one of the **supported resources**.
 
 ## Supported resources
 
 * [access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application.html)
+* [access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy.html)
 * [access_rule](https://www.terraform.io/docs/providers/cloudflare/r/access_rule.html)
 * [account_member](https://www.terraform.io/docs/providers/cloudflare/r/account_member.html)
 * [custom_pages](https://www.terraform.io/docs/providers/cloudflare/r/custom_pages.html)

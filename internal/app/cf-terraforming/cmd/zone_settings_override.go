@@ -1,14 +1,13 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -45,16 +44,20 @@ var zoneSettingsOverrideCmd = &cobra.Command{
 	Use:   "zone_settings_override",
 	Short: "Import Zone Settings Override data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Zone Settings data")
+		log.Debug("Importing zone settings data")
 
 		for _, zone := range zones {
 			// Fetch all settings for a zone
 			settingsResponse, err := api.ZoneSettings(zone.ID)
 
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
+
+			log.WithFields(logrus.Fields{
+				"Result": settingsResponse.Result,
+			}).Debug("Processing zone settings")
 
 			zoneSettingsOverrideParse(settingsResponse.Result, zone)
 		}

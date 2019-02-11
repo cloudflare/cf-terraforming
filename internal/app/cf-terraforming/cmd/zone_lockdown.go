@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -39,10 +39,13 @@ var zoneLockdownCmd = &cobra.Command{
 	Use:   "zone_lockdown",
 	Short: "Import Zone Lockdown data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Zone Lockdown data")
+		log.Debug("Importing Zone Lockdown data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			totalPages := 999
 
@@ -57,11 +60,15 @@ var zoneLockdownCmd = &cobra.Command{
 				totalPages = lockdowns.TotalPages
 
 				for _, r := range lockdowns.Result {
-					log.Printf("[DEBUG] Lockdown ID %s, URL %s\n", r.ID, r.URLs)
+
+					log.WithFields(logrus.Fields{
+						"ID":  r.ID,
+						"URL": r.URLs,
+					}).Debug("Processing lockdown")
+
 					zoneLockdownParse(zone, r)
 				}
 			}
-
 		}
 	},
 }

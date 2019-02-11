@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 
 	"text/template"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -31,17 +31,23 @@ var workerRouteCmd = &cobra.Command{
 	Use:   "worker_route",
 	Short: "Import a worker route into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
+		log.Debug("Importing worker route data")
 		// Loop through all zones in account and fetch routes for each zone
 		for _, zone := range zones {
 			workerRoutesResponse, err := api.ListWorkerRoutes(zone.ID)
 
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
 
 			if workerRoutesResponse.Success == true {
 				for _, route := range workerRoutesResponse.Routes {
+
+					log.WithFields(logrus.Fields{
+						"ID":      route.ID,
+						"Pattern": route.Pattern,
+					}).Debug("Processing woker route")
 					// worker_route is rendered differently for multi-script (enterprise) accounts
 					// and non-enterprise accounts
 					workerRouteParse(zone, route, api.OrganizationID != "")

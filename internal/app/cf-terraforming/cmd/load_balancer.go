@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 
 	"text/template"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -63,17 +63,31 @@ var loadBalancerCmd = &cobra.Command{
 	Use:   "load_balancer",
 	Short: "Import a load balancer into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
+		log.Debug("Importing Load Balancer data")
 		// Loop through all zones in account and fetch routes for each zone
 		for _, zone := range zones {
 			loadBalancers, err := api.ListLoadBalancers(zone.ID)
 
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			})
+
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
 
 			if len(loadBalancers) > 0 {
 				for _, lb := range loadBalancers {
+
+					log.WithFields(logrus.Fields{
+						"ID":           lb.ID,
+						"Description":  lb.Description,
+						"FallbackPool": lb.FallbackPool,
+						"DefaultPools": lb.DefaultPools,
+					}).Debug("Processing load balancer")
+
 					loadBalancerParse(lb, zone)
 				}
 			}

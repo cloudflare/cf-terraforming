@@ -1,14 +1,14 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
+
+	"github.com/sirupsen/logrus"
 )
 
 const accountMemberTemplate = `
@@ -26,10 +26,10 @@ var accountMemberCmd = &cobra.Command{
 	Use:   "account_member",
 	Short: "Import Account Member data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Account Member data")
+		log.Debug("Importing Account Member data")
 
 		if accountID == "" {
-			fmt.Println("'account' must be set.")
+			log.Fatal("'account' must be set.")
 			os.Exit(1)
 		}
 
@@ -39,12 +39,18 @@ var accountMemberCmd = &cobra.Command{
 		})
 
 		if err != nil {
-			fmt.Println(err)
+			log.Fatal(err)
 			os.Exit(1)
 		}
 
 		for _, r := range accountMembers {
-			log.Printf("[DEBUG] Account Member ID %s, Status %s, User.ID %s, User.Email %s\n", r.ID, r.Status, r.User.ID, r.User.Email)
+			log.WithFields(logrus.Fields{
+				"Account member ID": r.ID,
+				"Status":            r.Status,
+				"User ID":           r.User.ID,
+				"User email":        r.User.Email,
+			}).Debug("Processing account member")
+
 			memberParse(r)
 		}
 	},

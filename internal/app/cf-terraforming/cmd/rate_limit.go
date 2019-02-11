@@ -1,13 +1,12 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -30,12 +29,12 @@ resource "cloudflare_rate_limit" "{{replace .Zone.Name "." "_"}}_{{.RateLimit.ID
   action {
     mode = "{{.RateLimit.Action.Mode}}"
     timeout = {{.RateLimit.Action.Timeout}}
-	{{if .RateLimit.Action.Response}}
+    {{if .RateLimit.Action.Response}}
     response {
       content_type = "{{.RateLimit.Action.Response.ContentType}}"
       body = "{{js .RateLimit.Action.Response.Body}}"
     }
-	{{end}}
+    {{end}}
   }
   {{if .RateLimit.Correlate.By}}
   correlate {
@@ -58,10 +57,14 @@ var rateLimitCmd = &cobra.Command{
 	Use:   "rate_limit",
 	Short: "Import Rate Limit data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Rate Limit data")
+		log.Debug("Importing Rate Limit data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			totalPages := 999
 
@@ -72,18 +75,22 @@ var rateLimitCmd = &cobra.Command{
 				})
 
 				if err != nil {
-					fmt.Println(err)
+					log.Fatal(err)
 					os.Exit(1)
 				}
 
 				totalPages = resultInfo.TotalPages
 
 				for _, r := range rateLimits {
-					log.Printf("[DEBUG] Rate Limit ID %s, Description %s\n", r.ID, r.Description)
+
+					log.WithFields(logrus.Fields{
+						"ID":          r.ID,
+						"Description": r.Description,
+					}).Debug("Processing rate limit")
+
 					rateLimitParse(zone, r)
 				}
 			}
-
 		}
 	},
 }

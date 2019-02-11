@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -30,10 +30,14 @@ var firewallRuleCmd = &cobra.Command{
 	Use:   "firewall_rule",
 	Short: "Import Firewall Rule data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Firewall Rule data")
+		log.Debug("Importing Firewall Rule data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			firewallRules, err := api.FirewallRules(zone.ID, cloudflare.PaginationOptions{
 				Page:    1,
@@ -46,7 +50,12 @@ var firewallRuleCmd = &cobra.Command{
 			}
 
 			for _, r := range firewallRules {
-				log.Printf("[DEBUG] Firewall Rule ID %s, Description %s\n", r.ID, r.Description)
+
+				log.WithFields(logrus.Fields{
+					"ID":          r.ID,
+					"Description": r.Description,
+				}).Debug("Processing firewall rule")
+
 				firewallRuleParse(zone, r)
 			}
 		}

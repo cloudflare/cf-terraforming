@@ -1,13 +1,12 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -44,17 +43,20 @@ var zoneCmd = &cobra.Command{
 	Use:   "zone",
 	Short: "Import zone data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing zones' data")
+		log.Debug("Importing zone data")
 
 		for _, zone := range zones {
 			zoneDetails, err := api.ZoneDetails(zone.ID)
 
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
 
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zoneDetails.ID, zoneDetails.Name)
+			log.WithFields(logrus.Fields{
+				"ID":   zoneDetails.ID,
+				"Name": zoneDetails.Name,
+			}).Debug("Processing zone")
 
 			zoneParse(zone)
 		}

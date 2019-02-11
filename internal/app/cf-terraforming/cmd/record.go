@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -53,10 +53,14 @@ var recordCmd = &cobra.Command{
 	Use:   "record",
 	Short: "Import Record data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing DNS Record data")
+		log.Debug("Importing DNS Record data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			// Fetch all records for a zone
 			recs, err := api.DNSRecords(zone.ID, cloudflare.DNSRecord{})
@@ -66,7 +70,13 @@ var recordCmd = &cobra.Command{
 				os.Exit(1)
 			}
 			for _, r := range recs {
-				fmt.Printf("Record ID %s, Name %s, Type %s: %s\n", r.ID, r.Name, r.Type, r.Content)
+
+				log.WithFields(logrus.Fields{
+					"ID":      r.ID,
+					"Name":    r.Name,
+					"Type":    r.Type,
+					"Content": r.Content,
+				}).Debug("Processing record")
 
 				recordParse(zone, r)
 			}
@@ -88,7 +98,7 @@ func recordParse(zone cloudflare.Zone, record cloudflare.DNSRecord) {
 			IsValueTypeField: contains(dnsTypeValueFields, record.Type),
 			IsDataTypeField:  contains(dnsTypeDataFields, record.Type),
 		}); err != nil {
-		fmt.Println(err)
+		log.Fatal(err)
 		os.Exit(1)
 	}
 }

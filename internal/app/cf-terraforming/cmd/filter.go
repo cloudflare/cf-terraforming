@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -28,10 +27,14 @@ var filterCmd = &cobra.Command{
 	Use:   "filter",
 	Short: "Import Filter data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Filter data")
+		log.Debug("Importing Filter data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			filters, err := api.Filters(zone.ID, cloudflare.PaginationOptions{
 				Page:    1,
@@ -39,12 +42,18 @@ var filterCmd = &cobra.Command{
 			})
 
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
 
 			for _, r := range filters {
-				log.Printf("[DEBUG] Filter ID %s, Expression %s, Description %s\n", r.ID, r.Expression, r.Description)
+
+				log.WithFields(logrus.Fields{
+					"ID":          r.ID,
+					"Expression":  r.Expression,
+					"Description": r.Description,
+				})
+
 				filterParse(zone, r)
 			}
 		}

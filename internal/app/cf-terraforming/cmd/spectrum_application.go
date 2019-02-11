@@ -1,13 +1,14 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
+	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 
 	"text/template"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -47,19 +48,27 @@ var spectrumApplicationCmd = &cobra.Command{
 	Use:   "spectrum_application",
 	Short: "Import a spectrum application into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
+		log.Debug("Importing Spectrum application data")
 		// Loop through all zones in account and fetch routes for each zone
 		for _, zone := range zones {
 			spectrumApplications, err := api.SpectrumApplications(zone.ID)
 
 			if err != nil {
-				// FIXME: api.SpectrumApplications can return 403 errors in the case
-				// of permissions problems, for example, which will pollute tfstate
-				fmt.Println(err)
-				os.Exit(1)
+				if strings.Contains(err.Error(), "HTTP status 403") {
+					log.WithFields(logrus.Fields{
+						"ID": zone.ID,
+					}).Debug("Insufficient permissions for accessing zone")
+					continue
+				}
 			}
 
 			if len(spectrumApplications) > 0 {
 				for _, app := range spectrumApplications {
+
+					log.WithFields(logrus.Fields{
+						"ID": app.ID,
+					}).Debug("Processing spectrum app")
+
 					spectrumAppParse(app)
 				}
 			}

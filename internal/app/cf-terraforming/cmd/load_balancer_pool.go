@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 
 	"text/template"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -54,21 +54,26 @@ var loadBalancerPoolCmd = &cobra.Command{
 		loadBalancerPools, err := api.ListLoadBalancerPools()
 
 		if err != nil {
-			fmt.Println(err)
+			log.Fatal(err)
 			os.Exit(1)
 		}
 
 		if len(loadBalancerPools) > 0 {
 			for _, lbp := range loadBalancerPools {
+
+				log.WithFields(logrus.Fields{
+					"ID":          lbp.ID,
+					"Description": lbp.Description,
+				}).Debug("Processing load balancer pool")
+
 				loadBalancerPoolParse(lbp)
 			}
 		}
-
 	},
 }
 
 func loadBalancerPoolParse(lbp cloudflare.LoadBalancerPool) {
-	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(loadBalancerPoolTemplate))
+	tmpl := template.Must(template.New("load_balancer_pool").Funcs(templateFuncMap).Parse(loadBalancerPoolTemplate))
 	tmpl.Execute(os.Stdout,
 		struct {
 			LBP cloudflare.LoadBalancerPool

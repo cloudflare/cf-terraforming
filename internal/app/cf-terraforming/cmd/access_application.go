@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -10,6 +8,8 @@ import (
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
+
+	"github.com/sirupsen/logrus"
 )
 
 const accessApplicationTemplate = `
@@ -29,10 +29,14 @@ var accessApplicationCmd = &cobra.Command{
 	Use:   "access_application",
 	Short: "Import Access Application data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Access Application data")
+		log.Debug("Importing Access Application data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			accessApplications, _, err := api.AccessApplications(zone.ID, cloudflare.PaginationOptions{
 				Page:    1,
@@ -41,11 +45,13 @@ var accessApplicationCmd = &cobra.Command{
 
 			if err != nil {
 				if strings.Contains(err.Error(), "HTTP status 403") {
-					log.Printf("[INFO] insufficient permissions accessing Zone ID %s\n", zone.ID)
+
+					log.WithFields(logrus.Fields{
+						"ID": zone.ID,
+					}).Info("Insufficient permissions to access zone")
 					continue
 				}
-
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
 

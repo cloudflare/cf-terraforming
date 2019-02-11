@@ -1,13 +1,13 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 
 	"text/template"
 
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -30,6 +30,7 @@ var workerScriptCmd = &cobra.Command{
 	Use:   "worker_script",
 	Short: "Import a worker script into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
+		log.Debug("Importing worker script data")
 		// Enterprise multi-script mode:
 		// If the organization ID is set at the API level,
 		// this is an enterprise request, which can use special endpoints such as enumerate workers
@@ -37,20 +38,29 @@ var workerScriptCmd = &cobra.Command{
 			workerScripts, err := api.ListWorkerScripts()
 
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
 			// Loop through every script and fetch its content for rendering into tfstate format
 			for _, script := range workerScripts.WorkerList {
 
+				log.WithFields(logrus.Fields{
+					"ID": script.ID,
+				}).Debug("Fetching script")
+
 				workerScriptResponse, downloadErr := api.DownloadWorker(&cloudflare.WorkerRequestParams{ScriptName: script.ID})
 
 				if downloadErr != nil {
-					fmt.Println(downloadErr)
+					log.Fatal(downloadErr)
 					os.Exit(1)
 				}
 
 				if workerScriptResponse.Success == true {
+
+					log.WithFields(logrus.Fields{
+						"Body": workerScriptResponse.WorkerScript,
+					}).Debug("Worker script in multi-script mode")
+
 					workerScriptParse(script.ID, "", workerScriptResponse.WorkerScript, true)
 				}
 			}
@@ -61,7 +71,7 @@ var workerScriptCmd = &cobra.Command{
 				workerScriptResponse, singleScriptErr := api.DownloadWorker(&cloudflare.WorkerRequestParams{ZoneID: zone.ID})
 
 				if singleScriptErr != nil {
-					fmt.Println(singleScriptErr)
+					log.Fatal(singleScriptErr)
 					os.Exit(1)
 				}
 				// It's possible for the script ID to be unset in some cases,
@@ -72,6 +82,11 @@ var workerScriptCmd = &cobra.Command{
 				}
 
 				if workerScriptResponse.Success == true {
+
+					log.WithFields(logrus.Fields{
+						"Body": workerScriptResponse.WorkerScript,
+					}).Debug("Worker script in non multi-script mode")
+
 					workerScriptParse(scriptID, zone.Name, workerScriptResponse.WorkerScript, false)
 				}
 			}

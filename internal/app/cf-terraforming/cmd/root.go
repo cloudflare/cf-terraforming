@@ -2,17 +2,20 @@ package cmd
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"regexp"
+	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	homedir "github.com/mitchellh/go-homedir"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var cfgFile, zoneName, apiEmail, apiKey, accountID, orgID string
+var log = logrus.New()
+var cfgFile, zoneName, apiEmail, apiKey, accountID, orgID, logLevel string
+var verbose bool
 var api *cloudflare.API
 var zones []cloudflare.Zone
 
@@ -56,6 +59,10 @@ func init() {
 	// [Optional] Organization ID
 	rootCmd.PersistentFlags().StringVar(&orgID, "organization", "", "Use specific organization ID for import")
 
+	// Debug logging mode
+	rootCmd.PersistentFlags().StringVarP(&logLevel, "loglevel", "l", "", "Specify logging level")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Specify verbose output (same as setting log level to debug)")
+
 	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
 	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
 	viper.BindPFlag("organization", rootCmd.PersistentFlags().Lookup("organization"))
@@ -86,6 +93,32 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+
+	var cfgLogLevel = logrus.InfoLevel
+
+	// A user may also pass the verbose flag in order to support this convention
+	if verbose {
+		cfgLogLevel = logrus.DebugLevel
+	}
+
+	switch strings.ToLower(logLevel) {
+	case "trace":
+		cfgLogLevel = logrus.TraceLevel
+	case "debug":
+		cfgLogLevel = logrus.DebugLevel
+	case "info":
+		break
+	case "warn":
+		cfgLogLevel = logrus.WarnLevel
+	case "error":
+		cfgLogLevel = logrus.ErrorLevel
+	case "fatal":
+		cfgLogLevel = logrus.FatalLevel
+	case "panic":
+		cfgLogLevel = logrus.PanicLevel
+	}
+
+	log.SetLevel(cfgLogLevel)
 }
 
 func persistentPreRun(cmd *cobra.Command, args []string) {
@@ -99,13 +132,20 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		os.Exit(1)
 	}
 
-	log.Printf("[DEBUG] API Email = %s\n", apiEmail)
-
-	log.Print("[DEBUG] Initializing cloudflare-go")
+	log.WithFields(logrus.Fields{
+		"API email":       apiEmail,
+		"Zone name":       zoneName,
+		"Account ID":      accountID,
+		"Organization ID": orgID,
+	}).Debug("Initializing cloudflare-go")
 
 	var options cloudflare.Option
+
 	if orgID = viper.GetString("organization"); orgID != "" {
-		log.Printf("[DEBUG] configuring Cloudflare API with organization ID: %s\n", orgID)
+		log.WithFields(logrus.Fields{
+			"ID": orgID,
+		}).Debug("Configuring Cloudflare API with organization")
+
 		// Organization ID was passed, use it to configure the API
 		options = cloudflare.UsingOrganization(orgID)
 	}
@@ -120,7 +160,7 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 	}
 
-	log.Printf("[DEBUG] Selecting zones for import\n")
+	log.Debug("Selecting zones for import")
 
 	if regexp.MustCompile("^[a-z0-9]{32}$").MatchString(zoneName) {
 		zone, err := api.ZoneDetails(zoneName)
@@ -147,8 +187,12 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	log.Printf("[INFO] Zones selected:\n")
+	log.Debug("Zones selected:\n")
+
 	for _, i := range zones {
-		log.Printf("[INFO] - ID: %s, Name: %s\n", i.ID, i.Name)
+		log.WithFields(logrus.Fields{
+			"ID":   i.ID,
+			"Name": i.Name,
+		}).Debug("Zone")
 	}
 }

@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -30,10 +29,14 @@ var accessRuleCmd = &cobra.Command{
 	Use:   "access_rule",
 	Short: "Import Access Rule data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Access Rule data")
+		log.Debug("Importing Access Rule data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			totalPages := 999
 
@@ -41,14 +44,21 @@ var accessRuleCmd = &cobra.Command{
 				accessRules, err := api.ListZoneAccessRules(zone.ID, cloudflare.AccessRule{}, page)
 
 				if err != nil {
-					fmt.Println(err)
+					log.Fatal(err)
 					os.Exit(1)
 				}
 
 				totalPages = accessRules.TotalPages
 
 				for _, r := range accessRules.Result {
-					log.Printf("[DEBUG] Access Rule ID %s, Notes %s, Configuration %s, Scope %s\n", r.ID, r.Notes, r.Configuration, r.Scope)
+
+					log.WithFields(logrus.Fields{
+						"Rule ID":       r.ID,
+						"Notes":         r.Notes,
+						"Configuration": r.Configuration,
+						"Scope":         r.Scope,
+					}).Debug("Processing Access rule")
+
 					accessRuleParse(zone, r)
 				}
 			}

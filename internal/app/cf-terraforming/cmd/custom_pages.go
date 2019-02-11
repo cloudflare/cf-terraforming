@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -30,17 +29,27 @@ var customPagesCmd = &cobra.Command{
 		log.Print("Importing Custom Pages data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			customPages, err := api.CustomPages(&cloudflare.CustomPageOptions{ZoneID: zone.ID})
 
 			if err != nil {
-				fmt.Println(err)
+				log.Fatal(err)
 				os.Exit(1)
 			}
 
 			for _, r := range customPages {
-				log.Printf("[DEBUG] Custom Page ID %s, URL %s, Description %s\n", r.ID, r.URL, r.Description)
+
+				log.WithFields(logrus.Fields{
+					"ID":          r.ID,
+					"URL":         r.URL,
+					"Description": r.Description,
+				}).Debug("Processing custom page")
+
 				customPagesParse(zone, r)
 			}
 		}

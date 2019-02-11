@@ -1,14 +1,13 @@
 package cmd
 
 import (
-	"fmt"
-	"log"
 	"os"
 	"strings"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -67,10 +66,13 @@ var accessPolicyCmd = &cobra.Command{
 	Use:   "access_policy",
 	Short: "Import Access Policy data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Access Policy data")
+		log.Debug("Importing Access Policy data")
 
 		for _, zone := range zones {
-			log.Printf("[DEBUG] Processing zone: ID %s, Name %s", zone.ID, zone.Name)
+			log.WithFields(logrus.Fields{
+				"ID":   zone.ID,
+				"Name": zone.Name,
+			}).Debug("Processing zone")
 
 			accessApplications, _, appFetchErr := api.AccessApplications(zone.ID, cloudflare.PaginationOptions{
 				Page:    1,
@@ -78,7 +80,7 @@ var accessPolicyCmd = &cobra.Command{
 			})
 
 			if appFetchErr != nil {
-				fmt.Println(appFetchErr)
+				log.Fatal(appFetchErr)
 				os.Exit(1)
 			}
 
@@ -91,11 +93,13 @@ var accessPolicyCmd = &cobra.Command{
 
 				if err != nil {
 					if strings.Contains(err.Error(), "HTTP status 403") {
-						log.Printf("[INFO] insufficient permissions accessing Zone ID %s\n", zone.ID)
+						log.WithFields(logrus.Fields{
+							"ID": zone.ID,
+						}).Debug("Insufficient permissions for accessing zone")
 						continue
 					}
 
-					fmt.Println(err)
+					log.Fatal(err)
 					os.Exit(1)
 				}
 

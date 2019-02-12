@@ -92,8 +92,7 @@ DEBU[0000] Importing zone settings data
 For convenience, you can set the verbose flag, which is functionally equivalent to setting a log level of debug: 
 
 ```
-go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 --v spectrum_application
- 
+go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 -v spectrum_application
 ```
 
 ## Prerequisites 

@@ -56,7 +56,7 @@ Use "cf-terraforming [command] --help" for more information about a command.
 
 You can use ```go run``` to build and execute the binary in a single command like so: 
 
-```go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY --account $CLOUDFLARE_ACCOUNT_ID spectrum_application```
+```go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN --account $CLOUDFLARE_ACCOUNT_ID spectrum_application```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform configuration representing the **resource** you requested:
 
@@ -80,7 +80,7 @@ By default, cf-terraforming will not output any log type messages to stdout when
 However, it can be useful when debugging issues to specify a logging level, like so:
 
 ```
-go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -a 1233455678d876bc764b5f763af7644411 -l="debug" spectrum_application
+go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 -l="debug" spectrum_application
  
 DEBU[0000] Initializing cloudflare-go                    API email=apicloudflare.com Account ID=e9e138b6x52ea331b359a2ddfc6a8 Organization ID= Zone name=example.com
 DEBU[0000] Selecting zones for import
@@ -92,13 +92,8 @@ DEBU[0000] Importing zone settings data
 For convenience, you can set the verbose flag, which is functionally equivalent to setting a log level of debug: 
 
 ```
-go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -a 1233455678d876bc764b5f763af7644411 --v spectrum_application
+go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 --v spectrum_application
  
-DEBU[0000] Initializing cloudflare-go                    API email=apicloudflare.com Account ID=e9e138b6x52ea331b359a2ddfc6a8 Organization ID= Zone name=example.com
-DEBU[0000] Selecting zones for import
-DEBU[0000] Zones selected:
-DEBU[0000] Zone                                          ID=81b06ss3228f488fh84e5e993c2dc17 Name=example.com
-DEBU[0000] Importing zone settings data 
 ```
 
 ## Prerequisites 

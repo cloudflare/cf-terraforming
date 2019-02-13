@@ -23,6 +23,7 @@ Available Commands:
   firewall_rule          Import Firewall Rule data into Terraform
   help                   Help about any command
   load_balancer          Import a load balancer into Terraform
+  load_balancer_monitor  Import a load balancer monitor into Terraform
   load_balancer_pool     Import a load balancer pool into Terraform
   page_rule              Import Page Rule data into Terraform
   rate_limit             Import Rate Limit data into Terraform
@@ -118,6 +119,7 @@ This will fetch the cf-terraforming tool as well as its dependencies, updating t
 * [firewall_rule](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule.html)
 * [load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer.html)
 * [load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool.html)
+* [load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor.html)
 * [rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html)
 * [record](https://www.terraform.io/docs/providers/cloudflare/r/record.html)
 * [spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application.html) 

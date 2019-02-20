@@ -120,6 +120,7 @@ This will fetch the cf-terraforming tool as well as its dependencies, updating t
 * [load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer.html)
 * [load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool.html)
 * [load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor.html)
+* [page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html)
 * [rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html)
 * [record](https://www.terraform.io/docs/providers/cloudflare/r/record.html)
 * [spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application.html) 

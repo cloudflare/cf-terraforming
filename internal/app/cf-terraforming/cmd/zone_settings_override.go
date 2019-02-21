@@ -12,7 +12,7 @@ import (
 )
 
 const zoneSettingOverrideTemplate = `
-resource cloudflare_zone_settings_override {{.Zone.ID}} {
+resource "cloudflare_zone_settings_override" "{{.Zone.ID}}" {
 	name = "{{.Zone.Name -}}"
 	settings {
 		{{- range .Settings}}

@@ -75,8 +75,8 @@ var rateLimitCmd = &cobra.Command{
 				})
 
 				if err != nil {
-					log.Fatal(err)
-					os.Exit(1)
+					log.Debug(err)
+					return
 				}
 
 				totalPages = resultInfo.TotalPages

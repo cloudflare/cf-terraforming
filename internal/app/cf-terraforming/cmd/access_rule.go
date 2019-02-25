@@ -44,8 +44,7 @@ var accessRuleCmd = &cobra.Command{
 				accessRules, err := api.ListZoneAccessRules(zone.ID, cloudflare.AccessRule{}, page)
 
 				if err != nil {
-					log.Fatal(err)
-					os.Exit(1)
+					log.Debug(err)
 				}
 
 				totalPages = accessRules.TotalPages

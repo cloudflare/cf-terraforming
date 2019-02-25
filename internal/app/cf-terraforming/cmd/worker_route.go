@@ -37,8 +37,8 @@ var workerRouteCmd = &cobra.Command{
 			workerRoutesResponse, err := api.ListWorkerRoutes(zone.ID)
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			if workerRoutesResponse.Success == true {

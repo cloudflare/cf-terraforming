@@ -38,8 +38,8 @@ var customPagesCmd = &cobra.Command{
 			customPages, err := api.CustomPages(&cloudflare.CustomPageOptions{ZoneID: zone.ID})
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			for _, r := range customPages {

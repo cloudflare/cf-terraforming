@@ -51,8 +51,8 @@ var pageRuleCmd = &cobra.Command{
 			pageRules, err := api.ListPageRules(zone.ID)
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			for _, rule := range pageRules {

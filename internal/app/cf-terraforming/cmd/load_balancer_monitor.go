@@ -42,8 +42,7 @@ var loadBalancerMonitorCmd = &cobra.Command{
 		loadBalancerMonitors, err := api.ListLoadBalancerMonitors()
 
 		if err != nil {
-			log.Fatal(err)
-			os.Exit(1)
+			log.Debug(err)
 		}
 
 		if len(loadBalancerMonitors) > 0 {

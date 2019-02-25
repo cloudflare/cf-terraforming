@@ -49,8 +49,8 @@ var zoneCmd = &cobra.Command{
 			zoneDetails, err := api.ZoneDetails(zone.ID)
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			log.WithFields(logrus.Fields{

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"text/template"
@@ -42,6 +41,7 @@ var zoneLockdownCmd = &cobra.Command{
 		log.Debug("Importing Zone Lockdown data")
 
 		for _, zone := range zones {
+
 			log.WithFields(logrus.Fields{
 				"ID":   zone.ID,
 				"Name": zone.Name,
@@ -53,8 +53,8 @@ var zoneLockdownCmd = &cobra.Command{
 				lockdowns, err := api.ListZoneLockdowns(zone.ID, page)
 
 				if err != nil {
-					fmt.Println(err)
-					os.Exit(1)
+					log.Debug(err)
+					return
 				}
 
 				totalPages = lockdowns.TotalPages
@@ -75,15 +75,12 @@ var zoneLockdownCmd = &cobra.Command{
 
 func zoneLockdownParse(zone cloudflare.Zone, lockdown cloudflare.ZoneLockdown) {
 	tmpl := template.Must(template.New("zone_lockdown").Funcs(templateFuncMap).Parse(zoneLockdownTemplate))
-	if err := tmpl.Execute(os.Stdout,
+	tmpl.Execute(os.Stdout,
 		struct {
 			Zone     cloudflare.Zone
 			Lockdown cloudflare.ZoneLockdown
 		}{
 			Zone:     zone,
 			Lockdown: lockdown,
-		}); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+		})
 }

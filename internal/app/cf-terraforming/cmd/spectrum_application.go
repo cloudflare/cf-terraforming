@@ -60,6 +60,7 @@ var spectrumApplicationCmd = &cobra.Command{
 					}).Debug("Insufficient permissions for accessing zone")
 					continue
 				}
+				log.Debug(err)
 			}
 
 			if len(spectrumApplications) > 0 {

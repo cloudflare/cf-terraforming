@@ -5,6 +5,7 @@ import (
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 
+	"strings"
 	"text/template"
 
 	"github.com/sirupsen/logrus"
@@ -38,8 +39,8 @@ var workerScriptCmd = &cobra.Command{
 			workerScripts, err := api.ListWorkerScripts()
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 			// Loop through every script and fetch its content for rendering into tfstate format
 			for _, script := range workerScripts.WorkerList {
@@ -51,8 +52,14 @@ var workerScriptCmd = &cobra.Command{
 				workerScriptResponse, downloadErr := api.DownloadWorker(&cloudflare.WorkerRequestParams{ScriptName: script.ID})
 
 				if downloadErr != nil {
-					log.Fatal(downloadErr)
-					os.Exit(1)
+					if strings.Contains(downloadErr.Error(), "HTTP status 404") {
+						log.WithFields(logrus.Fields{
+							"Script ID": script.ID,
+						}).Debug("Error fetching script - does this zone have the workers entitlement?")
+
+						continue
+					}
+					log.Debug(downloadErr)
 				}
 
 				if workerScriptResponse.Success == true {
@@ -71,8 +78,16 @@ var workerScriptCmd = &cobra.Command{
 				workerScriptResponse, singleScriptErr := api.DownloadWorker(&cloudflare.WorkerRequestParams{ZoneID: zone.ID})
 
 				if singleScriptErr != nil {
-					log.Fatal(singleScriptErr)
-					os.Exit(1)
+					//Workers endpoints may return a 404 if the zone is not entitled to use workers
+					//skip over this error to avoid polluting stdout / generated config files
+					if strings.Contains(singleScriptErr.Error(), "HTTP status 404") {
+						log.WithFields(logrus.Fields{
+							"Zone ID": zone.ID,
+						}).Debug("Error fetching script - does this zone have the workers entitlement?")
+
+						continue
+					}
+					log.Debug(singleScriptErr)
 				}
 				// It's possible for the script ID to be unset in some cases,
 				// so set a default value

@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"os"
-	"strings"
 
+	"strings"
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
@@ -80,8 +80,8 @@ var accessPolicyCmd = &cobra.Command{
 			})
 
 			if appFetchErr != nil {
-				log.Fatal(appFetchErr)
-				os.Exit(1)
+				log.Debug(appFetchErr)
+				return
 			}
 
 			for _, app := range accessApplications {
@@ -98,9 +98,7 @@ var accessPolicyCmd = &cobra.Command{
 						}).Debug("Insufficient permissions for accessing zone")
 						continue
 					}
-
-					log.Fatal(err)
-					os.Exit(1)
+					log.Debug(err)
 				}
 
 				for _, policy := range accessPolicies {

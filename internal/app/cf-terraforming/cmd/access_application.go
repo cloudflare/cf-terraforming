@@ -51,8 +51,7 @@ var accessApplicationCmd = &cobra.Command{
 					}).Info("Insufficient permissions to access zone")
 					continue
 				}
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
 			}
 
 			for _, app := range accessApplications {

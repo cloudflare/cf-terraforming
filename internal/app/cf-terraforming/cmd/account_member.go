@@ -29,8 +29,7 @@ var accountMemberCmd = &cobra.Command{
 		log.Debug("Importing Account Member data")
 
 		if accountID == "" {
-			log.Fatal("'account' must be set.")
-			os.Exit(1)
+			log.Error("'account' must be set.")
 		}
 
 		accountMembers, _, err := api.AccountMembers(accountID, cloudflare.PaginationOptions{
@@ -39,11 +38,11 @@ var accountMemberCmd = &cobra.Command{
 		})
 
 		if err != nil {
-			log.Fatal(err)
-			os.Exit(1)
+			log.Debug(err)
 		}
 
 		for _, r := range accountMembers {
+
 			log.WithFields(logrus.Fields{
 				"Account member ID": r.ID,
 				"Status":            r.Status,

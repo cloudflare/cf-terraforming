@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"text/template"
@@ -39,8 +38,8 @@ var wafRuleCmd = &cobra.Command{
 			wafPackages, err := api.ListWAFPackages(zone.ID)
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			for _, wafPackage := range wafPackages {
@@ -55,8 +54,8 @@ var wafRuleCmd = &cobra.Command{
 				wafRules, err := api.ListWAFRules(zone.ID, wafPackage.ID)
 
 				if err != nil {
-					log.Fatal(err)
-					os.Exit(1)
+					log.Debug(err)
+					return
 				}
 
 				for _, rule := range wafRules {
@@ -74,7 +73,7 @@ var wafRuleCmd = &cobra.Command{
 
 func wafRuleParse(zone cloudflare.Zone, wafPackage cloudflare.WAFPackage, wafRule cloudflare.WAFRule) {
 	tmpl := template.Must(template.New("waf_rule").Funcs(templateFuncMap).Parse(wafRuleTemplate))
-	if err := tmpl.Execute(os.Stdout,
+	tmpl.Execute(os.Stdout,
 		struct {
 			Zone    cloudflare.Zone
 			Package cloudflare.WAFPackage
@@ -83,8 +82,5 @@ func wafRuleParse(zone cloudflare.Zone, wafPackage cloudflare.WAFPackage, wafRul
 			Zone:    zone,
 			Package: wafPackage,
 			Rule:    wafRule,
-		}); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+		})
 }

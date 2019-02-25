@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
 	"regexp"
 	"strings"
 
@@ -33,8 +31,8 @@ all of their existing Cloudflare configuration into Terraform.`,
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Debug(err)
+		return
 	}
 }
 
@@ -77,8 +75,8 @@ func initConfig() {
 		// Find home directory.
 		home, err := homedir.Dir()
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Debug(err)
+			return
 		}
 
 		// Search config in home directory with name ".cf-terraforming" (without extension).
@@ -91,7 +89,7 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		log.Debug("Using config file:", viper.ConfigFileUsed())
 	}
 
 	var cfgLogLevel = logrus.InfoLevel
@@ -123,13 +121,11 @@ func initConfig() {
 
 func persistentPreRun(cmd *cobra.Command, args []string) {
 	if apiEmail = viper.GetString("email"); apiEmail == "" {
-		fmt.Println("'email' must be set.")
-		os.Exit(1)
+		log.Error("'email' must be set.")
 	}
 
 	if apiKey = viper.GetString("key"); apiKey == "" {
-		fmt.Println("'key' must be set.")
-		os.Exit(1)
+		log.Error("'key' must be set.")
 	}
 
 	log.WithFields(logrus.Fields{
@@ -157,7 +153,7 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		api, err = cloudflare.New(apiKey, apiEmail)
 	}
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 	}
 
 	log.Debug("Selecting zones for import")
@@ -166,8 +162,7 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		zone, err := api.ZoneDetails(zoneName)
 
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Error(err)
 		}
 
 		zones = []cloudflare.Zone{zone}
@@ -175,21 +170,20 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		zones, err = api.ListZones(zoneName)
 
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Error(err)
 		}
 	} else {
 		zones, err = api.ListZones()
 
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			log.Error(err)
 		}
 	}
 
 	log.Debug("Zones selected:\n")
 
 	for _, i := range zones {
+
 		log.WithFields(logrus.Fields{
 			"ID":   i.ID,
 			"Name": i.Name,

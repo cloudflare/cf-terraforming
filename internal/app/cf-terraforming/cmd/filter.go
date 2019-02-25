@@ -42,8 +42,8 @@ var filterCmd = &cobra.Command{
 			})
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			for _, r := range filters {

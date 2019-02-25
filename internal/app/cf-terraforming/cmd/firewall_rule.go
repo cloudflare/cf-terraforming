@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"text/template"
@@ -45,8 +44,8 @@ var firewallRuleCmd = &cobra.Command{
 			})
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			for _, r := range firewallRules {

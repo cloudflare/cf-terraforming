@@ -26,7 +26,7 @@ var customPagesCmd = &cobra.Command{
 	Use:   "custom_pages",
 	Short: "Import Custom Pages data into Terraform",
 	Run: func(cmd *cobra.Command, args []string) {
-		log.Print("Importing Custom Pages data")
+		log.Debug("Importing Custom Pages data")
 
 		for _, zone := range zones {
 
@@ -38,8 +38,8 @@ var customPagesCmd = &cobra.Command{
 			customPages, err := api.CustomPages(&cloudflare.CustomPageOptions{ZoneID: zone.ID})
 
 			if err != nil {
-				log.Fatal(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 
 			for _, r := range customPages {

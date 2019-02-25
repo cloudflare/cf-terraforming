@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"os"
 	"text/template"
 
@@ -66,8 +65,8 @@ var recordCmd = &cobra.Command{
 			recs, err := api.DNSRecords(zone.ID, cloudflare.DNSRecord{})
 
 			if err != nil {
-				fmt.Println(err)
-				os.Exit(1)
+				log.Debug(err)
+				return
 			}
 			for _, r := range recs {
 
@@ -86,7 +85,7 @@ var recordCmd = &cobra.Command{
 
 func recordParse(zone cloudflare.Zone, record cloudflare.DNSRecord) {
 	tmpl := template.Must(template.New("record").Funcs(templateFuncMap).Parse(recordTemplate))
-	if err := tmpl.Execute(os.Stdout,
+	tmpl.Execute(os.Stdout,
 		struct {
 			Zone             cloudflare.Zone
 			Record           cloudflare.DNSRecord
@@ -97,8 +96,5 @@ func recordParse(zone cloudflare.Zone, record cloudflare.DNSRecord) {
 			Record:           record,
 			IsValueTypeField: contains(dnsTypeValueFields, record.Type),
 			IsDataTypeField:  contains(dnsTypeDataFields, record.Type),
-		}); err != nil {
-		log.Fatal(err)
-		os.Exit(1)
-	}
+		})
 }

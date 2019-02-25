@@ -26,6 +26,10 @@ func isMap(i interface{}) bool {
 }
 
 func quoteIfString(i interface{}) interface{} {
+	// Handle <no value> zero value by converting it to an empty string
+	if i == nil {
+		return "\"\""
+	}
 	if reflect.ValueOf(i).Kind() == reflect.String {
 		return fmt.Sprintf("\"%v\"", i)
 	} else {

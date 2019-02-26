@@ -15,18 +15,20 @@ resource "cloudflare_page_rule" "{{.Rule.ID}}" {
     zone = "{{.Zone.Name}}"
 {{ range .Rule.Targets}}
     target = "{{.Constraint.Value }}"
-{{end }}
+{{ end }}
     priority = {{ quoteIfString .Rule.Priority }}
-    actions {
-{{ range .Rule.Actions}}
-    {{ .ID }} = {{if isMap .Value }} {
-        {{ range $k, $v := .Value}}
-            {{ $k }} = {{ quoteIfString $v }}
-        {{else}}
-            {{ quoteIfString .Value }}
+    actions = {
+    {{- range .Rule.Actions}}
+    {{- if isMap .Value}}
+        {{.ID}} {
+        {{- range $k, $v := .Value }}
+            {{$k}} = {{ quoteIfString $v -}}
         {{end }}
-    } {{end}}
-{{end}}
+        }
+    {{else}}
+        {{.ID}} = {{ quoteIfString .Value }}
+    {{end -}}
+    {{end }}
     }
 }
 `

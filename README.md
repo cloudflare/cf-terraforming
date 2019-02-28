@@ -46,6 +46,7 @@ Flags:
   -k, --key string            API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile
   -l, --loglevel string       Specify logging level: (trace, debug, info, warn, error, fatal, panic)
   -o, --organization string   Use specific organization ID for import
+  -s, --tfstate               Export tfstate for the given resource instead of HCL Terraform config (default ! See caveats below !)
   -v, --verbose               Specify verbose output (same as setting log level to debug)
   -z, --zone string           Limit the export to a single zone (name or ID)
 
@@ -116,7 +117,91 @@ $ go get -u github.com/cloudflare/cf-terraforming/...
 ```
 This will fetch the cf-terraforming tool as well as its dependencies, updating them as necessary.
 
-## Supported resources
+## Experimental: exporting tfstate
+
+Work is underway to support downloading your resources via cf-terraform as valid tfstate, which will allow you to skip importing and let Terraform become aware of and begin managing your resources immediately.
+
+Currently, only the worker_route command supports the --tfstate flag, but support for downloading tfstate will steadily be added across the other resources supported by cf-terraforming.
+
+To use this currently experimental feature, pass the --tftstate (-s) flag to your command like so:
+
+```
+$ go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z example.com -a $CLOUDFLARE_ACCOUNT_ID --organization $CLOUDFLARE_ORG_ID --tfstate worker_route
+
+```
+
+The output will look something like this:
+
+```
+{
+    "version": 1,
+    "terraform_version": "",
+    "serial": 0,
+    "lineage": "",
+    "modules": [
+    {
+        "path": ["root"],
+        "depends_on": [],
+        "outputs":
+        {},
+        "resources":
+        {
+            "cloudflare_worker_route.3489743985643594723e238ce":
+            {
+                "primary":
+                {
+                    "id": "249653298b6041148b411b4723e238ce",
+                    "attributes":
+                    {
+                        "enabled": "true",
+                        "id": "249653298b6041148b411b4723e238ce",
+                        "multi_script": "true",
+                        "pattern": "example.com",
+                        "zone": "example.com",
+                        "zone_id": "z1b06143shshs3223e5ec83c2z1klop"
+                    },
+                    "meta":
+                    {},
+                    "tainted": false
+                },
+                "depends_on": [],
+                "deposed": [],
+                "provider": "provider.cloudflare",
+                "type": "cloudflare_worker_route"
+            },
+            "cloudflare_worker_route.zZ3exdfyt3e76274ef25dda436":
+            {
+                "primary":
+                {
+                    "id": "9b3e8f2cc874zsde9274ef25dda58f36",
+                    "attributes":
+                    {
+                        "enabled": "true",
+                        "id": "9b3e8f2cc87444fb9274ef25dda58f36",
+                        "multi_script": "true",
+                        "pattern": "example.com/*",
+                        "zone": "example.com",
+                        "zone_id": "z1b06143shshs3223e5ec83c2z1klop"
+                    },
+                    "meta":
+                    {},
+                    "tainted": false
+                },
+                "depends_on": [],
+                "deposed": [],
+                "provider": "provider.cloudflare",
+                "type": "cloudflare_worker_route"
+            }
+        }
+    }]
+}
+```
+
+This means that when you next run ```$ terraform plan```, Terraform should see no difference between your defined resources and your current tfstate.
+
+## Supported resources (for HCL download)
+
+The following resources can be downloaded into [Terraform HCL format](https://www.terraform.io/docs/configuration/syntax.html) right now.
 
 * [access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application.html)
 * [access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy.html)
@@ -138,3 +223,9 @@ This will fetch the cf-terraforming tool as well as its dependencies, updating t
 * [zone](https://www.terraform.io/docs/providers/cloudflare/r/zone.html)
 * [zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown.html)
 * [zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override.html)
+
+## Supported resources for exporting tfstate
+
+The following commands support the --tfstate flag. Note that support across the remaining commands will be added over time.
+
+* [worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route.html)

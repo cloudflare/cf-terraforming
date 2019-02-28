@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"os"
 	"regexp"
 	"strings"
+
+	"encoding/json"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	homedir "github.com/mitchellh/go-homedir"
@@ -13,9 +16,10 @@ import (
 
 var log = logrus.New()
 var cfgFile, zoneName, apiEmail, apiKey, accountID, orgID, logLevel string
-var verbose bool
+var verbose, tfstate bool
 var api *cloudflare.API
 var zones []cloudflare.Zone
+var resourcesMap = map[string]interface{}{}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -24,7 +28,8 @@ var rootCmd = &cobra.Command{
 	Long: `cf-terraforming is an application that allows Cloudflare users
 to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,
-	PersistentPreRun: persistentPreRun,
+	PersistentPreRun:  persistentPreRun,
+	PersistentPostRun: persistentPostRun,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -60,6 +65,9 @@ func init() {
 	// Debug logging mode
 	rootCmd.PersistentFlags().StringVarP(&logLevel, "loglevel", "l", "", "Specify logging level: (trace, debug, info, warn, error, fatal, panic)")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Specify verbose output (same as setting log level to debug)")
+
+	// tfstate export
+	rootCmd.PersistentFlags().BoolVarP(&tfstate, "tfstate", "s", false, "Export tfstate for the given resource instead of HCL Terraform config (default)")
 
 	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
 	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
@@ -188,5 +196,36 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 			"ID":   i.ID,
 			"Name": i.Name,
 		}).Debug("Zone")
+	}
+}
+
+// This function runs following every root command
+// When the tfstate flag is passed, output the
+// full Terraform state file by rendering the resources map
+// that was built up by the resource-specific commands
+func persistentPostRun(cmd *cobra.Command, args []string) {
+
+	if tfstate {
+
+		m := []Module{{
+			Path:      []string{"root"},
+			DependsOn: []string{},
+			Outputs:   make(map[string]string),
+			Resource:  resourcesMap,
+		}}
+
+		s := TFStateScaffold{
+			Version: 1,
+			Serial:  0,
+			Modules: m,
+		}
+
+		sr := StateResponse{
+			TFStateScaffold: s,
+		}
+
+		j, _ := json.Marshal(sr)
+
+		os.Stdout.Write(j)
 	}
 }

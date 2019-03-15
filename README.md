@@ -229,3 +229,5 @@ The following resources can be downloaded into [Terraform HCL format](https://ww
 The following commands support the --tfstate flag. Note that support across the remaining commands will be added over time.
 
 * [worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route.html)
+* [zone](https://www.terraform.io/docs/providers/cloudflare/r/zone.html)
+

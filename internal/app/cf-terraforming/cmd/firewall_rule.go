@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strconv"
 
 	"text/template"
 
@@ -20,6 +21,16 @@ resource "cloudflare_firewall_rule" "{{.FirewallRule.ID}}" {
   {{if .FirewallRule.Paused}}paused = {{.FirewallRule.Paused}}{{end}}
 }
 `
+
+type FirewallRuleAttributes struct {
+	ID          string `json:"id"`
+	Action      string `json:"action"`
+	FilterID    string `json:"filter_id"`
+	Priority    string `json:"priority"`
+	ZoneID      string `json:"zone_id"`
+	Description string `json:"description"`
+	Paused      string `json:"paused"`
+}
 
 func init() {
 	rootCmd.AddCommand(firewallRuleCmd)
@@ -55,7 +66,12 @@ var firewallRuleCmd = &cobra.Command{
 					"Description": r.Description,
 				}).Debug("Processing firewall rule")
 
-				firewallRuleParse(zone, r)
+				if tfstate {
+					r := firewallRuleResourceStateBuild(zone, r)
+					resourcesMap["cloudflare_firewall_rule."+r.Primary.Id] = r
+				} else {
+					firewallRuleParse(zone, r)
+				}
 			}
 		}
 	},
@@ -71,4 +87,34 @@ func firewallRuleParse(zone cloudflare.Zone, firewallRule cloudflare.FirewallRul
 			Zone:         zone,
 			FirewallRule: firewallRule,
 		})
+}
+
+func firewallRuleResourceStateBuild(zone cloudflare.Zone, rule cloudflare.FirewallRule) Resource {
+	r := Resource{
+		Primary: Primary{
+			Id: rule.ID,
+			Attributes: FirewallRuleAttributes{
+				ID:          rule.ID,
+				Action:      rule.Action,
+				FilterID:    rule.Filter.ID,
+				ZoneID:      zone.ID,
+				Description: rule.Description,
+				Paused:      strconv.FormatBool(rule.Paused),
+			},
+			Meta:    make(map[string]string),
+			Tainted: false,
+		},
+		DependsOn: []string{},
+		Deposed:   []string{},
+		Provider:  "provider.cloudflare",
+		Type:      "cloudflare_firewall_rule",
+	}
+
+	firewallRuleAttributes := r.Primary.Attributes.(FirewallRuleAttributes)
+	if rule.Priority != nil {
+		firewallRuleAttributes.Priority = strconv.FormatFloat(rule.Priority.(float64), 'g', -1, 32)
+	}
+	r.Primary.Attributes = firewallRuleAttributes
+
+	return r
 }

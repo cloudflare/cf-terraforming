@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"os"
+	"strconv"
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
@@ -18,6 +19,15 @@ resource "cloudflare_filter" "{{.Filter.ID}}" {
   {{if .Filter.Ref}}ref = "{{.Filter.Ref}}"{{end}}
 }
 `
+
+type FilterAttributes struct {
+	ID          string `json:"id"`
+	ZoneID      string `json:"zone_id"`
+	Description string `json:"description"`
+	Expression  string `json:"expression"`
+	Paused      string `json:"paused"`
+	Ref         string `json:"ref"`
+}
 
 func init() {
 	rootCmd.AddCommand(filterCmd)
@@ -54,7 +64,12 @@ var filterCmd = &cobra.Command{
 					"Description": r.Description,
 				})
 
-				filterParse(zone, r)
+				if tfstate {
+					r := filterResourceStateBuild(zone, r)
+					resourcesMap["cloudflare_filter."+r.Primary.Id] = r
+				} else {
+					filterParse(zone, r)
+				}
 			}
 		}
 	},
@@ -70,4 +85,28 @@ func filterParse(zone cloudflare.Zone, filter cloudflare.Filter) {
 			Zone:   zone,
 			Filter: filter,
 		})
+}
+
+func filterResourceStateBuild(zone cloudflare.Zone, filter cloudflare.Filter) Resource {
+	r := Resource{
+		Primary: Primary{
+			Id: filter.ID,
+			Attributes: FilterAttributes{
+				ID:          filter.ID,
+				ZoneID:      zone.ID,
+				Description: filter.Description,
+				Expression:  filter.Expression,
+				Paused:      strconv.FormatBool(filter.Paused),
+				Ref:         filter.Ref,
+			},
+			Meta:    make(map[string]string),
+			Tainted: false,
+		},
+		DependsOn: []string{},
+		Deposed:   []string{},
+		Provider:  "provider.cloudflare",
+		Type:      "cloudflare_filter",
+	}
+
+	return r
 }

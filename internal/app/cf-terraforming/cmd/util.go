@@ -1,10 +1,14 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"reflect"
+	"sort"
 	"strings"
 	"text/template"
+
+	"github.com/hashicorp/terraform/helper/hashcode"
 )
 
 func replace(input, from, to string) string {
@@ -41,4 +45,26 @@ var templateFuncMap = template.FuncMap{
 	"replace":       replace,
 	"isMap":         isMap,
 	"quoteIfString": quoteIfString,
+}
+
+func hashMap(values map[string]string) int {
+	var keys []string
+	var buf bytes.Buffer
+
+	for k := range values {
+		keys = append(keys, k)
+	}
+
+	sort.Strings(keys)
+
+	buf.WriteString("{<")
+	for _, k := range keys {
+		buf.WriteString(k)
+		buf.WriteRune(':')
+		buf.WriteString(values[k])
+		buf.WriteRune(';')
+	}
+	buf.WriteString(">;};")
+
+	return hashcode.String(buf.String())
 }

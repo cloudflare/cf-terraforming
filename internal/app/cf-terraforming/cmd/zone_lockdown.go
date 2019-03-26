@@ -1,11 +1,13 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/hashicorp/terraform/helper/hashcode"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -66,7 +68,12 @@ var zoneLockdownCmd = &cobra.Command{
 						"URL": r.URLs,
 					}).Debug("Processing lockdown")
 
-					zoneLockdownParse(zone, r)
+					if tfstate {
+						r := zoneLockdownResourceStateBuild(zone, r)
+						resourcesMap["cloudflare_zone_lockdown."+r.Primary.Id] = r
+					} else {
+						zoneLockdownParse(zone, r)
+					}
 				}
 			}
 		}
@@ -83,4 +90,46 @@ func zoneLockdownParse(zone cloudflare.Zone, lockdown cloudflare.ZoneLockdown) {
 			Zone:     zone,
 			Lockdown: lockdown,
 		})
+}
+
+func zoneLockdownResourceStateBuild(zone cloudflare.Zone, record cloudflare.ZoneLockdown) Resource {
+	r := Resource{
+		Primary: Primary{
+			Id: record.ID,
+			Attributes: map[string]string{
+				"configurations.#": fmt.Sprint(len(record.Configurations)),
+				"description":      record.Description,
+				"id":               record.ID,
+				"paused":           fmt.Sprint(record.Paused),
+				"urls.#":           fmt.Sprint(len(record.URLs)),
+				"zone_id":          zone.ID,
+			},
+			Meta:    make(map[string]string),
+			Tainted: false,
+		},
+		DependsOn: []string{},
+		Deposed:   []string{},
+		Provider:  "provider.cloudflare",
+		Type:      "cloudflare_zone_lockdown",
+	}
+
+	attributes := r.Primary.Attributes.(map[string]string)
+
+	for _, configuration := range record.Configurations {
+		hash := hashMap(map[string]string{
+			"target": configuration.Target,
+			"value":  configuration.Value,
+		})
+		attributes[fmt.Sprintf("configurations.%d.target", hash)] = configuration.Target
+		attributes[fmt.Sprintf("configurations.%d.value", hash)] = configuration.Value
+	}
+
+	for _, url := range record.URLs {
+		hash := hashcode.String(fmt.Sprintf("%s;", url))
+		attributes[fmt.Sprintf("urls.%d", hash)] = url
+	}
+
+	r.Primary.Attributes = attributes
+
+	return r
 }

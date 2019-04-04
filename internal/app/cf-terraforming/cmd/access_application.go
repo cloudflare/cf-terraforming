@@ -21,6 +21,15 @@ resource "cloudflare_access_application" "{{.App.ID}}" {
 }
 `
 
+type AccessApplicationAttributes struct {
+	ID              string `json:"id"`
+	ZoneID          string `json:"zone_id"`
+	AUD             string `json:"aud"`
+	Name            string `json:"name"`
+	Domain          string `json:"domain"`
+	SessionDuration string `json:"session_duration"`
+}
+
 func init() {
 	rootCmd.AddCommand(accessApplicationCmd)
 }
@@ -56,7 +65,12 @@ var accessApplicationCmd = &cobra.Command{
 
 			for _, app := range accessApplications {
 
-				accessApplicationParse(app, zone)
+				if tfstate {
+					r := accessApplicationResourceStateBuild(app, zone)
+					resourcesMap["cloudflare_access_application."+r.Primary.Id] = r
+				} else {
+					accessApplicationParse(app, zone)
+				}
 			}
 
 		}
@@ -73,4 +87,28 @@ func accessApplicationParse(app cloudflare.AccessApplication, zone cloudflare.Zo
 			App:  app,
 			Zone: zone,
 		})
+}
+
+func accessApplicationResourceStateBuild(app cloudflare.AccessApplication, zone cloudflare.Zone) Resource {
+	r := Resource{
+		Primary: Primary{
+			Id: app.ID,
+			Attributes: AccessApplicationAttributes{
+				ID:              app.ID,
+				ZoneID:          zone.ID,
+				AUD:             app.AUD,
+				Name:            app.Name,
+				Domain:          app.Domain,
+				SessionDuration: app.SessionDuration,
+			},
+			Meta:    make(map[string]string),
+			Tainted: false,
+		},
+		DependsOn: []string{},
+		Deposed:   []string{},
+		Provider:  "provider.cloudflare",
+		Type:      "cloudflare_access_application",
+	}
+
+	return r
 }

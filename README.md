@@ -123,7 +123,7 @@ Work is underway to support downloading your resources via cf-terraform as valid
 
 Currently, only the worker_route command supports the --tfstate flag, but support for downloading tfstate will steadily be added across the other resources supported by cf-terraforming.
 
-To use this currently experimental feature, pass the --tftstate (-s) flag to your command like so:
+To use this currently experimental feature, pass the --tfstate (-s) flag to your command like so:
 
 ```
 $ go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z example.com -a $CLOUDFLARE_ACCOUNT_ID --organization $CLOUDFLARE_ORG_ID --tfstate worker_route

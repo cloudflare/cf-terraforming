@@ -80,7 +80,7 @@ type RecordAttributes struct {
 	DataLongMinutes             string `json:"data.long_minutes,omitempty"`
 	DataLongSeconds             string `json:"data.long_seconds,omitempty"`
 	DataPrecisionHorz           string `json:"data.precision_horz,omitempty"`
-	DataPrecisionVert           string `json:"data.precision_vert,opmitempty"`
+	DataPrecisionVert           string `json:"data.precision_vert,omitempty"`
 	DataSize                    string `json:"data.size,omitempty"`
 	Domain                      string `json:"domain"`
 	Hostname                    string `json:"hostname"`

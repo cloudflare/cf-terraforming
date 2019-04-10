@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"strings"
@@ -106,8 +107,12 @@ var accessPolicyCmd = &cobra.Command{
 				}
 
 				for _, policy := range accessPolicies {
-
-					accessPolicyParse(app, policy, zone)
+					if tfstate {
+						r := accessPolicyResourceStateBuild(app, policy, zone)
+						resourcesMap["cloudflare_access_policy."+r.Primary.Id] = r
+					} else {
+						accessPolicyParse(app, policy, zone)
+					}
 				}
 			}
 
@@ -127,4 +132,68 @@ func accessPolicyParse(app cloudflare.AccessApplication, policy cloudflare.Acces
 			Policy: policy,
 			Zone:   zone,
 		})
+}
+
+func accessPolicyResourceStateBuild(app cloudflare.AccessApplication, policy cloudflare.AccessPolicy, zone cloudflare.Zone) Resource {
+	r := Resource{
+		Primary: Primary{
+			Id: policy.ID,
+			Attributes: map[string]string{
+				"id":             policy.ID,
+				"application_id": app.ID,
+				"decision":       policy.Decision,
+				"name":           policy.Name,
+				"precedence":     fmt.Sprint(policy.Precedence),
+				"zone_id":        zone.ID,
+			},
+			Meta:    make(map[string]string),
+			Tainted: false,
+		},
+		DependsOn: []string{},
+		Deposed:   []string{},
+		Provider:  "provider.cloudflare",
+		Type:      "cloudflare_access_policy",
+	}
+
+	attributes := r.Primary.Attributes.(map[string]string)
+
+	flattenPolicy(attributes, "include", policy.Include)
+	flattenPolicy(attributes, "exclude", policy.Exclude)
+	flattenPolicy(attributes, "require", policy.Require)
+
+	r.Primary.Attributes = attributes
+
+	return r
+}
+
+func flattenPolicy(attributes map[string]string, name string, policy []interface{}) {
+	if len(policy) > 0 {
+		attributes[fmt.Sprintf("%s.#", name)] = "1"
+	} else {
+		attributes[fmt.Sprintf("%s.#", name)] = "0"
+	}
+
+	flattened := make(map[string][]string)
+	for _, policyItem := range policy {
+		policyItem = policyItem.(map[string]interface{})
+		for k, v := range policyItem.(map[string]interface{}) {
+			if _, ok := flattened[k]; !ok {
+				flattened[k] = make([]string, 0)
+			}
+			for _, v1 := range v.(map[string]interface{}) {
+				flattened[k] = append(flattened[k], v1.(string))
+			}
+		}
+	}
+
+	for k, v := range flattened {
+		if k == "everyone" {
+			attributes[fmt.Sprintf("%s.0.%s", name, k)] = "true"
+			continue
+		}
+		attributes[fmt.Sprintf("%s.0.%s.#", name, k)] = fmt.Sprint(len(v))
+		for k1, v1 := range v {
+			attributes[fmt.Sprintf("%s.0.%s.%d", name, k, k1)] = v1
+		}
+	}
 }

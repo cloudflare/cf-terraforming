@@ -225,10 +225,3 @@ The following resources can be downloaded into [Terraform HCL format](https://ww
 | [zone](https://www.terraform.io/docs/providers/cloudflare/r/zone.html) | ✔️ | ✔️ |
 | [zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown.html) | ✔️ | ✔️ |
 | [zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override.html) | ✔️ | ✖️ |
-
-## Supported resources for exporting tfstate
-
-
-* [filter](https://www.terraform.io/docs/providers/cloudflare/r/filter.html)
-* [worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route.html)
-* [zone](https://www.terraform.io/docs/providers/cloudflare/r/zone.html)

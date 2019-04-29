@@ -199,34 +199,35 @@ The output will look something like this:
 
 This means that when you next run ```$ terraform plan```, Terraform should see no difference between your defined resources and your current tfstate.
 
-## Supported resources (for HCL download)
+## Supported resources
 
-The following resources can be downloaded into [Terraform HCL format](https://www.terraform.io/docs/configuration/syntax.html) right now.
+The following resources can be downloaded into [Terraform HCL format](https://www.terraform.io/docs/configuration/syntax.html) right now. Some resources also support the `--tfstate` flag. Support across the remaining commands will be added over time.
 
-* [access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application.html)
-* [access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy.html)
-* [access_rule](https://www.terraform.io/docs/providers/cloudflare/r/access_rule.html)
-* [account_member](https://www.terraform.io/docs/providers/cloudflare/r/account_member.html)
-* [custom_pages](https://www.terraform.io/docs/providers/cloudflare/r/custom_pages.html)
-* [filter](https://www.terraform.io/docs/providers/cloudflare/r/filter.html)
-* [firewall_rule](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule.html)
-* [load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer.html)
-* [load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool.html)
-* [load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor.html)
-* [page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html)
-* [rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html)
-* [record](https://www.terraform.io/docs/providers/cloudflare/r/record.html)
-* [spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application.html)
-* [waf_rule](https://www.terraform.io/docs/providers/cloudflare/r/waf_rule.html)
-* [worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route.html)
-* [worker_script](https://www.terraform.io/docs/providers/cloudflare/r/worker_script.html)
-* [zone](https://www.terraform.io/docs/providers/cloudflare/r/zone.html)
-* [zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown.html)
-* [zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override.html)
+| Resource | Generating HCL | Generating tfstate |
+|----------|----------------|--------------------|
+| [access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application.html) | ✔️ | ✔️ |
+| [access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy.html) | ✔️ | ✔️ |
+| [access_rule](https://www.terraform.io/docs/providers/cloudflare/r/access_rule.html) | ✔️ | ✔️ |
+| [account_member](https://www.terraform.io/docs/providers/cloudflare/r/account_member.html) | ✔️ | ✖️ |
+| [custom_pages](https://www.terraform.io/docs/providers/cloudflare/r/custom_pages.html) | ✔️ | ✖️ |
+| [filter](https://www.terraform.io/docs/providers/cloudflare/r/filter.html) | ✔️ | ✔️ |
+| [firewall_rule](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule.html) | ✔️ | ✔️ |
+| [load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer.html) | ✔️ | ✖️ |
+| [load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool.html) | ✔️ | ✖️ |
+| [load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor.html) | ✔️ | ✖️ |
+| [page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html) | ✔️ | ✖️ |
+| [rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html) | ✔️ | ✔️ |
+| [record](https://www.terraform.io/docs/providers/cloudflare/r/record.html) | ✔️ | ✔️ |
+| [spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application.html) | ✔️ | ✖️ |
+| [waf_rule](https://www.terraform.io/docs/providers/cloudflare/r/waf_rule.html) | ✔️ | ✖️ |
+| [worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route.html) | ✔️ | ✔️ |
+| [worker_script](https://www.terraform.io/docs/providers/cloudflare/r/worker_script.html) | ✔️ | ✖️ |
+| [zone](https://www.terraform.io/docs/providers/cloudflare/r/zone.html) | ✔️ | ✔️ |
+| [zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown.html) | ✔️ | ✔️ |
+| [zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override.html) | ✔️ | ✖️ |
 
 ## Supported resources for exporting tfstate
 
-The following commands support the --tfstate flag. Note that support across the remaining commands will be added over time.
 
 * [filter](https://www.terraform.io/docs/providers/cloudflare/r/filter.html)
 * [worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route.html)

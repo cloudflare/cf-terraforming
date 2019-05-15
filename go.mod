@@ -9,7 +9,7 @@ require (
 	github.com/hashicorp/go-getter v0.0.0-20181213035916-be39683deade // indirect
 	github.com/hashicorp/go-uuid v1.0.0 // indirect
 	github.com/hashicorp/hcl2 v0.0.0-20190515035735-6a61d80ae3d0 // indirect
-	github.com/hashicorp/hil v0.0.0-20170627220502-fa9f258a9250 // indirect
+	github.com/hashicorp/hil v0.0.0-20190515184748-97b3a9cdfa93 // indirect
 	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/hashicorp/terraform v0.11.11
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect

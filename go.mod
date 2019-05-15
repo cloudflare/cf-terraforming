@@ -20,7 +20,7 @@ require (
 	github.com/sirupsen/logrus v1.4.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/viper v1.3.1
-	github.com/zclconf/go-cty v0.0.0-20181210194043-3a13afc12792 // indirect
+	github.com/zclconf/go-cty v0.0.0-20190515042330-f22aff679d50 // indirect
 	golang.org/x/net v0.0.0-20181213202711-891ebc4b82d6 // indirect
 	golang.org/x/time v0.0.0-20181108054448-85acf8d2951c // indirect
 )

@@ -3,7 +3,7 @@ module github.com/cloudflare/cf-terraforming
 require (
 	github.com/apparentlymart/go-cidr v1.0.0 // indirect
 	github.com/aws/aws-sdk-go v1.19.31 // indirect
-	github.com/blang/semver v0.0.0-20190414102917-ba2c2ddd8906 // indirect
+	github.com/blang/semver/v3 v3.6.1 // indirect
 	github.com/cloudflare/cloudflare-go v0.9.1
 	github.com/hashicorp/go-getter v1.3.0 // indirect
 	github.com/hashicorp/go-uuid v1.0.1 // indirect

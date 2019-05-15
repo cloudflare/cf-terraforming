@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/hcl2 v0.0.0-20190515035735-6a61d80ae3d0 // indirect
 	github.com/hashicorp/hil v0.0.0-20190515184748-97b3a9cdfa93 // indirect
 	github.com/hashicorp/logutils v1.0.0 // indirect
-	github.com/hashicorp/terraform v0.11.11
+	github.com/hashicorp/terraform v0.11.13
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/mitchellh/cli v1.0.0 // indirect
 	github.com/mitchellh/copystructure v1.0.0 // indirect

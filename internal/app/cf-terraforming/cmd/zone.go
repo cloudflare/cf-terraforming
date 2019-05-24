@@ -3,6 +3,7 @@ package cmd
 import (
 	"os"
 	"strconv"
+	"strings"
 
 	"text/template"
 
@@ -78,7 +79,7 @@ var zoneCmd = &cobra.Command{
 
 			if tfstate {
 				r := zoneResourceStateBuild(zone)
-				resourcesMap["cloudflare_zone."+zone.ID] = r
+				resourcesMap["cloudflare_zone."+strings.ReplaceAll(zoneDetails.Name, ".", "_")] = r
 			} else {
 				zoneParse(zone)
 			}

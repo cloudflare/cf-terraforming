@@ -69,8 +69,8 @@ var accessRuleCmd = &cobra.Command{
 					}).Debug("Processing Access rule")
 
 					if tfstate {
-						r := accessRuleResourceStateBuild(zone, r)
-						resourcesMap["cloudflare_access_rule."+r.Primary.Id] = r
+						state := accessRuleResourceStateBuild(zone, r)
+						resourcesMap["cloudflare_access_rule."+r.ID] = state
 					} else {
 						accessRuleParse(zone, r)
 					}

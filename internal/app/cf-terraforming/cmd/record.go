@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"text/template"
 	"time"
 
@@ -141,8 +142,9 @@ var recordCmd = &cobra.Command{
 				}).Debug("Processing record")
 
 				if tfstate {
-					r := recordResourceStateBuild(zone, r)
-					resourcesMap["cloudflare_record."+r.Primary.Id] = r
+					state := recordResourceStateBuild(zone, r)
+					name := r.Type + "_" + strings.ReplaceAll(r.Name, ".", "_") + "_" + r.ID
+					resourcesMap["cloudflare_record."+name] = state
 				} else {
 					recordParse(zone, r)
 				}

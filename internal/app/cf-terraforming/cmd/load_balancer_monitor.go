@@ -53,7 +53,11 @@ var loadBalancerMonitorCmd = &cobra.Command{
 					"Description": lbm.Description,
 				}).Debug("Processing load balancer monitor")
 
-				loadBalancerMonitorParse(lbm)
+				if tfstate {
+					// TODO: Implement state dump
+				} else {
+					loadBalancerMonitorParse(lbm)
+				}
 			}
 		}
 	},

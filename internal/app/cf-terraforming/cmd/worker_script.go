@@ -68,7 +68,11 @@ var workerScriptCmd = &cobra.Command{
 						"Body": workerScriptResponse.WorkerScript,
 					}).Debug("Worker script in multi-script mode")
 
-					workerScriptParse(script.ID, "", workerScriptResponse.WorkerScript, true)
+					if tfstate {
+						// TODO: Implement state dump
+					} else {
+						workerScriptParse(script.ID, "", workerScriptResponse.WorkerScript, true)
+					}
 				}
 			}
 

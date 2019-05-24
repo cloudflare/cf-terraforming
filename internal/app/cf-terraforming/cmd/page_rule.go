@@ -66,7 +66,11 @@ var pageRuleCmd = &cobra.Command{
 					"Status":   rule.Status,
 				}).Debug("Processing page rule")
 
-				pageRuleParse(rule, zone)
+				if tfstate {
+					// TODO: Implement state dump
+				} else {
+					pageRuleParse(rule, zone)
+				}
 			}
 		}
 	},

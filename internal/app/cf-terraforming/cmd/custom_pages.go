@@ -50,7 +50,11 @@ var customPagesCmd = &cobra.Command{
 					"Description": r.Description,
 				}).Debug("Processing custom page")
 
-				customPagesParse(zone, r)
+				if tfstate {
+					// TODO: Implement state dump
+				} else {
+					customPagesParse(zone, r)
+				}
 			}
 		}
 	},

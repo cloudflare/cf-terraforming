@@ -59,7 +59,11 @@ var zoneSettingsOverrideCmd = &cobra.Command{
 				"Result": settingsResponse.Result,
 			}).Debug("Processing zone settings")
 
-			zoneSettingsOverrideParse(settingsResponse.Result, zone)
+			if tfstate {
+				// TODO: Implement state dump
+			} else {
+				zoneSettingsOverrideParse(settingsResponse.Result, zone)
+			}
 		}
 	},
 }

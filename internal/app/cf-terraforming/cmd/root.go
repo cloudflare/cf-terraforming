@@ -70,7 +70,9 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&tfstate, "tfstate", "s", false, "Export tfstate for the given resource instead of HCL Terraform config (default)")
 
 	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
+	viper.BindEnv("email", "CLOUDFLARE_EMAIL")
 	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
+	viper.BindEnv("key", "CLOUDFLARE_TOKEN")
 	viper.BindPFlag("organization", rootCmd.PersistentFlags().Lookup("organization"))
 }
 

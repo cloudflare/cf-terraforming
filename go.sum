@@ -164,6 +164,7 @@ github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T
 github.com/hashicorp/hcl2 v0.0.0-20180308163058-5f8ed954abd8/go.mod h1:xp1eMAxqhQKBxz+yQUTsig9bBMRRWRWw+rK3FJmHf/A=
 github.com/hashicorp/hcl2 v0.0.0-20190515232855-4b22149b7cef h1:rSwJZCz1QBG3jYGOWTm7oFlGNGmbsH1I03bbRvp1C+g=
 github.com/hashicorp/hcl2 v0.0.0-20190515232855-4b22149b7cef/go.mod h1:4oI94iqF3GB10QScn46WqbG0kgTUpha97SAzzg2+2ec=
+github.com/hashicorp/hcl2 v0.0.0-20190702192043-5b39d9ff3a9a/go.mod h1:FSQTwDi9qesxGBsII2VqhIzKQ4r0bHvBkOczWfD7llg=
 github.com/hashicorp/hil v0.0.0-20170627220502-fa9f258a9250 h1:fooK5IvDL/KIsi4LxF/JH68nVdrBSiGNPhS2JAQjtjo=
 github.com/hashicorp/hil v0.0.0-20170627220502-fa9f258a9250/go.mod h1:KHvg/R2/dPtaePb16oW4qIyzkMxXOL38xjRN64adsts=
 github.com/hashicorp/hil v0.0.0-20190515184748-97b3a9cdfa93 h1:OGPcuGwOf3eodeAjPddw61dFJ71G1dDa69hxxw0GTNI=
@@ -357,6 +358,7 @@ github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:
 github.com/zclconf/go-cty v0.0.0-20180302160414-49fa5e03c418/go.mod h1:LnDKxj8gN4aatfXUqmUNooaDjvmDcLPbAN3hYBIVoJE=
 github.com/zclconf/go-cty v0.0.0-20190426224007-b18a157db9e2 h1:Ai1LhlYNEqE39zGU07qHDNJ41iZVPZfZr1dSCoXrp1w=
 github.com/zclconf/go-cty v0.0.0-20190426224007-b18a157db9e2/go.mod h1:xnAOWiHeOqg2nWS62VtQ7pbOu17FtxJNW8RLEih+O3s=
+github.com/zclconf/go-cty v1.0.0/go.mod h1:xnAOWiHeOqg2nWS62VtQ7pbOu17FtxJNW8RLEih+O3s=
 go.opencensus.io v0.18.0 h1:Mk5rgZcggtbvtAun5aJzAtjKKN/t0R3jJPlWILlv938=
 go.opencensus.io v0.18.0/go.mod h1:vKdFvxhtzZ9onBp9VKHK8z/sRpBMnKAsufL7wlDrCOA=
 go4.org v0.0.0-20180809161055-417644f6feb5/go.mod h1:MkTOUMDaeVYJUOUsaDXIhWPZYa1yOyC1qaOBpL57BhE=

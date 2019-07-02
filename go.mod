@@ -6,7 +6,7 @@ require (
 	github.com/cloudflare/cloudflare-go v0.9.1
 	github.com/hashicorp/go-getter v1.3.0 // indirect
 	github.com/hashicorp/go-uuid v1.0.1 // indirect
-	github.com/hashicorp/hcl2 v0.0.0-20190515232855-4b22149b7cef // indirect
+	github.com/hashicorp/hcl2 v0.0.0-20190702192043-5b39d9ff3a9a // indirect
 	github.com/hashicorp/hil v0.0.0-20190515184748-97b3a9cdfa93 // indirect
 	github.com/hashicorp/logutils v1.0.0 // indirect
 	github.com/hashicorp/terraform v0.11.13

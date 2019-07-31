@@ -11,7 +11,7 @@ import (
 )
 
 const filterTemplate = `
-resource "cloudflare_filter" "{{.Filter.ID}}" {
+resource "cloudflare_filter" "filter_{{.Filter.ID}}" {
   zone_id = "{{.Zone.ID}}"
   description = "{{.Filter.Description}}"
   expression = "{{js .Filter.Expression}}"
@@ -66,7 +66,7 @@ var filterCmd = &cobra.Command{
 
 				if tfstate {
 					r := filterResourceStateBuild(zone, r)
-					resourcesMap["cloudflare_filter."+r.Primary.Id] = r
+					resourcesMap["cloudflare_filter.filter_"+r.Primary.Id] = r
 				} else {
 					filterParse(zone, r)
 				}

@@ -4,15 +4,16 @@ import (
 	"os"
 	"strconv"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
 	"text/template"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
 const workerRouteTemplate = `
-resource "cloudflare_worker_route" "{{.Route.ID}}" {
+resource "cloudflare_worker_route" "worker_route_{{.Route.ID}}" {
     zone = "{{.Zone.Name}}"
     pattern = "{{.Route.Pattern}}"
 {{if .MultiScript }}
@@ -63,7 +64,7 @@ var workerRouteCmd = &cobra.Command{
 					if tfstate {
 						r := workerResourceStateBuild(zone, route, api.OrganizationID != "")
 
-						resourcesMap["cloudflare_worker_route."+route.ID] = r
+						resourcesMap["cloudflare_worker_route.worker_route_"+route.ID] = r
 
 					} else {
 						// worker_route is rendered differently for multi-script (enterprise) accounts

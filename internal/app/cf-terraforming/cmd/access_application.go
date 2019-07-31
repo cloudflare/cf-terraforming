@@ -13,7 +13,7 @@ import (
 )
 
 const accessApplicationTemplate = `
-resource "cloudflare_access_application" "{{.App.ID}}" {
+resource "cloudflare_access_application" "access_application_{{.App.ID}}" {
  	zone_id = "{{.Zone.ID}}"
  	name = "{{.App.Name}}"
  	domain = "{{.App.Domain}}"
@@ -67,7 +67,7 @@ var accessApplicationCmd = &cobra.Command{
 
 				if tfstate {
 					r := accessApplicationResourceStateBuild(app, zone)
-					resourcesMap["cloudflare_access_application."+r.Primary.Id] = r
+					resourcesMap["cloudflare_access_application.access_application_"+r.Primary.Id] = r
 				} else {
 					accessApplicationParse(app, zone)
 				}

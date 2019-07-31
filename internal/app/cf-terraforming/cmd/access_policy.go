@@ -13,7 +13,7 @@ import (
 )
 
 const accessPolicyTemplate = `
-resource "cloudflare_access_policy" "{{.Policy.ID}}" {
+resource "cloudflare_access_policy" "access_policy_{{.Policy.ID}}" {
     application_id = "{{.App.ID}}"
     zone_id = "{{.Zone.ID}}"
     name = "{{.Policy.Name}}"
@@ -109,7 +109,7 @@ var accessPolicyCmd = &cobra.Command{
 				for _, policy := range accessPolicies {
 					if tfstate {
 						r := accessPolicyResourceStateBuild(app, policy, zone)
-						resourcesMap["cloudflare_access_policy."+r.Primary.Id] = r
+						resourcesMap["cloudflare_access_policy.access_policy_"+r.Primary.Id] = r
 					} else {
 						accessPolicyParse(app, policy, zone)
 					}

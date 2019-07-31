@@ -12,7 +12,7 @@ import (
 )
 
 const firewallRuleTemplate = `
-resource "cloudflare_firewall_rule" "{{.FirewallRule.ID}}" {
+resource "cloudflare_firewall_rule" "firewall_rule_{{.FirewallRule.ID}}" {
   zone_id = "{{.Zone.ID}}"
   description = "{{.FirewallRule.Description}}"
   filter_id = "{{.FirewallRule.Filter.ID}}"
@@ -68,7 +68,7 @@ var firewallRuleCmd = &cobra.Command{
 
 				if tfstate {
 					r := firewallRuleResourceStateBuild(zone, r)
-					resourcesMap["cloudflare_firewall_rule."+r.Primary.Id] = r
+					resourcesMap["cloudflare_firewall_rule.firewall_rule_"+r.Primary.Id] = r
 				} else {
 					firewallRuleParse(zone, r)
 				}

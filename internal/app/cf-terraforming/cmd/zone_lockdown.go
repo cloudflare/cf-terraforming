@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"text/template"
 
@@ -70,7 +71,7 @@ var zoneLockdownCmd = &cobra.Command{
 
 					if tfstate {
 						r := zoneLockdownResourceStateBuild(zone, r)
-						resourcesMap["cloudflare_zone_lockdown."+r.Primary.Id] = r
+						resourcesMap["cloudflare_zone_lockdown."+strings.ReplaceAll(zone.Name, ".", "_")+"_"+r.Primary.Id] = r
 					} else {
 						zoneLockdownParse(zone, r)
 					}

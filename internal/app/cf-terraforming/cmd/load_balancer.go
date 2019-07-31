@@ -12,7 +12,7 @@ import (
 )
 
 const loadBalancerTemplate = `
-resource "cloudflare_load_balancer" "{{.LB.ID}}" {
+resource "cloudflare_load_balancer" "load_balancer_{{.LB.ID}}" {
     zone = "{{.Zone.Name}}"
     name = "{{.LB.Name}}"
     fallback_pool_id = "{{.LB.FallbackPool}}"

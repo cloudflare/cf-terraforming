@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"text/template"
 
@@ -92,7 +93,7 @@ var rateLimitCmd = &cobra.Command{
 
 					if tfstate {
 						r := rateLimitResourceStateBuild(zone, r)
-						resourcesMap["cloudflare_rate_limit."+r.Primary.Id] = r
+						resourcesMap["cloudflare_rate_limit."+strings.ReplaceAll(zone.Name, ".", "_")+"_"+r.Primary.Id] = r
 					} else {
 						rateLimitParse(zone, r)
 					}

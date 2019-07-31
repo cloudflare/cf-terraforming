@@ -12,7 +12,7 @@ import (
 )
 
 const loadBalancerMonitorTemplate = `
-resource "cloudflare_load_balancer_monitor" "{{.LBM.ID}}" {
+resource "cloudflare_load_balancer_monitor" "load_balancer_monitor_{{.LBM.ID}}" {
     expected_body = "{{.LBM.ExpectedBody}}"
     expected_codes = "{{.LBM.ExpectedCodes}}"
     method = "{{.LBM.Method}}"

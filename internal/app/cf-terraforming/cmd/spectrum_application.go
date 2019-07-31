@@ -13,7 +13,7 @@ import (
 )
 
 const spectrumApplicationTemplate = `
-resource "cloudflare_spectrum_application" "{{.App.ID}}" {
+resource "cloudflare_spectrum_application" "spectrum_application_{{.App.ID}}" {
     protocol = "{{.App.Protocol}}"
     dns = {
         type = "{{.App.DNS.Type}}"

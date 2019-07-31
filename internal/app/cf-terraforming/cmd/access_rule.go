@@ -10,7 +10,7 @@ import (
 )
 
 const accessRuleTemplate = `
-resource "cloudflare_access_rule" "{{.AccessRule.ID}}" {
+resource "cloudflare_access_rule" "access_rule_{{.AccessRule.ID}}" {
   notes = "{{.AccessRule.Notes}}"
   mode = "{{.AccessRule.Mode}}"
   configuration {
@@ -70,7 +70,7 @@ var accessRuleCmd = &cobra.Command{
 
 					if tfstate {
 						state := accessRuleResourceStateBuild(zone, r)
-						resourcesMap["cloudflare_access_rule."+r.ID] = state
+						resourcesMap["cloudflare_access_rule.access_rule_"+r.ID] = state
 					} else {
 						accessRuleParse(zone, r)
 					}

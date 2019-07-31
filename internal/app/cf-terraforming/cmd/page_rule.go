@@ -11,7 +11,7 @@ import (
 )
 
 const pageRuleTemplate = `
-resource "cloudflare_page_rule" "{{.Rule.ID}}" {
+resource "cloudflare_page_rule" "page_rule_{{.Rule.ID}}" {
     zone = "{{.Zone.Name}}"
 {{ range .Rule.Targets}}
     target = "{{.Constraint.Value }}"

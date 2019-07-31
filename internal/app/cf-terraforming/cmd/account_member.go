@@ -12,7 +12,7 @@ import (
 )
 
 const accountMemberTemplate = `
-resource "cloudflare_account_member" "{{.Member.ID}}" {
+resource "cloudflare_account_member" "account_member_{{.Member.ID}}" {
     email_address = "{{.Member.User.Email}}"
     role_ids = [{{range .Member.Roles}}"{{.ID}}",{{end}}]
 }

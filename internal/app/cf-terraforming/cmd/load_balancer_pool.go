@@ -12,7 +12,7 @@ import (
 )
 
 const loadBalancerPoolTemplate = `
-resource "cloudflare_load_balancer_pool" "{{.LBP.ID}}" {
+resource "cloudflare_load_balancer_pool" "load_balancer_pool_{{.LBP.ID}}" {
     name = "{{.LBP.Name}}"
 {{if .LBP.Origins}}
     {{range .LBP.Origins}}

@@ -17,6 +17,7 @@ resource "cloudflare_page_rule" "page_rule_{{.Rule.ID}}" {
     target = "{{.Constraint.Value }}"
 {{ end }}
     priority = {{ quoteIfString .Rule.Priority }}
+    status = "{{.Rule.Status}}"
     actions = {
     {{- range .Rule.Actions}}
     {{- if isMap .Value}}

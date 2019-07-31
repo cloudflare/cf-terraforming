@@ -64,7 +64,11 @@ var wafRuleCmd = &cobra.Command{
 						"ID": rule.ID,
 					}).Debug("Processing WAF rule")
 
-					wafRuleParse(zone, wafPackage, rule)
+					if tfstate {
+						// TODO: Implement state dump
+					} else {
+						wafRuleParse(zone, wafPackage, rule)
+					}
 				}
 			}
 		}

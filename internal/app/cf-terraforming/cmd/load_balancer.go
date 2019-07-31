@@ -88,7 +88,11 @@ var loadBalancerCmd = &cobra.Command{
 						"DefaultPools": lb.DefaultPools,
 					}).Debug("Processing load balancer")
 
-					loadBalancerParse(lb, zone)
+					if tfstate {
+						// TODO: Implement state dump
+					} else {
+						loadBalancerParse(lb, zone)
+					}
 				}
 			}
 		}

@@ -50,7 +50,11 @@ var accountMemberCmd = &cobra.Command{
 				"User email":        r.User.Email,
 			}).Debug("Processing account member")
 
-			memberParse(r)
+			if tfstate {
+				// TODO: Implement state dump
+			} else {
+				memberParse(r)
+			}
 		}
 	},
 }

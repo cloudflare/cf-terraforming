@@ -70,7 +70,11 @@ var spectrumApplicationCmd = &cobra.Command{
 						"ID": app.ID,
 					}).Debug("Processing spectrum app")
 
-					spectrumAppParse(app)
+					if tfstate {
+						// TODO: Implement state dump
+					} else {
+						spectrumAppParse(app)
+					}
 				}
 			}
 		}

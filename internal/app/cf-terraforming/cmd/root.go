@@ -15,7 +15,7 @@ import (
 )
 
 var log = logrus.New()
-var cfgFile, zoneName, apiEmail, apiKey, accountID, orgID, logLevel string
+var cfgFile, zoneName, apiEmail, apiKey, apiToken, accountID, orgID, logLevel string
 var verbose, tfstate bool
 var api *cloudflare.API
 var zones []cloudflare.Zone
@@ -57,7 +57,8 @@ func init() {
 
 	// API credentials
 	rootCmd.PersistentFlags().StringVarP(&apiEmail, "email", "e", "", "API Email address associated with your account")
-	rootCmd.PersistentFlags().StringVarP(&apiKey, "key", "k", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile")
+	rootCmd.PersistentFlags().StringVarP(&apiKey, "key", "k", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile")
+	rootCmd.PersistentFlags().StringVarP(&apiToken, "token", "t", "", "API Token")
 
 	// [Optional] Organization ID
 	rootCmd.PersistentFlags().StringVarP(&orgID, "organization", "o", "", "Use specific organization ID for import")
@@ -73,6 +74,9 @@ func init() {
 	viper.BindEnv("email", "CLOUDFLARE_EMAIL")
 	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
 	viper.BindEnv("key", "CLOUDFLARE_KEY")
+	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
+	viper.BindEnv("token", "CLOUDFLARE_TOKEN")
+
 	viper.BindPFlag("organization", rootCmd.PersistentFlags().Lookup("organization"))
 }
 
@@ -130,6 +134,14 @@ func initConfig() {
 }
 
 func persistentPreRun(cmd *cobra.Command, args []string) {
+
+	accountID = viper.GetString("account")
+	if accountID == "" {
+		// backward-compatible with organization
+		accountID = viper.GetString("organization")
+	}
+
+	if apiToken = viper.GetString("token"); apiToken == "" {
 	if apiEmail = viper.GetString("email"); apiEmail == "" {
 		log.Error("'email' must be set.")
 	}
@@ -139,31 +151,39 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 	}
 
 	log.WithFields(logrus.Fields{
-		"API email":       apiEmail,
-		"Zone name":       zoneName,
-		"Account ID":      accountID,
-		"Organization ID": orgID,
+			"API email":  apiEmail,
+			"Zone name":  zoneName,
+			"Account ID": accountID,
 	}).Debug("Initializing cloudflare-go")
 
-	var options cloudflare.Option
-
-	if orgID = viper.GetString("organization"); orgID != "" {
+	} else {
 		log.WithFields(logrus.Fields{
-			"ID": orgID,
-		}).Debug("Configuring Cloudflare API with organization")
+			"Zone name":  zoneName,
+			"Account ID": accountID,
+		}).Debug("Initializing cloudflare-go with API Token")
+	}
+
+	var options []cloudflare.Option
+
+	if accountID != "" {
+		log.WithFields(logrus.Fields{
+			"ID": accountID,
+		}).Debug("Configuring Cloudflare API with account")
 
 		// Organization ID was passed, use it to configure the API
-		options = cloudflare.UsingOrganization(orgID)
+		options = append(options, cloudflare.UsingOrganization(accountID))
 	}
 
 	var err error
-	if options != nil {
-		api, err = cloudflare.New(apiKey, apiEmail, options)
+	var useToken = apiToken != ""
+
+	if useToken {
+		api, err = cloudflare.NewWithAPIToken(apiToken, options...)
 	} else {
-		api, err = cloudflare.New(apiKey, apiEmail)
+		api, err = cloudflare.New(apiKey, apiEmail, options...)
 	}
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 
 	log.Debug("Selecting zones for import")

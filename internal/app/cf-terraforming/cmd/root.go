@@ -61,7 +61,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&apiToken, "token", "t", "", "API Token")
 
 	// [Optional] Organization ID
-	rootCmd.PersistentFlags().StringVarP(&orgID, "organization", "o", "", "Use specific organization ID for import")
+	rootCmd.PersistentFlags().StringVarP(&orgID, "organization", "o", "", "Use specific organization ID for import (deprecated)")
 
 	// Debug logging mode
 	rootCmd.PersistentFlags().StringVarP(&logLevel, "loglevel", "l", "", "Specify logging level: (trace, debug, info, warn, error, fatal, panic)")
@@ -77,6 +77,7 @@ func init() {
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindEnv("token", "CLOUDFLARE_TOKEN")
 
+	viper.BindPFlag("account", rootCmd.PersistentFlags().Lookup("account"))
 	viper.BindPFlag("organization", rootCmd.PersistentFlags().Lookup("organization"))
 }
 
@@ -142,19 +143,19 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 	}
 
 	if apiToken = viper.GetString("token"); apiToken == "" {
-	if apiEmail = viper.GetString("email"); apiEmail == "" {
-		log.Error("'email' must be set.")
-	}
+		if apiEmail = viper.GetString("email"); apiEmail == "" {
+			log.Error("'email' must be set.")
+		}
 
-	if apiKey = viper.GetString("key"); apiKey == "" {
-		log.Error("'key' must be set.")
-	}
+		if apiKey = viper.GetString("key"); apiKey == "" {
+			log.Error("'key' must be set.")
+		}
 
-	log.WithFields(logrus.Fields{
+		log.WithFields(logrus.Fields{
 			"API email":  apiEmail,
 			"Zone name":  zoneName,
 			"Account ID": accountID,
-	}).Debug("Initializing cloudflare-go")
+		}).Debug("Initializing cloudflare-go")
 
 	} else {
 		log.WithFields(logrus.Fields{

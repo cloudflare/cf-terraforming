@@ -45,7 +45,7 @@ Flags:
   -h, --help                  help for cf-terraforming
   -k, --key string            API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile
   -l, --loglevel string       Specify logging level: (trace, debug, info, warn, error, fatal, panic)
-  -o, --organization string   Use specific organization ID for import
+  -o, --organization string   Use specific organization ID for import (deprecated, use -a instead)
   -s, --tfstate               Export tfstate for the given resource instead of HCL Terraform config (default ! See caveats below !)
   -v, --verbose               Specify verbose output (same as setting log level to debug)
   -z, --zone string           Limit the export to a single zone (name or ID)
@@ -126,7 +126,7 @@ Currently, only the worker_route command supports the --tfstate flag, but suppor
 To use this currently experimental feature, pass the --tfstate (-s) flag to your command like so:
 
 ```
-$ go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z example.com -a $CLOUDFLARE_ACCOUNT_ID --organization $CLOUDFLARE_ORG_ID --tfstate worker_route
+$ go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z example.com --account $CLOUDFLARE_ACCOUNT_ID --tfstate worker_route
 
 ```
 

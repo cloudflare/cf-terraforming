@@ -35,7 +35,7 @@ var workerScriptCmd = &cobra.Command{
 		// Enterprise multi-script mode:
 		// If the organization ID is set at the API level,
 		// this is an enterprise request, which can use special endpoints such as enumerate workers
-		if api.OrganizationID != "" {
+		if api.AccountID != "" {
 			workerScripts, err := api.ListWorkerScripts()
 
 			if err != nil {

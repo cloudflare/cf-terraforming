@@ -172,7 +172,7 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		}).Debug("Configuring Cloudflare API with account")
 
 		// Organization ID was passed, use it to configure the API
-		options = append(options, cloudflare.UsingOrganization(accountID))
+		options = append(options, cloudflare.UsingAccount(accountID))
 	}
 
 	var err error

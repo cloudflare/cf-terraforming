@@ -62,14 +62,14 @@ var workerRouteCmd = &cobra.Command{
 					}).Debug("Processing woker route")
 
 					if tfstate {
-						r := workerResourceStateBuild(zone, route, api.OrganizationID != "")
+						r := workerResourceStateBuild(zone, route, api.AccountID != "")
 
 						resourcesMap["cloudflare_worker_route.worker_route_"+route.ID] = r
 
 					} else {
 						// worker_route is rendered differently for multi-script (enterprise) accounts
 						// and non-enterprise accounts
-						workerRouteParse(zone, route, api.OrganizationID != "")
+						workerRouteParse(zone, route, api.AccountID != "")
 					}
 				}
 			}

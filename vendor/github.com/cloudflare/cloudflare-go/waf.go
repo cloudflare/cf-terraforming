@@ -24,6 +24,38 @@ type WAFPackagesResponse struct {
 	ResultInfo ResultInfo   `json:"result_info"`
 }
 
+// WAFPackageResponse represents the response from the WAF package endpoint.
+type WAFPackageResponse struct {
+	Response
+	Result     WAFPackage `json:"result"`
+	ResultInfo ResultInfo `json:"result_info"`
+}
+
+// WAFPackageOptions represents options to edit a WAF package.
+type WAFPackageOptions struct {
+	Sensitivity string `json:"sensitivity,omitempty"`
+	ActionMode  string `json:"action_mode,omitempty"`
+}
+
+// WAFGroup represents a WAF rule group.
+type WAFGroup struct {
+	ID                 string   `json:"id"`
+	Name               string   `json:"name"`
+	Description        string   `json:"description"`
+	RulesCount         int      `json:"rules_count"`
+	ModifiedRulesCount int      `json:"modified_rules_count"`
+	PackageID          string   `json:"package_id"`
+	Mode               string   `json:"mode"`
+	AllowedModes       []string `json:"allowed_modes"`
+}
+
+// WAFGroupsResponse represents the response from the WAF groups endpoint.
+type WAFGroupsResponse struct {
+	Response
+	Result     []WAFGroup `json:"result"`
+	ResultInfo ResultInfo `json:"result_info"`
+}
+
 // WAFRule represents a WAF rule.
 type WAFRule struct {
 	ID          string `json:"id"`
@@ -83,6 +115,74 @@ func (api *API) ListWAFPackages(zoneID string) ([]WAFPackage, error) {
 		packages = append(packages, p.Result[pi])
 	}
 	return packages, nil
+}
+
+// WAFPackage returns a WAF package for the given zone.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-packages-firewall-package-details
+func (api *API) WAFPackage(zoneID, packageID string) (WAFPackage, error) {
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFPackageResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return r.Result, nil
+}
+
+// UpdateWAFPackage lets you update the a WAF Package.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-packages-edit-firewall-package
+func (api *API) UpdateWAFPackage(zoneID, packageID string, opts WAFPackageOptions) (WAFPackage, error) {
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID
+	res, err := api.makeRequest("PATCH", uri, opts)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFPackageResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return WAFPackage{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// ListWAFGroups returns a slice of the WAF groups for the given WAF package.
+//
+// API Reference: https://api.cloudflare.com/#waf-rule-groups-list-rule-groups
+func (api *API) ListWAFGroups(zoneID, packageID string) ([]WAFGroup, error) {
+	var groups []WAFGroup
+	var res []byte
+	var err error
+
+	uri := "/zones/" + zoneID + "/firewall/waf/packages/" + packageID + "/groups"
+	res, err = api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return []WAFGroup{}, errors.Wrap(err, errMakeRequestError)
+	}
+
+	var r WAFGroupsResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return []WAFGroup{}, errors.Wrap(err, errUnmarshalError)
+	}
+
+	if !r.Success {
+		// TODO: Provide an actual error message instead of always returning nil
+		return []WAFGroup{}, err
+	}
+
+	for gi := range r.Result {
+		groups = append(groups, r.Result[gi])
+	}
+	return groups, nil
 }
 
 // ListWAFRules returns a slice of the WAF rules for the given WAF package.

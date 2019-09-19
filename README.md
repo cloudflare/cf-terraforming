@@ -43,10 +43,11 @@ Flags:
   -c, --config string         config file (default is $HOME/.cf-terraforming.yaml)
   -e, --email string          API Email address associated with your account
   -h, --help                  help for cf-terraforming
-  -k, --key string            API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/?account=profile
+  -k, --key string            API Key generated on the 'API Tokens' page, under 'API Keys'. See: https://dash.cloudflare.com/profile/api-tokens
   -l, --loglevel string       Specify logging level: (trace, debug, info, warn, error, fatal, panic)
   -o, --organization string   Use specific organization ID for import (deprecated, use -a instead)
   -s, --tfstate               Export tfstate for the given resource instead of HCL Terraform config (default ! See caveats below !)
+  -t, --token string          API Token generated on the 'API Tokens' page, under 'API Tokens'. See: https://dash.cloudflare.com/profile/api-tokens
   -v, --verbose               Specify verbose output (same as setting log level to debug)
   -z, --zone string           Limit the export to a single zone (name or ID)
 

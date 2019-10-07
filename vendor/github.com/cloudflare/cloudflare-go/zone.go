@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"golang.org/x/net/idna"
 )
 
 // Owner describes the resource owner.
@@ -138,7 +139,7 @@ type ZoneRatePlanResponse struct {
 type ZoneSetting struct {
 	ID            string      `json:"id"`
 	Editable      bool        `json:"editable"`
-	ModifiedOn    string      `json:"modified_on"`
+	ModifiedOn    string      `json:"modified_on,omitempty"`
 	Value         interface{} `json:"value"`
 	TimeRemaining int         `json:"time_remaining"`
 }
@@ -147,6 +148,12 @@ type ZoneSetting struct {
 type ZoneSettingResponse struct {
 	Response
 	Result []ZoneSetting `json:"result"`
+}
+
+// ZoneSettingSingleResponse represents the response from the Zone Setting endpoint for the specified setting.
+type ZoneSettingSingleResponse struct {
+	Response
+	Result ZoneSetting `json:"result"`
 }
 
 // ZoneSSLSetting contains ssl setting for a zone.
@@ -344,7 +351,7 @@ func (api *API) ListZones(z ...string) ([]Zone, error) {
 	var err error
 	if len(z) > 0 {
 		for _, zone := range z {
-			v.Set("name", zone)
+			v.Set("name", normalizeZoneName(zone))
 			res, err = api.makeRequest("GET", "/zones?"+v.Encode(), nil)
 			if err != nil {
 				return []Zone{}, errors.Wrap(err, errMakeRequestError)
@@ -731,6 +738,55 @@ func (api *API) UpdateFallbackOrigin(zoneID string, fbo FallbackOrigin) (*Fallba
 	}
 
 	response := &FallbackOriginResponse{}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return nil, errors.Wrap(err, errUnmarshalError)
+	}
+
+	return response, nil
+}
+
+// normalizeZoneName tries to convert IDNs (international domain names)
+// from Punycode to Unicode form. If the given zone name is not represented
+// as Punycode, or converting fails (for invalid representations), it
+// is returned unchanged.
+//
+// Note: conversion errors are silently discarded.
+func normalizeZoneName(name string) string {
+	if n, err := idna.ToUnicode(name); err == nil {
+		return n
+	}
+	return name
+}
+
+// ZoneSingleSetting returns information about specified setting to the specified zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-get-all-zone-settings
+func (api *API) ZoneSingleSetting(zoneID, settingName string) (ZoneSetting, error) {
+	uri := "/zones/" + zoneID + "/settings/" + settingName
+	res, err := api.makeRequest("GET", uri, nil)
+	if err != nil {
+		return ZoneSetting{}, errors.Wrap(err, errMakeRequestError)
+	}
+	var r ZoneSettingSingleResponse
+	err = json.Unmarshal(res, &r)
+	if err != nil {
+		return ZoneSetting{}, errors.Wrap(err, errUnmarshalError)
+	}
+	return r.Result, nil
+}
+
+// UpdateZoneSingleSetting updates the specified setting for a given zone.
+//
+// API reference: https://api.cloudflare.com/#zone-settings-edit-zone-settings-info
+func (api *API) UpdateZoneSingleSetting(zoneID, settingName string, setting ZoneSetting) (*ZoneSettingSingleResponse, error) {
+	uri := "/zones/" + zoneID + "/settings/" + settingName
+	res, err := api.makeRequest("PATCH", uri, setting)
+	if err != nil {
+		return nil, errors.Wrap(err, errMakeRequestError)
+	}
+
+	response := &ZoneSettingSingleResponse{}
 	err = json.Unmarshal(res, &response)
 	if err != nil {
 		return nil, errors.Wrap(err, errUnmarshalError)

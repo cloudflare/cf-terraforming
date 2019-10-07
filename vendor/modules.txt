@@ -1,4 +1,4 @@
-# github.com/cloudflare/cloudflare-go v0.10.1
+# github.com/cloudflare/cloudflare-go v0.10.3
 github.com/cloudflare/cloudflare-go
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
@@ -46,13 +46,17 @@ github.com/spf13/pflag
 github.com/spf13/viper
 # golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
 golang.org/x/crypto/ssh/terminal
+# golang.org/x/net v0.0.0-20191002035440-2ec189313ef0
+golang.org/x/net/idna
 # golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # golang.org/x/text v0.3.2
+golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
+golang.org/x/text/unicode/bidi
 golang.org/x/text/unicode/norm
-# golang.org/x/time v0.0.0-20190308202827-9d24e82272b4
+# golang.org/x/time v0.0.0-20190921001708-c4c64cad1fd0
 golang.org/x/time/rate
 # gopkg.in/yaml.v2 v2.2.2
 gopkg.in/yaml.v2

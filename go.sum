@@ -80,6 +80,8 @@ github.com/cloudflare/cloudflare-go v0.10.1 h1:d2CL6F9k2O0Ux0w27LgogJ5UOzZRj6a/h
 github.com/cloudflare/cloudflare-go v0.10.1/go.mod h1:C0Y6eWnTJPMK2ceuOxx2pjh78UUHihcXeTTHb8r7QjU=
 github.com/cloudflare/cloudflare-go v0.10.3 h1:rPVJpDkdEid83aVsET8O6GjLmJUs32XjsmT8465dnG8=
 github.com/cloudflare/cloudflare-go v0.10.3/go.mod h1:tJ8N2H9dqI0tzR1HgIrCLBxtisLYgog53iTkQsNVXDM=
+github.com/cloudflare/cloudflare-go v0.10.6 h1:mbv0IrcrrLlPLxAzCdW6aQ/CPlqhyXrXTjviU0Tb+34=
+github.com/cloudflare/cloudflare-go v0.10.6/go.mod h1:dcRl7AXBH5Bf7QFTBVc3TRzwvotSeO4AlnMhuxORAX8=
 github.com/coreos/bbolt v1.3.0/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/bbolt v1.3.2/go.mod h1:iRUV2dpdMOn7Bo10OQBFzIJO9kkE559Wcmn+qkEiiKk=
 github.com/coreos/etcd v3.3.10+incompatible/go.mod h1:uF7uidLiAD3TWHmW31ZFd/JWoc32PjwdhPthX9715RE=
@@ -485,6 +487,8 @@ golang.org/x/net v0.0.0-20191002035440-2ec189313ef0 h1:2mqDk8w/o6UmeUCu5Qiq2y7iM
 golang.org/x/net v0.0.0-20191002035440-2ec189313ef0/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=
 golang.org/x/net v0.0.0-20191009170851-d66e71096ffb h1:TR699M2v0qoKTOHxeLgp6zPqaQNs74f01a/ob9W0qko=
 golang.org/x/net v0.0.0-20191009170851-d66e71096ffb/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=
+golang.org/x/net v0.0.0-20191014212845-da9a3fd4c582 h1:p9xBe/w/OzkeYVKm234g55gMdD1nSIooTir5kV11kfA=
+golang.org/x/net v0.0.0-20191014212845-da9a3fd4c582/go.mod h1:z5CRVTTTmAJ677TzLLGU+0bjPO0LkuOLi4/5GtJWs/s=
 golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/oauth2 v0.0.0-20181017192945-9dcd33a902f4/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=
 golang.org/x/oauth2 v0.0.0-20181203162652-d668ce993890/go.mod h1:N/0e6XlmueqKjAGxoOufVs8QHGRruUQn6yWY3a++T0U=

@@ -58,9 +58,7 @@ Use "cf-terraforming [command] --help" for more information about a command.
 
 **A note on storing your credentials securely:** We recommend that you store your Cloudflare credentials (API key, email, account ID, etc) as environment variables as demonstrated below.
 
-You can use ```go run``` to build and execute the binary in a single command like so:
-
-```go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN --account $CLOUDFLARE_ACCOUNT_ID spectrum_application```
+```cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN --account $CLOUDFLARE_ACCOUNT_ID spectrum_application```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform configuration representing the **resource** you requested:
 
@@ -83,7 +81,7 @@ See the currently **supported resources** below.
 
 Use the **all** command to download everything and convert it into Terraform config.
 
-```go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN --account $CLOUDFLARE_ACCOUNT_ID all```
+```cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN --account $CLOUDFLARE_ACCOUNT_ID all```
 
 ## Controlling output and verbose mode
 By default, cf-terraforming will not output any log type messages to stdout when run, so as to not pollute your generated Terraform config files and to allow you to cleanly redirect cf-terraforming output to existing Terraform configs.
@@ -91,7 +89,7 @@ By default, cf-terraforming will not output any log type messages to stdout when
 However, it can be useful when debugging issues to specify a logging level, like so:
 
 ```
-go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 -l="debug" spectrum_application
+cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 -l="debug" spectrum_application
 
 DEBU[0000] Initializing cloudflare-go                    API email=apicloudflare.com Account ID=e9e138b6x52ea331b359a2ddfc6a8 Organization ID= Zone name=example.com
 DEBU[0000] Selecting zones for import
@@ -103,7 +101,7 @@ DEBU[0000] Importing zone settings data
 For convenience, you can set the verbose flag, which is functionally equivalent to setting a log level of debug:
 
 ```
-go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 -v spectrum_application
+cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d876bc764b5f763af7644411 -v spectrum_application
 ```
 
 ## Prerequisites
@@ -116,7 +114,7 @@ go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_T
 ```bash
 $ go get -u github.com/cloudflare/cf-terraforming/...
 ```
-This will fetch the cf-terraforming tool as well as its dependencies, updating them as necessary.
+This will fetch the cf-terraforming tool as well as its dependencies, updating them as necessary, and build and install the package.
 
 ## Experimental: exporting tfstate
 
@@ -127,7 +125,7 @@ Currently, only the worker_route command supports the --tfstate flag, but suppor
 To use this currently experimental feature, pass the --tfstate (-s) flag to your command like so:
 
 ```
-$ go run cmd/cf-terraforming/main.go --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z example.com --account $CLOUDFLARE_ACCOUNT_ID --tfstate worker_route
+$ cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z example.com --account $CLOUDFLARE_ACCOUNT_ID --tfstate worker_route
 
 ```
 

@@ -1,4 +1,4 @@
-# github.com/cloudflare/cloudflare-go v0.10.3
+# github.com/cloudflare/cloudflare-go v0.10.6
 github.com/cloudflare/cloudflare-go
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
@@ -46,7 +46,7 @@ github.com/spf13/pflag
 github.com/spf13/viper
 # golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20191009170851-d66e71096ffb
+# golang.org/x/net v0.0.0-20191014212845-da9a3fd4c582
 golang.org/x/net/idna
 # golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa
 golang.org/x/sys/unix

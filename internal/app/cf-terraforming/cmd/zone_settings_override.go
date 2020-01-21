@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"os"
+	"sort"
+	"strings"
 
 	"text/template"
 
@@ -54,6 +56,19 @@ var zoneSettingsOverrideCmd = &cobra.Command{
 				log.Debug(err)
 				return
 			}
+
+			if settingsResponse.Success {
+				for n, s := range settingsResponse.Result {
+					// Remap the 0rtt zone setting to zero_rtt
+					if s.ID == "0rtt" {
+						settingsResponse.Result[n].ID = "zero_rtt"
+					}
+				}
+			}
+
+			sort.Slice(settingsResponse.Result, func(i, j int) bool {
+				return strings.Compare(settingsResponse.Result[i].ID, settingsResponse.Result[j].ID) <= 0
+			})
 
 			log.WithFields(logrus.Fields{
 				"Result": settingsResponse.Result,

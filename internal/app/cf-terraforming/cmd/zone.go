@@ -133,6 +133,12 @@ func zoneResourceStateBuild(zone cloudflare.Zone) Resource {
 	if len(zone.VanityNS) > 1 {
 		zoneAttributes.VanityNameServers1 = zone.VanityNS[0]
 	}
+	if len(zone.NameServers) > 0 {
+		zoneAttributes.NameServers0 = zone.NameServers[0]
+	}
+	if len(zone.NameServers) > 1 {
+		zoneAttributes.NameServers1 = zone.NameServers[1]
+	}
 	r.Primary.Attributes = zoneAttributes
 
 	return r

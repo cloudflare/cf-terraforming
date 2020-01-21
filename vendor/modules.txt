@@ -1,4 +1,4 @@
-# github.com/cloudflare/cloudflare-go v0.11.0
+# github.com/cloudflare/cloudflare-go v0.11.1
 github.com/cloudflare/cloudflare-go
 # github.com/fsnotify/fsnotify v1.4.7
 github.com/fsnotify/fsnotify
@@ -27,7 +27,7 @@ github.com/mitchellh/go-homedir
 github.com/mitchellh/mapstructure
 # github.com/pelletier/go-toml v1.2.0
 github.com/pelletier/go-toml
-# github.com/pkg/errors v0.8.1
+# github.com/pkg/errors v0.9.1
 github.com/pkg/errors
 # github.com/sirupsen/logrus v1.2.0
 github.com/sirupsen/logrus
@@ -48,7 +48,7 @@ github.com/spf13/viper
 github.com/subosito/gotenv
 # golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553
+# golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa
 golang.org/x/net/idna
 # golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa
 golang.org/x/sys/unix

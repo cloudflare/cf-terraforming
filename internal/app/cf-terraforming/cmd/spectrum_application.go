@@ -24,7 +24,7 @@ resource "cloudflare_spectrum_application" "spectrum_application_{{.App.ID}}" {
     origin_port = "{{.App.OriginPort}}"
 {{end}}
 {{if .App.OriginDNS}}
-    origin_dns = {
+    origin_dns {
       name = "{{.App.OriginDNS.Name}}"
     }
 {{end}}

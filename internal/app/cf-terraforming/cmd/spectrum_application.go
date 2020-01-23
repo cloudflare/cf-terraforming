@@ -90,7 +90,7 @@ func spectrumAppParse(app cloudflare.SpectrumApplication, zone cloudflare.Zone) 
 			Zone cloudflare.Zone
 			App cloudflare.SpectrumApplication
 		}{
-			App: app,
 			Zone: zone,
+			App: app,
 		})
 }

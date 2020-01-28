@@ -83,7 +83,6 @@ var spectrumApplicationCmd = &cobra.Command{
 }
 
 func spectrumAppParse(app cloudflare.SpectrumApplication, zone cloudflare.Zone) {
-	// modified this section to support zone id
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(spectrumApplicationTemplate))
 	tmpl.Execute(os.Stdout,
 		struct {

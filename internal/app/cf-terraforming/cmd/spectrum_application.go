@@ -14,8 +14,9 @@ import (
 
 const spectrumApplicationTemplate = `
 resource "cloudflare_spectrum_application" "spectrum_application_{{.App.ID}}" {
+    zone_id = "{{.Zone.ID}}"
     protocol = "{{.App.Protocol}}"
-    dns = {
+    dns {
         type = "{{.App.DNS.Type}}"
         name = "{{.App.DNS.Name}}"
     }
@@ -23,7 +24,7 @@ resource "cloudflare_spectrum_application" "spectrum_application_{{.App.ID}}" {
     origin_port = "{{.App.OriginPort}}"
 {{end}}
 {{if .App.OriginDNS}}
-    origin_dns = {
+    origin_dns {
       name = "{{.App.OriginDNS.Name}}"
     }
 {{end}}
@@ -73,7 +74,7 @@ var spectrumApplicationCmd = &cobra.Command{
 					if tfstate {
 						// TODO: Implement state dump
 					} else {
-						spectrumAppParse(app)
+						spectrumAppParse(app, zone)
 					}
 				}
 			}
@@ -81,12 +82,14 @@ var spectrumApplicationCmd = &cobra.Command{
 	},
 }
 
-func spectrumAppParse(app cloudflare.SpectrumApplication) {
+func spectrumAppParse(app cloudflare.SpectrumApplication, zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(spectrumApplicationTemplate))
 	tmpl.Execute(os.Stdout,
 		struct {
+			Zone cloudflare.Zone
 			App cloudflare.SpectrumApplication
 		}{
+			Zone: zone,
 			App: app,
 		})
 }

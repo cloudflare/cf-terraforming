@@ -17,7 +17,7 @@ resource "cloudflare_worker_route" "worker_route_{{.Route.ID}}" {
     zone = "{{.Zone.Name}}"
     pattern = "{{.Route.Pattern}}"
 {{if .MultiScript }}
-	script_name = "${cloudflare_worker_script.{{.Route.Script}}}"
+	script_name = "cloudflare_worker_script.{{.Route.Script}}"
 {{else}}
     enabled = "{{.Route.Enabled}}"
 {{end}}

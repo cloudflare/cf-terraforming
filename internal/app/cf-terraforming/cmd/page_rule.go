@@ -12,13 +12,13 @@ import (
 
 const pageRuleTemplate = `
 resource "cloudflare_page_rule" "page_rule_{{.Rule.ID}}" {
-    zone = "{{.Zone.Name}}"
+    zone_id = "{{.Zone.ID}}"
 {{ range .Rule.Targets}}
     target = "{{.Constraint.Value }}"
 {{ end }}
     priority = {{ quoteIfString .Rule.Priority }}
     status = "{{.Rule.Status}}"
-    actions = {
+    actions {
     {{- range .Rule.Actions}}
     {{- if isMap .Value}}
         {{.ID}} {

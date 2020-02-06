@@ -19,7 +19,7 @@ resource "cloudflare_record" "{{.Record.Type}}_{{replace .Record.Name "." "_"}}_
 {{ if .Zone.Paused}}
     paused = "true"
 {{end}}
-    name = "{{.Record.Name}}"
+    name = "{{normalizeRecordName .Record.Name .Record.Domain}}"
     type = "{{.Record.Type}}"
     ttl = "{{.Record.TTL}}"
     proxied = "{{.Record.Proxied}}"

@@ -105,7 +105,7 @@ var dnsTypeValueFields = []string{
 }
 
 var dnsTypeDataFields = []string{
-	"LOC", "SRV", "CERT", "DNSKEY", "DS", "NAPTR", "SMIMEA", "SSHFP", "TLSA", "URI",
+	"LOC", "SRV", "CAA", "CERT", "DNSKEY", "DS", "NAPTR", "SMIMEA", "SSHFP", "TLSA", "URI",
 }
 
 func init() {

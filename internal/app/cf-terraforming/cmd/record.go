@@ -30,7 +30,7 @@ resource "cloudflare_record" "{{.Record.Type}}_{{replace .Record.Name "." "_"}}_
     value = "{{.Record.Content}}"
 {{end}}
 {{ if .IsDataTypeField }}
-    data {
+    data = {
 {{range $k, $v := .Record.Data}}
         {{ $k }} = "{{ $v }}"
 {{end}}

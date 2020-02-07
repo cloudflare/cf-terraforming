@@ -41,10 +41,15 @@ func quoteIfString(i interface{}) interface{} {
 	}
 }
 
+func normalizeRecordName(name, domain string) string {
+	return strings.TrimSuffix(name, "."+domain)
+}
+
 var templateFuncMap = template.FuncMap{
 	"replace":       replace,
 	"isMap":         isMap,
 	"quoteIfString": quoteIfString,
+	"normalizeRecordName": normalizeRecordName,
 }
 
 func hashMap(values map[string]string) int {

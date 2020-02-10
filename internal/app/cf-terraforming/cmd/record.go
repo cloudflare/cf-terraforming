@@ -196,7 +196,7 @@ func recordResourceStateBuild(zone cloudflare.Zone, record cloudflare.DNSRecord)
 				MetadataManagedByApps:       strconv.FormatBool(meta["managed_by_apps"].(bool)),
 				MetadataManagedByArgoTunnel: strconv.FormatBool(meta["managed_by_argo_tunnel"].(bool)),
 				ModifiedOn:                  record.ModifiedOn.Format(time.RFC3339),
-				Name:                        util.normalizeRecordName(record.Name, record.ZoneName),
+				Name:                        normalizeRecordName(record.Name, record.ZoneName),
 				Priority:                    strconv.Itoa(record.Priority),
 				Proxiable:                   strconv.FormatBool(record.Proxiable),
 				Proxied:                     strconv.FormatBool(record.Proxied),

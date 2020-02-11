@@ -39,7 +39,7 @@ resource "cloudflare_rate_limit" "{{replace .Zone.Name "." "_"}}_{{.RateLimit.ID
     }
     {{end}}
   }
-  {{if .RateLimit.Correlate.By}}
+  {{if .RateLimit.Correlate}}
   correlate {
     by = "{{.RateLimit.Correlate.By}}"
   }
@@ -47,7 +47,7 @@ resource "cloudflare_rate_limit" "{{replace .Zone.Name "." "_"}}_{{.RateLimit.ID
   disabled = {{.RateLimit.Disabled}}
   description = "{{.RateLimit.Description}}"
   {{if .RateLimit.Bypass}}
-  bypass_url_patterns = [{{range .RateLimit.Bypass.Value}}"{{.}}", {{end}}]
+  bypass_url_patterns = [{{range .RateLimit.Bypass}}"{{.Value}}", {{end}}]
   {{end}}
 }
 `

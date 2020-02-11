@@ -53,7 +53,7 @@ var zoneSettingsOverrideCmd = &cobra.Command{
 			settingsResponse, err := api.ZoneSettings(zone.ID)
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 

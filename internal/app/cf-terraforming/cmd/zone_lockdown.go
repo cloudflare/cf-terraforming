@@ -56,7 +56,7 @@ var zoneLockdownCmd = &cobra.Command{
 				lockdowns, err := api.ListZoneLockdowns(zone.ID, page)
 
 				if err != nil {
-					log.Debug(err)
+					log.Error(err)
 					return
 				}
 

@@ -129,7 +129,7 @@ var recordCmd = &cobra.Command{
 			recs, err := api.DNSRecords(zone.ID, cloudflare.DNSRecord{})
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 			for _, r := range recs {

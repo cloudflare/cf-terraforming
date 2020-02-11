@@ -58,10 +58,10 @@ var spectrumApplicationCmd = &cobra.Command{
 				if strings.Contains(err.Error(), "HTTP status 403") {
 					log.WithFields(logrus.Fields{
 						"ID": zone.ID,
-					}).Debug("Insufficient permissions for accessing zone")
+					}).Error("Insufficient permissions for accessing zone")
 					continue
 				}
-				log.Debug(err)
+				log.Error(err)
 			}
 
 			if len(spectrumApplications) > 0 {

@@ -85,7 +85,7 @@ var accessPolicyCmd = &cobra.Command{
 			})
 
 			if appFetchErr != nil {
-				log.Debug(appFetchErr)
+				log.Error(appFetchErr)
 				return
 			}
 
@@ -100,10 +100,10 @@ var accessPolicyCmd = &cobra.Command{
 					if strings.Contains(err.Error(), "HTTP status 403") {
 						log.WithFields(logrus.Fields{
 							"ID": zone.ID,
-						}).Debug("Insufficient permissions for accessing zone")
+						}).Error("Insufficient permissions for accessing zone")
 						continue
 					}
-					log.Debug(err)
+					log.Error(err)
 				}
 
 				for _, policy := range accessPolicies {

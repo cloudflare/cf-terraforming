@@ -74,7 +74,7 @@ var loadBalancerCmd = &cobra.Command{
 			})
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 

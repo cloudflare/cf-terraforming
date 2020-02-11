@@ -54,7 +54,7 @@ var loadBalancerPoolCmd = &cobra.Command{
 		loadBalancerPools, err := api.ListLoadBalancerPools()
 
 		if err != nil {
-			log.Debug(err)
+			log.Error(err)
 			return
 		}
 

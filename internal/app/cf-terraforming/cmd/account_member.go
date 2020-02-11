@@ -38,7 +38,7 @@ var accountMemberCmd = &cobra.Command{
 		})
 
 		if err != nil {
-			log.Debug(err)
+			log.Error(err)
 		}
 
 		for _, r := range accountMembers {

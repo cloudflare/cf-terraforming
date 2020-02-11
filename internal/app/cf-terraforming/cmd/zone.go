@@ -68,7 +68,7 @@ var zoneCmd = &cobra.Command{
 			zoneDetails, err := api.ZoneDetails(zone.ID)
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 

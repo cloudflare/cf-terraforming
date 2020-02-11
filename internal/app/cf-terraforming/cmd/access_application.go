@@ -57,10 +57,10 @@ var accessApplicationCmd = &cobra.Command{
 
 					log.WithFields(logrus.Fields{
 						"ID": zone.ID,
-					}).Info("Insufficient permissions to access zone")
+					}).Error("Insufficient permissions to access zone")
 					continue
 				}
-				log.Debug(err)
+				log.Error(err)
 			}
 
 			for _, app := range accessApplications {

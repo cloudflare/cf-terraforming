@@ -38,7 +38,7 @@ var wafRuleCmd = &cobra.Command{
 			wafPackages, err := api.ListWAFPackages(zone.ID)
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 
@@ -54,7 +54,7 @@ var wafRuleCmd = &cobra.Command{
 				wafRules, err := api.ListWAFRules(zone.ID, wafPackage.ID)
 
 				if err != nil {
-					log.Debug(err)
+					log.Error(err)
 					return
 				}
 

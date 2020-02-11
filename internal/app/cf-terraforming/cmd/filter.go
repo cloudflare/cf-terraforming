@@ -77,7 +77,7 @@ var filterCmd = &cobra.Command{
 
 func filterParse(zone cloudflare.Zone, filter cloudflare.Filter) {
 	tmpl := template.Must(template.New("filter").Funcs(templateFuncMap).Parse(filterTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone   cloudflare.Zone
 			Filter cloudflare.Filter
@@ -85,6 +85,9 @@ func filterParse(zone cloudflare.Zone, filter cloudflare.Filter) {
 			Zone:   zone,
 			Filter: filter,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func filterResourceStateBuild(zone cloudflare.Zone, filter cloudflare.Filter) Resource {

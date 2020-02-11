@@ -84,7 +84,7 @@ var spectrumApplicationCmd = &cobra.Command{
 
 func spectrumAppParse(app cloudflare.SpectrumApplication, zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(spectrumApplicationTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone cloudflare.Zone
 			App cloudflare.SpectrumApplication
@@ -92,4 +92,7 @@ func spectrumAppParse(app cloudflare.SpectrumApplication, zone cloudflare.Zone) 
 			Zone: zone,
 			App: app,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

@@ -61,10 +61,13 @@ var accountMemberCmd = &cobra.Command{
 
 func memberParse(member cloudflare.AccountMember) {
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(accountMemberTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Member cloudflare.AccountMember
 		}{
 			Member: member,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

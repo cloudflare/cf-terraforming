@@ -82,7 +82,7 @@ var accessRuleCmd = &cobra.Command{
 
 func accessRuleParse(zone cloudflare.Zone, accessRule cloudflare.AccessRule) {
 	tmpl := template.Must(template.New("access_rule").Funcs(templateFuncMap).Parse(accessRuleTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone       cloudflare.Zone
 			AccessRule cloudflare.AccessRule
@@ -90,6 +90,9 @@ func accessRuleParse(zone cloudflare.Zone, accessRule cloudflare.AccessRule) {
 			Zone:       zone,
 			AccessRule: accessRule,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func accessRuleResourceStateBuild(zone cloudflare.Zone, rule cloudflare.AccessRule) Resource {

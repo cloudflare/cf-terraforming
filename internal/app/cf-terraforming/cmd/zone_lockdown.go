@@ -83,7 +83,7 @@ var zoneLockdownCmd = &cobra.Command{
 
 func zoneLockdownParse(zone cloudflare.Zone, lockdown cloudflare.ZoneLockdown) {
 	tmpl := template.Must(template.New("zone_lockdown").Funcs(templateFuncMap).Parse(zoneLockdownTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone     cloudflare.Zone
 			Lockdown cloudflare.ZoneLockdown
@@ -91,6 +91,9 @@ func zoneLockdownParse(zone cloudflare.Zone, lockdown cloudflare.ZoneLockdown) {
 			Zone:     zone,
 			Lockdown: lockdown,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func zoneLockdownResourceStateBuild(zone cloudflare.Zone, record cloudflare.ZoneLockdown) Resource {

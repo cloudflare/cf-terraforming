@@ -79,7 +79,7 @@ var pageRuleCmd = &cobra.Command{
 
 func pageRuleParse(rule cloudflare.PageRule, zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("page_rule").Funcs(templateFuncMap).Parse(pageRuleTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Rule cloudflare.PageRule
 			Zone cloudflare.Zone
@@ -87,4 +87,7 @@ func pageRuleParse(rule cloudflare.PageRule, zone cloudflare.Zone) {
 			Rule: rule,
 			Zone: zone,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

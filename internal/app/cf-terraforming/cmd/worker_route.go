@@ -105,7 +105,7 @@ func workerResourceStateBuild(zone cloudflare.Zone, route cloudflare.WorkerRoute
 func workerRouteParse(zone cloudflare.Zone, route cloudflare.WorkerRoute, multiScript bool) {
 
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(workerRouteTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone        cloudflare.Zone
 			Route       cloudflare.WorkerRoute
@@ -116,4 +116,7 @@ func workerRouteParse(zone cloudflare.Zone, route cloudflare.WorkerRoute, multiS
 			Route:       route,
 			MultiScript: multiScript,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

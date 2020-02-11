@@ -65,10 +65,13 @@ var loadBalancerMonitorCmd = &cobra.Command{
 
 func loadBalancerMonitorParse(lbm cloudflare.LoadBalancerMonitor) {
 	tmpl := template.Must(template.New("load_balancer_monitor").Funcs(templateFuncMap).Parse(loadBalancerMonitorTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			LBM cloudflare.LoadBalancerMonitor
 		}{
 			LBM: lbm,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

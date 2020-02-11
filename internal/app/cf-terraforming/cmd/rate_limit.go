@@ -106,7 +106,7 @@ var rateLimitCmd = &cobra.Command{
 
 func rateLimitParse(zone cloudflare.Zone, rateLimit cloudflare.RateLimit) {
 	tmpl := template.Must(template.New("rate_limit").Funcs(templateFuncMap).Parse(rateLimitTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone      cloudflare.Zone
 			RateLimit cloudflare.RateLimit
@@ -114,6 +114,9 @@ func rateLimitParse(zone cloudflare.Zone, rateLimit cloudflare.RateLimit) {
 			Zone:      zone,
 			RateLimit: rateLimit,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func rateLimitResourceStateBuild(zone cloudflare.Zone, rateLimit cloudflare.RateLimit) Resource {

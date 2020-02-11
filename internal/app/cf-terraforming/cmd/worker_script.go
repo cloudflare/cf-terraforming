@@ -115,7 +115,7 @@ var workerScriptCmd = &cobra.Command{
 
 func workerScriptParse(scriptName string, zoneName string, script cloudflare.WorkerScript, multiScript bool) {
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(workerScriptTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			ScriptName  string
 			ZoneName    string
@@ -127,4 +127,7 @@ func workerScriptParse(scriptName string, zoneName string, script cloudflare.Wor
 			Script:      script,
 			MultiScript: multiScript,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

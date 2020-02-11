@@ -77,7 +77,7 @@ var wafRuleCmd = &cobra.Command{
 
 func wafRuleParse(zone cloudflare.Zone, wafPackage cloudflare.WAFPackage, wafRule cloudflare.WAFRule) {
 	tmpl := template.Must(template.New("waf_rule").Funcs(templateFuncMap).Parse(wafRuleTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone    cloudflare.Zone
 			Package cloudflare.WAFPackage
@@ -87,4 +87,7 @@ func wafRuleParse(zone cloudflare.Zone, wafPackage cloudflare.WAFPackage, wafRul
 			Package: wafPackage,
 			Rule:    wafRule,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

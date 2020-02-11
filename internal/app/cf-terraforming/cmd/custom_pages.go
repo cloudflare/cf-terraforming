@@ -62,7 +62,7 @@ var customPagesCmd = &cobra.Command{
 
 func customPagesParse(zone cloudflare.Zone, customPage cloudflare.CustomPage) {
 	tmpl := template.Must(template.New("custom_pages").Funcs(templateFuncMap).Parse(customPagesTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone       cloudflare.Zone
 			CustomPage cloudflare.CustomPage
@@ -70,4 +70,7 @@ func customPagesParse(zone cloudflare.Zone, customPage cloudflare.CustomPage) {
 			Zone:       zone,
 			CustomPage: customPage,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

@@ -78,10 +78,13 @@ var loadBalancerPoolCmd = &cobra.Command{
 
 func loadBalancerPoolParse(lbp cloudflare.LoadBalancerPool) {
 	tmpl := template.Must(template.New("load_balancer_pool").Funcs(templateFuncMap).Parse(loadBalancerPoolTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			LBP cloudflare.LoadBalancerPool
 		}{
 			LBP: lbp,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

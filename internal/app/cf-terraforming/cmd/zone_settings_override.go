@@ -85,7 +85,7 @@ var zoneSettingsOverrideCmd = &cobra.Command{
 
 func zoneSettingsOverrideParse(s []cloudflare.ZoneSetting, zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(zoneSettingOverrideTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Settings []cloudflare.ZoneSetting
 			Zone     cloudflare.Zone
@@ -93,4 +93,7 @@ func zoneSettingsOverrideParse(s []cloudflare.ZoneSetting, zone cloudflare.Zone)
 			Settings: s,
 			Zone:     zone,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

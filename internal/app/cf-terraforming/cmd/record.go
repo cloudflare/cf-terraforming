@@ -155,7 +155,7 @@ var recordCmd = &cobra.Command{
 
 func recordParse(zone cloudflare.Zone, record cloudflare.DNSRecord) {
 	tmpl := template.Must(template.New("record").Funcs(templateFuncMap).Parse(recordTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone             cloudflare.Zone
 			Record           cloudflare.DNSRecord
@@ -167,6 +167,9 @@ func recordParse(zone cloudflare.Zone, record cloudflare.DNSRecord) {
 			IsValueTypeField: contains(dnsTypeValueFields, record.Type),
 			IsDataTypeField:  contains(dnsTypeDataFields, record.Type),
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func recordResourceStateBuild(zone cloudflare.Zone, record cloudflare.DNSRecord) Resource {

@@ -85,7 +85,7 @@ var accessPolicyCmd = &cobra.Command{
 			})
 
 			if appFetchErr != nil {
-				log.Debug(appFetchErr)
+				log.Error(appFetchErr)
 				return
 			}
 
@@ -100,10 +100,10 @@ var accessPolicyCmd = &cobra.Command{
 					if strings.Contains(err.Error(), "HTTP status 403") {
 						log.WithFields(logrus.Fields{
 							"ID": zone.ID,
-						}).Debug("Insufficient permissions for accessing zone")
+						}).Error("Insufficient permissions for accessing zone")
 						continue
 					}
-					log.Debug(err)
+					log.Error(err)
 				}
 
 				for _, policy := range accessPolicies {
@@ -122,7 +122,7 @@ var accessPolicyCmd = &cobra.Command{
 
 func accessPolicyParse(app cloudflare.AccessApplication, policy cloudflare.AccessPolicy, zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("access_policy").Funcs(templateFuncMap).Parse(accessPolicyTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			App    cloudflare.AccessApplication
 			Policy cloudflare.AccessPolicy
@@ -132,6 +132,9 @@ func accessPolicyParse(app cloudflare.AccessApplication, policy cloudflare.Acces
 			Policy: policy,
 			Zone:   zone,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func accessPolicyResourceStateBuild(app cloudflare.AccessApplication, policy cloudflare.AccessPolicy, zone cloudflare.Zone) Resource {

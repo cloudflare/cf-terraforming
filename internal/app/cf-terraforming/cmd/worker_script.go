@@ -39,7 +39,7 @@ var workerScriptCmd = &cobra.Command{
 			workerScripts, err := api.ListWorkerScripts()
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 			// Loop through every script and fetch its content for rendering into tfstate format
@@ -55,11 +55,10 @@ var workerScriptCmd = &cobra.Command{
 					if strings.Contains(downloadErr.Error(), "HTTP status 404") {
 						log.WithFields(logrus.Fields{
 							"Script ID": script.ID,
-						}).Debug("Error fetching script - does this zone have the workers entitlement?")
-
+						}).Error("Error fetching script - does this zone have the workers entitlement?")
 						continue
 					}
-					log.Debug(downloadErr)
+					log.Error(downloadErr)
 				}
 
 				if workerScriptResponse.Success == true {
@@ -87,11 +86,11 @@ var workerScriptCmd = &cobra.Command{
 					if strings.Contains(singleScriptErr.Error(), "HTTP status 404") {
 						log.WithFields(logrus.Fields{
 							"Zone ID": zone.ID,
-						}).Debug("Error fetching script - does this zone have the workers entitlement?")
+						}).Error("Error fetching script - does this zone have the workers entitlement?")
 
 						continue
 					}
-					log.Debug(singleScriptErr)
+					log.Error(singleScriptErr)
 				}
 				// It's possible for the script ID to be unset in some cases,
 				// so set a default value
@@ -115,7 +114,7 @@ var workerScriptCmd = &cobra.Command{
 
 func workerScriptParse(scriptName string, zoneName string, script cloudflare.WorkerScript, multiScript bool) {
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(workerScriptTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			ScriptName  string
 			ZoneName    string
@@ -127,4 +126,7 @@ func workerScriptParse(scriptName string, zoneName string, script cloudflare.Wor
 			Script:      script,
 			MultiScript: multiScript,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

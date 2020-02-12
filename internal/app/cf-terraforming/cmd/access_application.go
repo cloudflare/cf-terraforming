@@ -57,10 +57,10 @@ var accessApplicationCmd = &cobra.Command{
 
 					log.WithFields(logrus.Fields{
 						"ID": zone.ID,
-					}).Info("Insufficient permissions to access zone")
+					}).Error("Insufficient permissions to access zone")
 					continue
 				}
-				log.Debug(err)
+				log.Error(err)
 			}
 
 			for _, app := range accessApplications {
@@ -79,7 +79,7 @@ var accessApplicationCmd = &cobra.Command{
 
 func accessApplicationParse(app cloudflare.AccessApplication, zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("access_rule").Funcs(templateFuncMap).Parse(accessApplicationTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			App  cloudflare.AccessApplication
 			Zone cloudflare.Zone
@@ -87,6 +87,9 @@ func accessApplicationParse(app cloudflare.AccessApplication, zone cloudflare.Zo
 			App:  app,
 			Zone: zone,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func accessApplicationResourceStateBuild(app cloudflare.AccessApplication, zone cloudflare.Zone) Resource {

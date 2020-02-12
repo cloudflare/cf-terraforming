@@ -68,7 +68,7 @@ var zoneCmd = &cobra.Command{
 			zoneDetails, err := api.ZoneDetails(zone.ID)
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 
@@ -89,7 +89,7 @@ var zoneCmd = &cobra.Command{
 
 func zoneParse(zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("zone").Funcs(templateFuncMap).Parse(zoneTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone     cloudflare.Zone
 			ZonePlan string
@@ -97,6 +97,9 @@ func zoneParse(zone cloudflare.Zone) {
 			Zone:     zone,
 			ZonePlan: idForName[zone.Plan.Name],
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func zoneResourceStateBuild(zone cloudflare.Zone) Resource {

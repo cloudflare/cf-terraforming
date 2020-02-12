@@ -39,7 +39,7 @@ resource "cloudflare_rate_limit" "{{replace .Zone.Name "." "_"}}_{{.RateLimit.ID
     }
     {{end}}
   }
-  {{if .RateLimit.Correlate.By}}
+  {{if .RateLimit.Correlate}}
   correlate {
     by = "{{.RateLimit.Correlate.By}}"
   }
@@ -47,7 +47,7 @@ resource "cloudflare_rate_limit" "{{replace .Zone.Name "." "_"}}_{{.RateLimit.ID
   disabled = {{.RateLimit.Disabled}}
   description = "{{.RateLimit.Description}}"
   {{if .RateLimit.Bypass}}
-  bypass_url_patterns = [{{range .RateLimit.Bypass.Value}}"{{.}}", {{end}}]
+  bypass_url_patterns = [{{range .RateLimit.Bypass}}"{{.Value}}", {{end}}]
   {{end}}
 }
 `
@@ -78,7 +78,7 @@ var rateLimitCmd = &cobra.Command{
 				})
 
 				if err != nil {
-					log.Debug(err)
+					log.Error(err)
 					return
 				}
 
@@ -106,7 +106,7 @@ var rateLimitCmd = &cobra.Command{
 
 func rateLimitParse(zone cloudflare.Zone, rateLimit cloudflare.RateLimit) {
 	tmpl := template.Must(template.New("rate_limit").Funcs(templateFuncMap).Parse(rateLimitTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone      cloudflare.Zone
 			RateLimit cloudflare.RateLimit
@@ -114,6 +114,9 @@ func rateLimitParse(zone cloudflare.Zone, rateLimit cloudflare.RateLimit) {
 			Zone:      zone,
 			RateLimit: rateLimit,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func rateLimitResourceStateBuild(zone cloudflare.Zone, rateLimit cloudflare.RateLimit) Resource {

@@ -36,7 +36,7 @@ all of their existing Cloudflare configuration into Terraform.`,
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		log.Debug(err)
+		log.Error(err)
 		return
 	}
 }
@@ -148,7 +148,7 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		}
 
 		if apiKey = viper.GetString("key"); apiKey == "" {
-			log.Error("'key' must be set.")
+			log.Error("either -t/--token or -k/--key must be set.")
 		}
 
 		log.WithFields(logrus.Fields{

@@ -74,7 +74,7 @@ var loadBalancerCmd = &cobra.Command{
 			})
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 
@@ -101,7 +101,7 @@ var loadBalancerCmd = &cobra.Command{
 
 func loadBalancerParse(lb cloudflare.LoadBalancer, zone cloudflare.Zone) {
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(loadBalancerTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			LB   cloudflare.LoadBalancer
 			Zone cloudflare.Zone
@@ -109,4 +109,7 @@ func loadBalancerParse(lb cloudflare.LoadBalancer, zone cloudflare.Zone) {
 			LB:   lb,
 			Zone: zone,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }

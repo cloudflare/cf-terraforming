@@ -55,7 +55,7 @@ var firewallRuleCmd = &cobra.Command{
 			})
 
 			if err != nil {
-				log.Debug(err)
+				log.Error(err)
 				return
 			}
 
@@ -79,7 +79,7 @@ var firewallRuleCmd = &cobra.Command{
 
 func firewallRuleParse(zone cloudflare.Zone, firewallRule cloudflare.FirewallRule) {
 	tmpl := template.Must(template.New("firewall_rule").Funcs(templateFuncMap).Parse(firewallRuleTemplate))
-	tmpl.Execute(os.Stdout,
+	err := tmpl.Execute(os.Stdout,
 		struct {
 			Zone         cloudflare.Zone
 			FirewallRule cloudflare.FirewallRule
@@ -87,6 +87,9 @@ func firewallRuleParse(zone cloudflare.Zone, firewallRule cloudflare.FirewallRul
 			Zone:         zone,
 			FirewallRule: firewallRule,
 		})
+	if err != nil {
+		log.Error(err)
+	}
 }
 
 func firewallRuleResourceStateBuild(zone cloudflare.Zone, rule cloudflare.FirewallRule) Resource {

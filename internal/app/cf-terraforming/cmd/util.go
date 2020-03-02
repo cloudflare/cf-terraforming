@@ -45,11 +45,18 @@ func normalizeRecordName(name, domain string) string {
 	return strings.TrimSuffix(name, "."+domain)
 }
 
+func normalizeResourceName(name string) string {
+	r := strings.NewReplacer(".", "_", "*", "star")
+
+	return r.Replace(name)
+}
+
 var templateFuncMap = template.FuncMap{
 	"replace":       replace,
 	"isMap":         isMap,
 	"quoteIfString": quoteIfString,
 	"normalizeRecordName": normalizeRecordName,
+	"recordResourceName": recordResourceName,
 }
 
 func hashMap(values map[string]string) int {

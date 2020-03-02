@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 	"text/template"
 	"time"
 
@@ -14,7 +13,7 @@ import (
 )
 
 const recordTemplate = `
-resource "cloudflare_record" "{{.Record.Type}}_{{replace .Record.Name "." "_"}}_{{.Record.ID}}" {
+resource "cloudflare_record" "{{recordResourceName .Record}}" {
     zone_id = "{{.Zone.ID}}"
 {{ if .Zone.Paused}}
     paused = "true"
@@ -143,7 +142,7 @@ var recordCmd = &cobra.Command{
 
 				if tfstate {
 					state := recordResourceStateBuild(zone, r)
-					name := r.Type + "_" + strings.ReplaceAll(r.Name, ".", "_") + "_" + r.ID
+					name := recordResourceName(r)
 					resourcesMap["cloudflare_record."+name] = state
 				} else {
 					recordParse(zone, r)
@@ -170,6 +169,10 @@ func recordParse(zone cloudflare.Zone, record cloudflare.DNSRecord) {
 	if err != nil {
 		log.Error(err)
 	}
+}
+
+func recordResourceName(record cloudflare.DNSRecord) string {
+	return normalizeResourceName(record.Type + "_" + record.Name + "_" + record.ID)
 }
 
 func recordResourceStateBuild(zone cloudflare.Zone, record cloudflare.DNSRecord) Resource {

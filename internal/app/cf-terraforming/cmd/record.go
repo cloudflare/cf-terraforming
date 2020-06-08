@@ -134,10 +134,11 @@ var recordCmd = &cobra.Command{
 			for _, r := range recs {
 
 				log.WithFields(logrus.Fields{
-					"ID":      r.ID,
-					"Name":    r.Name,
-					"Type":    r.Type,
-					"Content": r.Content,
+					"ID":                 r.ID,
+					"Name":               r.Name,
+					"Type":               r.Type,
+					"Content":            r.Content,
+					"RecordResourceName": recordResourceName(r),
 				}).Debug("Processing record")
 
 				if tfstate {

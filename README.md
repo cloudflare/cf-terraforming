@@ -107,7 +107,7 @@ cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d
 ## Prerequisites
 * A Cloudflare account with resources defined (e.g. a few zones, some load balancers, spectrum applications, etc)
 * A valid Cloudflare API key and sufficient permissions to access the resources you are requesting via the API
-* A working [installation of Go](https://golang.org/doc/install)
+* A working [installation of Go](https://golang.org/doc/install) at least v1.12.x.
 
 ## Installation
 

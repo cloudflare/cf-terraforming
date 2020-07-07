@@ -24,7 +24,7 @@ var resourcesMap = map[string]interface{}{}
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "cf-terraforming",
-	Short: "Boostrapping Terraform from existing Cloudflare account",
+	Short: "Bootstrapping Terraform from existing Cloudflare account",
 	Long: `cf-terraforming is an application that allows Cloudflare users
 to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,

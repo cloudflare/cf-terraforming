@@ -3,7 +3,7 @@ module github.com/cloudflare/cf-terraforming
 go 1.12
 
 require (
-	github.com/cloudflare/cloudflare-go v0.11.7
+	github.com/cloudflare/cloudflare-go v0.12.1
 	github.com/hashicorp/terraform v0.12.28
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.6.0

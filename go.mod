@@ -1,6 +1,6 @@
 module github.com/cloudflare/cf-terraforming
 
-go 1.12
+go 1.15
 
 require (
 	github.com/cloudflare/cloudflare-go v0.12.1

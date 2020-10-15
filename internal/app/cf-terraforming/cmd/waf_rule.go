@@ -13,7 +13,7 @@ import (
 const wafRuleTemplate = `
 resource "cloudflare_waf_rule" "{{replace .Zone.Name "." "_"}}_{{.Rule.ID}}" {
     rule_id = "{{.Rule.ID}}"
-    zone = "{{.Zone.Name}}"
+    zone_id = "{{.Zone.ID}}"
     mode = "{{.Rule.Mode}}"
 }
 `

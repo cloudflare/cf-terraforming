@@ -30,6 +30,8 @@ resource "cloudflare_zone_settings_override" "zone_settings_override_{{.Zone.ID}
 			{{- end}}
 		{{- end}}
 		}
+		{{ else if isSlice .Value}}
+			{{- .ID }} = [ {{ range .Value }}"{{.}}", {{ end }} ]
 		{{ else }}
 			{{- .ID}} = {{ quoteIfString .Value -}}
 		{{- end}}

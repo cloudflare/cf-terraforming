@@ -29,6 +29,10 @@ func isMap(i interface{}) bool {
 	return (reflect.ValueOf(i).Kind() == reflect.Map)
 }
 
+func isSlice(i interface{}) bool {
+	return (reflect.ValueOf(i).Kind() == reflect.Slice)
+}
+
 func quoteIfString(i interface{}) interface{} {
 	// Handle <no value> zero value by converting it to an empty string
 	if i == nil {
@@ -52,11 +56,12 @@ func normalizeResourceName(name string) string {
 }
 
 var templateFuncMap = template.FuncMap{
-	"replace":       replace,
-	"isMap":         isMap,
-	"quoteIfString": quoteIfString,
+	"replace":             replace,
+	"isMap":               isMap,
+	"isSlice":             isSlice,
+	"quoteIfString":       quoteIfString,
 	"normalizeRecordName": normalizeRecordName,
-	"recordResourceName": recordResourceName,
+	"recordResourceName":  recordResourceName,
 }
 
 func hashMap(values map[string]string) int {

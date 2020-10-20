@@ -62,6 +62,7 @@ var templateFuncMap = template.FuncMap{
 	"quoteIfString":       quoteIfString,
 	"normalizeRecordName": normalizeRecordName,
 	"recordResourceName":  recordResourceName,
+	"trim":                strings.TrimSpace,
 }
 
 func hashMap(values map[string]string) int {

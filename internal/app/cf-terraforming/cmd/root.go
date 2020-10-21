@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"os"
 	"regexp"
 	"strings"
@@ -203,6 +204,14 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		if err != nil {
 			log.Error(err)
 		}
+	} else if accountID != "" {
+		zonesResponse, err := api.ListZonesContext(context.TODO(), cloudflare.WithZoneFilters("", accountID, ""))
+
+		if err != nil {
+			log.Error(err)
+		}
+
+		zones = zonesResponse.Result
 	} else {
 		zones, err = api.ListZones()
 

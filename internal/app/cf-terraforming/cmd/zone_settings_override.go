@@ -40,6 +40,10 @@ resource "cloudflare_zone_settings_override" "zone_settings_override_{{.Zone.ID}
 }
 `
 
+var zoneSettingsToRemove = []string{
+	"advanced_ddos", "edge_cache_ttl",
+}
+
 func init() {
 	rootCmd.AddCommand(zoneSettingsOverrideCmd)
 }
@@ -60,12 +64,23 @@ var zoneSettingsOverrideCmd = &cobra.Command{
 			}
 
 			if settingsResponse.Success {
-				for n, s := range settingsResponse.Result {
+				i := 0
+
+				for _, s := range settingsResponse.Result {
+					if contains(zoneSettingsToRemove, s.ID) {
+						continue
+					}
+
 					// Remap the 0rtt zone setting to zero_rtt
 					if s.ID == "0rtt" {
-						settingsResponse.Result[n].ID = "zero_rtt"
+						s.ID = "zero_rtt"
 					}
+
+					settingsResponse.Result[i] = s
+					i++
 				}
+
+				settingsResponse.Result = settingsResponse.Result[:i]
 			}
 
 			sort.Slice(settingsResponse.Result, func(i, j int) bool {

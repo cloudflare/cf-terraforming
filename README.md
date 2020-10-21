@@ -114,7 +114,11 @@ cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d
 ```bash
 $ go get -u github.com/cloudflare/cf-terraforming/...
 ```
-This will fetch the cf-terraforming tool as well as its dependencies, updating them as necessary, and build and install the package.
+This will fetch the cf-terraforming tool as well as its dependencies, updating them as necessary, build and install the package in your `$GOPATH` (usually `~/go/bin`). You can check your current GOPATH by running:
+
+```bash
+$ go env | grep GOPATH
+```
 
 ## Experimental: exporting tfstate
 

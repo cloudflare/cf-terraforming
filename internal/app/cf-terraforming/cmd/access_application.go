@@ -56,7 +56,8 @@ var accessApplicationCmd = &cobra.Command{
 				if strings.Contains(err.Error(), "HTTP status 403") {
 
 					log.WithFields(logrus.Fields{
-						"ID": zone.ID,
+						"ID":      zone.ID,
+						"Message": err.Error(),
 					}).Error("Insufficient permissions to access zone")
 					continue
 				}

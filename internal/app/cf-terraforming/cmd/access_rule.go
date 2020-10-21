@@ -13,7 +13,7 @@ const accessRuleTemplate = `
 resource "cloudflare_access_rule" "access_rule_{{.AccessRule.ID}}" {
   notes = "{{.AccessRule.Notes}}"
   mode = "{{.AccessRule.Mode}}"
-  configuration {
+  configuration = {
     target = "{{.AccessRule.Configuration.Target}}"
     value = "{{.AccessRule.Configuration.Value}}"
   }

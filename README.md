@@ -54,11 +54,38 @@ Flags:
 Use "cf-terraforming [command] --help" for more information about a command.
 ```
 
-## Example
+## Authentication
 
-**A note on storing your credentials securely:** We recommend that you store your Cloudflare credentials (API key, email, account ID, etc) as environment variables as demonstrated below.
+Cloudflare supports two authentication methods to the API:
+* API Token - gives access only to resources and permissions specified for that token (recommended)
+* API key - gives access to everything your user profile has access to
 
-```cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN --account $CLOUDFLARE_ACCOUNT_ID spectrum_application```
+Both can be retrieved on [profile page](https://dash.cloudflare.com/profile/api-tokens).
+
+**A note on storing your credentials securely:** We recommend that you store your Cloudflare credentials (API key, email, token) as environment variables as demonstrated below.
+
+```bash
+# if using API Token
+export CLOUDFLARE_TOKEN='Hzsq3Vub-7Y-hSTlAaLH3Jq_YfTUOCcgf22_Fs-j'
+
+# if using API Key
+export CLOUDFLARE_EMAIL='user@example.com'
+export CLOUDFLARE_KEY='1150bed3f45247b99f7db9696fffa17cbx9'
+
+# specify Account ID
+export CLOUDFLARE_ACCOUNT_ID='81b06ss3228f488fh84e5e993c2dc17'
+
+# now call cf-terraforming, e.g.
+cf-terraforming --account $CLOUDFLARE_ACCOUNT_ID spectrum_application
+```
+
+cf-terraforming supports the following environment variables:
+* CLOUDFLARE_TOKEN - API Token basd authentication
+* CLOUDFLARE_EMAIL, CLOUDFLARE_KEY - API Key based authentication
+
+## Example usage
+
+```cf-terraforming --account $CLOUDFLARE_ACCOUNT_ID spectrum_application```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform configuration representing the **resource** you requested:
 
@@ -71,7 +98,7 @@ resource "cloudflare_spectrum_application" "1150bed3f45247b99f7db9696fffa17cbx9"
     }
     ip_firewall = "true"
     tls = "off"
-    origin_direct = [ "tcp://37.241.37.138:8000", ]
+    origin_direct = [ "tcp://192.0.2.1:8000", ]
 }
 ```
 

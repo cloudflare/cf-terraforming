@@ -3,7 +3,7 @@
 
 ## Overview
 
-cf-terraforming is a command line utility to facilitate terraforming your existing Cloudflare resources. It does this by using your account credentials to retrieve your configurations from the [Cloudflare API](https://api.cloudflare.com) and converting them to Terraform configurations that can be used with the [Terraform Cloudflare provider](https://www.terraform.io/docs/providers/cloudflare/index.html).
+cf-terraforming is a command line utility to facilitate terraforming your existing Cloudflare resources. It does this by using your account credentials to retrieve your configurations from the [Cloudflare API](https://api.cloudflare.com) and converting them to Terraform configurations that can be used with the [Terraform Cloudflare provider](https://registry.terraform.io/providers/cloudflare/cloudflare/latest).
 
 This tool is ideal if you already have Cloudflare resources defined but want to start managing them via Terraform, and don't want to spend the time to manually write the Terraform configuration to describe them.
 

@@ -13,8 +13,9 @@ import (
 
 const loadBalancerTemplate = `
 resource "cloudflare_load_balancer" "load_balancer_{{.LB.ID}}" {
-    zone = "{{.Zone.Name}}"
+    zone_id = "{{.Zone.ID}}"
     name = "{{.LB.Name}}"
+    enabled = {{.LB.Enabled}}
     fallback_pool_id = "{{.LB.FallbackPool}}"
 {{if .LB.DefaultPools}}
     default_pool_ids = [{{range .LB.DefaultPools}}"{{.}}",{{end}}]
@@ -23,7 +24,7 @@ resource "cloudflare_load_balancer" "load_balancer_{{.LB.ID}}" {
     description = "{{.LB.Description}}"
 {{end}}
 {{/* TTL conflicts with Proxied setting and cannot be set for a Proxied LB */}}
-{{/* See: https://www.terraform.io/docs/providers/cloudflare/r/load_balancer.html */}}
+{{/* See: https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/load_balancer */}}
 {{if and (ne .LB.TTL 0) (eq .LB.Proxied true) }}
     ttl = {{.LB.TTL}}
 {{end}}

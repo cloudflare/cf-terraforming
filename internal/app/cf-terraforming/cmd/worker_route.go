@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"os"
-	"strconv"
 
 	"text/template"
 
@@ -14,23 +13,16 @@ import (
 
 const workerRouteTemplate = `
 resource "cloudflare_worker_route" "worker_route_{{.Route.ID}}" {
-    zone = "{{.Zone.Name}}"
+    zone_id = "{{.Zone.ID}}"
     pattern = "{{.Route.Pattern}}"
-{{if .MultiScript }}
-	script_name = cloudflare_worker_script.{{.Route.Script}}
-{{else}}
-    enabled = "{{.Route.Enabled}}"
-{{end}}
+    script_name = cloudflare_worker_script.{{.Route.Script}}
 }
 `
 
 type WorkerRouteAttributes struct {
-	Enabled     string `json:"enabled"`
-	Id          string `json:"id"`
-	MultiScript string `json:"multi_script"`
-	Pattern     string `json:"pattern"`
-	Zone        string `json:"zone"`
-	ZoneId      string `json:"zone_id"`
+	Id      string `json:"id"`
+	Pattern string `json:"pattern"`
+	ZoneId  string `json:"zone_id"`
 }
 
 func init() {
@@ -62,14 +54,14 @@ var workerRouteCmd = &cobra.Command{
 					}).Debug("Processing woker route")
 
 					if tfstate {
-						r := workerResourceStateBuild(zone, route, api.AccountID != "")
+						r := workerResourceStateBuild(zone, route)
 
 						resourcesMap["cloudflare_worker_route.worker_route_"+route.ID] = r
 
 					} else {
 						// worker_route is rendered differently for multi-script (enterprise) accounts
 						// and non-enterprise accounts
-						workerRouteParse(zone, route, api.AccountID != "")
+						workerRouteParse(zone, route)
 					}
 				}
 			}
@@ -77,18 +69,15 @@ var workerRouteCmd = &cobra.Command{
 	},
 }
 
-func workerResourceStateBuild(zone cloudflare.Zone, route cloudflare.WorkerRoute, multiScript bool) Resource {
+func workerResourceStateBuild(zone cloudflare.Zone, route cloudflare.WorkerRoute) Resource {
 
 	r := Resource{
 		Primary: Primary{
 			Id: route.ID,
 			Attributes: WorkerRouteAttributes{
-				Enabled:     strconv.FormatBool(route.Enabled),
-				Id:          route.ID,
-				MultiScript: strconv.FormatBool(multiScript),
-				Pattern:     route.Pattern,
-				Zone:        zone.Name,
-				ZoneId:      zone.ID,
+				Id:      route.ID,
+				Pattern: route.Pattern,
+				ZoneId:  zone.ID,
 			},
 			Meta:    make(map[string]string),
 			Tainted: false,
@@ -102,19 +91,16 @@ func workerResourceStateBuild(zone cloudflare.Zone, route cloudflare.WorkerRoute
 	return r
 }
 
-func workerRouteParse(zone cloudflare.Zone, route cloudflare.WorkerRoute, multiScript bool) {
+func workerRouteParse(zone cloudflare.Zone, route cloudflare.WorkerRoute) {
 
 	tmpl := template.Must(template.New("script").Funcs(templateFuncMap).Parse(workerRouteTemplate))
 	err := tmpl.Execute(os.Stdout,
 		struct {
-			Zone        cloudflare.Zone
-			Route       cloudflare.WorkerRoute
-			MultiScript bool
-			StateHeader string
+			Zone  cloudflare.Zone
+			Route cloudflare.WorkerRoute
 		}{
-			Zone:        zone,
-			Route:       route,
-			MultiScript: multiScript,
+			Zone:  zone,
+			Route: route,
 		})
 	if err != nil {
 		log.Error(err)

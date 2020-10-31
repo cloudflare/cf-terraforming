@@ -15,7 +15,7 @@ import (
 
 const rateLimitTemplate = `
 resource "cloudflare_rate_limit" "{{replace .Zone.Name "." "_"}}_{{.RateLimit.ID}}" {
-  zone = "{{.Zone.Name}}"
+  zone_id = "{{.Zone.ID}}"
   threshold = {{.RateLimit.Threshold}}
   period = {{.RateLimit.Period}}
   match {

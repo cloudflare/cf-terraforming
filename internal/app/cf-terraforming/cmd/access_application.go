@@ -47,7 +47,7 @@ var accessApplicationCmd = &cobra.Command{
 				"Name": zone.Name,
 			}).Debug("Processing zone")
 
-			accessApplications, _, err := api.AccessApplications(zone.ID, cloudflare.PaginationOptions{
+			accessApplications, _, err := api.ZoneLevelAccessApplications(zone.ID, cloudflare.PaginationOptions{
 				Page:    1,
 				PerPage: 1000,
 			})

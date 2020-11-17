@@ -79,7 +79,7 @@ var accessPolicyCmd = &cobra.Command{
 				"Name": zone.Name,
 			}).Debug("Processing zone")
 
-			accessApplications, _, appFetchErr := api.AccessApplications(zone.ID, cloudflare.PaginationOptions{
+			accessApplications, _, appFetchErr := api.ZoneLevelAccessApplications(zone.ID, cloudflare.PaginationOptions{
 				Page:    1,
 				PerPage: 1000,
 			})
@@ -91,7 +91,7 @@ var accessPolicyCmd = &cobra.Command{
 
 			for _, app := range accessApplications {
 
-				accessPolicies, _, err := api.AccessPolicies(zone.ID, app.ID, cloudflare.PaginationOptions{
+				accessPolicies, _, err := api.ZoneLevelAccessPolicies(zone.ID, app.ID, cloudflare.PaginationOptions{
 					Page:    1,
 					PerPage: 1000,
 				})

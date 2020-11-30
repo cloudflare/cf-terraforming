@@ -21,7 +21,7 @@ resource "cloudflare_access_policy" "access_policy_{{.Policy.ID}}" {
     decision = "{{.Policy.Decision}}"
 
 {{if .Policy.Include }}
-    include = {
+    include {
 {{range $k, $v := .Policy.Include }}
     {{if isMap $v }}
         {{- range $k, $v := $v }}

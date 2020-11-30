@@ -24,7 +24,8 @@ resource "cloudflare_load_balancer_monitor" "load_balancer_monitor_{{.LBM.ID}}" 
     {{if isMap .LBM.Header}}
     header {
     {{range $k, $v := .LBM.Header}}
-        {{$k}} = {{ quoteIfString $v }}
+        header = {{$k}}
+		values = {{ quoteIfString $v }}
     {{end}}
     }
     {{end}}

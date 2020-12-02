@@ -28,7 +28,6 @@ resource "cloudflare_zone_lockdown" "{{replace .Zone.Name "." "_"}}_{{.Lockdown.
       value  = "{{.Value}}"
     }
 {{end}}
-    ]
 }
 `
 

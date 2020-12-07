@@ -15,7 +15,7 @@ const workerRouteTemplate = `
 resource "cloudflare_worker_route" "worker_route_{{.Route.ID}}" {
     zone_id = "{{.Zone.ID}}"
     pattern = "{{.Route.Pattern}}"
-    script_name = cloudflare_worker_script.{{.Route.Script}}
+    script_name = cloudflare_worker_script.{{replace .Route.Script "-" "_"}}.name
 }
 `
 

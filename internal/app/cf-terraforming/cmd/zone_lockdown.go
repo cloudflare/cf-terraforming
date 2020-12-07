@@ -22,14 +22,12 @@ resource "cloudflare_zone_lockdown" "{{replace .Zone.Name "." "_"}}_{{.Lockdown.
         "{{.}}",
 {{end}}
     ]
-    configurations = [
 {{range .Lockdown.Configurations}}
-        {
-            target = "{{.Target}}"
-            value = "{{.Value}}"
-        },
+    configurations {
+      target = "{{.Target}}"
+      value  = "{{.Value}}"
+    }
 {{end}}
-    ]
 }
 `
 

@@ -31,24 +31,26 @@ resource "cloudflare_rate_limit" "{{replace .Zone.Name "." "_"}}_{{.RateLimit.ID
   }
   action {
     mode = "{{.RateLimit.Action.Mode}}"
+	{{- if or (eq .RateLimit.Action.Mode "simulate") (eq .RateLimit.Action.Mode "ban") }}
     timeout = {{.RateLimit.Action.Timeout}}
-    {{if .RateLimit.Action.Response}}
+	{{- end }}
+    {{- if .RateLimit.Action.Response }}
     response {
       content_type = "{{.RateLimit.Action.Response.ContentType}}"
       body = "{{js .RateLimit.Action.Response.Body}}"
     }
-    {{end}}
+    {{- end }}
   }
-  {{if .RateLimit.Correlate}}
+  {{- if .RateLimit.Correlate }}
   correlate {
     by = "{{.RateLimit.Correlate.By}}"
   }
-  {{end}}
+  {{- end }}
   disabled = {{.RateLimit.Disabled}}
   description = "{{.RateLimit.Description}}"
-  {{if .RateLimit.Bypass}}
+  {{- if .RateLimit.Bypass }}
   bypass_url_patterns = [{{range .RateLimit.Bypass}}"{{.Value}}", {{end}}]
-  {{end}}
+  {{- end }}
 }
 `
 

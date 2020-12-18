@@ -15,8 +15,12 @@ resource "cloudflare_filter" "filter_{{.Filter.ID}}" {
   zone_id = "{{.Zone.ID}}"
   description = "{{.Filter.Description}}"
   expression = "{{js .Filter.Expression}}"
-  {{if .Filter.Paused}}paused = {{.Filter.Paused}}{{end}}
-  {{if .Filter.Ref}}ref = "{{.Filter.Ref}}"{{end}}
+  {{- if .Filter.Paused}}
+  paused = {{.Filter.Paused}}
+  {{- end }}
+  {{- if .Filter.Ref}}
+  ref = "{{.Filter.Ref}}"
+  {{- end }}
 }
 `
 

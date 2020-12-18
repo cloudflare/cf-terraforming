@@ -21,14 +21,14 @@ resource "cloudflare_load_balancer_monitor" "load_balancer_monitor_{{.LBM.ID}}" 
     interval = {{.LBM.Interval}}
     retries = {{.LBM.Retries}}
     description = "{{.LBM.Description}}"
-    {{if isMap .LBM.Header}}
+    {{- if isMap .LBM.Header}}
     header {
-    {{range $k, $v := .LBM.Header}}
+    {{- range $k, $v := .LBM.Header}}
         header = "{{$k}}"
         values = [{{ range $hv := $v }}"{{ $hv }}",{{ end }}]
-    {{end}}
+    {{- end }}
     }
-    {{end}}
+    {{- end }}
 }
 `
 

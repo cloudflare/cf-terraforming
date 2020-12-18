@@ -55,6 +55,12 @@ func normalizeResourceName(name string) string {
 	return r.Replace(name)
 }
 
+func escapeSpecialChars(value string) string  {
+	r := strings.NewReplacer("\"","\\\"", "\\","\\\\")
+
+	return r.Replace(value)
+}
+
 var templateFuncMap = template.FuncMap{
 	"replace":             replace,
 	"isMap":               isMap,
@@ -63,6 +69,7 @@ var templateFuncMap = template.FuncMap{
 	"normalizeRecordName": normalizeRecordName,
 	"recordResourceName":  recordResourceName,
 	"trim":                strings.TrimSpace,
+	"escapeSpecialChars":  escapeSpecialChars,
 }
 
 func hashMap(values map[string]string) int {

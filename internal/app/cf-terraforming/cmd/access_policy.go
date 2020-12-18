@@ -20,48 +20,47 @@ resource "cloudflare_access_policy" "access_policy_{{.Policy.ID}}" {
     precedence = "{{.Policy.Precedence}}"
     decision = "{{.Policy.Decision}}"
 
-{{if .Policy.Include }}
+{{- if .Policy.Include }}
     include {
-{{range $k, $v := .Policy.Include }}
-    {{if isMap $v }}
+{{- range $k, $v := .Policy.Include }}
+    {{- if isMap $v }}
         {{- range $k, $v := $v }}
-			{{ if eq $k "everyone" }}
+			{{- if eq $k "everyone" }}
 			{{ $k }} = "true"
-			{{ else if eq $k "certificate" }}
+			{{- else if eq $k "certificate" }}
 			{{ $k }} = true
-			{{ else }}
+			{{- else }}
             {{ $k }} =  {{if isMap $v }} [{{range $v}}"{{.}}",{{end}}]  {{else}} "{{ $v }}" {{end}}
-			{{ end }}
-        {{end -}}
-    {{end}}
-{{end}}
+			{{- end }}
+        {{- end }}
+    {{- end }}
+{{- end}}
     }
-{{end}}
+{{- end }}
 
-{{if .Policy.Exclude }}
+{{- if .Policy.Exclude }}
     exclude = {
-{{range $k, $v := .Policy.Exclude }}
-    {{if isMap $v }}
+{{- range $k, $v := .Policy.Exclude }}
+    {{- if isMap $v }}
         {{- range $k, $v := $v }}
             {{ $k }} =  {{if isMap $v }} [{{range $v}}"{{.}}",{{end}}]  {{else}} "{{ $v }}" {{end}}
-        {{end -}}
-    {{end}}
-{{end}}
+        {{- end}}
+    {{- end }}
+{{- end }}
     }
-{{end}}
+{{- end }}
 
-{{if .Policy.Require }}
+{{- if .Policy.Require }}
     require = {
-{{range $k, $v := .Policy.Require }}
-    {{if isMap $v }}
+{{- range $k, $v := .Policy.Require }}
+    {{- if isMap $v }}
         {{- range $k, $v := $v }}
             {{ $k }} =  {{if isMap $v }} [{{range $v}}"{{.}}",{{end}}]  {{else}} "{{ $v }}" {{end}}
-        {{end -}}
-    {{end}}
-{{end}}
+        {{- end }}
+    {{- end }}
+{{- end }}
     }
-{{end}}
-
+{{- end }}
 }
 `
 

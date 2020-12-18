@@ -17,42 +17,42 @@ resource "cloudflare_load_balancer" "load_balancer_{{.LB.ID}}" {
     name = "{{.LB.Name}}"
     enabled = {{.LB.Enabled}}
     fallback_pool_id = "{{.LB.FallbackPool}}"
-{{if .LB.DefaultPools}}
+{{- if .LB.DefaultPools }}
     default_pool_ids = [{{range .LB.DefaultPools}}"{{.}}",{{end}}]
-{{end}}
-{{if .LB.Description}}
+{{- end }}
+{{- if .LB.Description }}
     description = "{{.LB.Description}}"
-{{end}}
-{{/* TTL conflicts with Proxied setting and cannot be set for a Proxied LB */}}
-{{/* See: https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/load_balancer */}}
-{{if and (ne .LB.TTL 0) (eq .LB.Proxied true) }}
+{{- end }}
+{{- /* TTL conflicts with Proxied setting and cannot be set for a Proxied LB */ -}}
+{{- /* See: https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/load_balancer */ -}}
+{{- if and (ne .LB.TTL 0) (eq .LB.Proxied true) }}
     ttl = {{.LB.TTL}}
-{{end}}
-{{if .LB.SteeringPolicy}}
+{{- end }}
+{{- if .LB.SteeringPolicy}}
     steering_policy = "{{.LB.SteeringPolicy}}"
-{{end}}
-{{if .LB.Proxied}}
+{{- end }}
+{{- if .LB.Proxied }}
     proxied = {{.LB.Proxied}}
-{{end}}
-{{if .LB.RegionPools}}
-    {{range $region, $regIDs := .LB.RegionPools}}
+{{- end }}
+{{- if .LB.RegionPools }}
+    {{- range $region, $regIDs := .LB.RegionPools }}
         region_pools {
             region = "{{ $region }}"
             pool_ids = [{{ range $regIDs }} "{{.}}", {{end}}]
         }
-    {{end}}
-{{end}}
-{{if .LB.PopPools}}
-    {{range $pop, $popIDs := .LB.PopPools}}
+    {{- end }}
+{{- end }}
+{{- if .LB.PopPools }}
+    {{- range $pop, $popIDs := .LB.PopPools }}
         pop_pools {
             pop = "{{ $pop }}"
             pool_ids = [{{range $popID := $popIDs }} "{{.}}", {{end}}]
         }
-    {{end}}
-{{end}}
-{{if .LB.Persistence}}
+    {{- end }}
+{{- end }}
+{{- if .LB.Persistence }}
     session_affinity = "{{.LB.Persistence}}"
-{{end}}
+{{- end }}
 }
 `
 

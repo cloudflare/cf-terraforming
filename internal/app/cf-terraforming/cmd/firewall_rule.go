@@ -17,8 +17,12 @@ resource "cloudflare_firewall_rule" "firewall_rule_{{.FirewallRule.ID}}" {
   description = "{{.FirewallRule.Description}}"
   filter_id = "{{.FirewallRule.Filter.ID}}"
   action = "{{.FirewallRule.Action}}"
-  {{if .FirewallRule.Priority}}priority = {{.FirewallRule.Priority}}{{end}}
-  {{if .FirewallRule.Paused}}paused = {{.FirewallRule.Paused}}{{end}}
+  {{- if .FirewallRule.Priority}}
+  priority = {{.FirewallRule.Priority}}
+  {{- end }}
+  {{- if .FirewallRule.Paused}}
+  paused = {{.FirewallRule.Paused}}
+  {{- end }}
 }
 `
 

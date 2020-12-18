@@ -14,32 +14,31 @@ import (
 const loadBalancerPoolTemplate = `
 resource "cloudflare_load_balancer_pool" "load_balancer_pool_{{.LBP.ID}}" {
     name = "{{.LBP.Name}}"
-{{if .LBP.Origins}}
-    {{range .LBP.Origins}}
+{{- if .LBP.Origins}}
+    {{- range .LBP.Origins}}
     origins {
         name = "{{.Name}}"
         address = "{{.Address}}"
         weight = {{.Weight}}
         enabled = {{.Enabled}}
-
     }
-    {{end}}
-{{end}}
-{{if .LBP.Description}}
+    {{- end }}
+{{- end }}
+{{- if .LBP.Description }}
     description = "{{.LBP.Description}}"
-{{end}}
-{{if .LBP.Enabled}}
+{{- end }}
+{{- if .LBP.Enabled }}
     enabled = {{.LBP.Enabled}}
-{{end}}
-{{if .LBP.MinimumOrigins}}
+{{- end }}
+{{- if .LBP.MinimumOrigins }}
     minimum_origins = {{.LBP.MinimumOrigins}}
-{{end}}
-{{if .LBP.Monitor}}
+{{- end }}
+{{- if .LBP.Monitor }}
     monitor = "{{.LBP.Monitor}}"
-{{end}}
-{{if .LBP.NotificationEmail}}
+{{- end }}
+{{- if .LBP.NotificationEmail }}
     notification_email = "{{.LBP.NotificationEmail}}"
-{{end}}
+{{- end }}
 }
 `
 

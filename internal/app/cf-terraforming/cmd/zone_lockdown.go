@@ -18,16 +18,17 @@ resource "cloudflare_zone_lockdown" "{{replace .Zone.Name "." "_"}}_{{.Lockdown.
     zone_id = "{{.Zone.ID}}"
     description = "{{.Lockdown.Description}}"
     urls = [
-{{range .Lockdown.URLs}}
+{{- range .Lockdown.URLs}}
         "{{.}}",
-{{end}}
+{{- end}}
     ]
-{{range .Lockdown.Configurations}}
+{{- range .Lockdown.Configurations}}
     configurations {
       target = "{{.Target}}"
       value  = "{{.Value}}"
     }
-{{end}}
+{{- end}}
+    paused = {{.Lockdown.Paused}}
 }
 `
 

@@ -36,6 +36,9 @@ resource "cloudflare_load_balancer_pool" "load_balancer_pool_{{.LBP.ID}}" {
 {{- if .LBP.Monitor }}
     monitor = "{{.LBP.Monitor}}"
 {{- end }}
+{{- if .LBP.CheckRegions }}
+    check_regions = [{{range .LBP.CheckRegions}}"{{.}}",{{end}}]
+{{- end }}
 {{- if .LBP.NotificationEmail }}
     notification_email = "{{.LBP.NotificationEmail}}"
 {{- end }}

@@ -29,6 +29,16 @@ func isMap(i interface{}) bool {
 	return (reflect.ValueOf(i).Kind() == reflect.Map)
 }
 
+func isMapEmpty(i interface{}) bool {
+	if isMap(i) {
+		k := reflect.ValueOf(i)
+		if k.Len() == 0 {
+			return true
+		}
+	}
+	return false
+}
+
 func isSlice(i interface{}) bool {
 	return (reflect.ValueOf(i).Kind() == reflect.Slice)
 }
@@ -55,8 +65,8 @@ func normalizeResourceName(name string) string {
 	return r.Replace(name)
 }
 
-func escapeSpecialChars(value string) string  {
-	r := strings.NewReplacer("\"","\\\"", "\\","\\\\")
+func escapeSpecialChars(value string) string {
+	r := strings.NewReplacer("\"", "\\\"", "\\", "\\\\")
 
 	return r.Replace(value)
 }
@@ -64,6 +74,7 @@ func escapeSpecialChars(value string) string  {
 var templateFuncMap = template.FuncMap{
 	"replace":             replace,
 	"isMap":               isMap,
+	"isMapEmpty":          isMapEmpty,
 	"isSlice":             isSlice,
 	"quoteIfString":       quoteIfString,
 	"normalizeRecordName": normalizeRecordName,

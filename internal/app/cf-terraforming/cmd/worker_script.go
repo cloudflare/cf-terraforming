@@ -15,9 +15,9 @@ import (
 const workerScriptTemplate = `
 resource "cloudflare_worker_script" "{{replace .ScriptName "-" "_"}}" {
 	name    = "{{.ScriptName}}"
-	content = <<EOT71E0QXNH27
+	content = <<-EOF
 {{ trim .Script.Script }}
-EOT71E0QXNH27
+EOF
 }
 `
 

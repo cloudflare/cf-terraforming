@@ -17,7 +17,9 @@ resource "cloudflare_access_rule" "access_rule_{{.AccessRule.ID}}" {
     target = "{{.AccessRule.Configuration.Target}}"
     value = "{{.AccessRule.Configuration.Value}}"
   }
-  {{if eq .AccessRule.Scope.Type "zone"}}zone_id = "{{.Zone.ID}}"{{end}}
+  {{- if eq .AccessRule.Scope.Type "zone"}}
+  zone_id = "{{.Zone.ID}}"
+  {{- end }}
 }
 `
 

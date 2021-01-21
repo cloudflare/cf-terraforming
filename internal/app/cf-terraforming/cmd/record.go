@@ -15,28 +15,27 @@ import (
 const recordTemplate = `
 resource "cloudflare_record" "{{recordResourceName .Record}}" {
     zone_id = "{{.Zone.ID}}"
-{{ if .Zone.Paused}}
+{{- if .Zone.Paused }}
     paused = "true"
-{{end}}
+{{- end }}
     name = "{{normalizeRecordName .Record.Name .Record.ZoneName}}"
     type = "{{.Record.Type}}"
     ttl = "{{.Record.TTL}}"
     proxied = "{{.Record.Proxied}}"
-{{ if or (eq .Record.Type "MX") (eq .Record.Type "URI") }}
+{{- if or (eq .Record.Type "MX") (eq .Record.Type "URI") }}
     priority = "{{.Record.Priority}}"
-{{end}}
-{{ if .IsValueTypeField }}
-    value = "{{.Record.Content}}"
-{{end}}
-{{ if .IsDataTypeField }}
+{{- end }}
+{{- if .IsValueTypeField }}
+    value = "{{escapeSpecialChars .Record.Content}}"
+{{- end }}
+{{- if .IsDataTypeField }}
     data = {
-{{range $k, $v := .Record.Data}}
+{{- range $k, $v := .Record.Data }}
         {{ $k }} = "{{ $v }}"
-{{end}}
+{{- end }}
     }
-{{end}}
+{{- end }}
 }
-
 `
 
 type RecordAttributes struct {

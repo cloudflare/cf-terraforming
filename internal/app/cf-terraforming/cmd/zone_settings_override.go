@@ -21,27 +21,27 @@ resource "cloudflare_zone_settings_override" "zone_settings_override_{{.Zone.ID}
 		{{if isMap .Value }}
 			{{- .ID }} {
 			{{- range $k, $v := .Value}}
-			{{if isMap $v }}
+			{{- if isMap $v }}
 				{{- range $k, $v := $v }}
-			{{ $k }} = {{ quoteIfString $v -}}
+			{{ $k }} = {{ quoteIfString $v }}
 				{{- end}}
-				{{else}}
-			{{- $k }} = {{ quoteIfString $v -}}
+				{{- else }}
+			{{ $k }} = {{ quoteIfString $v }}
 			{{- end}}
 		{{- end}}
 		}
 		{{ else if isSlice .Value}}
-			{{- .ID }} = [ {{ range .Value }}"{{.}}", {{ end }} ]
+			{{- .ID }} = [{{ range .Value }}"{{.}}", {{ end }}]
 		{{ else }}
 			{{- .ID}} = {{ quoteIfString .Value -}}
-		{{- end}}
-		{{- end}}
+		{{- end }}
+		{{- end }}
 	}
 }
 `
 
 var zoneSettingsToRemove = []string{
-	"advanced_ddos", "edge_cache_ttl",
+	"advanced_ddos",
 }
 
 func init() {

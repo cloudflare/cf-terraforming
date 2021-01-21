@@ -14,11 +14,11 @@ import (
 
 const zoneTemplate = `
 resource "cloudflare_zone" "{{replace .Zone.Name "." "_"}}" {
-    zone = "{{.Zone.Name}}"
-{{ if .Zone.Paused}}    paused = "true"{{end}}
-    plan = "{{.ZonePlan}}"
+    zone   = "{{.Zone.Name}}"
+    paused = {{.Zone.Paused}}
+    plan   = "{{.ZonePlan}}"
+    type   = "{{.Zone.Type}}"
 }
-
 `
 
 type ZoneAttributes struct {

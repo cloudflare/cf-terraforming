@@ -13,22 +13,31 @@ import (
 
 const loadBalancerMonitorTemplate = `
 resource "cloudflare_load_balancer_monitor" "load_balancer_monitor_{{.LBM.ID}}" {
-    expected_body = "{{.LBM.ExpectedBody}}"
-    expected_codes = "{{.LBM.ExpectedCodes}}"
+    type = "{{.LBM.Type}}"
     method = "{{.LBM.Method}}"
     timeout = {{.LBM.Timeout}}
-    path = "{{.LBM.Path}}"
+    {{- if not (eq .LBM.Port 0) }}
+    port = {{.LBM.Port}}
+    {{- end }}
     interval = {{.LBM.Interval}}
     retries = {{.LBM.Retries}}
     description = "{{.LBM.Description}}"
-    {{if isMap .LBM.Header}}
+    {{- if or (eq .LBM.Type "http") (eq .LBM.Type "https") }}
+    expected_body = "{{.LBM.ExpectedBody}}"
+    expected_codes = "{{.LBM.ExpectedCodes}}"
+    path = "{{.LBM.Path}}"
+    {{- if not (isMapEmpty .LBM.Header) }}
     header {
-    {{range $k, $v := .LBM.Header}}
+    {{- range $k, $v := .LBM.Header}}
         header = "{{$k}}"
         values = [{{ range $hv := $v }}"{{ $hv }}",{{ end }}]
-    {{end}}
+    {{- end }}
     }
-    {{end}}
+    {{- end }}
+    allow_insecure = {{.LBM.AllowInsecure}}
+    follow_redirects = {{.LBM.FollowRedirects}}
+    #probe_zone = "{{.LBM.ProbeZone}}"
+    {{- end }}
 }
 `
 

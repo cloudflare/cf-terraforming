@@ -13,9 +13,9 @@ import (
 const pageRuleTemplate = `
 resource "cloudflare_page_rule" "page_rule_{{.Rule.ID}}" {
     zone_id = "{{.Zone.ID}}"
-{{ range .Rule.Targets}}
+{{-  range .Rule.Targets}}
     target = "{{.Constraint.Value }}"
-{{ end }}
+{{- end }}
     priority = {{ quoteIfString .Rule.Priority }}
     status = "{{.Rule.Status}}"
     actions {
@@ -40,16 +40,16 @@ resource "cloudflare_page_rule" "page_rule_{{.Rule.ID}}" {
             {{- end }}
         {{- end }}
         }
-    {{ else if isSlice .Value}}
+    {{- else if isSlice .Value}}
         {{- .ID }} = [ {{ range .Value }}"{{.}}", {{ end }} ]
-    {{ else if eq .ID "always_use_https"  }}
+    {{- else if eq .ID "always_use_https"  }}
         {{.ID }} = true
-    {{ else if eq .ID "disable_security"  }}
+    {{- else if eq .ID "disable_security"  }}
         {{.ID }} = true
-    {{else}}
+    {{- else }}
         {{.ID}} = {{ quoteIfString .Value }}
-    {{end -}}
-    {{end }}
+    {{- end }}
+    {{- end }}
     }
 }
 `

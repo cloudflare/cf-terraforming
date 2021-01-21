@@ -20,23 +20,23 @@ resource "cloudflare_spectrum_application" "spectrum_application_{{.App.ID}}" {
         type = "{{.App.DNS.Type}}"
         name = "{{.App.DNS.Name}}"
     }
-{{if .App.OriginPort}}
+{{- if .App.OriginPort }}
     origin_port = "{{.App.OriginPort}}"
-{{end}}
-{{if .App.OriginDNS}}
+{{- end }}
+{{- if .App.OriginDNS }}
     origin_dns {
       name = "{{.App.OriginDNS.Name}}"
     }
-{{end}}
-{{if .App.IPFirewall}}
+{{- end }}
+{{- if .App.IPFirewall}}
     ip_firewall = "{{.App.IPFirewall}}"
-{{end}}
-{{if .App.ProxyProtocol}}
+{{- end }}
+{{- if .App.ProxyProtocol }}
     proxy_protocol = "{{.App.ProxyProtocol}}"
-{{end}}
-{{if .App.TLS}}
+{{- end }}
+{{- if .App.TLS }}
     tls = "{{.App.TLS}}"
-{{end}}
+{{- end }}
     origin_direct = [{{range .App.OriginDirect}} "{{.}}", {{end}}]
 }
 `

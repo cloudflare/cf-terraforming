@@ -13,7 +13,9 @@ const customPagesTemplate = `
 resource "cloudflare_custom_pages" "custom_pages_{{.CustomPage.ID}}" {
   zone_id = "{{.Zone.ID}}"
   type    = "{{.CustomPage.ID}}"
-  {{if .CustomPage.URL}}url     = "{{.CustomPage.URL}}"{{end}}
+  {{- if .CustomPage.URL }}
+  url     = "{{.CustomPage.URL}}"
+  {{- end }}
   state   = "{{.CustomPage.State}}"
 }
 `

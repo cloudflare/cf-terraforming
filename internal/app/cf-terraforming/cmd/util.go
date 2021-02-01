@@ -8,7 +8,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/hashicorp/terraform/helper/hashcode"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 )
 
 func replace(input, from, to string) string {

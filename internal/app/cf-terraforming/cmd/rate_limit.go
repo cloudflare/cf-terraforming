@@ -8,7 +8,7 @@ import (
 	"text/template"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/hashicorp/terraform/helper/hashcode"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

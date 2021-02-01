@@ -139,7 +139,7 @@ cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_TOKEN -a 1233455678d
 ## Installation
 
 ```bash
-$ go get -u github.com/cloudflare/cf-terraforming/...
+$ GO111MODULE=on go get -u github.com/cloudflare/cf-terraforming/...
 ```
 This will fetch the cf-terraforming tool as well as its dependencies, updating them as necessary, build and install the package in your `$GOPATH` (usually `~/go/bin`). You can check your current GOPATH by running:
 

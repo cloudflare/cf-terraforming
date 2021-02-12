@@ -23,17 +23,21 @@ resource "cloudflare_firewall_rule" "firewall_rule_{{.FirewallRule.ID}}" {
   {{- if .FirewallRule.Paused}}
   paused = {{.FirewallRule.Paused}}
   {{- end }}
+  {{- if .FirewallRule.Products}}
+  products = [{{range .FirewallRule.Products}}"{{.}}",{{end}}]
+  {{- end }}
 }
 `
 
 type FirewallRuleAttributes struct {
-	ID          string `json:"id"`
-	Action      string `json:"action"`
-	FilterID    string `json:"filter_id"`
-	Priority    string `json:"priority"`
-	ZoneID      string `json:"zone_id"`
-	Description string `json:"description"`
-	Paused      string `json:"paused"`
+	ID          string   `json:"id"`
+	Action      string   `json:"action"`
+	FilterID    string   `json:"filter_id"`
+	Priority    string   `json:"priority"`
+	ZoneID      string   `json:"zone_id"`
+	Description string   `json:"description"`
+	Paused      string   `json:"paused"`
+	Products    []string `json:"products,omitempty"`
 }
 
 func init() {
@@ -107,6 +111,7 @@ func firewallRuleResourceStateBuild(zone cloudflare.Zone, rule cloudflare.Firewa
 				ZoneID:      zone.ID,
 				Description: rule.Description,
 				Paused:      strconv.FormatBool(rule.Paused),
+				Products:    rule.Products,
 			},
 			Meta:    make(map[string]string),
 			Tainted: false,

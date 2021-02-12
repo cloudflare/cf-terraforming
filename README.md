@@ -80,7 +80,7 @@ cf-terraforming --account $CLOUDFLARE_ACCOUNT_ID spectrum_application
 ```
 
 cf-terraforming supports the following environment variables:
-* CLOUDFLARE_TOKEN - API Token basd authentication
+* CLOUDFLARE_TOKEN - API Token based authentication
 * CLOUDFLARE_EMAIL, CLOUDFLARE_KEY - API Key based authentication
 
 ## Example usage

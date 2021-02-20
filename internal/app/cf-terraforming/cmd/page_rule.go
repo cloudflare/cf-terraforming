@@ -44,6 +44,12 @@ resource "cloudflare_page_rule" "page_rule_{{.Rule.ID}}" {
         {{- .ID }} = [ {{ range .Value }}"{{.}}", {{ end }} ]
     {{- else if eq .ID "always_use_https"  }}
         {{.ID }} = true
+    {{- else if eq .ID "disable_apps"  }}
+        {{.ID }} = true
+    {{- else if eq .ID "disable_performance"  }}
+        {{.ID }} = true
+    {{- else if eq .ID "disable_railgun"  }}
+        {{.ID }} = true
     {{- else if eq .ID "disable_security"  }}
         {{.ID }} = true
     {{- else }}

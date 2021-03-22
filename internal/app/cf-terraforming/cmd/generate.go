@@ -21,6 +21,15 @@ import (
 var (
 	resourceType string
 
+	// schemaToAPIMapping contains an override mapping for the API <> schema
+	// mismatches. The top level map key is the resource name while the inner map
+	// is the API value that you wish to map to the schema.
+	schemaToAPIMapping = map[string]map[string]string{
+		"cloudflare_record": map[string]string{
+			"value": "content", // remap "value" from the API to "content" in the schema
+		},
+	}
+
 	// eventually, this will come from the API
 	jsonPayload = []byte(`
 	{
@@ -101,6 +110,11 @@ var generateCmd = &cobra.Command{
 				field := t.Field(i)
 				tag := field.Tag.Get("json")
 				jsonTag := strings.Split(tag, ",")[0]
+
+				// check for overridding mappings
+				if val, ok := schemaToAPIMapping[*&resourceType][attrName]; ok {
+					attrName = val
+				}
 
 				if jsonTag == attrName {
 					r := reflect.ValueOf(record)

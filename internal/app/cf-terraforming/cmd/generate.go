@@ -6,6 +6,7 @@ import (
 
 func init() {
 	rootCmd.AddCommand(generateCmd)
+	generateCmd.PersistentFlags().StringVarP(&resourceType, "resource-type", "r", "", "Which resource you wish to generate")
 }
 
 var generateCmd = &cobra.Command{

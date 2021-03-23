@@ -108,6 +108,12 @@ var generateCmd = &cobra.Command{
 		case "cloudflare_certificate_pack":
 			jsonStructData = cloudflare.CertificatePack{}
 			json.Unmarshal(jsonPayload, &jsonStructData)
+		case "cloudflare_argo_tunnel":
+			jsonStructData = cloudflare.ArgoTunnel{}
+			json.Unmarshal(jsonPayload, &jsonStructData)
+		case "cloudflare_authenticated_origin_pulls":
+			jsonStructData = cloudflare.AuthenticatedOriginPulls{}
+			json.Unmarshal(jsonPayload, &jsonStructData)
 		default:
 			log.Fatalf("%q is not yet supported for automatic generation", *&resourceType)
 		}

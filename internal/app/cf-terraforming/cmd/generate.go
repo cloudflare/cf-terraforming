@@ -3,6 +3,7 @@ package cmd
 import (
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
+	"github.com/thanhpk/randstr"
 	"github.com/zclconf/go-cty/cty"
 
 	"context"
@@ -33,23 +34,6 @@ var (
 			"value": "content", // remap "value" from the API to "content" in the schema
 		},
 	}
-
-	// eventually, this will come from the API
-	jsonPayload = []byte(`
-	{
-    "id": "3822ff90-ea29-44df-9e55-21300bb9419b",
-    "type": "advanced",
-    "hosts": [
-      "example.com",
-      "*.example.com",
-      "www.example.com"
-    ],
-    "status": "initializing",
-    "validation_method": "txt",
-    "validity_days": 365,
-    "certificate_authority": "digicert",
-    "cloudflare_branding": false
-  }`)
 )
 
 func init() {
@@ -77,6 +61,7 @@ var generateCmd = &cobra.Command{
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured. Eventually, this will be '.'.
 		workingDir := "/tmp"
+		log.Debugf("initialising Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {
 			log.Fatal(err)
@@ -87,6 +72,7 @@ var generateCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
+		log.Debug("reading Terraform schema for Cloudflare provider")
 		ps, err := tf.ProvidersSchema(context.Background())
 		s := ps.Schemas["registry.terraform.io/cloudflare/cloudflare"]
 		if s == nil {
@@ -95,89 +81,105 @@ var generateCmd = &cobra.Command{
 
 		r := s.ResourceSchemas[*&resourceType]
 
-		// Lazy approach to restrict support to known resourcwes due to Go's type
+		log.Debugf("beginning to read and build %s resources", *&resourceType)
+
+		// Initialise `resourceCount` outside of the switch for supported resources
+		// to allow it to be referenced further down in the loop that outputs the
+		// newly generated resources.
+		resourceCount := 0
+
+		// Lazy approach to restrict support to known resources due to Go's type
 		// restrictions and the need to explicitly map out the structs.
-		var jsonStructData interface{}
+		var jsonStructData []interface{}
 		switch *&resourceType {
 		case "cloudflare_record":
-			jsonStructData = cloudflare.DNSRecord{}
-			json.Unmarshal(jsonPayload, &jsonStructData)
-		case "cloudflare_filter":
-			jsonStructData = cloudflare.Filter{}
-			json.Unmarshal(jsonPayload, &jsonStructData)
-		case "cloudflare_certificate_pack":
-			jsonStructData = cloudflare.CertificatePack{}
-			json.Unmarshal(jsonPayload, &jsonStructData)
-		case "cloudflare_argo_tunnel":
-			jsonStructData = cloudflare.ArgoTunnel{}
-			json.Unmarshal(jsonPayload, &jsonStructData)
-		case "cloudflare_authenticated_origin_pulls":
-			jsonStructData = cloudflare.AuthenticatedOriginPulls{}
-			json.Unmarshal(jsonPayload, &jsonStructData)
+			jsonPayload, err := api.DNSRecords(*&zoneName, cloudflare.DNSRecord{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		// case "cloudflare_filter":
+		// 	json.Unmarshal(jsonPayload, &jsonStructData)
+		// case "cloudflare_certificate_pack":
+		// 	jsonStructData = cloudflare.CertificatePack{}
+		// 	json.Unmarshal(jsonPayload, &jsonStructData)
+		// case "cloudflare_argo_tunnel":
+		// 	jsonStructData = cloudflare.ArgoTunnel{}
+		// 	json.Unmarshal(jsonPayload, &jsonStructData)
+		// case "cloudflare_authenticated_origin_pulls":
+		// 	jsonStructData = cloudflare.AuthenticatedOriginPulls{}
+		// 	json.Unmarshal(jsonPayload, &jsonStructData)
 		default:
 			log.Fatalf("%q is not yet supported for automatic generation", *&resourceType)
 		}
 
-		output += fmt.Sprintf(`resource "%s" "some_generated_name" {`+"\n", *&resourceType)
+		for i := 0; i < resourceCount; i++ {
+			output += fmt.Sprintf(`resource "%s" "terraform_managed_resource_%s" {`+"\n", *&resourceType, randstr.Hex(5))
 
-		for attrName, attrConfig := range r.Block.Attributes {
-			// Don't bother outputting the ID as that is only for internal use
-			if attrName == "id" {
-				continue
-			}
-
-			if val, ok := schemaToAPIMapping[*&resourceType][attrName]; ok {
-				attrName = val
-			}
-
-			structData := jsonStructData.(map[string]interface{})
-
-			if attrName == "account_id" && *&accountID == "" {
-				if *&accountID == "" {
-					log.Fatalf(errAccountIDMissing)
-				} else {
-					output += writeAttrLine(attrName, *&accountID, 2)
+			for attrName, attrConfig := range r.Block.Attributes {
+				// Don't bother outputting the ID for the resource as that is only for
+				// internal use (such as importing state).
+				if attrName == "id" {
 					continue
 				}
-			}
 
-			if attrName == "zone_id" {
-				if *&zoneName == "" {
-					log.Fatalf(errZoneIDMissing)
-				} else {
-					output += writeAttrLine(attrName, *&zoneName, 2)
-					continue
+				if val, ok := schemaToAPIMapping[*&resourceType][attrName]; ok {
+					attrName = val
 				}
-			}
 
-			ty := attrConfig.AttributeType
-			switch {
-			case ty.IsPrimitiveType():
-				switch ty {
-				case cty.String, cty.Bool, cty.Number:
-					output += writeAttrLine(attrName, structData[attrName], 2)
-				default:
-					log.Warnf("unexpected primitive type %q", ty.FriendlyName())
+				structData := jsonStructData[i].(map[string]interface{})
+
+				if attrName == "account_id" && *&accountID == "" {
+					if *&accountID == "" {
+						log.Fatalf(errAccountIDMissing)
+					} else {
+						output += writeAttrLine(attrName, *&accountID, 2)
+						continue
+					}
 				}
-			case ty.IsCollectionType():
+
+				if attrName == "zone_id" {
+					if *&zoneName == "" {
+						log.Fatalf(errZoneIDMissing)
+					} else {
+						output += writeAttrLine(attrName, *&zoneName, 2)
+						continue
+					}
+				}
+
+				ty := attrConfig.AttributeType
 				switch {
-				case ty.IsListType(), ty.IsSetType():
-					output += writeAttrLine(attrName, structData[attrName], 2)
-				case ty.IsMapType():
-					fmt.Printf("map found. attrName %s\n", attrName)
+				case ty.IsPrimitiveType():
+					switch ty {
+					case cty.String, cty.Bool, cty.Number:
+						output += writeAttrLine(attrName, structData[attrName], 2)
+					default:
+						log.Warnf("unexpected primitive type %q", ty.FriendlyName())
+					}
+				case ty.IsCollectionType():
+					switch {
+					case ty.IsListType(), ty.IsSetType():
+						output += writeAttrLine(attrName, structData[attrName], 2)
+					case ty.IsMapType():
+						fmt.Printf("map found. attrName %s\n", attrName)
+					default:
+						log.Warnf("unexpected collection type %q", ty.FriendlyName())
+					}
+				case ty.IsTupleType():
+					fmt.Printf("tuple found. attrName %s\n", attrName)
+				case ty.IsObjectType():
+					fmt.Printf("object found. attrName %s\n", attrName)
 				default:
-					log.Warnf("unexpected collection type %q", ty.FriendlyName())
+					log.Warnf("attribute %q (attribute type of %q) has not been generated", attrName, ty.FriendlyName())
 				}
-			case ty.IsTupleType():
-				fmt.Printf("tuple found. attrName %s\n", attrName)
-			case ty.IsObjectType():
-				fmt.Printf("object found. attrName %s\n", attrName)
-			default:
-				log.Warnf("attribute %q (attribute type of %q) has not been generated", attrName, ty.FriendlyName())
 			}
+
+			output += "}\n\n"
 		}
 
-		output += "}\n"
 		fmt.Println(output)
 	},
 }

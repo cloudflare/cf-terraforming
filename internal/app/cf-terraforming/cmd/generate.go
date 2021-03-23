@@ -1,24 +1,28 @@
 package cmd
 
 import (
+	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
+	"github.com/zclconf/go-cty/cty"
 
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"reflect"
 	"strings"
-	"time"
 
-	"github.com/cloudflare/cloudflare-go"
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/hashicorp/terraform-exec/tfinstall"
-	"github.com/zclconf/go-cty/cty"
+)
+
+const (
+	errAccountIDMissing = "account_id is expected on the resource however the provided value is missing"
+	errZoneIDMissing    = "zone_id is expected on the resource however the provided value is missing"
 )
 
 var (
+	output       string
 	resourceType string
 
 	// schemaToAPIMapping contains an override mapping for the API <> schema
@@ -33,24 +37,19 @@ var (
 	// eventually, this will come from the API
 	jsonPayload = []byte(`
 	{
-		"id": "372e67954025e0ba6aaa6d586b9e0b59",
-		"type": "A",
-		"name": "example.com",
-		"content": "198.51.100.4",
-		"proxiable": true,
-		"proxied": false,
-		"ttl": 120,
-		"locked": false,
-		"zone_id": "023e105f4ecef8ad9ca31a8372d0c353",
-		"zone_name": "example.com",
-		"created_on": "2014-01-01T05:20:00.12345Z",
-		"modified_on": "2014-01-01T05:20:00.12345Z",
-		"data": {},
-		"meta": {
-			"auto_added": true,
-			"source": "primary"
-		}
-	}`)
+    "id": "3822ff90-ea29-44df-9e55-21300bb9419b",
+    "type": "advanced",
+    "hosts": [
+      "example.com",
+      "*.example.com",
+      "www.example.com"
+    ],
+    "status": "initializing",
+    "validation_method": "txt",
+    "validity_days": 365,
+    "certificate_authority": "digicert",
+    "cloudflare_branding": false
+  }`)
 )
 
 func init() {
@@ -63,9 +62,6 @@ var generateCmd = &cobra.Command{
 	Short: "Pull resources from the Cloudflare API and generate the respective Terraform resources",
 	Run: func(cmd *cobra.Command, args []string) {
 		log.Debugf("attempting to generating %q resources", *&resourceType)
-
-		var record cloudflare.DNSRecord
-		json.Unmarshal(jsonPayload, &record)
 
 		tmpDir, err := ioutil.TempDir("", "tfinstall")
 		if err != nil {
@@ -99,78 +95,79 @@ var generateCmd = &cobra.Command{
 
 		r := s.ResourceSchemas[*&resourceType]
 
-		output := ""
+		// Lazy approach to restrict support to known resourcwes due to Go's type
+		// restrictions and the need to explicitly map out the structs.
+		var jsonStructData interface{}
+		switch *&resourceType {
+		case "cloudflare_record":
+			jsonStructData = cloudflare.DNSRecord{}
+			json.Unmarshal(jsonPayload, &jsonStructData)
+		case "cloudflare_filter":
+			jsonStructData = cloudflare.Filter{}
+			json.Unmarshal(jsonPayload, &jsonStructData)
+		case "cloudflare_certificate_pack":
+			jsonStructData = cloudflare.CertificatePack{}
+			json.Unmarshal(jsonPayload, &jsonStructData)
+		default:
+			log.Fatalf("%q is not yet supported for automatic generation", *&resourceType)
+		}
+
 		output += fmt.Sprintf(`resource "%s" "some_generated_name" {`+"\n", *&resourceType)
 
 		for attrName, attrConfig := range r.Block.Attributes {
-			t := reflect.TypeOf(record)
+			// Don't bother outputting the ID as that is only for internal use
+			if attrName == "id" {
+				continue
+			}
 
-			// Iterate over all available fields and read the tag value
-			for i := 0; i < t.NumField(); i++ {
-				field := t.Field(i)
-				tag := field.Tag.Get("json")
-				jsonTag := strings.Split(tag, ",")[0]
+			if val, ok := schemaToAPIMapping[*&resourceType][attrName]; ok {
+				attrName = val
+			}
 
-				// check for overridding mappings
-				if val, ok := schemaToAPIMapping[*&resourceType][attrName]; ok {
-					attrName = val
+			structData := jsonStructData.(map[string]interface{})
+
+			if attrName == "account_id" && *&accountID == "" {
+				if *&accountID == "" {
+					log.Fatalf(errAccountIDMissing)
+				} else {
+					output += writeAttrLine(attrName, *&accountID, 2)
+					continue
 				}
+			}
 
-				if jsonTag == attrName {
-					r := reflect.ValueOf(record)
-					f := reflect.Indirect(r).FieldByName(field.Name)
-
-					ty := attrConfig.AttributeType
-					switch {
-					case ty.IsPrimitiveType():
-						switch ty {
-						case cty.String:
-							if attrName == "created_on" || attrName == "modified_on" {
-								t := f.Interface().(time.Time)
-								formatedTime := t.Format(time.RFC3339Nano)
-								output += writeAttrLine(attrName, formatedTime, 2)
-							} else {
-								output += writeAttrLine(attrName, f.Interface().(string), 2)
-							}
-						case cty.Bool:
-							output += writeAttrLine(jsonTag, f.Interface().(bool), 2)
-						case cty.Number:
-							output += writeAttrLine(attrName, f.Interface().(int), 2)
-						default:
-							log.Warnf("unexpected primitive type %q", ty.FriendlyName())
-						}
-					case ty.IsCollectionType():
-						switch {
-						case ty.IsListType(), ty.IsSetType():
-							if f.Interface() == nil || len(f.Interface().([]string)) == 0 {
-								continue
-							}
-
-							items := f.Interface().([]string)
-							for k, v := range items {
-								items[k] = fmt.Sprintf("%q", v)
-							}
-							output += fmt.Sprintf("  %s = [ ", attrName)
-							output += strings.Join(items, ", ")
-							output += fmt.Sprintf(" ]\n")
-						case ty.IsMapType():
-							if f.Interface() == nil {
-								continue
-							}
-
-							// output += buildNestedMap(attrName, f, r)
-
-						default:
-							log.Warnf("unexpected collection type %q", ty.FriendlyName())
-						}
-					case ty.IsTupleType():
-						fmt.Printf("tuple found. attrName %s\n", attrName)
-					case ty.IsObjectType():
-						fmt.Printf("object found. attrName %s\n", attrName)
-					default:
-						log.Warnf("attribute %q (attribute type of %q) has not been generated", attrName, ty.FriendlyName())
-					}
+			if attrName == "zone_id" {
+				if *&zoneName == "" {
+					log.Fatalf(errZoneIDMissing)
+				} else {
+					output += writeAttrLine(attrName, *&zoneName, 2)
+					continue
 				}
+			}
+
+			ty := attrConfig.AttributeType
+			switch {
+			case ty.IsPrimitiveType():
+				switch ty {
+				case cty.String, cty.Bool, cty.Number:
+					output += writeAttrLine(attrName, structData[attrName], 2)
+				default:
+					log.Warnf("unexpected primitive type %q", ty.FriendlyName())
+				}
+			case ty.IsCollectionType():
+				switch {
+				case ty.IsListType(), ty.IsSetType():
+					output += writeAttrLine(attrName, structData[attrName], 2)
+				case ty.IsMapType():
+					fmt.Printf("map found. attrName %s\n", attrName)
+				default:
+					log.Warnf("unexpected collection type %q", ty.FriendlyName())
+				}
+			case ty.IsTupleType():
+				fmt.Printf("tuple found. attrName %s\n", attrName)
+			case ty.IsObjectType():
+				fmt.Printf("object found. attrName %s\n", attrName)
+			default:
+				log.Warnf("attribute %q (attribute type of %q) has not been generated", attrName, ty.FriendlyName())
 			}
 		}
 
@@ -178,20 +175,27 @@ var generateCmd = &cobra.Command{
 		fmt.Println(output)
 	},
 }
+
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
 func writeAttrLine(key string, value interface{}, depth int) string {
-	switch reflect.TypeOf(value).String() {
-	case "string":
+	switch value.(type) {
+	case []interface{}:
+		var items []string
+		for _, item := range value.([]interface{}) {
+			items = append(items, fmt.Sprintf("%q", item.(string)))
+		}
+		return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
+	case string:
 		return fmt.Sprintf("%s%s = %q\n", strings.Repeat(" ", depth), key, value)
-	case "int":
+	case int:
 		return fmt.Sprintf("%s%s = %d\n", strings.Repeat(" ", depth), key, value)
-	case "float64":
+	case float64:
 		return fmt.Sprintf("%s%s = %0.f\n", strings.Repeat(" ", depth), key, value)
-	case "bool":
+	case bool:
 		return fmt.Sprintf("%s%s = %t\n", strings.Repeat(" ", depth), key, value)
 	default:
 		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
-		return "n/a"
+		return ""
 	}
 }

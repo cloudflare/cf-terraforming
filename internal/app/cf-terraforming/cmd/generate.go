@@ -194,6 +194,12 @@ var generateCmd = &cobra.Command{
 			log.Fatalf("%q is not yet supported for automatic generation", *&resourceType)
 		}
 
+		// If we don't have any resources to generate, just bail out early.
+		if resourceCount == 0 {
+			log.Info("no resources found to generate. Exiting...")
+			os.Exit(0)
+		}
+
 		for i := 0; i < resourceCount; i++ {
 			output += fmt.Sprintf(`resource "%s" "terraform_managed_resource_%s" {`+"\n", *&resourceType, randstr.Hex(5))
 

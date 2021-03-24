@@ -170,6 +170,20 @@ var generateCmd = &cobra.Command{
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_firewall_rule":
+			jsonPayload, err := api.FirewallRules(*&zoneName, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			// remap Filter.ID to `filter_id` on the JSON payload
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["filter_id"] = jsonStructData[i].(map[string]interface{})["filter"].(map[string]interface{})["id"]
+			}
 		case "cloudflare_record":
 			jsonPayload, err := api.DNSRecords(*&zoneName, cloudflare.DNSRecord{})
 			if err != nil {

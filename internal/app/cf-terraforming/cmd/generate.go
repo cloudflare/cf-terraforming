@@ -92,6 +92,84 @@ var generateCmd = &cobra.Command{
 		// restrictions and the need to explicitly map out the structs.
 		var jsonStructData []interface{}
 		switch *&resourceType {
+		case "cloudflare_access_service_token":
+			if *&accountID != "" {
+				jsonPayload, _, err := api.AccessServiceTokens(*&accountID)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			} else {
+				jsonPayload, _, err := api.ZoneLevelAccessServiceTokens(*&zoneName)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			}
+		case "cloudflare_argo_tunnel":
+			jsonPayload, err := api.ArgoTunnels(context.Background(), *&accountID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		// need to work out how to zone/account differences
+		// case "cloudflare_authenticated_origin_pulls":
+		case "cloudflare_byo_ip_prefix":
+			jsonPayload, err := api.ListPrefixes(context.Background())
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_custom_hostname_fallback_origin":
+			jsonPayload, _, err := api.CustomHostnames(*&zoneName, 1, cloudflare.CustomHostname{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_custom_pages":
+			if *&accountID != "" {
+				jsonPayload, err := api.CustomPages(&cloudflare.CustomPageOptions{AccountID: *&accountID})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			} else {
+				jsonPayload, err := api.CustomPages(&cloudflare.CustomPageOptions{ZoneID: *&zoneName})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			}
+		case "cloudflare_filter":
+			jsonPayload, err := api.Filters(*&zoneName, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_record":
 			jsonPayload, err := api.DNSRecords(*&zoneName, cloudflare.DNSRecord{})
 			if err != nil {

@@ -262,7 +262,7 @@ var generateCmd = &cobra.Command{
 					case ty.IsListType(), ty.IsSetType():
 						output += writeAttrLine(attrName, structData[attrName], 2)
 					case ty.IsMapType():
-						fmt.Printf("map found. attrName %s\n", attrName)
+						output += writeAttrLine(attrName, structData[attrName], 2)
 					default:
 						log.Warnf("unexpected collection type %q", ty.FriendlyName())
 					}
@@ -286,6 +286,12 @@ var generateCmd = &cobra.Command{
 // for known types.
 func writeAttrLine(key string, value interface{}, depth int) string {
 	switch value.(type) {
+	case map[string]interface{}:
+		s := ""
+		for k, v := range value.(map[string]interface{}) {
+			s += writeAttrLine(k, v, depth+2)
+		}
+		return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
 	case []interface{}:
 		var items []string
 		for _, item := range value.([]interface{}) {

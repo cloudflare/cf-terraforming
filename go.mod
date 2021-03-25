@@ -4,7 +4,7 @@ go 1.15
 
 require (
 	github.com/cloudflare/cloudflare-go v0.13.8
-	github.com/hashicorp/terraform-plugin-sdk v1.16.0
+	github.com/hashicorp/terraform-plugin-sdk v1.16.1
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.1.3

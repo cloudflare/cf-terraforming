@@ -229,6 +229,15 @@ func GenerateCmd() *cobra.Command {
 				for i := 0; i < resourceCount; i++ {
 					jsonStructData[i].(map[string]interface{})["filter_id"] = jsonStructData[i].(map[string]interface{})["filter"].(map[string]interface{})["id"]
 				}
+			case "cloudflare_custom_hostname":
+				jsonPayload, _, err := api.CustomHostnames(*&zoneName, 1, cloudflare.CustomHostname{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_record":
 				simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS"}
 				jsonPayload, err := api.DNSRecords(*&zoneName, cloudflare.DNSRecord{})
@@ -295,6 +304,7 @@ func GenerateCmd() *cobra.Command {
 			for i := 0; i < resourceCount; i++ {
 				output += fmt.Sprintf(`resource "%s" "terraform_managed_resource_%s" {`+"\n", *&resourceType, randstr.Hex(5))
 
+				// Block attributes are for any attributes where assignment is involved.
 				for attrName, attrConfig := range r.Block.Attributes {
 					// Don't bother outputting the ID for the resource as that is only for
 					// internal use (such as importing state).
@@ -308,7 +318,7 @@ func GenerateCmd() *cobra.Command {
 						if *&accountID == "" {
 							log.Fatal(errAccountIDMissing)
 						} else {
-							output += writeAttrLine(attrName, *&accountID, 2)
+							output += writeAttrLine(attrName, *&accountID, 2, false)
 							continue
 						}
 					}
@@ -317,7 +327,7 @@ func GenerateCmd() *cobra.Command {
 						if *&zoneName == "" {
 							log.Fatal(errZoneIDMissing)
 						} else {
-							output += writeAttrLine(attrName, *&zoneName, 2)
+							output += writeAttrLine(attrName, *&zoneName, 2, false)
 							continue
 						}
 					}
@@ -327,16 +337,16 @@ func GenerateCmd() *cobra.Command {
 					case ty.IsPrimitiveType():
 						switch ty {
 						case cty.String, cty.Bool, cty.Number:
-							output += writeAttrLine(attrName, structData[attrName], 2)
+							output += writeAttrLine(attrName, structData[attrName], 2, false)
 						default:
 							log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 						}
 					case ty.IsCollectionType():
 						switch {
 						case ty.IsListType(), ty.IsSetType():
-							output += writeAttrLine(attrName, structData[attrName], 2)
+							output += writeAttrLine(attrName, structData[attrName], 2, false)
 						case ty.IsMapType():
-							output += writeAttrLine(attrName, structData[attrName], 2)
+							output += writeAttrLine(attrName, structData[attrName], 2, false)
 						default:
 							log.Debugf("unexpected collection type %q", ty.FriendlyName())
 						}
@@ -349,6 +359,32 @@ func GenerateCmd() *cobra.Command {
 					}
 				}
 
+				// Nested blocks are used for configuration options where assignment
+				// isn't required.
+				for attrName, attrConfig := range r.Block.NestedBlocks {
+					structData := jsonStructData[i].(map[string]interface{})
+
+					if attrConfig.NestingMode == "list" {
+						output += "  " + attrName + " {\n"
+
+						for nestedAttrName, attrConfig := range attrConfig.Block.Attributes {
+							ty := attrConfig.AttributeType
+							switch {
+							case ty.IsPrimitiveType():
+								switch ty {
+								case cty.String, cty.Bool, cty.Number:
+									output += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
+								default:
+									log.Debugf("unexpected primitive type %q", ty.FriendlyName())
+								}
+							}
+						}
+
+						output += "  }\n"
+					} else {
+						log.Debugf("nested mode %q for %s not recongised", attrConfig.NestingMode, attrName)
+					}
+				}
 				output += "}\n\n"
 			}
 
@@ -362,7 +398,7 @@ func GenerateCmd() *cobra.Command {
 
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
-func writeAttrLine(key string, value interface{}, depth int) string {
+func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) string {
 	switch value.(type) {
 	case map[string]interface{}:
 		values := value.(map[string]interface{})
@@ -375,9 +411,15 @@ func writeAttrLine(key string, value interface{}, depth int) string {
 
 		s := ""
 		for _, v := range sortedKeys {
-			s += writeAttrLine(v, values[v], depth+2)
+			s += writeAttrLine(v, values[v], depth+2, false)
 		}
-		return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
+
+		if usedInBlock {
+			return fmt.Sprintf("%s%s {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
+		} else {
+			return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
+		}
+
 	case []interface{}:
 		var items []string
 		for _, item := range value.([]interface{}) {

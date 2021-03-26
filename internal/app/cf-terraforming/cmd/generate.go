@@ -365,9 +365,17 @@ func GenerateCmd() *cobra.Command {
 func writeAttrLine(key string, value interface{}, depth int) string {
 	switch value.(type) {
 	case map[string]interface{}:
+		values := value.(map[string]interface{})
+
+		sortedKeys := make([]string, 0, len(values))
+		for k := range values {
+			sortedKeys = append(sortedKeys, k)
+		}
+		sort.Strings(sortedKeys)
+
 		s := ""
-		for k, v := range value.(map[string]interface{}) {
-			s += writeAttrLine(k, v, depth+2)
+		for _, v := range sortedKeys {
+			s += writeAttrLine(v, values[v], depth+2)
 		}
 		return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
 	case []interface{}:

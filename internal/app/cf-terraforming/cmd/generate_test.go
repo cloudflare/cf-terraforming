@@ -1,11 +1,9 @@
 package cmd
 
 import (
-	"bytes"
 	"fmt"
 	"testing"
 
-	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -68,13 +66,7 @@ func TestGenerate_ResourceNotSupported(t *testing.T) {
 	}
 }
 
-func executeCommandC(root *cobra.Command, args ...string) (c *cobra.Command, output string, err error) {
-	buf := new(bytes.Buffer)
-	root.SetOut(buf)
-	root.SetErr(buf)
-	root.SetArgs(args)
-
-	c, err = root.ExecuteC()
-
-	return c, buf.String(), err
+func TestGenerate_trimLeftChar(t *testing.T) {
+	assert.Equal(t, "example", trimLeftChar("/example"))
+	assert.Equal(t, "nother example", trimLeftChar("another example"))
 }

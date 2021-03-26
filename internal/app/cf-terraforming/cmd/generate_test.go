@@ -54,7 +54,7 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := writeAttrLine(tc.key, tc.value, tc.depth)
+			got := writeAttrLine(tc.key, tc.value, tc.depth, false)
 			assert.Equal(t, got, tc.want)
 		})
 	}

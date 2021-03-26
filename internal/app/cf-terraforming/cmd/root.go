@@ -1,12 +1,7 @@
 package cmd
 
 import (
-	"context"
-	"os"
-	"regexp"
 	"strings"
-
-	"encoding/json"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	homedir "github.com/mitchellh/go-homedir"
@@ -29,8 +24,7 @@ var rootCmd = &cobra.Command{
 	Long: `cf-terraforming is an application that allows Cloudflare users
 to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,
-	PersistentPreRun:  persistentPreRun,
-	PersistentPostRun: persistentPostRun,
+	PersistentPreRun: persistentPreRun,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -188,76 +182,45 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 	}
 
-	log.Debug("Selecting zones for import")
+	// log.Debug("Selecting zones for import")
 
-	if regexp.MustCompile("^[a-z0-9]{32}$").MatchString(zoneName) {
-		zone, err := api.ZoneDetails(zoneName)
+	// if regexp.MustCompile("^[a-z0-9]{32}$").MatchString(zoneName) {
+	// 	zone, err := api.ZoneDetails(zoneName)
 
-		if err != nil {
-			log.Error(err)
-		}
+	// 	if err != nil {
+	// 		log.Error(err)
+	// 	}
 
-		zones = []cloudflare.Zone{zone}
-	} else if zoneName != "" {
-		zones, err = api.ListZones(zoneName)
+	// 	zones = []cloudflare.Zone{zone}
+	// } else if zoneName != "" {
+	// 	zones, err = api.ListZones(zoneName)
 
-		if err != nil {
-			log.Error(err)
-		}
-	} else if accountID != "" {
-		zonesResponse, err := api.ListZonesContext(context.TODO(), cloudflare.WithZoneFilters("", accountID, ""))
+	// 	if err != nil {
+	// 		log.Error(err)
+	// 	}
+	// } else if accountID != "" {
+	// 	zonesResponse, err := api.ListZonesContext(context.TODO(), cloudflare.WithZoneFilters("", accountID, ""))
 
-		if err != nil {
-			log.Error(err)
-		}
+	// 	if err != nil {
+	// 		log.Error(err)
+	// 	}
 
-		zones = zonesResponse.Result
-	} else {
-		zones, err = api.ListZones()
+	// 	zones = zonesResponse.Result
+	// } else {
+	// 	zones, err = api.ListZones()
 
-		if err != nil {
-			log.Error(err)
-		}
-	}
+	// 	if err != nil {
+	// 		log.Error(err)
+	// 	}
+	// }
 
-	log.Debug("Zones selected:\n")
+	// log.Debug("Zones selected:\n")
 
-	for _, i := range zones {
+	// for _, i := range zones {
 
-		log.WithFields(logrus.Fields{
-			"ID":   i.ID,
-			"Name": i.Name,
-		}).Debug("Zone")
-	}
-}
-
-// This function runs following every root command
-// When the tfstate flag is passed, output the
-// full Terraform state file by rendering the resources map
-// that was built up by the resource-specific commands
-func persistentPostRun(cmd *cobra.Command, args []string) {
-
-	if tfstate {
-
-		m := []Module{{
-			Path:      []string{"root"},
-			DependsOn: []string{},
-			Outputs:   make(map[string]string),
-			Resource:  resourcesMap,
-		}}
-
-		s := TFStateScaffold{
-			Version: 1,
-			Serial:  0,
-			Modules: m,
-		}
-
-		sr := StateResponse{
-			TFStateScaffold: s,
-		}
-
-		j, _ := json.Marshal(sr)
-
-		os.Stdout.Write(j)
-	}
+	// 	log.WithFields(logrus.Fields{
+	// 		"ID":   i.ID,
+	// 		"Name": i.Name,
+	// 	}).Debug("Zone")
+	// }
 }

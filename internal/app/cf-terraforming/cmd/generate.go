@@ -82,6 +82,26 @@ func GenerateCmd() *cobra.Command {
 			// restrictions and the need to explicitly map out the structs.
 			var jsonStructData []interface{}
 			switch *&resourceType {
+			case "cloudflare_access_identity_provider":
+				if *&accountID != "" {
+					jsonPayload, err := api.AccessIdentityProviders(*&accountID)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					resourceCount = len(jsonPayload)
+					m, _ := json.Marshal(jsonPayload)
+					json.Unmarshal(m, &jsonStructData)
+				} else {
+					jsonPayload, err := api.ZoneLevelAccessIdentityProviders(*&zoneName)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					resourceCount = len(jsonPayload)
+					m, _ := json.Marshal(jsonPayload)
+					json.Unmarshal(m, &jsonStructData)
+				}
 			case "cloudflare_access_service_token":
 				if *&accountID != "" {
 					jsonPayload, _, err := api.AccessServiceTokens(*&accountID)
@@ -231,6 +251,15 @@ func GenerateCmd() *cobra.Command {
 				}
 			case "cloudflare_custom_hostname":
 				jsonPayload, _, err := api.CustomHostnames(*&zoneName, 1, cloudflare.CustomHostname{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			case "cloudflare_ip_list":
+				jsonPayload, err := api.ListIPLists(context.Background())
 				if err != nil {
 					log.Fatal(err)
 				}

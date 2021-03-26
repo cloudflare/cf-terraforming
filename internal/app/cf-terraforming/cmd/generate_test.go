@@ -1,9 +1,11 @@
 package cmd
 
 import (
+	"bytes"
 	"fmt"
 	"testing"
 
+	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -31,7 +33,7 @@ var (
 	}
 )
 
-func Test_writeAttrLine(t *testing.T) {
+func TestGenerate_writeAttrLine(t *testing.T) {
 	tests := map[string]struct {
 		key   string
 		value interface{}
@@ -56,4 +58,23 @@ func Test_writeAttrLine(t *testing.T) {
 			assert.Equal(t, got, tc.want)
 		})
 	}
+}
+
+func TestGenerate_ResourceNotSupported(t *testing.T) {
+	_, output, err := executeCommandC(GenerateCmd(), "--resource-type", "notreal")
+
+	if assert.Nil(t, err) {
+		assert.Contains(t, output, "\"notreal\" is not yet supported for automatic generation")
+	}
+}
+
+func executeCommandC(root *cobra.Command, args ...string) (c *cobra.Command, output string, err error) {
+	buf := new(bytes.Buffer)
+	root.SetOut(buf)
+	root.SetErr(buf)
+	root.SetArgs(args)
+
+	c, err = root.ExecuteC()
+
+	return c, buf.String(), err
 }

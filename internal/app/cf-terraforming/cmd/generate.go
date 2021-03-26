@@ -384,6 +384,12 @@ func writeAttrLine(key string, value interface{}, depth int) string {
 			items = append(items, fmt.Sprintf("%q", item.(string)))
 		}
 		return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
+	case []string:
+		var items []string
+		for _, item := range value.([]string) {
+			items = append(items, fmt.Sprintf("%q", item))
+		}
+		return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
 	case string:
 		return fmt.Sprintf("%s%s = %q\n", strings.Repeat(" ", depth), key, value)
 	case int:

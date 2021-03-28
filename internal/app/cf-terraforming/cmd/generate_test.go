@@ -75,11 +75,6 @@ func TestGenerate_ResourceNotSupported(t *testing.T) {
 	}
 }
 
-func TestGenerate_trimLeftChar(t *testing.T) {
-	assert.Equal(t, "example", trimLeftChar("/example"))
-	assert.Equal(t, "nother example", trimLeftChar("another example"))
-}
-
 func TestResourceGeneration(t *testing.T) {
 	resources := []string{
 		"cloudflare_record",

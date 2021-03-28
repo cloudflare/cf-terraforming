@@ -328,7 +328,7 @@ func GenerateCmd() *cobra.Command {
 
 			// If we don't have any resources to generate, just bail out early.
 			if resourceCount == 0 {
-				fmt.Fprintf(cmd.OutOrStdout(), "no resources found to generate. Exiting...")
+				fmt.Fprint(cmd.OutOrStdout(), "no resources found to generate. Exiting...")
 				return
 			}
 
@@ -431,7 +431,7 @@ func GenerateCmd() *cobra.Command {
 				output += "}\n\n"
 			}
 
-			fmt.Fprintf(cmd.OutOrStdout(), output)
+			fmt.Fprint(cmd.OutOrStdout(), output)
 		},
 	}
 

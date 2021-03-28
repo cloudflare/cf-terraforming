@@ -34,9 +34,7 @@ func executeCommandC(root *cobra.Command, args ...string) (c *cobra.Command, out
 // testDataFile slurps a local test case into memory and returns it while
 // encapsulating the logic for finding it.
 func testDataFile(filename string) string {
-	if strings.HasPrefix(filename, "/") {
-		filename = trimLeftChar(filename)
-	}
+	filename = strings.TrimSuffix(filename, "/")
 
 	dirname, err := os.Getwd()
 	if err != nil {
@@ -56,14 +54,4 @@ func testDataFile(filename string) string {
 	data, _ := ioutil.ReadFile(fullpath)
 
 	return string(data)
-}
-
-// trimLeftChar removes the first character of a string.
-func trimLeftChar(s string) string {
-	for i := range s {
-		if i > 0 {
-			return s[i:]
-		}
-	}
-	return s[:0]
 }

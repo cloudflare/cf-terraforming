@@ -79,29 +79,39 @@ func TestGenerate_trimLeftChar(t *testing.T) {
 	assert.Equal(t, "nother example", trimLeftChar("another example"))
 }
 
-func TestNewThing(t *testing.T) {
-	r, err := recorder.New("../../../../testdata/cloudflare/cloudflare_record")
-	if err != nil {
-		log.Fatal(err)
+func TestResourceGeneration(t *testing.T) {
+	resources := []string{
+		"cloudflare_record",
 	}
-	defer r.Stop()
 
-	r.AddFilter(func(i *cassette.Interaction) error {
-		delete(i.Request.Headers, "X-Auth-Email")
-		delete(i.Request.Headers, "X-Auth-Key")
-		delete(i.Request.Headers, "Authorization")
-		return nil
-	})
+	for _, resource := range resources {
+		t.Run(resource, func(t *testing.T) {
+			r, err := recorder.New("../../../../testdata/cloudflare/" + resource)
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer r.Stop()
 
-	api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
-		&http.Client{
-			Transport: r,
-		},
-	))
+			r.AddFilter(func(i *cassette.Interaction) error {
+				delete(i.Request.Headers, "X-Auth-Email")
+				delete(i.Request.Headers, "X-Auth-Key")
+				delete(i.Request.Headers, "Authorization")
+				return nil
+			})
 
-	_, output, _ := executeCommandC(GenerateCmd(), "--resource-type", "cloudflare_record", "--zone", cloudflareTestZoneID)
+			api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
+				&http.Client{
+					Transport: r,
+				},
+			))
 
-	expected := testDataFile("cloudflare_record.tf")
-	actual := output
-	assert.Equal(t, expected, actual)
+			_, output, _ := executeCommandC(GenerateCmd(), "--resource-type", resource, "--zone", cloudflareTestZoneID)
+
+			expected := testDataFile(resource + ".tf")
+			actual := output
+			assert.Equal(t, expected, actual)
+		})
+
+	}
+
 }

@@ -333,7 +333,13 @@ func GenerateCmd() *cobra.Command {
 			}
 
 			for i := 0; i < resourceCount; i++ {
-				output += fmt.Sprintf(`resource "%s" "terraform_managed_resource_%s" {`+"\n", *&resourceType, randstr.Hex(5))
+				resourceID := ""
+				if os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
+					resourceID = "terraform_managed_resource"
+				} else {
+					resourceID = fmt.Sprintf("terraform_managed_resource_%s", randstr.Hex(5))
+				}
+				output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", *&resourceType, resourceID)
 
 				// Block attributes are for any attributes where assignment is involved.
 				for attrName, attrConfig := range r.Block.Attributes {

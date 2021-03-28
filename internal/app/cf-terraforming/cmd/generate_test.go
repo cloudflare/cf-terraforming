@@ -2,7 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"net/http"
+	"os"
 	"testing"
+
+	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/dnaeon/go-vcr/cassette"
+	"github.com/dnaeon/go-vcr/recorder"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -29,6 +35,8 @@ var (
 		"c": "d",
 		"e": "f",
 	}
+
+	cloudflareTestZoneID = "0da42c8d2132a9ddaf714f9e7c920711"
 )
 
 func TestGenerate_writeAttrLine(t *testing.T) {
@@ -69,4 +77,31 @@ func TestGenerate_ResourceNotSupported(t *testing.T) {
 func TestGenerate_trimLeftChar(t *testing.T) {
 	assert.Equal(t, "example", trimLeftChar("/example"))
 	assert.Equal(t, "nother example", trimLeftChar("another example"))
+}
+
+func TestNewThing(t *testing.T) {
+	r, err := recorder.New("../../../../testdata/cloudflare/cloudflare_record")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer r.Stop()
+
+	r.AddFilter(func(i *cassette.Interaction) error {
+		delete(i.Request.Headers, "X-Auth-Email")
+		delete(i.Request.Headers, "X-Auth-Key")
+		delete(i.Request.Headers, "Authorization")
+		return nil
+	})
+
+	api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
+		&http.Client{
+			Transport: r,
+		},
+	))
+
+	_, output, _ := executeCommandC(GenerateCmd(), "--resource-type", "cloudflare_record", "--zone", cloudflareTestZoneID)
+
+	expected := testDataFile("cloudflare_record.tf")
+	actual := output
+	assert.Equal(t, expected, actual)
 }

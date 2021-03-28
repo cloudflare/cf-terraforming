@@ -84,7 +84,7 @@ func GenerateCmd() *cobra.Command {
 			switch *&resourceType {
 			case "cloudflare_access_identity_provider":
 				if *&accountID != "" {
-					jsonPayload, err := api.AccessIdentityProviders(*&accountID)
+					jsonPayload, err := api.AccessIdentityProviders(context.Background(), *&accountID)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -93,7 +93,7 @@ func GenerateCmd() *cobra.Command {
 					m, _ := json.Marshal(jsonPayload)
 					json.Unmarshal(m, &jsonStructData)
 				} else {
-					jsonPayload, err := api.ZoneLevelAccessIdentityProviders(*&zoneName)
+					jsonPayload, err := api.ZoneLevelAccessIdentityProviders(context.Background(), *&zoneName)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -104,7 +104,7 @@ func GenerateCmd() *cobra.Command {
 				}
 			case "cloudflare_access_service_token":
 				if *&accountID != "" {
-					jsonPayload, _, err := api.AccessServiceTokens(*&accountID)
+					jsonPayload, _, err := api.AccessServiceTokens(context.Background(), *&accountID)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -113,7 +113,7 @@ func GenerateCmd() *cobra.Command {
 					m, _ := json.Marshal(jsonPayload)
 					json.Unmarshal(m, &jsonStructData)
 				} else {
-					jsonPayload, _, err := api.ZoneLevelAccessServiceTokens(*&zoneName)
+					jsonPayload, _, err := api.ZoneLevelAccessServiceTokens(context.Background(), *&zoneName)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -123,7 +123,7 @@ func GenerateCmd() *cobra.Command {
 					json.Unmarshal(m, &jsonStructData)
 				}
 			case "cloudflare_access_mutual_tls_certificate":
-				jsonPayload, err := api.AccessMutualTLSCertificates(*&accountID)
+				jsonPayload, err := api.AccessMutualTLSCertificates(context.Background(), *&accountID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -133,7 +133,7 @@ func GenerateCmd() *cobra.Command {
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_access_rule":
 				if *&accountID != "" {
-					jsonPayload, err := api.ListAccountAccessRules(*&accountID, cloudflare.AccessRule{}, 1)
+					jsonPayload, err := api.ListAccountAccessRules(context.Background(), *&accountID, cloudflare.AccessRule{}, 1)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -142,7 +142,7 @@ func GenerateCmd() *cobra.Command {
 					m, _ := json.Marshal(jsonPayload.Result)
 					json.Unmarshal(m, &jsonStructData)
 				} else {
-					jsonPayload, err := api.ListZoneAccessRules(*&zoneName, cloudflare.AccessRule{}, 1)
+					jsonPayload, err := api.ListZoneAccessRules(context.Background(), *&zoneName, cloudflare.AccessRule{}, 1)
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -152,7 +152,7 @@ func GenerateCmd() *cobra.Command {
 					json.Unmarshal(m, &jsonStructData)
 				}
 			case "cloudflare_account_member":
-				jsonPayload, _, err := api.AccountMembers(*&accountID, cloudflare.PaginationOptions{})
+				jsonPayload, _, err := api.AccountMembers(context.Background(), *&accountID, cloudflare.PaginationOptions{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -189,7 +189,7 @@ func GenerateCmd() *cobra.Command {
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_certificate_pack":
-				jsonPayload, err := api.ListCertificatePacks(*&zoneName)
+				jsonPayload, err := api.ListCertificatePacks(context.Background(), *&zoneName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -198,7 +198,7 @@ func GenerateCmd() *cobra.Command {
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_custom_hostname_fallback_origin":
-				jsonPayload, _, err := api.CustomHostnames(*&zoneName, 1, cloudflare.CustomHostname{})
+				jsonPayload, _, err := api.CustomHostnames(context.Background(), *&zoneName, 1, cloudflare.CustomHostname{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -208,7 +208,7 @@ func GenerateCmd() *cobra.Command {
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_custom_pages":
 				if *&accountID != "" {
-					jsonPayload, err := api.CustomPages(&cloudflare.CustomPageOptions{AccountID: *&accountID})
+					jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{AccountID: *&accountID})
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -217,7 +217,7 @@ func GenerateCmd() *cobra.Command {
 					m, _ := json.Marshal(jsonPayload)
 					json.Unmarshal(m, &jsonStructData)
 				} else {
-					jsonPayload, err := api.CustomPages(&cloudflare.CustomPageOptions{ZoneID: *&zoneName})
+					jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{ZoneID: *&zoneName})
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -227,7 +227,7 @@ func GenerateCmd() *cobra.Command {
 					json.Unmarshal(m, &jsonStructData)
 				}
 			case "cloudflare_filter":
-				jsonPayload, err := api.Filters(*&zoneName, cloudflare.PaginationOptions{})
+				jsonPayload, err := api.Filters(context.Background(), *&zoneName, cloudflare.PaginationOptions{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -236,7 +236,7 @@ func GenerateCmd() *cobra.Command {
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_firewall_rule":
-				jsonPayload, err := api.FirewallRules(*&zoneName, cloudflare.PaginationOptions{})
+				jsonPayload, err := api.FirewallRules(context.Background(), *&zoneName, cloudflare.PaginationOptions{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -250,7 +250,7 @@ func GenerateCmd() *cobra.Command {
 					jsonStructData[i].(map[string]interface{})["filter_id"] = jsonStructData[i].(map[string]interface{})["filter"].(map[string]interface{})["id"]
 				}
 			case "cloudflare_custom_hostname":
-				jsonPayload, _, err := api.CustomHostnames(*&zoneName, 1, cloudflare.CustomHostname{})
+				jsonPayload, _, err := api.CustomHostnames(context.Background(), *&zoneName, 1, cloudflare.CustomHostname{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -269,7 +269,7 @@ func GenerateCmd() *cobra.Command {
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_record":
 				simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS"}
-				jsonPayload, err := api.DNSRecords(*&zoneName, cloudflare.DNSRecord{})
+				jsonPayload, err := api.DNSRecords(context.Background(), *&zoneName, cloudflare.DNSRecord{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -286,7 +286,7 @@ func GenerateCmd() *cobra.Command {
 					}
 				}
 			case "cloudflare_waf_package":
-				jsonPayload, err := api.ListWAFPackages(*&zoneName)
+				jsonPayload, err := api.ListWAFPackages(context.Background(), *&zoneName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -295,7 +295,7 @@ func GenerateCmd() *cobra.Command {
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_worker_route":
-				jsonPayload, err := api.ListWorkerRoutes(*&zoneName)
+				jsonPayload, err := api.ListWorkerRoutes(context.Background(), *&zoneName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -308,7 +308,7 @@ func GenerateCmd() *cobra.Command {
 					jsonStructData[i].(map[string]interface{})["script_name"] = jsonStructData[i].(map[string]interface{})["script"]
 				}
 			case "cloudflare_zone":
-				jsonPayload, err := api.ListZones()
+				jsonPayload, err := api.ListZones(context.Background())
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -323,11 +323,13 @@ func GenerateCmd() *cobra.Command {
 				}
 			default:
 				fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", *&resourceType)
+				return
 			}
 
 			// If we don't have any resources to generate, just bail out early.
 			if resourceCount == 0 {
 				fmt.Fprintf(cmd.OutOrStdout(), "no resources found to generate. Exiting...")
+				return
 			}
 
 			for i := 0; i < resourceCount; i++ {

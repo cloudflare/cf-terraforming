@@ -341,8 +341,14 @@ func GenerateCmd() *cobra.Command {
 				}
 				output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
 
+				sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
+				for k := range r.Block.Attributes {
+					sortedBlockAttributes = append(sortedBlockAttributes, k)
+				}
+				sort.Strings(sortedBlockAttributes)
+
 				// Block attributes are for any attributes where assignment is involved.
-				for attrName, attrConfig := range r.Block.Attributes {
+				for _, attrName := range sortedBlockAttributes {
 					// Don't bother outputting the ID for the resource as that is only for
 					// internal use (such as importing state).
 					if attrName == "id" {
@@ -369,7 +375,7 @@ func GenerateCmd() *cobra.Command {
 						}
 					}
 
-					ty := attrConfig.AttributeType
+					ty := r.Block.Attributes[attrName].AttributeType
 					switch {
 					case ty.IsPrimitiveType():
 						switch ty {

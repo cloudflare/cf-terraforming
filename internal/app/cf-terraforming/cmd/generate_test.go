@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"testing"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
@@ -109,7 +110,7 @@ func TestResourceGeneration(t *testing.T) {
 
 			expected := testDataFile(resource + ".tf")
 			actual := output
-			assert.Equal(t, expected, actual)
+			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(actual, "\n"))
 		})
 
 	}

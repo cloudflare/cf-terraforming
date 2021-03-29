@@ -24,7 +24,6 @@ const (
 )
 
 var (
-	output       string
 	resourceType string
 )
 
@@ -188,17 +187,19 @@ func GenerateCmd() *cobra.Command {
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
+
+				// remap ID to prefix_id and advertised to advertisement on the JSON payloads.
+				for i := 0; i < resourceCount; i++ {
+					jsonStructData[i].(map[string]interface{})["prefix_id"] = jsonStructData[i].(map[string]interface{})["id"]
+
+					if jsonStructData[i].(map[string]interface{})["advertised"].(bool) {
+						jsonStructData[i].(map[string]interface{})["advertisement"] = "on"
+					} else {
+						jsonStructData[i].(map[string]interface{})["advertisement"] = "off"
+					}
+				}
 			case "cloudflare_certificate_pack":
 				jsonPayload, err := api.ListCertificatePacks(context.Background(), zoneName)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_custom_hostname_fallback_origin":
-				jsonPayload, _, err := api.CustomHostnames(context.Background(), zoneName, 1, cloudflare.CustomHostname{})
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -216,6 +217,7 @@ func GenerateCmd() *cobra.Command {
 					resourceCount = len(jsonPayload)
 					m, _ := json.Marshal(jsonPayload)
 					json.Unmarshal(m, &jsonStructData)
+
 				} else {
 					jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{ZoneID: zoneName})
 					if err != nil {
@@ -225,6 +227,11 @@ func GenerateCmd() *cobra.Command {
 					resourceCount = len(jsonPayload)
 					m, _ := json.Marshal(jsonPayload)
 					json.Unmarshal(m, &jsonStructData)
+				}
+
+				// remap ID to the "type" field
+				for i := 0; i < resourceCount; i++ {
+					jsonStructData[i].(map[string]interface{})["type"] = jsonStructData[i].(map[string]interface{})["id"]
 				}
 			case "cloudflare_filter":
 				jsonPayload, err := api.Filters(context.Background(), zoneName, cloudflare.PaginationOptions{})
@@ -260,6 +267,15 @@ func GenerateCmd() *cobra.Command {
 				json.Unmarshal(m, &jsonStructData)
 			case "cloudflare_ip_list":
 				jsonPayload, err := api.ListIPLists(context.Background())
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			case "cloudflare_logpush_job":
+				jsonPayload, err := api.LogpushJobs(context.Background(), zoneName)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -332,6 +348,8 @@ func GenerateCmd() *cobra.Command {
 				return
 			}
 
+			output := ""
+
 			for i := 0; i < resourceCount; i++ {
 				resourceID := ""
 				if os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
@@ -357,22 +375,14 @@ func GenerateCmd() *cobra.Command {
 
 					structData := jsonStructData[i].(map[string]interface{})
 
-					if attrName == "account_id" && accountID == "" {
-						if accountID == "" {
-							log.Fatal(errAccountIDMissing)
-						} else {
-							output += writeAttrLine(attrName, accountID, 2, false)
-							continue
-						}
+					if attrName == "account_id" && accountID != "" {
+						output += writeAttrLine(attrName, accountID, 2, false)
+						continue
 					}
 
-					if attrName == "zone_id" {
-						if zoneName == "" {
-							log.Fatal(errZoneIDMissing)
-						} else {
-							output += writeAttrLine(attrName, zoneName, 2, false)
-							continue
-						}
+					if attrName == "zone_id" && zoneName != "" {
+						output += writeAttrLine(attrName, zoneName, 2, false)
+						continue
 					}
 
 					ty := r.Block.Attributes[attrName].AttributeType
@@ -402,15 +412,21 @@ func GenerateCmd() *cobra.Command {
 					}
 				}
 
+				sortedNestedBlocks := make([]string, 0, len(r.Block.NestedBlocks))
+				for k := range r.Block.NestedBlocks {
+					sortedNestedBlocks = append(sortedNestedBlocks, k)
+				}
+				sort.Strings(sortedNestedBlocks)
+
 				// Nested blocks are used for configuration options where assignment
 				// isn't required.
-				for attrName, attrConfig := range r.Block.NestedBlocks {
+				for _, attrName := range sortedNestedBlocks {
 					structData := jsonStructData[i].(map[string]interface{})
 
-					if attrConfig.NestingMode == "list" {
+					if r.Block.NestedBlocks[attrName].NestingMode == "list" {
 						output += "  " + attrName + " {\n"
 
-						for nestedAttrName, attrConfig := range attrConfig.Block.Attributes {
+						for nestedAttrName, attrConfig := range r.Block.NestedBlocks[attrName].Block.Attributes {
 							ty := attrConfig.AttributeType
 							switch {
 							case ty.IsPrimitiveType():
@@ -425,7 +441,7 @@ func GenerateCmd() *cobra.Command {
 
 						output += "  }\n"
 					} else {
-						log.Debugf("nested mode %q for %s not recongised", attrConfig.NestingMode, attrName)
+						log.Debugf("nested mode %q for %s not recongised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
 					}
 				}
 				output += "}\n\n"
@@ -436,6 +452,8 @@ func GenerateCmd() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().StringVar(&resourceType, "resource-type", "", "Which resource you wish to generate")
+	cmd.PersistentFlags().StringVarP(&zoneName, "zone", "z", "", "Limit the export to a single zone (name or ID)")
+	cmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for import")
 	return cmd
 }
 

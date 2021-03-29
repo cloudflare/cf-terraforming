@@ -1,0 +1,35 @@
+on: [push, pull_request]
+name: Test
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.15, 1.16]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2.1.3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Lint
+        if: matrix.os != 'windows-latest'
+        run: |
+          go get -v -u golang.org/x/lint/golint
+          $(go env GOPATH)/bin/golint -set_exit_status .
+      - name: Vet
+        run: go vet ./...
+      - name: Test
+        env:
+            USE_STATIC_RESOURCE_IDS: true
+            CLOUDFLARE_EMAIL: noone@cloudflare.com
+            CLOUDFLARE_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        run: go test -v -race ./...

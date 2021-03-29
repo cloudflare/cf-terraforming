@@ -37,7 +37,8 @@ var (
 		"e": "f",
 	}
 
-	cloudflareTestZoneID = "0da42c8d2132a9ddaf714f9e7c920711"
+	cloudflareTestZoneID    = "0da42c8d2132a9ddaf714f9e7c920711"
+	cloudflareTestAccountID = "f037e56e89293a057740de681ac9abbe"
 )
 
 func TestGenerate_writeAttrLine(t *testing.T) {
@@ -76,13 +77,26 @@ func TestGenerate_ResourceNotSupported(t *testing.T) {
 }
 
 func TestResourceGeneration(t *testing.T) {
-	resources := []string{
-		"cloudflare_record",
+	tests := map[string]struct {
+		identiferType    string
+		resourceType     string
+		testdataFilename string
+	}{
+		"cloudflare argo tunnel":            {identiferType: "account", resourceType: "cloudflare_argo_tunnel", testdataFilename: "cloudflare_argo_tunnel"},
+		"cloudflare BYO IP prefix":          {identiferType: "account", resourceType: "cloudflare_byo_ip_prefix", testdataFilename: "cloudflare_byo_ip_prefix"},
+		"cloudflare custom pages (zone)":    {identiferType: "zone", resourceType: "cloudflare_custom_pages", testdataFilename: "cloudflare_custom_pages_zone"},
+		"cloudflare custom pages (account)": {identiferType: "account", resourceType: "cloudflare_custom_pages", testdataFilename: "cloudflare_custom_pages_account"},
+		"cloudflare filter":                 {identiferType: "zone", resourceType: "cloudflare_filter", testdataFilename: "cloudflare_filter"},
+		"cloudflare firewall rule":          {identiferType: "zone", resourceType: "cloudflare_firewall_rule", testdataFilename: "cloudflare_firewall_rule"},
+		"cloudflare logpush jobs":           {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job"},
+		"cloudflare record simple":          {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record"},
+		"cloudflare worker route":           {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route"},
+		"cloudflare zone":                   {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 	}
 
-	for _, resource := range resources {
-		t.Run(resource, func(t *testing.T) {
-			r, err := recorder.New("../../../../testdata/cloudflare/" + resource)
+	for name, tc := range tests {
+		t.Run(name, func(t *testing.T) {
+			r, err := recorder.New("../../../../testdata/cloudflare/" + tc.testdataFilename)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -95,19 +109,25 @@ func TestResourceGeneration(t *testing.T) {
 				return nil
 			})
 
-			api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
-				&http.Client{
-					Transport: r,
-				},
-			))
+			output := ""
+			if tc.identiferType == "account" {
+				api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
+					&http.Client{
+						Transport: r,
+					},
+				), cloudflare.UsingAccount(cloudflareTestAccountID))
+				_, output, _ = executeCommandC(GenerateCmd(), "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
+			} else {
+				api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
+					&http.Client{
+						Transport: r,
+					},
+				))
+				_, output, _ = executeCommandC(GenerateCmd(), "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
+			}
 
-			_, output, _ := executeCommandC(GenerateCmd(), "--resource-type", resource, "--zone", cloudflareTestZoneID)
-
-			expected := testDataFile(resource + ".tf")
-			actual := output
-			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(actual, "\n"))
+			expected := testDataFile(tc.testdataFilename + ".tf")
+			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
-
 	}
-
 }

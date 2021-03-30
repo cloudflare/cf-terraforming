@@ -25,6 +25,24 @@ const (
 
 var (
 	resourceType string
+
+	resourceImportStrings []string
+
+	// resourceImportStringFormats contains a mapping of the resource type to the
+	// composite ID that is compatible with performing an import.
+	resourceImportStringFormats = map[string]string{
+		"cloudflare_account_member":   ":account_id/:id",
+		"cloudflare_argo_tunnel":      ":account_id/:id",
+		"cloudflare_byo_ip_prefix":    ":id",
+		"cloudflare_certificate_pack": ":zone_id/:id",
+		"cloudflare_filter":           ":zone_id/:id",
+		"cloudflare_firewall_rule":    ":zone_id/:id",
+		"cloudflare_custom_hostname":  ":zone_id/:id",
+		"cloudflare_ip_list":          ":account_id/:id",
+		"cloudflare_record":           ":zone_id/:id",
+		"cloudflare_worker_route":     ":zone_id/:id",
+		"cloudflare_zone":             ":zone_id",
+	}
 )
 
 func init() {
@@ -80,6 +98,9 @@ func GenerateCmd() *cobra.Command {
 			// Lazy approach to restrict support to known resources due to Go's type
 			// restrictions and the need to explicitly map out the structs.
 			var jsonStructData []interface{}
+
+			var resourceImportCommandOutputValues []string
+
 			switch resourceType {
 			case "cloudflare_access_identity_provider":
 				if accountID != "" {
@@ -367,13 +388,18 @@ func GenerateCmd() *cobra.Command {
 
 				// Block attributes are for any attributes where assignment is involved.
 				for _, attrName := range sortedBlockAttributes {
+					structData := jsonStructData[i].(map[string]interface{})
+
 					// Don't bother outputting the ID for the resource as that is only for
 					// internal use (such as importing state).
 					if attrName == "id" {
+						resourceImportCommandOutputValues = append(
+							resourceImportCommandOutputValues,
+							buildCompositeID(resourceType, resourceID, structData["id"].(string)),
+						)
+
 						continue
 					}
-
-					structData := jsonStructData[i].(map[string]interface{})
 
 					if attrName == "account_id" && accountID != "" {
 						output += writeAttrLine(attrName, accountID, 2, false)
@@ -444,10 +470,20 @@ func GenerateCmd() *cobra.Command {
 						log.Debugf("nested mode %q for %s not recongised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
 					}
 				}
+
 				output += "}\n\n"
 			}
 
 			fmt.Fprint(cmd.OutOrStdout(), output)
+
+			if tfstate {
+				fmt.Println("###########################################################")
+				fmt.Println("# `terraform import` commands for the generated resources #")
+				fmt.Println("###########################################################")
+				for _, output := range resourceImportCommandOutputValues {
+					fmt.Println("# terraform import", output)
+				}
+			}
 		},
 	}
 
@@ -455,6 +491,25 @@ func GenerateCmd() *cobra.Command {
 	cmd.PersistentFlags().StringVarP(&zoneName, "zone", "z", "", "Limit the export to a single zone (name or ID)")
 	cmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for import")
 	return cmd
+}
+
+// buildCompositeID takes the resourceType, resourceName and resourceID in order
+// order to lookup the resource type import string and then return a suitable
+// composite value that is compatible with `terraform import`.
+func buildCompositeID(resourceType, resourceName, resourceID string) string {
+	if _, ok := resourceImportStringFormats[resourceType]; !ok {
+		log.Fatalf("%s does not have an import format defined. Try running the command again without the --tfstate flag to only generate the resources.", resourceType)
+	}
+
+	s := ""
+	s += fmt.Sprintf("%s.%s %s", resourceType, resourceName, resourceImportStringFormats[resourceType])
+	replacer := strings.NewReplacer(
+		":zone_id", zoneName,
+		":account_id", accountID,
+		":id", resourceID,
+	)
+
+	return replacer.Replace(s)
 }
 
 // writeAttrLine outputs a line of HCL configuration with a configurable depth

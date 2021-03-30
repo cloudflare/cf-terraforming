@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/hashicorp/terraform-exec/tfinstall"
 	"github.com/spf13/cobra"
-	"github.com/thanhpk/randstr"
 	"github.com/zclconf/go-cty/cty"
 
 	"fmt"
@@ -372,11 +371,13 @@ func GenerateCmd() *cobra.Command {
 			output := ""
 
 			for i := 0; i < resourceCount; i++ {
+				structData := jsonStructData[i].(map[string]interface{})
+
 				resourceID := ""
 				if os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
 					resourceID = "terraform_managed_resource"
 				} else {
-					resourceID = fmt.Sprintf("terraform_managed_resource_%s", randstr.Hex(5))
+					resourceID = fmt.Sprintf("terraform_managed_resource_%s", structData["id"].(string))
 				}
 
 				output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)

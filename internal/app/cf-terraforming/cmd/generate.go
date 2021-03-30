@@ -378,6 +378,7 @@ func GenerateCmd() *cobra.Command {
 				} else {
 					resourceID = fmt.Sprintf("terraform_managed_resource_%s", randstr.Hex(5))
 				}
+
 				output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
 
 				sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
@@ -452,8 +453,14 @@ func GenerateCmd() *cobra.Command {
 					if r.Block.NestedBlocks[attrName].NestingMode == "list" {
 						output += "  " + attrName + " {\n"
 
-						for nestedAttrName, attrConfig := range r.Block.NestedBlocks[attrName].Block.Attributes {
-							ty := attrConfig.AttributeType
+						sortedInnerNestedBlock := make([]string, 0, len(r.Block.NestedBlocks[attrName].Block.Attributes))
+						for k := range r.Block.NestedBlocks[attrName].Block.Attributes {
+							sortedInnerNestedBlock = append(sortedInnerNestedBlock, k)
+						}
+						sort.Strings(sortedInnerNestedBlock)
+
+						for _, nestedAttrName := range sortedInnerNestedBlock {
+							ty := r.Block.NestedBlocks[attrName].Block.Attributes[nestedAttrName].AttributeType
 							switch {
 							case ty.IsPrimitiveType():
 								switch ty {

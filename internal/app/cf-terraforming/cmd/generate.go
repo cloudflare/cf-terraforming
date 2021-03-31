@@ -31,10 +31,6 @@ var generateCmd = &cobra.Command{
 
 func generateResources() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
-		if accountID != "" {
-			zoneID = ""
-		}
-
 		tmpDir, err := ioutil.TempDir("", "tfinstall")
 		if err != nil {
 			log.Fatal(err)
@@ -381,7 +377,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				structData := jsonStructData[i].(map[string]interface{})
 
 				if r.Block.NestedBlocks[attrName].NestingMode == "list" {
-					output += "  " + attrName + " {\n"
 
 					sortedInnerNestedBlock := make([]string, 0, len(r.Block.NestedBlocks[attrName].Block.Attributes))
 					for k := range r.Block.NestedBlocks[attrName].Block.Attributes {
@@ -389,20 +384,26 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 					sort.Strings(sortedInnerNestedBlock)
 
+					nestedBlockOutput := ""
 					for _, nestedAttrName := range sortedInnerNestedBlock {
 						ty := r.Block.NestedBlocks[attrName].Block.Attributes[nestedAttrName].AttributeType
 						switch {
 						case ty.IsPrimitiveType():
 							switch ty {
 							case cty.String, cty.Bool, cty.Number:
-								output += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
+								nestedBlockOutput += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
 							default:
 								log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 							}
 						}
 					}
 
-					output += "  }\n"
+					if nestedBlockOutput != "" {
+						output += "  " + attrName + " {\n"
+						output += nestedBlockOutput
+						output += "  }\n"
+					}
+
 				} else {
 					log.Debugf("nested mode %q for %s not recongised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
 				}
@@ -420,6 +421,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) string {
 	switch value.(type) {
 	case map[string]interface{}:
+
 		values := value.(map[string]interface{})
 
 		sortedKeys := make([]string, 0, len(values))
@@ -434,9 +436,13 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 		}
 
 		if usedInBlock {
-			return fmt.Sprintf("%s%s {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
+			if s != "" {
+				return fmt.Sprintf("%s%s {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
+			}
 		} else {
-			return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
+			if s != "" {
+				return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
+			}
 		}
 
 	case []interface{}:
@@ -444,15 +450,22 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 		for _, item := range value.([]interface{}) {
 			items = append(items, fmt.Sprintf("%q", item.(string)))
 		}
-		return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
+
+		if len(items) > 0 {
+			return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
+		}
 	case []string:
 		var items []string
 		for _, item := range value.([]string) {
 			items = append(items, fmt.Sprintf("%q", item))
 		}
-		return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
+		if len(items) > 0 {
+			return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
+		}
 	case string:
-		return fmt.Sprintf("%s%s = %q\n", strings.Repeat(" ", depth), key, value)
+		if value != "" {
+			return fmt.Sprintf("%s%s = %q\n", strings.Repeat(" ", depth), key, value)
+		}
 	case int:
 		return fmt.Sprintf("%s%s = %d\n", strings.Repeat(" ", depth), key, value)
 	case float64:
@@ -463,4 +476,5 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
 		return ""
 	}
+	return ""
 }

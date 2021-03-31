@@ -12,8 +12,8 @@ This tool is ideal if you already have Cloudflare resources defined but want to
 start managing them via Terraform, and don't want to spend the time to manually
 write the Terraform configuration to describe them.
 
-NOTE: If you would like to export resources compatible with Terraform < 0.12.x,
-you will need to download an older release as this tool no longer supports it.
+> NOTE: If you would like to export resources compatible with Terraform < 0.12.x,
+> you will need to download an older release as this tool no longer supports it.
 
 ## Usage
 
@@ -22,20 +22,21 @@ Usage:
   cf-terraforming [command]
 
 Available Commands:
-  generate    Pull resources from the Cloudflare API and generate the respective Terraform resources
+  generate    Fetch resources from the Cloudflare API and generate the respective Terraform stanzas
   help        Help about any command
+  import      Output `terraform import` compatible commands in order to import resources into state
   version     Print the version number of cf-terraforming
 
 Flags:
-  -a, --account string        Use specific account ID for import
-  -c, --config string         config file (default is $HOME/.cf-terraforming.yaml)
-  -e, --email string          API Email address associated with your account
-  -h, --help                  help for cf-terraforming
-  -k, --key string            API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
-  -s, --tfstate               Include generating `terraform import` commands for resources
-  -t, --token string          API Token
-  -v, --verbose               Specify verbose output (same as setting log level to debug)
-  -z, --zone string           Use specific zone ID for import
+  -a, --account string         Use specific account ID for commands
+  -c, --config string          config file (default is $HOME/.cf-terraforming.yaml)
+  -e, --email string           API Email address associated with your account
+  -h, --help                   help for cf-terraforming
+  -k, --key string             API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
+      --resource-type string   Which resource you wish to generate
+  -t, --token string           API Token
+  -v, --verbose                Specify verbose output (same as setting log level to debug)
+  -z, --zone string            Limit the export to a single zone ID
 
 Use "cf-terraforming [command] --help" for more information about a command.
 ```
@@ -48,7 +49,9 @@ Cloudflare supports two authentication methods to the API:
 
 Both can be retrieved on [profile page](https://dash.cloudflare.com/profile/api-tokens).
 
-**A note on storing your credentials securely:** We recommend that you store your Cloudflare credentials (API key, email, token) as environment variables as demonstrated below.
+**A note on storing your credentials securely:** We recommend that you store
+your Cloudflare credentials (API key, email, token) as environment variables as
+demonstrated below.
 
 ```bash
 # if using API Token
@@ -62,7 +65,7 @@ export CLOUDFLARE_KEY='1150bed3f45247b99f7db9696fffa17cbx9'
 export CLOUDFLARE_ACCOUNT_ID='81b06ss3228f488fh84e5e993c2dc17'
 
 # now call cf-terraforming, e.g.
-cf-terraforming --account $CLOUDFLARE_ACCOUNT_ID generate --resource-type "cloudflare_record"
+cf-terraforming generate --resource-type "cloudflare_record" --account $CLOUDFLARE_ACCOUNT_ID
 ```
 
 cf-terraforming supports the following environment variables:
@@ -72,7 +75,7 @@ cf-terraforming supports the following environment variables:
 ## Example usage
 
 ```
-cf-terraforming --account $CLOUDFLARE_ACCOUNT_ID generate --resource-type "cloudflare_record"
+cf-terraforming generate --account $CLOUDFLARE_ACCOUNT_ID --resource-type "cloudflare_record"
 ```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform
@@ -118,16 +121,14 @@ $ go env | grep GOPATH
 ## Importing with Terraform state
 
 As of the latest release, `cf-terraforming` will output the `terraform import`
-command for you when you pass the `--tfstate` flag in order to completely import
-existing resources. In the future we aim to automate this however for now, it is
-a manual step to allow flexibility in directory structure.
+compatible commands for you when you invoke the `import` command. This command
+assumes you have already ran `cf-terraforming generate ...` to output your
+resources.
+
+In the future we aim to automate this however for now, it is a manual step to
+allow flexibility in directory structure.
 
 ```
-$ cf-terraforming --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z example.com --tfstate
+$ cf-terraforming import --resource-type "cloudflare_record" --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z "example.com"
 
 ```
-
-## Supported resources
-
-For the most up to date listing of supported resources, please see the
-`generate.go` file.

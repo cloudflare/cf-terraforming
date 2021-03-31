@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"strings"
+	"os"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	homedir "github.com/mitchellh/go-homedir"
@@ -11,11 +11,11 @@ import (
 )
 
 var log = logrus.New()
-var cfgFile, zoneName, apiEmail, apiKey, apiToken, accountID, orgID, logLevel string
-var verbose, tfstate bool
+var cfgFile, zoneID, apiEmail, apiKey, apiToken, accountID string
+var verbose bool
 var api *cloudflare.API
-var zones []cloudflare.Zone
-var resourcesMap = map[string]interface{}{}
+var terraformImportCmdPrefix = "terraform import"
+var terraformResourceNamePrefix = "terraform_managed_resource"
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -45,25 +45,20 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.cf-terraforming.yaml)")
 
 	// Zone selection
-	rootCmd.PersistentFlags().StringVarP(&zoneName, "zone", "z", "", "Limit the export to a single zone (name or ID)")
+	rootCmd.PersistentFlags().StringVarP(&zoneID, "zone", "z", "", "Limit the export to a single zone ID")
 
 	// Account
-	rootCmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for import")
+	rootCmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for commands")
 
 	// API credentials
 	rootCmd.PersistentFlags().StringVarP(&apiEmail, "email", "e", "", "API Email address associated with your account")
 	rootCmd.PersistentFlags().StringVarP(&apiKey, "key", "k", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile")
 	rootCmd.PersistentFlags().StringVarP(&apiToken, "token", "t", "", "API Token")
 
-	// [Optional] Organization ID
-	rootCmd.PersistentFlags().StringVarP(&orgID, "organization", "o", "", "Use specific organization ID for import (deprecated)")
-
 	// Debug logging mode
-	rootCmd.PersistentFlags().StringVarP(&logLevel, "loglevel", "l", "", "Specify logging level: (trace, debug, info, warn, error, fatal, panic)")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Specify verbose output (same as setting log level to debug)")
 
-	// tfstate export
-	rootCmd.PersistentFlags().BoolVarP(&tfstate, "tfstate", "s", false, "Export tfstate for the given resource instead of HCL Terraform config (default)")
+	rootCmd.PersistentFlags().StringVar(&resourceType, "resource-type", "", "Which resource you wish to generate")
 
 	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
 	viper.BindEnv("email", "CLOUDFLARE_EMAIL")
@@ -73,7 +68,6 @@ func init() {
 	viper.BindEnv("token", "CLOUDFLARE_TOKEN")
 
 	viper.BindPFlag("account", rootCmd.PersistentFlags().Lookup("account"))
-	viper.BindPFlag("organization", rootCmd.PersistentFlags().Lookup("organization"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -99,43 +93,20 @@ func initConfig() {
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		log.Debug("Using config file:", viper.ConfigFileUsed())
+		log.Debug("using config file:", viper.ConfigFileUsed())
 	}
 
 	var cfgLogLevel = logrus.InfoLevel
 
-	// A user may also pass the verbose flag in order to support this convention
 	if verbose {
 		cfgLogLevel = logrus.DebugLevel
-	}
-
-	switch strings.ToLower(logLevel) {
-	case "trace":
-		cfgLogLevel = logrus.TraceLevel
-	case "debug":
-		cfgLogLevel = logrus.DebugLevel
-	case "info":
-		break
-	case "warn":
-		cfgLogLevel = logrus.WarnLevel
-	case "error":
-		cfgLogLevel = logrus.ErrorLevel
-	case "fatal":
-		cfgLogLevel = logrus.FatalLevel
-	case "panic":
-		cfgLogLevel = logrus.PanicLevel
 	}
 
 	log.SetLevel(cfgLogLevel)
 }
 
 func persistentPreRun(cmd *cobra.Command, args []string) {
-
 	accountID = viper.GetString("account")
-	if accountID == "" {
-		// backward-compatible with organization
-		accountID = viper.GetString("organization")
-	}
 
 	if apiToken = viper.GetString("token"); apiToken == "" {
 		if apiEmail = viper.GetString("email"); apiEmail == "" {
@@ -147,80 +118,44 @@ func persistentPreRun(cmd *cobra.Command, args []string) {
 		}
 
 		log.WithFields(logrus.Fields{
-			"API email":  apiEmail,
-			"Zone name":  zoneName,
-			"Account ID": accountID,
-		}).Debug("Initializing cloudflare-go")
+			"email":      apiEmail,
+			"zone_id":    zoneID,
+			"account_id": accountID,
+		}).Debug("initializing cloudflare-go")
 
 	} else {
 		log.WithFields(logrus.Fields{
-			"Zone name":  zoneName,
-			"Account ID": accountID,
-		}).Debug("Initializing cloudflare-go with API Token")
+			"zone_id":    zoneID,
+			"account_Id": accountID,
+		}).Debug("initializing cloudflare-go with API Token")
 	}
 
 	var options []cloudflare.Option
 
 	if accountID != "" {
 		log.WithFields(logrus.Fields{
-			"ID": accountID,
-		}).Debug("Configuring Cloudflare API with account")
+			"account_id": accountID,
+		}).Debug("configuring Cloudflare API with account")
 
 		// Organization ID was passed, use it to configure the API
 		options = append(options, cloudflare.UsingAccount(accountID))
 	}
 
 	var err error
-	var useToken = apiToken != ""
 
-	if useToken {
-		api, err = cloudflare.NewWithAPIToken(apiToken, options...)
-	} else {
-		api, err = cloudflare.New(apiKey, apiEmail, options...)
+	// Don't initialise a client in CI as this messes with VCR and the ability to
+	// mock out the HTTP interactions.
+	if os.Getenv("CI") != "true" {
+		var useToken = apiToken != ""
+
+		if useToken {
+			api, err = cloudflare.NewWithAPIToken(apiToken, options...)
+		} else {
+			api, err = cloudflare.New(apiKey, apiEmail, options...)
+		}
+
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// log.Debug("Selecting zones for import")
-
-	// if regexp.MustCompile("^[a-z0-9]{32}$").MatchString(zoneName) {
-	// 	zone, err := api.ZoneDetails(zoneName)
-
-	// 	if err != nil {
-	// 		log.Error(err)
-	// 	}
-
-	// 	zones = []cloudflare.Zone{zone}
-	// } else if zoneName != "" {
-	// 	zones, err = api.ListZones(zoneName)
-
-	// 	if err != nil {
-	// 		log.Error(err)
-	// 	}
-	// } else if accountID != "" {
-	// 	zonesResponse, err := api.ListZonesContext(context.TODO(), cloudflare.WithZoneFilters("", accountID, ""))
-
-	// 	if err != nil {
-	// 		log.Error(err)
-	// 	}
-
-	// 	zones = zonesResponse.Result
-	// } else {
-	// 	zones, err = api.ListZones()
-
-	// 	if err != nil {
-	// 		log.Error(err)
-	// 	}
-	// }
-
-	// log.Debug("Zones selected:\n")
-
-	// for _, i := range zones {
-
-	// 	log.WithFields(logrus.Fields{
-	// 		"ID":   i.ID,
-	// 		"Name": i.Name,
-	// 	}).Debug("Zone")
-	// }
 }

@@ -17,132 +17,73 @@ import (
 	"strings"
 )
 
-const (
-	errAccountIDMissing = "account_id is expected on the resource however the provided value is missing"
-	errZoneIDMissing    = "zone_id is expected on the resource however the provided value is missing"
-)
-
-var (
-	resourceType string
-
-	resourceImportStrings []string
-
-	// resourceImportStringFormats contains a mapping of the resource type to the
-	// composite ID that is compatible with performing an import.
-	resourceImportStringFormats = map[string]string{
-		"cloudflare_account_member":   ":account_id/:id",
-		"cloudflare_argo_tunnel":      ":account_id/:id",
-		"cloudflare_byo_ip_prefix":    ":id",
-		"cloudflare_certificate_pack": ":zone_id/:id",
-		"cloudflare_filter":           ":zone_id/:id",
-		"cloudflare_firewall_rule":    ":zone_id/:id",
-		"cloudflare_custom_hostname":  ":zone_id/:id",
-		"cloudflare_ip_list":          ":account_id/:id",
-		"cloudflare_record":           ":zone_id/:id",
-		"cloudflare_worker_route":     ":zone_id/:id",
-		"cloudflare_zone":             ":zone_id",
-	}
-)
+var resourceType string
 
 func init() {
-	rootCmd.AddCommand(GenerateCmd())
+	rootCmd.AddCommand(generateCmd)
 }
 
-func GenerateCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "generate",
-		Short: "Pull resources from the Cloudflare API and generate the respective Terraform resources",
-		Run: func(cmd *cobra.Command, args []string) {
-			tmpDir, err := ioutil.TempDir("", "tfinstall")
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer os.RemoveAll(tmpDir)
+var generateCmd = &cobra.Command{
+	Use:   "generate",
+	Short: "Fetch resources from the Cloudflare API and generate the respective Terraform stanzas",
+	Run:   generateResources(),
+}
 
-			execPath, err := tfinstall.Find(context.Background(), tfinstall.LatestVersion(tmpDir, false))
-			if err != nil {
-				log.Fatal(err)
-			}
+func generateResources() func(cmd *cobra.Command, args []string) {
+	return func(cmd *cobra.Command, args []string) {
+		if accountID != "" {
+			zoneID = ""
+		}
 
-			// Setup and configure Terraform to operate in the temporary directory where
-			// the provider is already configured. Eventually, this will be '.'.
-			workingDir := "/tmp"
-			log.Debugf("initialising Terraform in %s", workingDir)
-			tf, err := tfexec.NewTerraform(workingDir, execPath)
-			if err != nil {
-				log.Fatal(err)
-			}
+		tmpDir, err := ioutil.TempDir("", "tfinstall")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer os.RemoveAll(tmpDir)
 
-			err = tf.Init(context.Background(), tfexec.Upgrade(true), tfexec.LockTimeout("60s"))
-			if err != nil {
-				log.Fatal(err)
-			}
+		execPath, err := tfinstall.Find(context.Background(), tfinstall.LatestVersion(tmpDir, false))
+		if err != nil {
+			log.Fatal(err)
+		}
 
-			log.Debug("reading Terraform schema for Cloudflare provider")
-			ps, err := tf.ProvidersSchema(context.Background())
-			s := ps.Schemas["registry.terraform.io/cloudflare/cloudflare"]
-			if s == nil {
-				log.Fatal("failed to detect provider installation")
-			}
+		// Setup and configure Terraform to operate in the temporary directory where
+		// the provider is already configured. Eventually, this will be '.'.
+		workingDir := "/tmp"
+		log.Debugf("initialising Terraform in %s", workingDir)
+		tf, err := tfexec.NewTerraform(workingDir, execPath)
+		if err != nil {
+			log.Fatal(err)
+		}
 
-			r := s.ResourceSchemas[resourceType]
+		err = tf.Init(context.Background(), tfexec.Upgrade(true), tfexec.LockTimeout("60s"))
+		if err != nil {
+			log.Fatal(err)
+		}
 
-			log.Debugf("beginning to read and build %s resources", resourceType)
+		log.Debug("reading Terraform schema for Cloudflare provider")
+		ps, err := tf.ProvidersSchema(context.Background())
+		s := ps.Schemas["registry.terraform.io/cloudflare/cloudflare"]
+		if s == nil {
+			log.Fatal("failed to detect provider installation")
+		}
 
-			// Initialise `resourceCount` outside of the switch for supported resources
-			// to allow it to be referenced further down in the loop that outputs the
-			// newly generated resources.
-			resourceCount := 0
+		r := s.ResourceSchemas[resourceType]
 
-			// Lazy approach to restrict support to known resources due to Go's type
-			// restrictions and the need to explicitly map out the structs.
-			var jsonStructData []interface{}
+		log.Debugf("beginning to read and build %s resources", resourceType)
 
-			var resourceImportCommandOutputValues []string
+		// Initialise `resourceCount` outside of the switch for supported resources
+		// to allow it to be referenced further down in the loop that outputs the
+		// newly generated resources.
+		resourceCount := 0
 
-			switch resourceType {
-			case "cloudflare_access_identity_provider":
-				if accountID != "" {
-					jsonPayload, err := api.AccessIdentityProviders(context.Background(), accountID)
-					if err != nil {
-						log.Fatal(err)
-					}
+		// Lazy approach to restrict support to known resources due to Go's type
+		// restrictions and the need to explicitly map out the structs.
+		var jsonStructData []interface{}
 
-					resourceCount = len(jsonPayload)
-					m, _ := json.Marshal(jsonPayload)
-					json.Unmarshal(m, &jsonStructData)
-				} else {
-					jsonPayload, err := api.ZoneLevelAccessIdentityProviders(context.Background(), zoneName)
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					resourceCount = len(jsonPayload)
-					m, _ := json.Marshal(jsonPayload)
-					json.Unmarshal(m, &jsonStructData)
-				}
-			case "cloudflare_access_service_token":
-				if accountID != "" {
-					jsonPayload, _, err := api.AccessServiceTokens(context.Background(), accountID)
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					resourceCount = len(jsonPayload)
-					m, _ := json.Marshal(jsonPayload)
-					json.Unmarshal(m, &jsonStructData)
-				} else {
-					jsonPayload, _, err := api.ZoneLevelAccessServiceTokens(context.Background(), zoneName)
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					resourceCount = len(jsonPayload)
-					m, _ := json.Marshal(jsonPayload)
-					json.Unmarshal(m, &jsonStructData)
-				}
-			case "cloudflare_access_mutual_tls_certificate":
-				jsonPayload, err := api.AccessMutualTLSCertificates(context.Background(), accountID)
+		switch resourceType {
+		case "cloudflare_access_identity_provider":
+			if accountID != "" {
+				jsonPayload, err := api.AccessIdentityProviders(context.Background(), accountID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -150,28 +91,8 @@ func GenerateCmd() *cobra.Command {
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_access_rule":
-				if accountID != "" {
-					jsonPayload, err := api.ListAccountAccessRules(context.Background(), accountID, cloudflare.AccessRule{}, 1)
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					resourceCount = len(jsonPayload.Result)
-					m, _ := json.Marshal(jsonPayload.Result)
-					json.Unmarshal(m, &jsonStructData)
-				} else {
-					jsonPayload, err := api.ListZoneAccessRules(context.Background(), zoneName, cloudflare.AccessRule{}, 1)
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					resourceCount = len(jsonPayload.Result)
-					m, _ := json.Marshal(jsonPayload.Result)
-					json.Unmarshal(m, &jsonStructData)
-				}
-			case "cloudflare_account_member":
-				jsonPayload, _, err := api.AccountMembers(context.Background(), accountID, cloudflare.PaginationOptions{})
+			} else {
+				jsonPayload, err := api.ZoneLevelAccessIdentityProviders(context.Background(), zoneID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -372,152 +293,126 @@ func GenerateCmd() *cobra.Command {
 
 			for i := 0; i < resourceCount; i++ {
 				structData := jsonStructData[i].(map[string]interface{})
+		default:
+			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
+			return
+		}
 
-				resourceID := ""
-				if os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
-					resourceID = "terraform_managed_resource"
-				} else {
-					resourceID = fmt.Sprintf("terraform_managed_resource_%s", structData["id"].(string))
+		// If we don't have any resources to generate, just bail out early.
+		if resourceCount == 0 {
+			fmt.Fprint(cmd.OutOrStdout(), "no resources found to generate. Exiting...")
+			return
+		}
+
+		output := ""
+
+		for i := 0; i < resourceCount; i++ {
+			structData := jsonStructData[i].(map[string]interface{})
+
+			resourceID := ""
+			if os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
+				resourceID = "terraform_managed_resource"
+			} else {
+				resourceID = fmt.Sprintf("terraform_managed_resource_%s", structData["id"].(string))
+			}
+
+			output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
+
+			sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
+			for k := range r.Block.Attributes {
+				sortedBlockAttributes = append(sortedBlockAttributes, k)
+			}
+			sort.Strings(sortedBlockAttributes)
+
+			// Block attributes are for any attributes where assignment is involved.
+			for _, attrName := range sortedBlockAttributes {
+				// Don't bother outputting the ID for the resource as that is only for
+				// internal use (such as importing state).
+				if attrName == "id" {
+					continue
 				}
 
-				output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
-
-				sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
-				for k := range r.Block.Attributes {
-					sortedBlockAttributes = append(sortedBlockAttributes, k)
+				if attrName == "account_id" && accountID != "" {
+					output += writeAttrLine(attrName, accountID, 2, false)
+					continue
 				}
-				sort.Strings(sortedBlockAttributes)
 
-				// Block attributes are for any attributes where assignment is involved.
-				for _, attrName := range sortedBlockAttributes {
-					structData := jsonStructData[i].(map[string]interface{})
+				if attrName == "zone_id" && zoneID != "" {
+					output += writeAttrLine(attrName, zoneID, 2, false)
+					continue
+				}
 
-					// Don't bother outputting the ID for the resource as that is only for
-					// internal use (such as importing state).
-					if attrName == "id" {
-						resourceImportCommandOutputValues = append(
-							resourceImportCommandOutputValues,
-							buildCompositeID(resourceType, resourceID, structData["id"].(string)),
-						)
-
-						continue
-					}
-
-					if attrName == "account_id" && accountID != "" {
-						output += writeAttrLine(attrName, accountID, 2, false)
-						continue
-					}
-
-					if attrName == "zone_id" && zoneName != "" {
-						output += writeAttrLine(attrName, zoneName, 2, false)
-						continue
-					}
-
-					ty := r.Block.Attributes[attrName].AttributeType
-					switch {
-					case ty.IsPrimitiveType():
-						switch ty {
-						case cty.String, cty.Bool, cty.Number:
-							output += writeAttrLine(attrName, structData[attrName], 2, false)
-						default:
-							log.Debugf("unexpected primitive type %q", ty.FriendlyName())
-						}
-					case ty.IsCollectionType():
-						switch {
-						case ty.IsListType(), ty.IsSetType():
-							output += writeAttrLine(attrName, structData[attrName], 2, false)
-						case ty.IsMapType():
-							output += writeAttrLine(attrName, structData[attrName], 2, false)
-						default:
-							log.Debugf("unexpected collection type %q", ty.FriendlyName())
-						}
-					case ty.IsTupleType():
-						fmt.Printf("tuple found. attrName %s\n", attrName)
-					case ty.IsObjectType():
-						fmt.Printf("object found. attrName %s\n", attrName)
+				ty := r.Block.Attributes[attrName].AttributeType
+				switch {
+				case ty.IsPrimitiveType():
+					switch ty {
+					case cty.String, cty.Bool, cty.Number:
+						output += writeAttrLine(attrName, structData[attrName], 2, false)
 					default:
-						log.Debugf("attribute %q (attribute type of %q) has not been generated", attrName, ty.FriendlyName())
+						log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 					}
+				case ty.IsCollectionType():
+					switch {
+					case ty.IsListType(), ty.IsSetType():
+						output += writeAttrLine(attrName, structData[attrName], 2, false)
+					case ty.IsMapType():
+						output += writeAttrLine(attrName, structData[attrName], 2, false)
+					default:
+						log.Debugf("unexpected collection type %q", ty.FriendlyName())
+					}
+				case ty.IsTupleType():
+					fmt.Printf("tuple found. attrName %s\n", attrName)
+				case ty.IsObjectType():
+					fmt.Printf("object found. attrName %s\n", attrName)
+				default:
+					log.Debugf("attribute %q (attribute type of %q) has not been generated", attrName, ty.FriendlyName())
 				}
+			}
 
-				sortedNestedBlocks := make([]string, 0, len(r.Block.NestedBlocks))
-				for k := range r.Block.NestedBlocks {
-					sortedNestedBlocks = append(sortedNestedBlocks, k)
-				}
-				sort.Strings(sortedNestedBlocks)
+			sortedNestedBlocks := make([]string, 0, len(r.Block.NestedBlocks))
+			for k := range r.Block.NestedBlocks {
+				sortedNestedBlocks = append(sortedNestedBlocks, k)
+			}
+			sort.Strings(sortedNestedBlocks)
 
-				// Nested blocks are used for configuration options where assignment
-				// isn't required.
-				for _, attrName := range sortedNestedBlocks {
-					structData := jsonStructData[i].(map[string]interface{})
+			// Nested blocks are used for configuration options where assignment
+			// isn't required.
+			for _, attrName := range sortedNestedBlocks {
+				structData := jsonStructData[i].(map[string]interface{})
 
-					if r.Block.NestedBlocks[attrName].NestingMode == "list" {
-						output += "  " + attrName + " {\n"
+				if r.Block.NestedBlocks[attrName].NestingMode == "list" {
+					output += "  " + attrName + " {\n"
 
-						sortedInnerNestedBlock := make([]string, 0, len(r.Block.NestedBlocks[attrName].Block.Attributes))
-						for k := range r.Block.NestedBlocks[attrName].Block.Attributes {
-							sortedInnerNestedBlock = append(sortedInnerNestedBlock, k)
-						}
-						sort.Strings(sortedInnerNestedBlock)
+					sortedInnerNestedBlock := make([]string, 0, len(r.Block.NestedBlocks[attrName].Block.Attributes))
+					for k := range r.Block.NestedBlocks[attrName].Block.Attributes {
+						sortedInnerNestedBlock = append(sortedInnerNestedBlock, k)
+					}
+					sort.Strings(sortedInnerNestedBlock)
 
-						for _, nestedAttrName := range sortedInnerNestedBlock {
-							ty := r.Block.NestedBlocks[attrName].Block.Attributes[nestedAttrName].AttributeType
-							switch {
-							case ty.IsPrimitiveType():
-								switch ty {
-								case cty.String, cty.Bool, cty.Number:
-									output += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
-								default:
-									log.Debugf("unexpected primitive type %q", ty.FriendlyName())
-								}
+					for _, nestedAttrName := range sortedInnerNestedBlock {
+						ty := r.Block.NestedBlocks[attrName].Block.Attributes[nestedAttrName].AttributeType
+						switch {
+						case ty.IsPrimitiveType():
+							switch ty {
+							case cty.String, cty.Bool, cty.Number:
+								output += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
+							default:
+								log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 							}
 						}
-
-						output += "  }\n"
-					} else {
-						log.Debugf("nested mode %q for %s not recongised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
 					}
-				}
 
-				output += "}\n\n"
-			}
-
-			fmt.Fprint(cmd.OutOrStdout(), output)
-
-			if tfstate {
-				fmt.Println("###########################################################")
-				fmt.Println("# `terraform import` commands for the generated resources #")
-				fmt.Println("###########################################################")
-				for _, output := range resourceImportCommandOutputValues {
-					fmt.Println("# terraform import", output)
+					output += "  }\n"
+				} else {
+					log.Debugf("nested mode %q for %s not recongised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
 				}
 			}
-		},
+
+			output += "}\n\n"
+		}
+
+		fmt.Fprint(cmd.OutOrStdout(), output)
 	}
-
-	cmd.PersistentFlags().StringVar(&resourceType, "resource-type", "", "Which resource you wish to generate")
-	cmd.PersistentFlags().StringVarP(&zoneName, "zone", "z", "", "Limit the export to a single zone (name or ID)")
-	cmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for import")
-	return cmd
-}
-
-// buildCompositeID takes the resourceType, resourceName and resourceID in order
-// order to lookup the resource type import string and then return a suitable
-// composite value that is compatible with `terraform import`.
-func buildCompositeID(resourceType, resourceName, resourceID string) string {
-	if _, ok := resourceImportStringFormats[resourceType]; !ok {
-		log.Fatalf("%s does not have an import format defined. Try running the command again without the --tfstate flag to only generate the resources.", resourceType)
-	}
-
-	s := ""
-	s += fmt.Sprintf("%s.%s %s", resourceType, resourceName, resourceImportStringFormats[resourceType])
-	replacer := strings.NewReplacer(
-		":zone_id", zoneName,
-		":account_id", accountID,
-		":id", resourceID,
-	)
-
-	return replacer.Replace(s)
 }
 
 // writeAttrLine outputs a line of HCL configuration with a configurable depth

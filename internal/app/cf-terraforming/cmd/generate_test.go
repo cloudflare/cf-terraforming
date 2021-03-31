@@ -69,7 +69,7 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 }
 
 func TestGenerate_ResourceNotSupported(t *testing.T) {
-	_, output, err := executeCommandC(GenerateCmd(), "--resource-type", "notreal")
+	_, output, err := executeCommandC(rootCmd, "generate", "--resource-type", "notreal")
 
 	if assert.Nil(t, err) {
 		assert.Contains(t, output, "\"notreal\" is not yet supported for automatic generation")
@@ -116,14 +116,15 @@ func TestResourceGeneration(t *testing.T) {
 						Transport: r,
 					},
 				), cloudflare.UsingAccount(cloudflareTestAccountID))
-				_, output, _ = executeCommandC(GenerateCmd(), "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
+
+				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
 			} else {
 				api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
 					&http.Client{
 						Transport: r,
 					},
 				))
-				_, output, _ = executeCommandC(GenerateCmd(), "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
+				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
 			}
 
 			expected := testDataFile(tc.testdataFilename + ".tf")

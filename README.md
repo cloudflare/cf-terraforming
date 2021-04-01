@@ -84,8 +84,6 @@ configuration representing the **resource** you requested:
 ```
 resource "cloudflare_record" "terraform_managed_resource" {
   created_on = "2014-01-01T05:20:00.12345Z"
-  data = {
-  }
   modified_on = "2014-01-01T05:20:00.12345Z"
   name = "example.com"
   proxiable = true
@@ -100,9 +98,12 @@ resource "cloudflare_record" "terraform_managed_resource" {
 
 ## Prerequisites
 
-* A Cloudflare account with resources defined (e.g. a few zones, some load balancers, spectrum applications, etc)
-* A valid Cloudflare API key and sufficient permissions to access the resources you are requesting via the API
-* A working [installation of Go](https://golang.org/doc/install) at least v1.15.x.
+* A Cloudflare account with resources defined (e.g. a few zones, some load
+  balancers, spectrum applications, etc)
+* A valid Cloudflare API key and sufficient permissions to access the resources
+  you are requesting via the API
+* A working [installation of Go](https://golang.org/doc/install) at least
+  v1.15.x.
 
 ## Installation
 
@@ -132,3 +133,13 @@ allow flexibility in directory structure.
 $ cf-terraforming import --resource-type "cloudflare_record" --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z "example.com"
 
 ```
+
+## Testing
+
+To ensure changes don't introduce regressions this tool uses an automated test
+suite consisting of HTTP mocks via go-vcr and Terraform configuration files to
+assert against. The premise is that we mock the HTTP responses from the
+Cloudflare API to ensure we don't need to create and delete real resources to
+test. The Terraform files then allow us to build what the resource structure is
+expected to look like and once the tool parses the API response, we can compare
+that to the static file.

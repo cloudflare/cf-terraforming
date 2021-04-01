@@ -1,0 +1,70 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rate_limits
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "372e67954025e0ba6aaa6d586b9e0b59",
+            "disabled": false,
+            "description": "Prevent multiple login failures to mitigate brute force attacks",
+            "match": {
+              "request": {
+                "methods": [
+                  "GET",
+                  "POST"
+                ],
+                "schemes": [
+                  "HTTP",
+                  "HTTPS"
+                ],
+                "url": "*.example.org/path*"
+              },
+              "response": {},
+              "headers": [
+                {
+                  "name": "Cf-Cache-Status",
+                  "op": "ne",
+                  "value": "HIT"
+                }
+              ]
+            },
+            "bypass": [
+              {
+                "name": "url",
+                "value": "api.example.com/*"
+              }
+            ],
+            "threshold": 60,
+            "period": 900,
+            "action": {
+              "mode": "challenge",
+              "timeout": 86400,
+              "response": {
+                "content_type": "text/xml",
+                "body": "<error>This request has been rate-limited.</error>"
+              }
+            }
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

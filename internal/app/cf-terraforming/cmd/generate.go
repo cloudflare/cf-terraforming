@@ -77,6 +77,46 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		var jsonStructData []interface{}
 
 		switch resourceType {
+		case "cloudflare_access_application":
+			if accountID != "" {
+				jsonPayload, _, err := api.AccessApplications(context.Background(), accountID, cloudflare.PaginationOptions{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			} else {
+				jsonPayload, _, err := api.ZoneLevelAccessApplications(context.Background(), zoneID, cloudflare.PaginationOptions{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			}
+		case "cloudflare_access_group":
+			if accountID != "" {
+				jsonPayload, _, err := api.AccessGroups(context.Background(), accountID, cloudflare.PaginationOptions{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			} else {
+				jsonPayload, _, err := api.ZoneLevelAccessGroups(context.Background(), zoneID, cloudflare.PaginationOptions{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			}
 		case "cloudflare_access_identity_provider":
 			if accountID != "" {
 				jsonPayload, err := api.AccessIdentityProviders(context.Background(), accountID)
@@ -96,18 +136,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
-
-				// remap email and role_ids into the right structure.
-				for i := 0; i < resourceCount; i++ {
-					jsonStructData[i].(map[string]interface{})["email_address"] = jsonStructData[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
-					roleIDs := []string{}
-					for _, role := range jsonStructData[i].(map[string]interface{})["roles"].([]interface{}) {
-						roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
-					}
-					jsonStructData[i].(map[string]interface{})["role_ids"] = roleIDs
-				}
-			case "cloudflare_argo_tunnel":
-				jsonPayload, err := api.ArgoTunnels(context.Background(), accountID)
+			}
+		case "cloudflare_access_service_token":
+			if accountID != "" {
+				jsonPayload, _, err := api.AccessServiceTokens(context.Background(), accountID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -115,8 +147,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_byo_ip_prefix":
-				jsonPayload, err := api.ListPrefixes(context.Background())
+			} else {
+				jsonPayload, _, err := api.ZoneLevelAccessServiceTokens(context.Background(), zoneID)
 				if err != nil {
 					log.Fatal(err)
 				}
@@ -124,171 +156,305 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
+			}
+		case "cloudflare_access_mutual_tls_certificate":
+			jsonPayload, err := api.AccessMutualTLSCertificates(context.Background(), accountID)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-				// remap ID to prefix_id and advertised to advertisement on the JSON payloads.
-				for i := 0; i < resourceCount; i++ {
-					jsonStructData[i].(map[string]interface{})["prefix_id"] = jsonStructData[i].(map[string]interface{})["id"]
-
-					if jsonStructData[i].(map[string]interface{})["advertised"].(bool) {
-						jsonStructData[i].(map[string]interface{})["advertisement"] = "on"
-					} else {
-						jsonStructData[i].(map[string]interface{})["advertisement"] = "off"
-					}
-				}
-			case "cloudflare_certificate_pack":
-				jsonPayload, err := api.ListCertificatePacks(context.Background(), zoneName)
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_access_rule":
+			if accountID != "" {
+				jsonPayload, err := api.ListAccountAccessRules(context.Background(), accountID, cloudflare.AccessRule{}, 1)
 				if err != nil {
 					log.Fatal(err)
 				}
 
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
+				resourceCount = len(jsonPayload.Result)
+				m, _ := json.Marshal(jsonPayload.Result)
 				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_custom_pages":
-				if accountID != "" {
-					jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{AccountID: accountID})
-					if err != nil {
-						log.Fatal(err)
-					}
+			} else {
+				jsonPayload, err := api.ListZoneAccessRules(context.Background(), zoneID, cloudflare.AccessRule{}, 1)
+				if err != nil {
+					log.Fatal(err)
+				}
 
-					resourceCount = len(jsonPayload)
-					m, _ := json.Marshal(jsonPayload)
-					json.Unmarshal(m, &jsonStructData)
+				resourceCount = len(jsonPayload.Result)
+				m, _ := json.Marshal(jsonPayload.Result)
+				json.Unmarshal(m, &jsonStructData)
+			}
+		case "cloudflare_account_member":
+			jsonPayload, _, err := api.AccountMembers(context.Background(), accountID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
 
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			// remap email and role_ids into the right structure.
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["email_address"] = jsonStructData[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
+				roleIDs := []string{}
+				for _, role := range jsonStructData[i].(map[string]interface{})["roles"].([]interface{}) {
+					roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
+				}
+				jsonStructData[i].(map[string]interface{})["role_ids"] = roleIDs
+			}
+		case "cloudflare_argo_tunnel":
+			jsonPayload, err := api.ArgoTunnels(context.Background(), accountID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_byo_ip_prefix":
+			jsonPayload, err := api.ListPrefixes(context.Background())
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			// remap ID to prefix_id and advertised to advertisement on the JSON payloads.
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["prefix_id"] = jsonStructData[i].(map[string]interface{})["id"]
+
+				if jsonStructData[i].(map[string]interface{})["advertised"].(bool) {
+					jsonStructData[i].(map[string]interface{})["advertisement"] = "on"
 				} else {
-					jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{ZoneID: zoneName})
-					if err != nil {
-						log.Fatal(err)
-					}
-
-					resourceCount = len(jsonPayload)
-					m, _ := json.Marshal(jsonPayload)
-					json.Unmarshal(m, &jsonStructData)
+					jsonStructData[i].(map[string]interface{})["advertisement"] = "off"
 				}
-
-				// remap ID to the "type" field
-				for i := 0; i < resourceCount; i++ {
-					jsonStructData[i].(map[string]interface{})["type"] = jsonStructData[i].(map[string]interface{})["id"]
-				}
-			case "cloudflare_filter":
-				jsonPayload, err := api.Filters(context.Background(), zoneName, cloudflare.PaginationOptions{})
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_firewall_rule":
-				jsonPayload, err := api.FirewallRules(context.Background(), zoneName, cloudflare.PaginationOptions{})
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-
-				// remap Filter.ID to `filter_id` on the JSON payloads.
-				for i := 0; i < resourceCount; i++ {
-					jsonStructData[i].(map[string]interface{})["filter_id"] = jsonStructData[i].(map[string]interface{})["filter"].(map[string]interface{})["id"]
-				}
-			case "cloudflare_custom_hostname":
-				jsonPayload, _, err := api.CustomHostnames(context.Background(), zoneName, 1, cloudflare.CustomHostname{})
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_ip_list":
-				jsonPayload, err := api.ListIPLists(context.Background())
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_logpush_job":
-				jsonPayload, err := api.LogpushJobs(context.Background(), zoneName)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_record":
-				simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS"}
-				jsonPayload, err := api.DNSRecords(context.Background(), zoneName, cloudflare.DNSRecord{})
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-
-				for i := 0; i < resourceCount; i++ {
-					// We only want to remap the "value" to the "content" value for simple
-					// DNS types as the aggregate types use `data` for the structure.
-					if contains(simpleDNSTypes, jsonStructData[i].(map[string]interface{})["type"].(string)) {
-						jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
-					}
-				}
-			case "cloudflare_waf_package":
-				jsonPayload, err := api.ListWAFPackages(context.Background(), zoneName)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-			case "cloudflare_worker_route":
-				jsonPayload, err := api.ListWorkerRoutes(context.Background(), zoneName)
-				if err != nil {
-					log.Fatal(err)
-				}
-				resourceCount = len(jsonPayload.Routes)
-				m, _ := json.Marshal(jsonPayload.Routes)
-				json.Unmarshal(m, &jsonStructData)
-
-				// remap "script_name" to the "script" value.
-				for i := 0; i < resourceCount; i++ {
-					jsonStructData[i].(map[string]interface{})["script_name"] = jsonStructData[i].(map[string]interface{})["script"]
-				}
-			case "cloudflare_zone":
-				jsonPayload, err := api.ListZones(context.Background())
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
-
-				// remap "zone" to the "name" value.
-				for i := 0; i < resourceCount; i++ {
-					jsonStructData[i].(map[string]interface{})["zone"] = jsonStructData[i].(map[string]interface{})["name"]
-				}
-			default:
-				fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
-				return
+			}
+		case "cloudflare_certificate_pack":
+			jsonPayload, err := api.ListCertificatePacks(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
 			}
 
-			// If we don't have any resources to generate, just bail out early.
-			if resourceCount == 0 {
-				fmt.Fprint(cmd.OutOrStdout(), "no resources found to generate. Exiting...")
-				return
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_custom_pages":
+			if accountID != "" {
+				acc := cloudflare.CustomPageOptions{AccountID: accountID}
+				jsonPayload, err := api.CustomPages(context.Background(), &acc)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			} else {
+				zo := cloudflare.CustomPageOptions{ZoneID: zoneID}
+				jsonPayload, err := api.CustomPages(context.Background(), &zo)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
 			}
 
-			output := ""
+			// remap ID to the "type" field
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["type"] = jsonStructData[i].(map[string]interface{})["id"]
+			}
+		case "cloudflare_filter":
+			jsonPayload, err := api.Filters(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_firewall_rule":
+			jsonPayload, err := api.FirewallRules(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			// remap Filter.ID to `filter_id` on the JSON payloads.
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["filter_id"] = jsonStructData[i].(map[string]interface{})["filter"].(map[string]interface{})["id"]
+			}
+		case "cloudflare_custom_hostname":
+			jsonPayload, _, err := api.CustomHostnames(context.Background(), zoneID, 1, cloudflare.CustomHostname{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_custom_ssl":
+			jsonPayload, err := api.ListSSL(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_healthcheck":
+			jsonPayload, err := api.Healthchecks(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_load_balancer":
+			jsonPayload, err := api.ListLoadBalancers(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_load_balancer_pool":
+			jsonPayload, err := api.ListLoadBalancerPools(context.Background())
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_load_balancer_monitor":
+			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background())
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_logpush_job":
+			jsonPayload, err := api.LogpushJobs(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_origin_ca_certificate":
+			jsonPayload, err := api.OriginCertificates(context.Background(), cloudflare.OriginCACertificateListOptions{ZoneID: zoneID})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_rate_limit":
+			jsonPayload, _, err := api.ListRateLimits(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_record":
+			simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS"}
+			jsonPayload, err := api.DNSRecords(context.Background(), zoneID, cloudflare.DNSRecord{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
 
 			for i := 0; i < resourceCount; i++ {
-				structData := jsonStructData[i].(map[string]interface{})
+				// We only want to remap the "value" to the "content" value for simple
+				// DNS types as the aggregate types use `data` for the structure.
+				if contains(simpleDNSTypes, jsonStructData[i].(map[string]interface{})["type"].(string)) {
+					jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
+				}
+			}
+		case "cloudflare_spectrum_application":
+			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_waf_override":
+			jsonPayload, err := api.ListWAFOverrides(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_waf_package":
+			jsonPayload, err := api.ListWAFPackages(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_worker_route":
+			jsonPayload, err := api.ListWorkerRoutes(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			resourceCount = len(jsonPayload.Routes)
+			m, _ := json.Marshal(jsonPayload.Routes)
+			json.Unmarshal(m, &jsonStructData)
+
+			// remap "script_name" to the "script" value.
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["script_name"] = jsonStructData[i].(map[string]interface{})["script"]
+			}
+		case "cloudflare_zone":
+			jsonPayload, err := api.ListZones(context.Background())
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			// remap "zone" to the "name" value.
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["zone"] = jsonStructData[i].(map[string]interface{})["name"]
+			}
+		case "cloudflare_zone_lockdown":
+			jsonPayload, err := api.ListZoneLockdowns(context.Background(), zoneID, 1)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload.Result)
+			m, _ := json.Marshal(jsonPayload.Result)
+			json.Unmarshal(m, &jsonStructData)
 		default:
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
 			return
@@ -376,8 +542,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			for _, attrName := range sortedNestedBlocks {
 				structData := jsonStructData[i].(map[string]interface{})
 
-				if r.Block.NestedBlocks[attrName].NestingMode == "list" {
-
+				if r.Block.NestedBlocks[attrName].NestingMode == "list" || r.Block.NestedBlocks[attrName].NestingMode == "set" {
 					sortedInnerNestedBlock := make([]string, 0, len(r.Block.NestedBlocks[attrName].Block.Attributes))
 					for k := range r.Block.NestedBlocks[attrName].Block.Attributes {
 						sortedInnerNestedBlock = append(sortedInnerNestedBlock, k)
@@ -391,7 +556,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						case ty.IsPrimitiveType():
 							switch ty {
 							case cty.String, cty.Bool, cty.Number:
-								nestedBlockOutput += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
+								if structData[attrName] != nil {
+									switch structData[attrName].(type) {
+									case map[string]interface{}:
+										nestedBlockOutput += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
+									default:
+										log.Debugf("unexpected nested primitive type %T for %s", structData[attrName], attrName)
+									}
+								}
 							default:
 								log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 							}
@@ -405,7 +577,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 
 				} else {
-					log.Debugf("nested mode %q for %s not recongised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
+					log.Debugf("nested mode %q for %s not recognised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
 				}
 			}
 

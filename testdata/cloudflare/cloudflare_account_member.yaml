@@ -1,0 +1,97 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/members
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "4536bcfad5faccb111b47003c79917fa",
+            "code": "05dd05cce12bbed97c0d87cd78e89bc2fd41a6cee72f27f6fc84af2e45c0fac0",
+            "user": {
+              "id": "7c5dae5552338874e5053f2534d2767a",
+              "first_name": "John",
+              "last_name": "Appleseed",
+              "email": "user@example.com",
+              "two_factor_authentication_enabled": false
+            },
+            "status": "accepted",
+            "roles": [
+              {
+                "id": "3536bcfad5faccb999b47003c79917fb",
+                "name": "Account Administrator",
+                "description": "Administrative access to the entire Account",
+                "permissions": {
+                  "analytics": {
+                    "read": true,
+                    "write": true
+                  },
+                  "billing": {
+                    "read": true,
+                    "write": true
+                  },
+                  "cache_purge": {
+                    "read": true,
+                    "write": true
+                  },
+                  "dns": {
+                    "read": true,
+                    "write": true
+                  },
+                  "dns_records": {
+                    "read": true,
+                    "write": true
+                  },
+                  "lb": {
+                    "read": true,
+                    "write": true
+                  },
+                  "logs": {
+                    "read": true,
+                    "write": true
+                  },
+                  "organization": {
+                    "read": true,
+                    "write": true
+                  },
+                  "ssl": {
+                    "read": true,
+                    "write": true
+                  },
+                  "waf": {
+                    "read": true,
+                    "write": true
+                  },
+                  "zones": {
+                    "read": true,
+                    "write": true
+                  },
+                  "zone_settings": {
+                    "read": true,
+                    "write": true
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

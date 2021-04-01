@@ -18,20 +18,20 @@ var (
 	// listOfString is an example representation of a key where the value is a
 	// list of string values.
 	//
-	// resource "example" "example" {
-	//   attr = [ "b", "c", "d"]
-	// }
+	//   resource "example" "example" {
+	//     attr = [ "b", "c", "d"]
+	//   }
 	listOfString = []interface{}{"b", "c", "d"}
 
 	// configBlockOfStrings is an example of where a key is a "block" assignment
 	// in HCL.
 	//
-	// resource "example" "example" {
-	//   attr = {
-	//     c = "d"
-	//     e = "f"
+	//   resource "example" "example" {
+	//     attr = {
+	//       c = "d"
+	//       e = "f"
+	//     }
 	//   }
-	// }
 	configBlockOfStrings = map[string]interface{}{
 		"c": "d",
 		"e": "f",
@@ -82,16 +82,42 @@ func TestResourceGeneration(t *testing.T) {
 		resourceType     string
 		testdataFilename string
 	}{
-		"cloudflare argo tunnel":            {identiferType: "account", resourceType: "cloudflare_argo_tunnel", testdataFilename: "cloudflare_argo_tunnel"},
-		"cloudflare BYO IP prefix":          {identiferType: "account", resourceType: "cloudflare_byo_ip_prefix", testdataFilename: "cloudflare_byo_ip_prefix"},
-		"cloudflare custom pages (zone)":    {identiferType: "zone", resourceType: "cloudflare_custom_pages", testdataFilename: "cloudflare_custom_pages_zone"},
-		"cloudflare custom pages (account)": {identiferType: "account", resourceType: "cloudflare_custom_pages", testdataFilename: "cloudflare_custom_pages_account"},
-		"cloudflare filter":                 {identiferType: "zone", resourceType: "cloudflare_filter", testdataFilename: "cloudflare_filter"},
-		"cloudflare firewall rule":          {identiferType: "zone", resourceType: "cloudflare_firewall_rule", testdataFilename: "cloudflare_firewall_rule"},
-		"cloudflare logpush jobs":           {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job"},
-		"cloudflare record simple":          {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record"},
-		"cloudflare worker route":           {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route"},
-		"cloudflare zone":                   {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
+		"cloudflare access application simple (account)":    {identiferType: "account", resourceType: "cloudflare_access_application", testdataFilename: "cloudflare_access_application_simple_account"},
+		"cloudflare access application with CORS (account)": {identiferType: "account", resourceType: "cloudflare_access_application", testdataFilename: "cloudflare_access_application_with_cors_account"},
+		"cloudflare access IdP OTP (account)":               {identiferType: "account", resourceType: "cloudflare_access_identity_provider", testdataFilename: "cloudflare_access_identity_provider_otp_account"},
+		"cloudflare access IdP OTP (zone)":                  {identiferType: "zone", resourceType: "cloudflare_access_identity_provider", testdataFilename: "cloudflare_access_identity_provider_otp_zone"},
+		"cloudflare access IdP OAuth (account)":             {identiferType: "account", resourceType: "cloudflare_access_identity_provider", testdataFilename: "cloudflare_access_identity_provider_oauth_account"},
+		"cloudflare access IdP OAuth (zone)":                {identiferType: "zone", resourceType: "cloudflare_access_identity_provider", testdataFilename: "cloudflare_access_identity_provider_oauth_zone"},
+		"cloudflare access rule (account)":                  {identiferType: "account", resourceType: "cloudflare_access_rule", testdataFilename: "cloudflare_access_rule_account"},
+		"cloudflare access rule (zone)":                     {identiferType: "zone", resourceType: "cloudflare_access_rule", testdataFilename: "cloudflare_access_rule_zone"},
+		"cloudflare account member":                         {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},
+		"cloudflare argo tunnel":                            {identiferType: "account", resourceType: "cloudflare_argo_tunnel", testdataFilename: "cloudflare_argo_tunnel"},
+		"cloudflare BYO IP prefix":                          {identiferType: "account", resourceType: "cloudflare_byo_ip_prefix", testdataFilename: "cloudflare_byo_ip_prefix"},
+		"cloudflare certificate pack":                       {identiferType: "zone", resourceType: "cloudflare_certificate_pack", testdataFilename: "cloudflare_certificate_pack"},
+		"cloudflare custom pages (zone)":                    {identiferType: "zone", resourceType: "cloudflare_custom_pages", testdataFilename: "cloudflare_custom_pages_zone"},
+		"cloudflare custom pages (account)":                 {identiferType: "account", resourceType: "cloudflare_custom_pages", testdataFilename: "cloudflare_custom_pages_account"},
+		"cloudflare custom hostname":                        {identiferType: "zone", resourceType: "cloudflare_custom_hostname", testdataFilename: "cloudflare_custom_hostname"},
+		"cloudflare filter":                                 {identiferType: "zone", resourceType: "cloudflare_filter", testdataFilename: "cloudflare_filter"},
+		"cloudflare firewall rule":                          {identiferType: "zone", resourceType: "cloudflare_firewall_rule", testdataFilename: "cloudflare_firewall_rule"},
+		"cloudflare health check":                           {identiferType: "zone", resourceType: "cloudflare_healthcheck", testdataFilename: "cloudflare_healthcheck"},
+		"cloudflare load balancer":                          {identiferType: "zone", resourceType: "cloudflare_load_balancer", testdataFilename: "cloudflare_load_balancer"},
+		"cloudflare load balancer monitor":                  {identiferType: "account", resourceType: "cloudflare_load_balancer_monitor", testdataFilename: "cloudflare_load_balancer_monitor"},
+		"cloudflare logpush jobs":                           {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job"},
+		"cloudflare origin CA certificate":                  {identiferType: "zone", resourceType: "cloudflare_origin_ca_certificate", testdataFilename: "cloudflare_origin_ca_certificate"},
+		"cloudflare record simple":                          {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record"},
+		"cloudflare spectrum application":                   {identiferType: "zone", resourceType: "cloudflare_spectrum_application", testdataFilename: "cloudflare_spectrum_application"},
+		"cloudflare WAF override":                           {identiferType: "zone", resourceType: "cloudflare_waf_override", testdataFilename: "cloudflare_waf_override"},
+		"cloudflare worker route":                           {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route"},
+		"cloudflare zone lockdown":                          {identiferType: "zone", resourceType: "cloudflare_zone_lockdown", testdataFilename: "cloudflare_zone_lockdown"},
+
+		// "cloudflare access group (account)": {identiferType: "account", resourceType: "cloudflare_access_group", testdataFilename: "cloudflare_access_group_account"},
+		// "cloudflare access group (zone)":    {identiferType: "zone", resourceType: "cloudflare_access_group", testdataFilename: "cloudflare_access_group_zone"},
+		// "cloudflare custom certificates":    {identiferType: "zone", resourceType: "cloudflare_custom_certificates", testdataFilename: "cloudflare_custom_certificates"},
+		// "cloudflare custom SSL":             {identiferType: "zone", resourceType: "cloudflare_custom_ssl", testdataFilename: "cloudflare_custom_ssl"},
+		// "cloudflare load balancer pool":     {identiferType: "account", resourceType: "cloudflare_load_balancer_pool", testdataFilename: "cloudflare_load_balancer_pool"},
+		// "cloudflare rate limit":             {identiferType: "zone", resourceType: "cloudflare_rate_limit", testdataFilename: "cloudflare_rate_limit"},
+		// "cloudflare worker cron trigger":    {identiferType: "zone", resourceType: "cloudflare_worker_cron_trigger", testdataFilename: "cloudflare_worker_cron_trigger"},
+		// "cloudflare zone":                   {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 	}
 
 	for name, tc := range tests {
@@ -110,7 +136,10 @@ func TestResourceGeneration(t *testing.T) {
 			})
 
 			output := ""
+			storedAccountID := accountID
+			storedZoneID := zoneID
 			if tc.identiferType == "account" {
+				zoneID = ""
 				api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
 					&http.Client{
 						Transport: r,
@@ -118,13 +147,16 @@ func TestResourceGeneration(t *testing.T) {
 				), cloudflare.UsingAccount(cloudflareTestAccountID))
 
 				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
+				zoneID = storedZoneID
 			} else {
+				accountID = ""
 				api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
 					&http.Client{
 						Transport: r,
 					},
 				))
 				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
+				accountID = storedAccountID
 			}
 
 			expected := testDataFile(tc.testdataFilename + ".tf")

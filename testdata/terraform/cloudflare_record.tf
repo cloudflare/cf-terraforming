@@ -1,7 +1,5 @@
 resource "cloudflare_record" "terraform_managed_resource" {
   created_on = "2014-01-01T05:20:00.12345Z"
-  data = {
-  }
   modified_on = "2014-01-01T05:20:00.12345Z"
   name = "example.com"
   proxiable = true

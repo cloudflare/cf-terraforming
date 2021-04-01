@@ -12,65 +12,101 @@ interactions:
   response:
     body: |
       {
-        "success": true,
-        "errors": [],
-        "messages": [],
         "result": [
           {
-            "id": "023e105f4ecef8ad9ca31a8372d0c353",
+            "id": "0da42c8d2132a9ddaf714f9e7c920711",
             "name": "example.com",
-            "development_mode": 7200,
-            "original_name_servers": [
-              "ns1.originaldnshost.com",
-              "ns2.originaldnshost.com"
-            ],
-            "original_registrar": "GoDaddy",
-            "original_dnshost": "NameCheap",
-            "created_on": "2014-01-01T05:20:00.12345Z",
-            "modified_on": "2014-01-01T05:20:00.12345Z",
-            "activated_on": "2014-01-02T00:01:00.12345Z",
-            "owner": {
-              "id": "ba33f46d87652a7f0bedebc33fcd01d9",
-              "type": "user",
-              "email": "example@example.com"
-            },
-            "account": {
-              "id": "01a7362d577a6c3019a474fd6f485823",
-              "name": "Demo Account"
-            },
-            "permissions": [
-              "#zone:read",
-              "#zone:edit"
-            ],
-            "plan": {
-              "id": "e592fd9519420ba7405e1307bff33214",
-              "name": "Pro Plan",
-              "price": 20,
-              "currency": "USD",
-              "frequency": "monthly",
-              "legacy_id": "pro",
-              "is_subscribed": true,
-              "can_subscribe": true
-            },
-            "plan_pending": {
-              "id": "e592fd9519420ba7405e1307bff33214",
-              "name": "Pro Plan",
-              "price": 20,
-              "currency": "USD",
-              "frequency": "monthly",
-              "legacy_id": "pro",
-              "is_subscribed": true,
-              "can_subscribe": true
-            },
             "status": "active",
             "paused": false,
             "type": "full",
+            "development_mode": 0,
             "name_servers": [
-              "tony.ns.cloudflare.com",
-              "woz.ns.cloudflare.com"
-            ]
+              "rodney.ns.cloudflare.com",
+              "sara.ns.cloudflare.com"
+            ],
+            "original_name_servers": [
+              "linda.ns.cloudflare.com",
+              "merlin.ns.cloudflare.com"
+            ],
+            "original_registrar": null,
+            "original_dnshost": null,
+            "modified_on": "2021-03-30T05:22:27.022746Z",
+            "created_on": "2019-04-17T21:42:20.710742Z",
+            "activated_on": "2019-04-17T21:48:02.958654Z",
+            "vanity_name_servers": [],
+            "vanity_name_servers_ips": null,
+            "meta": {
+              "step": 3,
+              "wildcard_proxiable": true,
+              "custom_certificate_quota": 1
+            },
+            "owner": {
+              "id": "f037e56e89293a057740de681ac9abbe",
+              "type": "organization",
+              "name": "Example Inc."
+            },
+            "account": {
+              "id": "f037e56e89293a057740de681ac9abbe",
+              "name": "Example Inc."
+            },
+            "permissions": [
+              "#access:edit",
+              "#access:read",
+              "#analytics:read",
+              "#app:edit",
+              "#auditlogs:read",
+              "#billing:edit",
+              "#billing:read",
+              "#cache_purge:edit",
+              "#dns_records:edit",
+              "#dns_records:read",
+              "#lb:edit",
+              "#lb:read",
+              "#legal:edit",
+              "#legal:read",
+              "#logs:edit",
+              "#logs:read",
+              "#member:edit",
+              "#member:read",
+              "#organization:edit",
+              "#organization:read",
+              "#ssl:edit",
+              "#ssl:read",
+              "#stream:edit",
+              "#stream:read",
+              "#subscription:edit",
+              "#subscription:read",
+              "#teams:edit",
+              "#teams:read",
+              "#teams:report",
+              "#waf:edit",
+              "#waf:read",
+              "#webhooks:edit",
+              "#webhooks:read",
+              "#worker:edit",
+              "#worker:read",
+              "#zone:edit",
+              "#zone:read",
+              "#zone_settings:edit",
+              "#zone_settings:read"
+            ],
+            "plan": {
+              "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+              "name": "Enterprise Website",
+              "price": 0,
+              "currency": "USD",
+              "frequency": "",
+              "is_subscribed": true,
+              "can_subscribe": true,
+              "legacy_id": "enterprise",
+              "legacy_discount": false,
+              "externally_managed": true
+            }
           }
-        ]
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
       }
     headers:
       Content-Type:

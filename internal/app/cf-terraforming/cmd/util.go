@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -48,7 +49,7 @@ func testDataFile(filename string) string {
 
 	fullpath := dir.Name() + "/" + filename
 	if _, err := os.Stat(fullpath); os.IsNotExist(err) {
-		panic("path does not exist")
+		panic(fmt.Errorf("terraform testdata file does not exist at %s", fullpath))
 	}
 
 	data, _ := ioutil.ReadFile(fullpath)

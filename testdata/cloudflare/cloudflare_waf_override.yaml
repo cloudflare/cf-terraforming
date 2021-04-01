@@ -1,0 +1,47 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/firewall/waf/overrides
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "de677e5818985db1285d0e80225f06e5",
+            "description": "Enable Cloudflare Magento ruleset for shop.example.com",
+            "urls": [
+              "shop.example.com/*"
+            ],
+            "priority": 1,
+            "groups": {
+              "ea8687e59929c1fd05ba97574ad43f77": "default"
+            },
+            "rules": {
+              "100015": "disable"
+            },
+            "rewrite_action": {
+              "default": "block",
+              "challenge": "block",
+              "simulate": "disable"
+            }
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

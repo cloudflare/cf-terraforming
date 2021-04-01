@@ -8,11 +8,11 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Install Go
+      - name: install go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
-      - name: Checkout code
+      - name: checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2.1.3
         with:
@@ -20,14 +20,30 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
-      - name: Lint
+      - name: golint
         if: matrix.os != 'windows-latest'
         run: |
           go get -v -u golang.org/x/lint/golint
           $(go env GOPATH)/bin/golint -set_exit_status .
       - name: Vet
         run: go vet ./...
-      - name: Test
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: write Terraform configuration
+        run: |
+            cat > main.tf <<EOF
+            terraform {
+              required_providers {
+                cloudflare = {
+                  source = "cloudflare/cloudflare"
+                  version = "2.19.2"
+                }
+              }
+            }
+            EOF
+      - name: terraform init
+        run: terraform init
+      - name: go test
         env:
             USE_STATIC_RESOURCE_IDS: true
             CLOUDFLARE_EMAIL: noone@cloudflare.com

@@ -44,7 +44,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured. Eventually, this will be '.'.
-		workingDir := "/tmp"
+		workingDir := "."
 		log.Debugf("initialising Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {

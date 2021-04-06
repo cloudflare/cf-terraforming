@@ -8,7 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
+	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func contains(slice []string, item string) bool {
@@ -55,4 +58,59 @@ func testDataFile(filename string) string {
 	data, _ := ioutil.ReadFile(fullpath)
 
 	return string(data)
+}
+
+func sharedPreRun(cmd *cobra.Command, args []string) {
+	accountID = viper.GetString("account")
+
+	if apiToken = viper.GetString("token"); apiToken == "" {
+		if apiEmail = viper.GetString("email"); apiEmail == "" {
+			log.Error("'email' must be set.")
+		}
+
+		if apiKey = viper.GetString("key"); apiKey == "" {
+			log.Error("either -t/--token or -k/--key must be set.")
+		}
+
+		log.WithFields(logrus.Fields{
+			"email":      apiEmail,
+			"zone_id":    zoneID,
+			"account_id": accountID,
+		}).Debug("initializing cloudflare-go")
+
+	} else {
+		log.WithFields(logrus.Fields{
+			"zone_id":    zoneID,
+			"account_Id": accountID,
+		}).Debug("initializing cloudflare-go with API Token")
+	}
+
+	var options []cloudflare.Option
+
+	if accountID != "" {
+		log.WithFields(logrus.Fields{
+			"account_id": accountID,
+		}).Debug("configuring Cloudflare API with account")
+
+		// Organization ID was passed, use it to configure the API
+		options = append(options, cloudflare.UsingAccount(accountID))
+	}
+
+	var err error
+
+	// Don't initialise a client in CI as this messes with VCR and the ability to
+	// mock out the HTTP interactions.
+	if os.Getenv("CI") != "true" {
+		var useToken = apiToken != ""
+
+		if useToken {
+			api, err = cloudflare.NewWithAPIToken(apiToken, options...)
+		} else {
+			api, err = cloudflare.New(apiKey, apiEmail, options...)
+		}
+
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }

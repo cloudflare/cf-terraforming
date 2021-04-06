@@ -24,9 +24,10 @@ func init() {
 }
 
 var generateCmd = &cobra.Command{
-	Use:   "generate",
-	Short: "Fetch resources from the Cloudflare API and generate the respective Terraform stanzas",
-	Run:   generateResources(),
+	Use:    "generate",
+	Short:  "Fetch resources from the Cloudflare API and generate the respective Terraform stanzas",
+	Run:    generateResources(),
+	PreRun: sharedPreRun,
 }
 
 func generateResources() func(cmd *cobra.Command, args []string) {

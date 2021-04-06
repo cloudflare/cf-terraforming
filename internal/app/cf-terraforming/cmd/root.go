@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"os"
-
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
@@ -24,7 +22,6 @@ var rootCmd = &cobra.Command{
 	Long: `cf-terraforming is an application that allows Cloudflare users
 to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,
-	PersistentPreRun: persistentPreRun,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -101,59 +98,4 @@ func initConfig() {
 	}
 
 	log.SetLevel(cfgLogLevel)
-}
-
-func persistentPreRun(cmd *cobra.Command, args []string) {
-	accountID = viper.GetString("account")
-
-	if apiToken = viper.GetString("token"); apiToken == "" {
-		if apiEmail = viper.GetString("email"); apiEmail == "" {
-			log.Error("'email' must be set.")
-		}
-
-		if apiKey = viper.GetString("key"); apiKey == "" {
-			log.Error("either -t/--token or -k/--key must be set.")
-		}
-
-		log.WithFields(logrus.Fields{
-			"email":      apiEmail,
-			"zone_id":    zoneID,
-			"account_id": accountID,
-		}).Debug("initializing cloudflare-go")
-
-	} else {
-		log.WithFields(logrus.Fields{
-			"zone_id":    zoneID,
-			"account_Id": accountID,
-		}).Debug("initializing cloudflare-go with API Token")
-	}
-
-	var options []cloudflare.Option
-
-	if accountID != "" {
-		log.WithFields(logrus.Fields{
-			"account_id": accountID,
-		}).Debug("configuring Cloudflare API with account")
-
-		// Organization ID was passed, use it to configure the API
-		options = append(options, cloudflare.UsingAccount(accountID))
-	}
-
-	var err error
-
-	// Don't initialise a client in CI as this messes with VCR and the ability to
-	// mock out the HTTP interactions.
-	if os.Getenv("CI") != "true" {
-		var useToken = apiToken != ""
-
-		if useToken {
-			api, err = cloudflare.NewWithAPIToken(apiToken, options...)
-		} else {
-			api, err = cloudflare.New(apiKey, apiEmail, options...)
-		}
-
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
 }

@@ -45,7 +45,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured. Eventually, this will be '.'.
 		workingDir := "."
-		if os.Getenv("CI") == "true" {
+		if os.Getenv("CI") == "true" && os.Getenv("GITHUB_WORKSPACE") != "" {
 			workingDir = os.Getenv("GITHUB_WORKSPACE")
 		}
 		log.Debugf("initialising Terraform in %s", workingDir)

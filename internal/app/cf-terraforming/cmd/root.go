@@ -60,9 +60,9 @@ func init() {
 	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
 	viper.BindEnv("email", "CLOUDFLARE_EMAIL")
 	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
-	viper.BindEnv("key", "CLOUDFLARE_KEY")
+	viper.BindEnv("key", "CLOUDFLARE_API_KEY")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
-	viper.BindEnv("token", "CLOUDFLARE_TOKEN")
+	viper.BindEnv("token", "CLOUDFLARE_API_TOKEN")
 
 	viper.BindPFlag("account", rootCmd.PersistentFlags().Lookup("account"))
 }

@@ -55,11 +55,11 @@ demonstrated below.
 
 ```bash
 # if using API Token
-export CLOUDFLARE_TOKEN='Hzsq3Vub-7Y-hSTlAaLH3Jq_YfTUOCcgf22_Fs-j'
+export CLOUDFLARE_API_TOKEN='Hzsq3Vub-7Y-hSTlAaLH3Jq_YfTUOCcgf22_Fs-j'
 
 # if using API Key
 export CLOUDFLARE_EMAIL='user@example.com'
-export CLOUDFLARE_KEY='1150bed3f45247b99f7db9696fffa17cbx9'
+export CLOUDFLARE_API_KEY='1150bed3f45247b99f7db9696fffa17cbx9'
 
 # specify Account ID
 export CLOUDFLARE_ACCOUNT_ID='81b06ss3228f488fh84e5e993c2dc17'

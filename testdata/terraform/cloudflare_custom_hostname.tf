@@ -19,5 +19,6 @@ resource "cloudflare_custom_hostname" "terraform_managed_resource" {
     method = "http"
     status = "pending_validation"
     type = "dv"
+    wildcard = false
   }
 }

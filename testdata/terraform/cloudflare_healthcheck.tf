@@ -3,10 +3,8 @@ resource "cloudflare_healthcheck" "terraform_managed_resource" {
   check_regions = [ "WEU", "ENAM" ]
   consecutive_fails = 1
   consecutive_successes = 1
-  created_on = "2014-01-01T05:20:00.12345Z"
   description = "Health check for www.example.com"
   interval = 60
-  modified_on = "2014-01-01T05:20:00.12345Z"
   name = "server-1"
   retries = 2
   suspended = false

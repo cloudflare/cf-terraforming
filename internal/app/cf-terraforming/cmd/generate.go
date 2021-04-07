@@ -390,6 +390,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 
 			for i := 0; i < resourceCount; i++ {
+				// Drop the proxiable values as they are not usable
+				jsonStructData[i].(map[string]interface{})["proxiable"] = nil
+
 				// We only want to remap the "value" to the "content" value for simple
 				// DNS types as the aggregate types use `data` for the structure.
 				if contains(simpleDNSTypes, jsonStructData[i].(map[string]interface{})["type"].(string)) {

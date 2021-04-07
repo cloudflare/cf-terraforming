@@ -394,9 +394,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// Drop the proxiable values as they are not usable
 				jsonStructData[i].(map[string]interface{})["proxiable"] = nil
 
-				if jsonStructData[i].(map[string]interface{})["name"].(string) == jsonStructData[i].(map[string]interface{})["zone_name"].(string) {
-					jsonStructData[i].(map[string]interface{})["name"] = "@"
-				} else {
+				if jsonStructData[i].(map[string]interface{})["name"].(string) != jsonStructData[i].(map[string]interface{})["zone_name"].(string) {
 					jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+jsonStructData[i].(map[string]interface{})["zone_name"].(string), "")
 				}
 

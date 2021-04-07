@@ -1,5 +1,5 @@
 resource "cloudflare_record" "terraform_managed_resource" {
-  name = "example.com"
+  name = "@"
   proxied = false
   ttl = 120
   type = "A"

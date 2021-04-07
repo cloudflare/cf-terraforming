@@ -36,7 +36,7 @@ jobs:
               required_providers {
                 cloudflare = {
                   source = "cloudflare/cloudflare"
-                  version = "2.19.2"
+                  version = "~> 2"
                 }
               }
             }
@@ -47,5 +47,6 @@ jobs:
         env:
             USE_STATIC_RESOURCE_IDS: true
             CLOUDFLARE_EMAIL: noone@cloudflare.com
-            CLOUDFLARE_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+            CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ env.GITHUB_WORKSPACE }}
         run: go test -v -race ./...

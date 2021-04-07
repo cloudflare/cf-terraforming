@@ -3,13 +3,13 @@ package cmd
 import (
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 	"testing"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
+	"github.com/spf13/viper"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -136,11 +136,12 @@ func TestResourceGeneration(t *testing.T) {
 			})
 
 			output := ""
-			storedAccountID := accountID
-			storedZoneID := zoneID
+			storedAccountID := viper.GetString("account")
+			storedZoneID := viper.GetString("zone")
+
 			if tc.identiferType == "account" {
 				zoneID = ""
-				api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
+				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
 					&http.Client{
 						Transport: r,
 					},
@@ -150,7 +151,7 @@ func TestResourceGeneration(t *testing.T) {
 				zoneID = storedZoneID
 			} else {
 				accountID = ""
-				api, _ = cloudflare.New(os.Getenv("CLOUDFLARE_KEY"), os.Getenv("CLOUDFLARE_EMAIL"), cloudflare.HTTPClient(
+				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
 					&http.Client{
 						Transport: r,
 					},

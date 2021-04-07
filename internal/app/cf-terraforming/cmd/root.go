@@ -9,7 +9,7 @@ import (
 )
 
 var log = logrus.New()
-var cfgFile, zoneID, apiEmail, apiKey, apiToken, accountID string
+var cfgFile, zoneID, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
 var verbose bool
 var api *cloudflare.API
 var terraformImportCmdPrefix = "terraform import"
@@ -36,35 +36,49 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
+	home, err := homedir.Dir()
+	if err != nil {
+		log.Debug(err)
+		return
+	}
+
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.cf-terraforming.yaml)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", home+"/.cf-terraforming.yaml", "Path to config file")
 
 	// Zone selection
 	rootCmd.PersistentFlags().StringVarP(&zoneID, "zone", "z", "", "Limit the export to a single zone ID")
+	viper.BindPFlag("zone", rootCmd.PersistentFlags().Lookup("zone"))
+	viper.BindEnv("zone", "CLOUDFLARE_ZONE_ID")
 
 	// Account
 	rootCmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for commands")
+	viper.BindPFlag("account", rootCmd.PersistentFlags().Lookup("account"))
+	viper.BindEnv("account", "CLOUDFLARE_ACCOUNT_ID")
 
 	// API credentials
 	rootCmd.PersistentFlags().StringVarP(&apiEmail, "email", "e", "", "API Email address associated with your account")
+	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
+	viper.BindEnv("email", "CLOUDFLARE_EMAIL")
+
 	rootCmd.PersistentFlags().StringVarP(&apiKey, "key", "k", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile")
+	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
+	viper.BindEnv("key", "CLOUDFLARE_API_KEY")
+
 	rootCmd.PersistentFlags().StringVarP(&apiToken, "token", "t", "", "API Token")
+	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
+	viper.BindEnv("token", "CLOUDFLARE_API_TOKEN")
 
 	// Debug logging mode
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Specify verbose output (same as setting log level to debug)")
 
 	rootCmd.PersistentFlags().StringVar(&resourceType, "resource-type", "", "Which resource you wish to generate")
 
-	viper.BindPFlag("email", rootCmd.PersistentFlags().Lookup("email"))
-	viper.BindEnv("email", "CLOUDFLARE_EMAIL")
-	viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key"))
-	viper.BindEnv("key", "CLOUDFLARE_API_KEY")
-	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
-	viper.BindEnv("token", "CLOUDFLARE_API_TOKEN")
+	rootCmd.PersistentFlags().StringVar(&terraformInstallPath, "terraform-install-path", ".", "Path to the Terraform installation")
 
-	viper.BindPFlag("account", rootCmd.PersistentFlags().Lookup("account"))
+	viper.BindPFlag("terraform-install-path", rootCmd.PersistentFlags().Lookup("terraform-install-path"))
+	viper.BindEnv("terraform-install-path", "CLOUDFLARE_TERRAFORM_INSTALL_PATH")
 }
 
 // initConfig reads in config file and ENV variables if set.

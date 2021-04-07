@@ -11,6 +11,7 @@ import (
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/hashicorp/terraform-exec/tfinstall"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"github.com/zclconf/go-cty/cty"
 
 	"fmt"
@@ -32,6 +33,9 @@ var generateCmd = &cobra.Command{
 
 func generateResources() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
+		zoneID = viper.GetString("zone")
+		accountID = viper.GetString("account")
+
 		tmpDir, err := ioutil.TempDir("", "tfinstall")
 		if err != nil {
 			log.Fatal(err)
@@ -44,11 +48,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		// Setup and configure Terraform to operate in the temporary directory where
-		// the provider is already configured. Eventually, this will be '.'.
-		workingDir := "."
-		if os.Getenv("CI") == "true" && os.Getenv("GITHUB_WORKSPACE") != "" {
-			workingDir = os.Getenv("GITHUB_WORKSPACE")
-		}
+		// the provider is already configured.
+		workingDir := viper.GetString("terraform-install-path")
 		log.Debugf("initialising Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {

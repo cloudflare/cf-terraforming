@@ -48,5 +48,5 @@ jobs:
             USE_STATIC_RESOURCE_IDS: true
             CLOUDFLARE_EMAIL: noone@cloudflare.com
             CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-            CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ env.GITHUB_WORKSPACE }}
+            CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
         run: go test -v -race ./...

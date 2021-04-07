@@ -506,6 +506,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 
+				// Skip unusable timestamps
+				if contains([]string{"modified_on", "created_on"}, attrName) {
+					continue
+				}
+
 				if attrName == "account_id" && accountID != "" {
 					output += writeAttrLine(attrName, accountID, 2, false)
 					continue

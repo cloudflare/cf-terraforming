@@ -1,8 +1,10 @@
-TEST               ?= $$(go list ./...)
-GO_FILES           ?= $$(find . -name '*.go')
-CLOUDFLARE_EMAIL   ?= example@example.com
-CLOUDFLARE_API_KEY ?= aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-VERSION            ?= dev+$$(git rev-parse --short HEAD)
+TEST                  ?= $$(go list ./...)
+GO_FILES              ?= $$(find . -name '*.go')
+CLOUDFLARE_EMAIL      ?= example@example.com
+CLOUDFLARE_API_KEY    ?= aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+CLOUDFLARE_ZONE_ID    ?= 00deadb33f000000000000000000000000000
+CLOUDFLARE_ACCOUNT_ID ?= 00deadb33f000000000000000000000000000
+VERSION               ?= dev+$$(git rev-parse --short HEAD)
 
 HASHICORP_CHECKPOINT_TIMEMOUT ?= 30000
 
@@ -19,6 +21,7 @@ test:
 		CHECKPOINT_TIMEOUT=$(HASHICORP_CHECKPOINT_TIMEMOUT) \
 		CLOUDFLARE_EMAIL="$(CLOUDFLARE_EMAIL)" \
 		CLOUDFLARE_API_KEY="$(CLOUDFLARE_API_KEY)" \
+		CLOUDFLARE_ZONE_ID="$(CLOUDFLARE_ZONE_ID)" \
 		go test $(TEST) -v $(TESTARGS)
 
 fmt:

@@ -69,19 +69,19 @@ cf-terraforming generate --resource-type "cloudflare_record" --account $CLOUDFLA
 ```
 
 cf-terraforming supports the following environment variables:
-* CLOUDFLARE_TOKEN - API Token based authentication
-* CLOUDFLARE_EMAIL, CLOUDFLARE_KEY - API Key based authentication
+* CLOUDFLARE_API_TOKEN - API Token based authentication
+* CLOUDFLARE_EMAIL, CLOUDFLARE_API_KEY - API Key based authentication
 
 ## Example usage
 
-```
-cf-terraforming generate --account $CLOUDFLARE_ACCOUNT_ID --resource-type "cloudflare_record"
+```bash
+$ cf-terraforming generate --account $CLOUDFLARE_ACCOUNT_ID --resource-type "cloudflare_record"
 ```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform
 configuration representing the **resource** you requested:
 
-```
+```hcl
 resource "cloudflare_record" "terraform_managed_resource" {
   name = "example.com"
   proxied = false

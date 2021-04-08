@@ -24,7 +24,6 @@ jobs:
         with:
           version: latest
           args: release --rm-dist
-          workdir: cmd/cf-terraforming
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}

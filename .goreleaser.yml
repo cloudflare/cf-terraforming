@@ -1,0 +1,15 @@
+changelog:
+  skip: true
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+builds:
+  - main: ./cmd/cf-terraforming/main.go
+    binary: cf-terraforming
+    ldflags:
+      - -s -w -X "github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming/cmd.versionString={{.Env.VERSION}}"
+    goos:
+      - darwin
+      - linux
+      - windows

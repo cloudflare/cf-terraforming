@@ -1,0 +1,56 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/load_balancers/monitors
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "f1aba936b94213e5b8dca0c0dbf1f9cc",
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "type": "https",
+            "description": "Login page monitor",
+            "method": "GET",
+            "path": "/health",
+            "header": {
+              "Host": [
+                "example.com"
+              ],
+              "X-App-ID": [
+                "abc123"
+              ]
+            },
+            "port": 8080,
+            "timeout": 3,
+            "retries": 0,
+            "interval": 90,
+            "expected_body": "alive",
+            "expected_codes": "2xx",
+            "follow_redirects": true,
+            "allow_insecure": true,
+            "consecutive_up": 3,
+            "consecutive_down": 2,
+            "probe_zone": "example.com"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

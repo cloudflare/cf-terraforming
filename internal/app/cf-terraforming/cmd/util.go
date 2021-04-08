@@ -3,17 +3,16 @@ package cmd
 import (
 	"bytes"
 	"fmt"
-	"reflect"
-	"sort"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"strings"
-	"text/template"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/hashcode"
+	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
-
-func replace(input, from, to string) string {
-	return strings.Replace(input, from, to, -1)
-}
 
 func contains(slice []string, item string) bool {
 	set := make(map[string]struct{}, len(slice))
@@ -25,82 +24,93 @@ func contains(slice []string, item string) bool {
 	return ok
 }
 
-func isMap(i interface{}) bool {
-	return (reflect.ValueOf(i).Kind() == reflect.Map)
+func executeCommandC(root *cobra.Command, args ...string) (c *cobra.Command, output string, err error) {
+	buf := new(bytes.Buffer)
+	root.SetOut(buf)
+	root.SetErr(buf)
+	root.SetArgs(args)
+
+	c, err = root.ExecuteC()
+
+	return c, buf.String(), err
 }
 
-func isMapEmpty(i interface{}) bool {
-	if isMap(i) {
-		k := reflect.ValueOf(i)
-		if k.Len() == 0 {
-			return true
+// testDataFile slurps a local test case into memory and returns it while
+// encapsulating the logic for finding it.
+func testDataFile(filename string) string {
+	filename = strings.TrimSuffix(filename, "/")
+
+	dirname, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+
+	dir, err := os.Open(filepath.Join(dirname, "../../../../testdata/terraform"))
+	if err != nil {
+		panic(err)
+	}
+
+	fullpath := dir.Name() + "/" + filename
+	if _, err := os.Stat(fullpath); os.IsNotExist(err) {
+		panic(fmt.Errorf("terraform testdata file does not exist at %s", fullpath))
+	}
+
+	data, _ := ioutil.ReadFile(fullpath)
+
+	return string(data)
+}
+
+func sharedPreRun(cmd *cobra.Command, args []string) {
+	accountID = viper.GetString("account")
+
+	if apiToken = viper.GetString("token"); apiToken == "" {
+		if apiEmail = viper.GetString("email"); apiEmail == "" {
+			log.Error("'email' must be set.")
+		}
+
+		if apiKey = viper.GetString("key"); apiKey == "" {
+			log.Error("either -t/--token or -k/--key must be set.")
+		}
+
+		log.WithFields(logrus.Fields{
+			"email":      apiEmail,
+			"zone_id":    zoneID,
+			"account_id": accountID,
+		}).Debug("initializing cloudflare-go")
+
+	} else {
+		log.WithFields(logrus.Fields{
+			"zone_id":    zoneID,
+			"account_Id": accountID,
+		}).Debug("initializing cloudflare-go with API Token")
+	}
+
+	var options []cloudflare.Option
+
+	if accountID != "" {
+		log.WithFields(logrus.Fields{
+			"account_id": accountID,
+		}).Debug("configuring Cloudflare API with account")
+
+		// Organization ID was passed, use it to configure the API
+		options = append(options, cloudflare.UsingAccount(accountID))
+	}
+
+	var err error
+
+	// Don't initialise a client in CI as this messes with VCR and the ability to
+	// mock out the HTTP interactions.
+	if os.Getenv("CI") != "true" {
+		var useToken = apiToken != ""
+
+		if useToken {
+			api, err = cloudflare.NewWithAPIToken(apiToken, options...)
+		} else {
+			api, err = cloudflare.New(apiKey, apiEmail, options...)
+		}
+
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
-	return false
-}
-
-func isSlice(i interface{}) bool {
-	return (reflect.ValueOf(i).Kind() == reflect.Slice)
-}
-
-func quoteIfString(i interface{}) interface{} {
-	// Handle <no value> zero value by converting it to an empty string
-	if i == nil {
-		return "\"\""
-	}
-	if reflect.ValueOf(i).Kind() == reflect.String {
-		return fmt.Sprintf("\"%v\"", i)
-	} else {
-		return i
-	}
-}
-
-func normalizeRecordName(name, domain string) string {
-	return strings.TrimSuffix(name, "."+domain)
-}
-
-func normalizeResourceName(name string) string {
-	r := strings.NewReplacer(".", "_", "*", "star")
-
-	return r.Replace(name)
-}
-
-func escapeSpecialChars(value string) string {
-	r := strings.NewReplacer("\"", "\\\"", "\\", "\\\\")
-
-	return r.Replace(value)
-}
-
-var templateFuncMap = template.FuncMap{
-	"replace":             replace,
-	"isMap":               isMap,
-	"isMapEmpty":          isMapEmpty,
-	"isSlice":             isSlice,
-	"quoteIfString":       quoteIfString,
-	"normalizeRecordName": normalizeRecordName,
-	"recordResourceName":  recordResourceName,
-	"trim":                strings.TrimSpace,
-	"escapeSpecialChars":  escapeSpecialChars,
-}
-
-func hashMap(values map[string]string) int {
-	var keys []string
-	var buf bytes.Buffer
-
-	for k := range values {
-		keys = append(keys, k)
-	}
-
-	sort.Strings(keys)
-
-	buf.WriteString("{<")
-	for _, k := range keys {
-		buf.WriteString(k)
-		buf.WriteRune(':')
-		buf.WriteString(values[k])
-		buf.WriteRune(';')
-	}
-	buf.WriteString(">;};")
-
-	return hashcode.String(buf.String())
 }

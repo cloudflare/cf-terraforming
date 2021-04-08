@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/identity_providers
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "41830897-6cf6-449e-9cc1-f38b34928ae0",
+            "type": "github",
+            "uid": "41830897-6cf6-449e-9cc1-f38b34928ae0",
+            "name": "GitHub OAuth",
+            "config": {
+              "client_id": "example-id",
+              "redirect_url": "https://example.cloudflareaccess.com/cdn-cgi/access/callback"
+            },
+            "version": "3f79ae229bdb0a7fd163df1edbe148f5"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

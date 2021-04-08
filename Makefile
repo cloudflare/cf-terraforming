@@ -22,7 +22,7 @@ test:
 		CLOUDFLARE_EMAIL="$(CLOUDFLARE_EMAIL)" \
 		CLOUDFLARE_API_KEY="$(CLOUDFLARE_API_KEY)" \
 		CLOUDFLARE_ZONE_ID="$(CLOUDFLARE_ZONE_ID)" \
-		go test $(TEST) -v $(TESTARGS)
+		go test $(TEST) -timeout 120m -v $(TESTARGS)
 
 fmt:
 	gofmt -w $(GO_FILES)

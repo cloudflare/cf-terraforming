@@ -450,6 +450,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_workers_kv_namespace":
+			jsonPayload, err := api.ListWorkersKVNamespaces(context.Background())
+			if err != nil {
+				log.Fatal(err)
+			}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_worker_route":
 			jsonPayload, err := api.ListWorkerRoutes(context.Background(), zoneID)
 			if err != nil {

@@ -29,9 +29,9 @@ Available Commands:
 
 Flags:
   -a, --account string         Use specific account ID for commands
-  -c, --config string          config file (default is $HOME/.cf-terraforming.yaml)
+  -c, --config string          Path to configuration file (default is $HOME/.cf-terraforming.yaml)
   -e, --email string           API Email address associated with your account
-  -h, --help                   help for cf-terraforming
+  -h, --help                   Help for cf-terraforming
   -k, --key string             API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
       --resource-type string   Which resource you wish to generate
   -t, --token string           API Token
@@ -127,7 +127,6 @@ allow flexibility in directory structure.
 
 ```
 $ cf-terraforming import --resource-type "cloudflare_record" --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z "example.com"
-
 ```
 
 ## Testing

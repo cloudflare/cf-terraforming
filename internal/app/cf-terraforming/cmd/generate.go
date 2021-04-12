@@ -275,6 +275,25 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			for i := 0; i < resourceCount; i++ {
 				jsonStructData[i].(map[string]interface{})["type"] = jsonStructData[i].(map[string]interface{})["id"]
 			}
+		case "cloudflare_custom_hostname_fallback_origin":
+			var jsonPayload []cloudflare.CustomHostnameFallbackOrigin
+			apiCall, err := api.CustomHostnameFallbackOrigin(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			if apiCall.Origin != "" {
+				resourceCount = 1
+				jsonPayload = append(jsonPayload, apiCall)
+			}
+
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["id"] = sanitiseTerraformResourceName(jsonStructData[i].(map[string]interface{})["origin"].(string))
+				jsonStructData[i].(map[string]interface{})["status"] = nil
+			}
 		case "cloudflare_filter":
 			jsonPayload, err := api.Filters(context.Background(), zoneID, cloudflare.PaginationOptions{})
 			if err != nil {

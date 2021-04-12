@@ -31,6 +31,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_spectrum_application":  ":zone_id/:id",
 	"cloudflare_waf_override":          ":zone_id/:id",
 	"cloudflare_worker_route":          ":zone_id/:id",
+	"cloudflare_workers_kv_namespace":  ":id",
 	"cloudflare_zone":                  ":zone_id",
 	"cloudflare_zone_lockdown":         ":zone_id/:id",
 }
@@ -202,6 +203,14 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_workers_kv_namespace":
+			jsonPayload, err := api.ListWorkersKVNamespaces(context.Background())
+			if err != nil {
+				log.Fatal(err)
+			}
+
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_worker_route":

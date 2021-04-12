@@ -110,6 +110,7 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare spectrum application":                   {identiferType: "zone", resourceType: "cloudflare_spectrum_application", testdataFilename: "cloudflare_spectrum_application"},
 		"cloudflare WAF override":                           {identiferType: "zone", resourceType: "cloudflare_waf_override", testdataFilename: "cloudflare_waf_override"},
 		"cloudflare worker route":                           {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route"},
+		"cloudflare workers kv namespace":                   {identiferType: "account", resourceType: "cloudflare_workers_kv_namespace", testdataFilename: "cloudflare_workers_kv_namespace"},
 		"cloudflare zone lockdown":                          {identiferType: "zone", resourceType: "cloudflare_zone_lockdown", testdataFilename: "cloudflare_zone_lockdown"},
 
 		// "cloudflare access group (account)": {identiferType: "account", resourceType: "cloudflare_access_group", testdataFilename: "cloudflare_access_group_account"},

@@ -1,0 +1,40 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/storage/kv/namespaces?page=1&per_page=100
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "ede4053647c043feb35cfda2016eca98",
+            "title": "example-kv-namespace",
+            "supports_url_encoding": true
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result_info": {
+          "page": 1,
+          "per_page": 100,
+          "count": 1,
+          "total_count": 1,
+          "total_pages": 1
+        }
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

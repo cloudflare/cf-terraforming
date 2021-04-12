@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
@@ -113,4 +114,11 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 			log.Fatal(err)
 		}
 	}
+}
+
+// sanitiseTerraformResourceName ensures that a Terraform resource name matches the
+// restrictions imposed by core.
+func sanitiseTerraformResourceName(s string) string {
+	re := regexp.MustCompile(`[^a-zA-Z0-9_]+`)
+	return re.ReplaceAllString(s, "_")
 }

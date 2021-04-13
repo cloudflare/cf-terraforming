@@ -5,7 +5,7 @@ labels: ["kind/enhancement", "needs-triage"]
 body:
 - type: input
   attributes:
-    label: Current cf-terraform version
+    label: Current `cf-terraforming` version
     description: |
       If you're not using the latest version, please check to see if something related
       to your request has already been implemented in a later version.
@@ -31,7 +31,7 @@ body:
     required: true
 - type: textarea
   attributes:
-    label: Potential cf-terraform usage
+    label: Potential `cf-terraforming` usage
     description: |
       Show how you think this should work and interact. 
   validations:

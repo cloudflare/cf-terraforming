@@ -106,8 +106,8 @@ resource "cloudflare_record" "terraform_managed_resource" {
 If you use Homebrew on MacOS, you can run the following:
 
 ```bash
-brew tap cloudflare/cloudflare
-brew install cloudflare/cloudflare/cf-terrarforming
+$ brew tap cloudflare/cloudflare
+$ brew install cloudflare/cloudflare/cf-terrarforming
 ```
 
 Otherwise:

@@ -56,7 +56,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			log.Fatal(err)
 		}
 
-		err = tf.Init(context.Background(), tfexec.Upgrade(true), tfexec.LockTimeout("60s"))
+		err = tf.Init(context.Background(), tfexec.Upgrade(true))
 		if err != nil {
 			log.Fatal(err)
 		}

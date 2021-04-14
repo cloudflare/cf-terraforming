@@ -140,12 +140,9 @@ $ cf-terraforming import --resource-type "cloudflare_record" --email $CLOUDFLARE
 
 ## Supported Resources
 
-The following resources can be `generated` and `imported`
+The following resources can be both `generated` and `imported`
 
 Last updated April 13, 2021
-
-✔️
-✖️
 
 | Resource | Supported |
 |----------|-----------|

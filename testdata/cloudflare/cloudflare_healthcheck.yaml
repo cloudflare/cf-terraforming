@@ -1,0 +1,81 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/healthchecks
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "699d98642c564d2e855e9661899b7252",
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "name": "server-1",
+            "description": "Health check for www.example.com",
+            "suspended": false,
+            "notification": {
+              "suspended": false,
+              "email_addresses": [
+                "alert@example.com",
+                "oncall@example.com"
+              ],
+              "trigger": "FAIL"
+            },
+            "check_regions": [
+              "WEU",
+              "ENAM"
+            ],
+            "type": "HTTPS",
+            "consecutive_successes": 1,
+            "consecutive_fails": 1,
+            "http_config": {
+              "method": "GET",
+              "port": 80,
+              "path": "/health",
+              "expected_codes": [
+                "2xx",
+                "302"
+              ],
+              "expected_body": "success",
+              "follow_redirects": false,
+              "allow_insecure": false,
+              "header": {
+                "Host": [
+                  "example.com"
+                ],
+                "X-App-ID": [
+                  "abc123"
+                ]
+              }
+            },
+            "tcp_config": {
+              "method": "connection_established",
+              "port": 80
+            },
+            "timeout": 5,
+            "retries": 2,
+            "interval": 60,
+            "address": "www.example.com",
+            "status": "healthy",
+            "failure_reason": ""
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

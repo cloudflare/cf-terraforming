@@ -1,0 +1,42 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/addressing/prefixes
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "9a7806061c88ada191ed06f989cc3dac",
+            "created_at": "2014-01-01T05:20:00.12345Z",
+            "modified_at": "2014-01-01T05:20:00.12345Z",
+            "cidr": "192.0.2.0/24",
+            "account_id": "01a7362d577a6c3019a474fd6f485823",
+            "description": "Internal test prefix",
+            "approved": "P",
+            "loa_document_id": "d933b1530bc56c9953cf8ce166da8004",
+            "on_demand_enabled": true,
+            "on_demand_locked": false,
+            "advertised": true,
+            "advertised_modified_at": "2014-01-01T05:20:00.12345Z"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

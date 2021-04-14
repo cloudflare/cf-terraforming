@@ -1,0 +1,35 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/service_tokens
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "created_at": "2014-01-01T05:20:00.12345Z",
+            "updated_at": "2014-01-01T05:20:00.12345Z",
+            "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+            "name": "CI/CD token",
+            "client_id": "88bf3b6d86161464f6509f7219099e57.access.example.com"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

@@ -1,0 +1,55 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/access/groups
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+            "created_at": "2014-01-01T05:20:00.12345Z",
+            "updated_at": "2014-01-01T05:20:00.12345Z",
+            "name": "Allow devs",
+            "include": [
+              {
+                "email": {
+                  "email": "test@example.com"
+                }
+              }
+            ],
+            "exclude": [
+              {
+                "email": {
+                  "email": "test@example.com"
+                }
+              }
+            ],
+            "require": [
+              {
+                "email": {
+                  "email": "test@example.com"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

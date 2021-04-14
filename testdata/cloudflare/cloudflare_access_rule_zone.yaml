@@ -1,0 +1,50 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/firewall/access_rules/rules?page=1&per_page=100
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "92f17202ed8bd63d69a66b86a49a8f6b",
+            "notes": "This rule is on because of an event that occured on date X",
+            "allowed_modes": [
+              "whitelist",
+              "block",
+              "challenge",
+              "js_challenge"
+            ],
+            "mode": "challenge",
+            "configuration": {
+              "target": "ip",
+              "value": "198.51.100.4"
+            },
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "scope": {
+              "id": "7c5dae5552338874e5053f2534d2767a",
+              "email": "user@example.com",
+              "type": "user"
+            }
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

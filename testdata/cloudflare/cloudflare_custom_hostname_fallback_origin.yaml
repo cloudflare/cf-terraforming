@@ -1,0 +1,35 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/custom_hostnames/fallback_origin
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": {
+          "origin": "fallback.example.com",
+          "status": "pending_deployment",
+          "created_at": "2020-08-17T19:16:43.006255Z",
+          "updated_at": "2021-04-12T00:54:48.350843Z",
+          "errors": [
+            "DNS records are not setup correctly. Origin should be a proxied A/AAAA/CNAME dns record"
+          ]
+        }
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

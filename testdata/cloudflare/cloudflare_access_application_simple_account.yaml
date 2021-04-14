@@ -1,0 +1,42 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/apps
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+            "created_at": "2014-01-01T05:20:00.12345Z",
+            "updated_at": "2014-01-01T05:20:00.12345Z",
+            "aud": "737646a56ab1df6ec9bddc7e5ca84eaf3b0768850f3ffb5d74f1534911fe3893",
+            "name": "Admin Site",
+            "domain": "test.example.com/admin",
+            "session_duration": "24h",
+            "allowed_idps": [
+              "699d98642c564d2e855e9661899b7252"
+            ],
+            "auto_redirect_to_identity": false,
+            "enable_binding_cookie": false
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

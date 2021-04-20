@@ -47,7 +47,7 @@ Cloudflare supports two authentication methods to the API:
 * API Token - gives access only to resources and permissions specified for that token (recommended)
 * API key - gives access to everything your user profile has access to
 
-Both can be retrieved on [profile page](https://dash.cloudflare.com/profile/api-tokens).
+Both can be retrieved on the [user profile page](https://dash.cloudflare.com/profile/api-tokens).
 
 **A note on storing your credentials securely:** We recommend that you store
 your Cloudflare credentials (API key, email, token) as environment variables as
@@ -71,6 +71,16 @@ cf-terraforming generate --resource-type "cloudflare_record" --account $CLOUDFLA
 cf-terraforming supports the following environment variables:
 * CLOUDFLARE_API_TOKEN - API Token based authentication
 * CLOUDFLARE_EMAIL, CLOUDFLARE_API_KEY - API Key based authentication
+
+Alternatively, if using a config file, then specify the inputs using the same names the `flag` names.
+Example:
+```
+$ cat ~/.cf-terraforming.yaml 
+email: "email@domain.com"
+key: "<key>"
+#or
+token: "<token>" 
+```
 
 ## Example usage
 

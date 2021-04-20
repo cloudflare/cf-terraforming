@@ -110,19 +110,8 @@ $ brew tap cloudflare/cloudflare
 $ brew install --cask cloudflare/cloudflare/cf-terraforming
 ```
 
-Otherwise:
-
-```bash
-$ GO111MODULE=on go get -u github.com/cloudflare/cf-terraforming/...
-```
-
-This will fetch the `cf-terraforming` tool as well as its dependencies, updating
-them as necessary, build and install the package in your `$GOPATH` (usually
-`~/go/bin`). You can check your current GOPATH by running:
-
-```bash
-$ go env | grep GOPATH
-```
+If you use another OS, you will need to download the release directly from 
+[GitHub Releases](https://github.com/cloudflare/cf-terraforming/releases).
 
 ## Importing with Terraform state
 

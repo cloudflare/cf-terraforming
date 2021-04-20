@@ -4,7 +4,7 @@ CLOUDFLARE_EMAIL      ?= example@example.com
 CLOUDFLARE_API_KEY    ?= aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 CLOUDFLARE_ZONE_ID    ?= 00deadb33f000000000000000000000000000
 CLOUDFLARE_ACCOUNT_ID ?= 00deadb33f000000000000000000000000000
-VERSION               ?= dev+$$(git rev-parse --short HEAD)
+VERSION               ?= $$(git describe --tags --abbrev=0)-dev+$$(git rev-parse --short=12 HEAD)
 
 HASHICORP_CHECKPOINT_TIMEMOUT ?= 30000
 

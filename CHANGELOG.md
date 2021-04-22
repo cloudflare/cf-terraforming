@@ -1,5 +1,7 @@
 ## Unreleased
 
+generate: handle non-string values for IDs (#249)
+
 ## 0.1.1 (2021-04-15)
 
 generate: remove `tfexec.LockTimeout` on init for Terraform 0.15 support

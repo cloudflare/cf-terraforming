@@ -519,7 +519,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			if os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
 				resourceID = "terraform_managed_resource"
 			} else {
-				resourceID = fmt.Sprintf("terraform_managed_resource_%s", structData["id"].(string))
+				id := ""
+				switch structData["id"].(type) {
+				case float64:
+					id = fmt.Sprintf("%f", structData["id"].(float64))
+				default:
+					id = structData["id"].(string)
+				}
+
+				resourceID = fmt.Sprintf("terraform_managed_resource_%s", id)
 			}
 
 			output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)

@@ -1,6 +1,7 @@
 ## Unreleased
 
 generate: handle non-string values for IDs (#249)
+deps: bump zclconf/go-cty to 1.8.2 (#247)
 
 ## 0.1.1 (2021-04-15)
 

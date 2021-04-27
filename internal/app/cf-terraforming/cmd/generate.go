@@ -63,6 +63,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		log.Debug("reading Terraform schema for Cloudflare provider")
 		ps, err := tf.ProvidersSchema(context.Background())
+		if err != nil {
+			log.Fatal("failed to read provider schema", err)
+		}
 		s := ps.Schemas["registry.terraform.io/cloudflare/cloudflare"]
 		if s == nil {
 			log.Fatal("failed to detect provider installation")

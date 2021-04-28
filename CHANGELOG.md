@@ -1,4 +1,6 @@
-## Unreleased
+## Unreleased 
+
+## 0.2 (2021-04-28)
 
 - generate: handle non-string values for IDs ([#249](https://github.com/cloudflare/cf-terraforming/issues/249))
 - deps: bump zclconf/go-cty to 1.8.2 ([#247](https://github.com/cloudflare/cf-terraforming/issues/247))

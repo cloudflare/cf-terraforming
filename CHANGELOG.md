@@ -1,9 +1,9 @@
 ## Unreleased
 
-- generate: handle non-string values for IDs (#249)
-- deps: bump zclconf/go-cty to 1.8.2 (#247)
-- deps: update hashicorp/terraform-exec to 0.13.3 to address GPG revocation by HashiCorp ([HCSEC-2021-12](https://discuss.hashicorp.com/t/hcsec-2021-12-codecov-security-event-and-hashicorp-gpg-key-exposure/23512)) (#250)
-- deps: add explicit dependency for hashicorp/go-getter (#253)
+- generate: handle non-string values for IDs ([#249](https://github.com/cloudflare/cf-terraforming/issues/249))
+- deps: bump zclconf/go-cty to 1.8.2 ([#247](https://github.com/cloudflare/cf-terraforming/issues/247))
+- deps: update hashicorp/terraform-exec to 0.13.3 to address GPG revocation by HashiCorp ([HCSEC-2021-12](https://discuss.hashicorp.com/t/hcsec-2021-12-codecov-security-event-and-hashicorp-gpg-key-exposure/23512)) ([#250](https://github.com/cloudflare/cf-terraforming/issues/250))
+- deps: add explicit dependency for hashicorp/go-getter ([#253](https://github.com/cloudflare/cf-terraforming/issues/253))
 
 ## 0.1.1 (2021-04-15)
 

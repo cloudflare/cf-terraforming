@@ -72,7 +72,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		r := s.ResourceSchemas[resourceType]
-
 		log.Debugf("beginning to read and build %s resources", resourceType)
 
 		// Initialise `resourceCount` outside of the switch for supported resources
@@ -392,6 +391,20 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_page_rule":
+			jsonPayload, err := api.ListPageRules(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["target"] = jsonStructData[i].(map[string]interface{})["targets"].([]interface{})[0].(map[string]interface{})["constraint"].(map[string]interface{})["value"]
+				jsonStructData[i].(map[string]interface{})["actions"] = flattenAttrMap(jsonStructData[i].(map[string]interface{})["actions"].([]interface{}))
+			}
 		case "cloudflare_rate_limit":
 			jsonPayload, _, err := api.ListRateLimits(context.Background(), zoneID, cloudflare.PaginationOptions{})
 			if err != nil {
@@ -591,56 +604,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			sortedNestedBlocks := make([]string, 0, len(r.Block.NestedBlocks))
-			for k := range r.Block.NestedBlocks {
-				sortedNestedBlocks = append(sortedNestedBlocks, k)
-			}
-			sort.Strings(sortedNestedBlocks)
-
-			// Nested blocks are used for configuration options where assignment
-			// isn't required.
-			for _, attrName := range sortedNestedBlocks {
-				structData := jsonStructData[i].(map[string]interface{})
-
-				if r.Block.NestedBlocks[attrName].NestingMode == "list" || r.Block.NestedBlocks[attrName].NestingMode == "set" {
-					sortedInnerNestedBlock := make([]string, 0, len(r.Block.NestedBlocks[attrName].Block.Attributes))
-					for k := range r.Block.NestedBlocks[attrName].Block.Attributes {
-						sortedInnerNestedBlock = append(sortedInnerNestedBlock, k)
-					}
-					sort.Strings(sortedInnerNestedBlock)
-
-					nestedBlockOutput := ""
-					for _, nestedAttrName := range sortedInnerNestedBlock {
-						ty := r.Block.NestedBlocks[attrName].Block.Attributes[nestedAttrName].AttributeType
-						switch {
-						case ty.IsPrimitiveType():
-							switch ty {
-							case cty.String, cty.Bool, cty.Number:
-								if structData[attrName] != nil {
-									switch structData[attrName].(type) {
-									case map[string]interface{}:
-										nestedBlockOutput += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], 4, false)
-									default:
-										log.Debugf("unexpected nested primitive type %T for %s", structData[attrName], attrName)
-									}
-								}
-							default:
-								log.Debugf("unexpected primitive type %q", ty.FriendlyName())
-							}
-						}
-					}
-
-					if nestedBlockOutput != "" {
-						output += "  " + attrName + " {\n"
-						output += nestedBlockOutput
-						output += "  }\n"
-					}
-
-				} else {
-					log.Debugf("nested mode %q for %s not recognised", r.Block.NestedBlocks[attrName].NestingMode, attrName)
-				}
-			}
-
+			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), 2)
 			output += "}\n\n"
 		}
 
@@ -651,11 +615,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
 func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) string {
-	switch value.(type) {
+	switch values := value.(type) {
 	case map[string]interface{}:
-
-		values := value.(map[string]interface{})
-
 		sortedKeys := make([]string, 0, len(values))
 		for k := range values {
 			sortedKeys = append(sortedKeys, k)

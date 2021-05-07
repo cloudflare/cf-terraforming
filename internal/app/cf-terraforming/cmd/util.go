@@ -157,6 +157,7 @@ func flattenAttrMap(l []interface{}) map[string]interface{} {
 	return result
 }
 
+// nestBlocks takes a schema and generates all of the appropriate nesting of any top-level blocks as well as nested lists or sets.
 func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, depth int) string {
 	output := ""
 

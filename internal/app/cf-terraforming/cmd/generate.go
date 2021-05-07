@@ -572,7 +572,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 
-				if attrName == "zone_id" && zoneID != "" {
+				if attrName == "zone_id" && zoneID != "" && accountID == "" {
 					output += writeAttrLine(attrName, zoneID, 2, false)
 					continue
 				}

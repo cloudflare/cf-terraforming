@@ -1,4 +1,4 @@
-resource "cloudflare_page_rule" "terraform_managed_resource_9a7806061c88ada191ed06f989cc3dac" {
+resource "cloudflare_page_rule" "terraform_managed_resource" {
   priority = 1
   status = "active"
   target = "*example.com/images/*"

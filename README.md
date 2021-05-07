@@ -139,7 +139,7 @@ $ cf-terraforming import --resource-type "cloudflare_record" --email $CLOUDFLARE
 
 The following resources can be used with both `generate` and `import`
 
-Last updated April 13, 2021
+Last updated May 7, 2021
 
 | Resource | Supported |
 |----------|-----------|
@@ -174,7 +174,7 @@ Last updated April 13, 2021
 | [cloudflare_logpush_ownership_challenge](https://www.terraform.io/docs/providers/cloudflare/r/logpush_ownership_challenge.html) | ✖️ |
 | [cloudflare_magic_firewall_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/magic_firewall_ruleset.html) | ✖️ |
 | [cloudflare_origin_ca_certificate](https://www.terraform.io/docs/providers/cloudflare/r/origin_ca_certificate.html) | ✔️ |
-| [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html) | ✖️ |
+| [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html) | ✔️ |
 | [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html) | ✖️ |
 | [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record.html) | ✔️ |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application.html) | ✔️ |

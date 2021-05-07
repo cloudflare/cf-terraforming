@@ -14,6 +14,7 @@ resource "cloudflare_custom_hostname" "terraform_managed_resource" {
   zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   ssl {
     settings {
+      ciphers = [ "ECDHE-RSA-AES128-GCM-SHA256", "AES128-SHA" ]
       http2 = "on"
       min_tls_version = "1.2"
     }

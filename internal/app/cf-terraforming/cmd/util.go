@@ -206,6 +206,12 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 					default:
 						log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 					}
+				case ty.IsListType(), ty.IsSetType():
+					if structData[attrName] != nil {
+						nestedBlockOutput += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], depth+2, false)
+					}
+				default:
+					log.Debugf("unexpected nested type %T for %s", ty, nestedAttrName)
 				}
 			}
 

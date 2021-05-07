@@ -7,6 +7,8 @@ resource "cloudflare_access_application" "terraform_managed_resource" {
   session_duration = "24h"
   cors_headers {
     allow_all_headers = true
+    allowed_methods = [ "GET" ]
+    allowed_origins = [ "https://example.com" ]
     max_age = -1
   }
 }

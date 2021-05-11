@@ -404,6 +404,26 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			for i := 0; i < resourceCount; i++ {
 				jsonStructData[i].(map[string]interface{})["target"] = jsonStructData[i].(map[string]interface{})["targets"].([]interface{})[0].(map[string]interface{})["constraint"].(map[string]interface{})["value"]
 				jsonStructData[i].(map[string]interface{})["actions"] = flattenAttrMap(jsonStructData[i].(map[string]interface{})["actions"].([]interface{}))
+
+				// Have to remap the cache_ttl_by_status to conform to Terraform's more human-friendly structure.
+				if cache, ok := jsonStructData[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_ttl_by_status"].(map[string]interface{}); ok {
+					cache_ttl_by_status := []map[string]interface{}{}
+
+					for codes, ttl := range cache {
+						if ttl == "no-cache" {
+							ttl = 0
+						} else if ttl == "no-store" {
+							ttl = -1
+						}
+						elem := map[string]interface{}{
+							"codes": codes,
+							"ttl":   ttl,
+						}
+
+						cache_ttl_by_status = append(cache_ttl_by_status, elem)
+					}
+					jsonStructData[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_ttl_by_status"] = cache_ttl_by_status
+				}
 			}
 		case "cloudflare_rate_limit":
 			jsonPayload, _, err := api.ListRateLimits(context.Background(), zoneID, cloudflare.PaginationOptions{})

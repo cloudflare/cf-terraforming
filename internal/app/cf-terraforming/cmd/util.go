@@ -169,62 +169,88 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 	}
 	sort.Strings(sortedNestedBlocks)
 
-	for _, attrName := range sortedNestedBlocks {
-		if schemaBlock.NestedBlocks[attrName].NestingMode == "list" || schemaBlock.NestedBlocks[attrName].NestingMode == "set" {
-			sortedInnerNestedBlock := make([]string, 0, len(schemaBlock.NestedBlocks[attrName].Block.Attributes))
+	for _, block := range sortedNestedBlocks {
+		if schemaBlock.NestedBlocks[block].NestingMode == "list" || schemaBlock.NestedBlocks[block].NestingMode == "set" {
+			sortedInnerAttributes := make([]string, 0, len(schemaBlock.NestedBlocks[block].Block.Attributes))
 
-			for k := range schemaBlock.NestedBlocks[attrName].Block.Attributes {
-				sortedInnerNestedBlock = append(sortedInnerNestedBlock, k)
+			for k := range schemaBlock.NestedBlocks[block].Block.Attributes {
+				sortedInnerAttributes = append(sortedInnerAttributes, k)
 			}
 
-			sort.Strings(sortedInnerNestedBlock)
+			sort.Strings(sortedInnerAttributes)
 
 			nestedBlockOutput := ""
 
 			// If the attribute we're looking at has further nesting, we'll recursively call nestBlocks.
-			if len(schemaBlock.NestedBlocks[attrName].Block.NestedBlocks) > 0 {
-				if s, ok := structData[attrName]; ok {
-					nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[attrName].Block, s.(map[string]interface{}), depth+2)
+			if len(schemaBlock.NestedBlocks[block].Block.NestedBlocks) > 0 {
+				if s, ok := structData[block]; ok {
+					nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), depth+2)
 				}
 			}
 
-			for _, nestedAttrName := range sortedInnerNestedBlock {
-				ty := schemaBlock.NestedBlocks[attrName].Block.Attributes[nestedAttrName].AttributeType
+			switch attrStruct := structData[block].(type) {
 
-				switch {
-				case ty.IsPrimitiveType():
-					switch ty {
-					case cty.String, cty.Bool, cty.Number:
-						if structData[attrName] != nil {
-							switch structData[attrName].(type) {
-							case map[string]interface{}:
-								nestedBlockOutput += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], depth+2, false)
-							default:
-								log.Debugf("unexpected nested primitive type %T for %s", structData[attrName], attrName)
-							}
-						}
-					default:
-						log.Debugf("unexpected primitive type %q", ty.FriendlyName())
-					}
-				case ty.IsListType(), ty.IsSetType():
-					if structData[attrName] != nil {
-						nestedBlockOutput += writeAttrLine(nestedAttrName, structData[attrName].(map[string]interface{})[nestedAttrName], depth+2, false)
-					}
-				default:
-					log.Debugf("unexpected nested type %T for %s", ty, nestedAttrName)
+			// Case for if the inner block's attributes are a map of interfaces, in which case we can directly add them to the config.
+			case map[string]interface{}:
+				if attrStruct != nil {
+					nestedBlockOutput += writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct, depth)
 				}
-			}
 
-			if nestedBlockOutput != "" {
-				output += strings.Repeat(" ", depth) + attrName + " {\n"
-				output += nestedBlockOutput
-				output += strings.Repeat(" ", depth) + "}\n"
+				if nestedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
+					output += strings.Repeat(" ", depth) + block + " {\n"
+					output += nestedBlockOutput
+					output += strings.Repeat(" ", depth) + "}\n"
+				}
+
+			// Case for if the inner block's attributes are a list of map interfaces, in which case this should be treated as a duplicating block.
+			case []map[string]interface{}:
+				for _, v := range attrStruct {
+					repeatedBlockOutput := ""
+
+					if attrStruct != nil {
+						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v, depth)
+					}
+
+					// Write the block if we had data for it, or if it is a required block.
+					if repeatedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
+						output += strings.Repeat(" ", depth) + block + " {\n"
+						output += repeatedBlockOutput
+						output += strings.Repeat(" ", depth) + "}\n"
+					}
+				}
+
+			default:
+				log.Debugf("unexpected attribute struct type %T for block %s", attrStruct, block)
 			}
 
 		} else {
-			log.Debugf("nested mode %q for %s not recognised", schemaBlock.NestedBlocks[attrName].NestingMode, attrName)
+			log.Debugf("nested mode %q for %s not recognised", schemaBlock.NestedBlocks[block].NestingMode, block)
 		}
 	}
 
 	return output
+}
+
+func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attrStruct map[string]interface{}, depth int) string {
+	nestedBlockOutput := ""
+
+	for _, attrName := range attributes {
+		ty := schemaBlock.Attributes[attrName].AttributeType
+
+		switch {
+		case ty.IsPrimitiveType():
+			switch ty {
+			case cty.String, cty.Bool, cty.Number:
+				nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], depth+2, false)
+			default:
+				log.Debugf("unexpected primitive type %q", ty.FriendlyName())
+			}
+		case ty.IsListType(), ty.IsSetType():
+			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], depth+2, false)
+		default:
+			log.Debugf("unexpected nested type %T for %s", ty, attrName)
+		}
+	}
+
+	return nestedBlockOutput
 }

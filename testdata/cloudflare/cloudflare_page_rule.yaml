@@ -1,0 +1,99 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/pagerules
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "9a7806061c88ada191ed06f989cc3dac",
+            "targets": [
+              {
+                "target": "url",
+                "constraint": {
+                  "operator": "matches",
+                  "value": "*example.com/images/*"
+                }
+              }
+            ],
+            "actions": [
+              {
+                "id": "browser_cache_ttl",
+                "value": 1800
+              },
+              {
+                "id": "cache_key_fields",
+                "value": {
+                  "header": {
+                    "exclude": [],
+                    "include": [
+                      "authorization"
+                    ],
+                    "check_presence": [
+                      "x-forwarded-for"
+                    ]
+                  },
+                  "query_string": {
+                    "include": [],
+                    "exclude": [
+                      "*"
+                    ]
+                  },
+                  "host": {
+                    "resolved": true
+                  },
+                  "cookie": {
+                    "include": [
+                      "x-some-other-header",
+                      "x-some-value"
+                    ],
+                    "check_presence": [
+                      "x-some-header"
+                    ]
+                  },
+                  "user": {
+                    "lang": false,
+                    "geo": true,
+                    "device_type": true
+                  }
+                }
+              },
+              {
+                "id": "cache_ttl_by_status",
+                "value": {
+                  "200": 60,
+                  "204": "no-store",
+                  "300-399": "no-cache"
+                }
+              },
+              {
+                "id": "host_header_override",
+                "value": "not-example.com"
+              }
+            ],
+            "priority": 1,
+            "status": "active",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "created_on": "2014-01-01T05:20:00.12345Z"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

@@ -26,6 +26,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_custom_ssl":            ":zone_id/:id",
 	"cloudflare_ip_list":               ":account_id/:id",
 	"cloudflare_origin_ca_certificate": ":id",
+	"cloudflare_page_rule":             ":zone_id/:id",
 	"cloudflare_rate_limit":            ":zone_id/:id",
 	"cloudflare_record":                ":zone_id/:id",
 	"cloudflare_spectrum_application":  ":zone_id/:id",
@@ -161,6 +162,14 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_origin_ca_certificate":
 			jsonPayload, err := api.OriginCertificates(context.Background(), cloudflare.OriginCACertificateListOptions{ZoneID: zoneID})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_page_rule":
+			jsonPayload, err := api.ListPageRules(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}

@@ -422,6 +422,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 						cache_ttl_by_status = append(cache_ttl_by_status, elem)
 					}
+
+					sort.SliceStable(cache_ttl_by_status, func(i int, j int) bool {
+						return cache_ttl_by_status[i]["codes"].(string) < cache_ttl_by_status[j]["codes"].(string)
+					})
+
 					jsonStructData[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_ttl_by_status"] = cache_ttl_by_status
 				}
 

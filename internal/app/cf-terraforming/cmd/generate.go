@@ -542,6 +542,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["plan"] = jsonStructData[i].(map[string]interface{})["plan"].(map[string]interface{})["legacy_id"].(string)
 				jsonStructData[i].(map[string]interface{})["meta"] = nil
 				jsonStructData[i].(map[string]interface{})["name_servers"] = nil
+				jsonStructData[i].(map[string]interface{})["status"] = nil
 			}
 		case "cloudflare_zone_lockdown":
 			jsonPayload, err := api.ListZoneLockdowns(context.Background(), zoneID, 1)

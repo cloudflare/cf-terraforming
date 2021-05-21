@@ -14,5 +14,3 @@
 # Terraform files for instantiating state for tests
 *.tf
 .terraform
-
-cf-terraforming

@@ -1,5 +1,8 @@
 ## Unreleased 
 
+- deps: update hashicorp/terraform-json to 0.11.0 (#261)
+- generate: remove `cloudflare_zone.status` from output
+
 ## 0.3.0 (2021-05-20)
 
 - docs: update Terraform registry documentation links (#255)

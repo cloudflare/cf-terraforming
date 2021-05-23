@@ -1,5 +1,10 @@
 ## Unreleased 
 
+## 0.3.0 (2021-05-20)
+
+- docs: update Terraform registry documentation links (#255)
+- generate: add support for page rules (#259)
+
 ## 0.2.0 (2021-04-28)
 
 - generate: handle non-string values for IDs ([#249](https://github.com/cloudflare/cf-terraforming/issues/249))

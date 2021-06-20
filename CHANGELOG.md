@@ -2,6 +2,7 @@
 
 - deps: update hashicorp/terraform-json to 0.11.0 (#261)
 - generate: remove `cloudflare_zone.status` from output
+- generate: remap `cloudflare_load_balancer` `default_pool_ids` and `fallback_pool_id` to their schema values
 
 ## 0.3.0 (2021-05-20)
 

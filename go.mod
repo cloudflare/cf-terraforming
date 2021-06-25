@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.37.0 // indirect
 	github.com/cloudflare/cloudflare-go v0.18.0
 	github.com/dnaeon/go-vcr v1.2.0
-	github.com/hashicorp/terraform-exec v0.13.3
+	github.com/hashicorp/terraform-exec v0.14.0
 	github.com/hashicorp/terraform-json v0.12.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect

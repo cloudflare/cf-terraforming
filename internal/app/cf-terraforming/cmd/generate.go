@@ -212,6 +212,30 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 				jsonStructData[i].(map[string]interface{})["role_ids"] = roleIDs
 			}
+		case "cloudflare_argo":
+			jsonPayload := []cloudflare.ArgoFeatureSetting{}
+
+			argoSmartRouting, err := api.ArgoSmartRouting(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			jsonPayload = append(jsonPayload, argoSmartRouting)
+
+			argoTieredCaching, err := api.ArgoTieredCaching(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			jsonPayload = append(jsonPayload, argoTieredCaching)
+
+			resourceCount = 1
+
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			for _, b := range jsonStructData {
+				key := b.(map[string]interface{})["id"].(string)
+				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[0].(map[string]interface{})["value"]
+			}
 		case "cloudflare_argo_tunnel":
 			jsonPayload, err := api.ArgoTunnels(context.Background(), accountID)
 			if err != nil {

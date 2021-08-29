@@ -115,6 +115,10 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare zone lockdown":                          {identiferType: "zone", resourceType: "cloudflare_zone_lockdown", testdataFilename: "cloudflare_zone_lockdown"},
 		"cloudflare page rule":                              {identiferType: "zone", resourceType: "cloudflare_page_rule", testdataFilename: "cloudflare_page_rule"},
 
+		// We can't yet test `cloudflare_argo` as it makes multiple API requests and
+		// the Go library we are using doesn't play nicely with nested cassettes.
+		// "cloudflare argo": {identiferType: "zone", resourceType: "cloudflare_argo", testdataFilename: "cloudflare_argo"},
+
 		// "cloudflare access group (account)": {identiferType: "account", resourceType: "cloudflare_access_group", testdataFilename: "cloudflare_access_group_account"},
 		// "cloudflare access group (zone)":    {identiferType: "zone", resourceType: "cloudflare_access_group", testdataFilename: "cloudflare_access_group_zone"},
 		// "cloudflare custom certificates":    {identiferType: "zone", resourceType: "cloudflare_custom_certificates", testdataFilename: "cloudflare_custom_certificates"},

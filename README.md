@@ -152,7 +152,7 @@ Last updated May 7, 2021
 | [cloudflare_access_service_token](https://www.terraform.io/docs/providers/cloudflare/r/access_service_token.html) | ✔️ |
 | [cloudflare_account_member](https://www.terraform.io/docs/providers/cloudflare/r/account_member.html) | ✔️ |
 | [cloudflare_api_token](https://www.terraform.io/docs/providers/cloudflare/r/api_token.html) | ✖️ |
-| [cloudflare_argo](https://www.terraform.io/docs/providers/cloudflare/r/argo.html) | ✖️ |
+| [cloudflare_argo](https://www.terraform.io/docs/providers/cloudflare/r/argo.html) | ✔️ |
 | [cloudflare_argo_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/argo_tunnel.html) | ✔️ |
 | [cloudflare_authenticated_origin_pulls](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls.html) | ✖️ |
 | [cloudflare_authenticated_origin_pulls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls_certificate.html) | ✖️ |

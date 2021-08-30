@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"context"
+	"crypto/md5"
 	"encoding/json"
 	"strings"
+	"time"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
@@ -16,6 +18,7 @@ import (
 var resourceImportStringFormats = map[string]string{
 	"cloudflare_access_rule":           ":identifer_type/:identifer_value/:id",
 	"cloudflare_account_member":        ":account_id/:id",
+	"cloudflare_argo":                  ":zone_id/argo",
 	"cloudflare_argo_tunnel":           ":account_id/:id",
 	"cloudflare_byo_ip_prefix":         ":id",
 	"cloudflare_certificate_pack":      ":zone_id/:id",
@@ -75,6 +78,13 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_argo":
+			jsonPayload := []cloudflare.ArgoFeatureSetting{{
+				ID: fmt.Sprintf("%x", md5.Sum([]byte(time.Now().String()))),
+			}}
+
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_argo_tunnel":

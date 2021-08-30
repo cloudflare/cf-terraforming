@@ -456,6 +456,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				// Remap match.request.url to match.request.url_pattern
+				jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["request"].(map[string]interface{})["url_pattern"] = jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["request"].(map[string]interface{})["url"]
+
+				// Remap bypass to bypass_url_patterns
+				jsonStructData[i].(map[string]interface{})["bypass_url_patterns"] = jsonStructData[i].(map[string]interface{})["bypass"]
+
+				// Remap match.response.status to match.response.statuses
+				jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["statuses"] = jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["status"]
+			}
+
 		case "cloudflare_record":
 			simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS"}
 			jsonPayload, err := api.DNSRecords(context.Background(), zoneID, cloudflare.DNSRecord{})
@@ -682,14 +694,33 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 		}
 
 	case []interface{}:
-		var items []string
+		var stringItems []string
+		var intItems []int
+
 		for _, item := range value.([]interface{}) {
-			items = append(items, fmt.Sprintf("%q", item.(string)))
+			switch item.(type) {
+			case string:
+				stringItems = append(stringItems, item.(string))
+			case map[string]interface{}:
+				return writeAttrLine(key, item.(map[string]interface{}), depth, true)
+			case float64:
+				intItems = append(intItems, int(item.(float64)))
+			}
 		}
 
-		if len(items) > 0 {
-			return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
+		if len(stringItems) > 0 {
+			return writeAttrLine(key, stringItems, depth, false)
 		}
+
+		if len(intItems) > 0 {
+			return writeAttrLine(key, intItems, depth, false)
+		}
+	case []int:
+		stringyInts := []string{}
+		for _, int := range value.([]int) {
+			stringyInts = append(stringyInts, fmt.Sprintf("%d", int))
+		}
+		return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(stringyInts, ", "))
 	case []string:
 		var items []string
 		for _, item := range value.([]string) {

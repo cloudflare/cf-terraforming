@@ -1,5 +1,6 @@
 ## Unreleased 
 
+- generate: better validation that `--resource-type` is provided ([#302](https://github.com/cloudflare/cf-terraforming/issues/302))
 - import: fix the `:id` parameter of `cloudflare_zone` ([#300](https://github.com/cloudflare/cf-terraforming/issues/300))
 - generate: add the ability to export PTR DNS records for `cloudflare_record` ([#299](https://github.com/cloudflare/cf-terraforming/issues/299))
 - generate: add support for `cloudflare_zone_settings_override` ([#298](https://github.com/cloudflare/cf-terraforming/issues/298))

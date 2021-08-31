@@ -65,27 +65,32 @@ export CLOUDFLARE_API_KEY='1150bed3f45247b99f7db9696fffa17cbx9'
 export CLOUDFLARE_ACCOUNT_ID='81b06ss3228f488fh84e5e993c2dc17'
 
 # now call cf-terraforming, e.g.
-cf-terraforming generate --resource-type "cloudflare_record" --account $CLOUDFLARE_ACCOUNT_ID
+cf-terraforming generate \
+  --resource-type "cloudflare_record" \
+  --account $CLOUDFLARE_ACCOUNT_ID
 ```
 
 cf-terraforming supports the following environment variables:
 * CLOUDFLARE_API_TOKEN - API Token based authentication
 * CLOUDFLARE_EMAIL, CLOUDFLARE_API_KEY - API Key based authentication
 
-Alternatively, if using a config file, then specify the inputs using the same names the `flag` names.
-Example:
+Alternatively, if using a config file, then specify the inputs using the same
+names the `flag` names. Example:
+
 ```
-$ cat ~/.cf-terraforming.yaml 
+$ cat ~/.cf-terraforming.yaml
 email: "email@domain.com"
 key: "<key>"
 #or
-token: "<token>" 
+token: "<token>"
 ```
 
 ## Example usage
 
 ```bash
-$ cf-terraforming generate --account $CLOUDFLARE_ACCOUNT_ID --resource-type "cloudflare_record"
+$ cf-terraforming generate \
+  --account $CLOUDFLARE_ACCOUNT_ID \
+  --resource-type "cloudflare_record"
 ```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform
@@ -118,21 +123,24 @@ $ brew tap cloudflare/cloudflare
 $ brew install --cask cloudflare/cloudflare/cf-terraforming
 ```
 
-If you use another OS, you will need to download the release directly from 
+If you use another OS, you will need to download the release directly from
 [GitHub Releases](https://github.com/cloudflare/cf-terraforming/releases).
 
 ## Importing with Terraform state
 
-As of the latest release, `cf-terraforming` will output the `terraform import`
-compatible commands for you when you invoke the `import` command. This command
-assumes you have already ran `cf-terraforming generate ...` to output your
-resources.
+`cf-terraforming` will output the `terraform import` compatible commands for you
+when you invoke the `import` command. This command assumes you have already ran
+`cf-terraforming generate ...` to output your resources.
 
 In the future we aim to automate this however for now, it is a manual step to
 allow flexibility in directory structure.
 
 ```
-$ cf-terraforming import --resource-type "cloudflare_record" --email $CLOUDFLARE_EMAIL --key $CLOUDFLARE_API_KEY -z "example.com"
+$ cf-terraforming import \
+  --resource-type "cloudflare_record" \
+  --email $CLOUDFLARE_EMAIL \
+  --key $CLOUDFLARE_API_KEY \
+  --zone $CLOUDFLARE_ZONE_ID
 ```
 
 ## Supported Resources

@@ -1,6 +1,16 @@
 ## Unreleased 
 
-- deps: update hashicorp/terraform-json to 0.11.0 (#261)
+- import: fix the `:id` parameter of `cloudflare_zone` ([#300](https://github.com/cloudflare/cf-terraforming/issues/300))
+- generate: add the ability to export PTR DNS records for `cloudflare_record` ([#299](https://github.com/cloudflare/cf-terraforming/issues/299))
+- generate: add support for `cloudflare_zone_settings_override` ([#298](https://github.com/cloudflare/cf-terraforming/issues/298))
+- generate: add support for `cloudflare_rate_limit` ([#296](https://github.com/cloudflare/cf-terraforming/issues/296))
+- generate: add support for `cloudflare_argo` ([#295](https://github.com/cloudflare/cf-terraforming/issues/295))
+- deps: update github.com/spf13/cobra from 1.1.3 to 1.2.1 ([#277](https://github.com/cloudflare/cf-terraforming/issues/277))
+- deps: update hashicorp/terraform-exec from 0.13.3 to 0.14.0 ([#274](https://github.com/cloudflare/cf-terraforming/issues/274))
+- deps: update cloudflare/cloudflare-go from 0.17.0 to 0.21.0 ([#271](https://github.com/cloudflare/cf-terraforming/issues/271), [#283](https://github.com/cloudflare/cf-terraforming/issues/283), [#287](https://github.com/cloudflare/cf-terraforming/issues/287), [#293](https://github.com/cloudflare/cf-terraforming/issues/293))
+- deps: update zclconf/go-cty from 1.8.3 to 1.8.4  ([#270](https://github.com/cloudflare/cf-terraforming/issues/270))
+- deps: update spf13/viper from 1.7.1 to 1.9.1 ([#267](https://github.com/cloudflare/cf-terraforming/issues/249), [#273](https://github.com/cloudflare/cf-terraforming/issues/273), [#278](https://github.com/cloudflare/cf-terraforming/issues/278), [#290](https://github.com/cloudflare/cf-terraforming/issues/290))
+- deps: update hashicorp/terraform-json to 0.12.0 ([#261](https://github.com/cloudflare/cf-terraforming/issues/261), [#272](https://github.com/cloudflare/cf-terraforming/issues/272))
 - generate: remove `cloudflare_zone.status` from output
 - generate: remap `cloudflare_load_balancer` `default_pool_ids` and `fallback_pool_id` to their schema values
 

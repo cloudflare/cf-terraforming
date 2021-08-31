@@ -33,6 +33,10 @@ var generateCmd = &cobra.Command{
 
 func generateResources() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
+		if resourceType == "" {
+			log.Fatal("you must define a resource type to generate")
+		}
+
 		zoneID = viper.GetString("zone")
 		accountID = viper.GetString("account")
 

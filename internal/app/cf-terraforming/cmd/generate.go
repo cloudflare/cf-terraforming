@@ -493,7 +493,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 
 		case "cloudflare_record":
-			simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS"}
+			simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS", "PTR"}
 			jsonPayload, err := api.DNSRecords(context.Background(), zoneID, cloudflare.DNSRecord{})
 			if err != nil {
 				log.Fatal(err)

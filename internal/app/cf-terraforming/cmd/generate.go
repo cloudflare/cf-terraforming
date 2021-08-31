@@ -594,6 +594,44 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload.Result)
 			m, _ := json.Marshal(jsonPayload.Result)
 			json.Unmarshal(m, &jsonStructData)
+
+		case "cloudflare_zone_settings_override":
+			jsonPayload, err := api.ZoneSettings(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = 1
+			m, _ := json.Marshal(jsonPayload.Result)
+			json.Unmarshal(m, &jsonStructData)
+
+			zoneSettingsStruct := make(map[string]interface{})
+			for _, data := range jsonStructData {
+				keyName := data.(map[string]interface{})["id"].(string)
+				value := data.(map[string]interface{})["value"].(interface{})
+				zoneSettingsStruct[keyName] = value
+			}
+
+			// Remap all settings under "settings" block as well as some of the
+			// attributes that are not 1:1 with the API.
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["id"] = zoneID
+				jsonStructData[i].(map[string]interface{})["settings"] = zoneSettingsStruct
+
+				// zero RTT
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["zero_rtt"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["0rtt"]
+
+				// Mobile subdomain redirects
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_subdomain"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_redirect"]
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_subdomain"].(map[string]interface{})["mobile_subdomain"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_redirect"].(map[string]interface{})["mobile_subdomain"]
+
+				// HSTS
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["enabled"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["enabled"]
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["include_subdomains"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["include_subdomains"]
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["max_age"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["max_age"]
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["preload"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["preload"]
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["nosniff"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["nosniff"]
+			}
 		default:
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
 			return

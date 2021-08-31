@@ -139,7 +139,7 @@ $ cf-terraforming import --resource-type "cloudflare_record" --email $CLOUDFLARE
 
 The following resources can be used with both `generate` and `import`
 
-Last updated May 7, 2021
+Last updated Aug 31, 2021
 
 | Resource | Supported |
 |----------|-----------|
@@ -190,7 +190,7 @@ Last updated May 7, 2021
 | [cloudflare_zone](https://www.terraform.io/docs/providers/cloudflare/r/zone.html) | ✔️ |
 | [cloudflare_zone_dnssec](https://www.terraform.io/docs/providers/cloudflare/r/zone_dnssec.html) | ✖️ |
 | [cloudflare_zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown.html) | ✔️ |
-| [cloudflare_zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override.html) | ✖️ |
+| [cloudflare_zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override.html) | ✔️ |
 
 ## Testing
 

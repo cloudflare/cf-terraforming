@@ -36,7 +36,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_waf_override":          ":zone_id/:id",
 	"cloudflare_worker_route":          ":zone_id/:id",
 	"cloudflare_workers_kv_namespace":  ":id",
-	"cloudflare_zone":                  ":zone_id",
+	"cloudflare_zone":                  ":id",
 	"cloudflare_zone_lockdown":         ":zone_id/:id",
 }
 

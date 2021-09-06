@@ -30,3 +30,32 @@ interactions:
     status: 200 OK
     code: 200
     duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/argo/tiered_caching
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "tiered_caching",
+          "value": "off",
+          "modified_on": "2021-08-29T22:07:38.044691Z",
+          "editable": true
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

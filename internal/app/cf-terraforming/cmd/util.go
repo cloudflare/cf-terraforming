@@ -119,8 +119,8 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 	}
 }
 
-// sanitiseTerraformResourceName ensures that a Terraform resource name matches the
-// restrictions imposed by core.
+// sanitiseTerraformResourceName ensures that a Terraform resource name matches
+// the restrictions imposed by core.
 func sanitiseTerraformResourceName(s string) string {
 	re := regexp.MustCompile(`[^a-zA-Z0-9_]+`)
 	return re.ReplaceAllString(s, "_")
@@ -157,7 +157,8 @@ func flattenAttrMap(l []interface{}) map[string]interface{} {
 	return result
 }
 
-// nestBlocks takes a schema and generates all of the appropriate nesting of any top-level blocks as well as nested lists or sets.
+// nestBlocks takes a schema and generates all of the appropriate nesting of any
+// top-level blocks as well as nested lists or sets.
 func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, depth int) string {
 	output := ""
 
@@ -190,7 +191,8 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 
 			switch attrStruct := structData[block].(type) {
 
-			// Case for if the inner block's attributes are a map of interfaces, in which case we can directly add them to the config.
+			// Case for if the inner block's attributes are a map of interfaces, in
+			// which case we can directly add them to the config.
 			case map[string]interface{}:
 				if attrStruct != nil {
 					nestedBlockOutput += writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct, depth)
@@ -202,7 +204,8 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 					output += strings.Repeat(" ", depth) + "}\n"
 				}
 
-			// Case for if the inner block's attributes are a list of map interfaces, in which case this should be treated as a duplicating block.
+			// Case for if the inner block's attributes are a list of map interfaces,
+			// in which case this should be treated as a duplicating block.
 			case []map[string]interface{}:
 				for _, v := range attrStruct {
 					repeatedBlockOutput := ""

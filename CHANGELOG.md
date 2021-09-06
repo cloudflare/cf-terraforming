@@ -1,6 +1,7 @@
 ## Unreleased 
 
 - generate: add support for `cloudflare_ruleset` ([#305](https://github.com/cloudflare/cf-terraforming/issues/305))
+- generate: don't export "universal" `cloudflare_certificate_pack` ([#306](https://github.com/cloudflare/cf-terraforming/issues/306))
 
 ## 0.4.0 (2021-09-01)
 

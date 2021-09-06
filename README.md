@@ -185,6 +185,7 @@ Last updated Aug 31, 2021
 | [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html) | ✔️ |
 | [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html) | ✖️ |
 | [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record.html) | ✔️ |
+| [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset.html) | ✔️ |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application.html) | ✔️ |
 | [cloudflare_waf_group](https://www.terraform.io/docs/providers/cloudflare/r/waf_group.html) | ✖️ |
 | [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override.html) | ✔️ |

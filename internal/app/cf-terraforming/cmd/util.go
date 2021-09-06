@@ -181,10 +181,21 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 
 			nestedBlockOutput := ""
 
-			// If the attribute we're looking at has further nesting, we'll recursively call nestBlocks.
+			// If the attribute we're looking at has further nesting, we'll
+			// recursively call nestBlocks.
 			if len(schemaBlock.NestedBlocks[block].Block.NestedBlocks) > 0 {
 				if s, ok := structData[block]; ok {
-					nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), depth+2)
+					switch s.(type) {
+					case map[string]interface{}:
+						nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), depth+2)
+					case []interface{}:
+						for _, nestedItem := range s.([]interface{}) {
+							nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), depth+2)
+						}
+
+					default:
+						log.Debugf("unable to generate recursively nested blocks for %T", s)
+					}
 				}
 			}
 
@@ -215,10 +226,37 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 					if repeatedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
 						output += strings.Repeat(" ", depth) + block + " {\n"
 						output += repeatedBlockOutput
+
+						if nestedBlockOutput != "" {
+							output += nestedBlockOutput
+						}
+
 						output += strings.Repeat(" ", depth) + "}\n"
 					}
 				}
 
+			// Case for duplicated blocks that commonly end up as an array or list at
+			// the API level.
+			case []interface{}:
+				for _, v := range attrStruct {
+					repeatedBlockOutput := ""
+
+					if attrStruct != nil {
+						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}), depth)
+					}
+
+					// Write the block if we had data for it, or if it is a required block.
+					if repeatedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
+						output += strings.Repeat(" ", depth) + block + " {\n"
+						output += repeatedBlockOutput
+
+						if nestedBlockOutput != "" {
+							output += nestedBlockOutput
+						}
+
+						output += strings.Repeat(" ", depth) + "}\n"
+					}
+				}
 			default:
 				log.Debugf("unexpected attribute struct type %T for block %s", attrStruct, block)
 			}

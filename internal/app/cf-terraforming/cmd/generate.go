@@ -521,6 +521,60 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
 				}
 			}
+		case "cloudflare_ruleset":
+			if accountID != "" {
+				jsonPayload, err := api.ListAccountRulesets(context.Background(), accountID)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				var nonManagedRules []cloudflare.Ruleset
+
+				// A little annoying but makes more sense doing it this way. Only append
+				// the non-managed rules to the usable nonManagedRules variable instead
+				// of attempting to delete from an existing slice and just reassign.
+				for _, r := range jsonPayload {
+					if r.Kind != string(cloudflare.RulesetKindManaged) {
+						nonManagedRules = append(nonManagedRules, r)
+					}
+				}
+				jsonPayload = nonManagedRules
+
+				for i, rule := range nonManagedRules {
+					ruleset, _ := api.GetAccountRuleset(context.Background(), accountID, rule.ID)
+					jsonPayload[i].Rules = ruleset.Rules
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			} else {
+				jsonPayload, err := api.ListZoneRulesets(context.Background(), zoneID)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				var nonManagedRules []cloudflare.Ruleset
+
+				// A little annoying but makes more sense doing it this way. Only append
+				// the non-managed rules to the usable nonManagedRules variable instead
+				// of attempting to delete from an existing slice and just reassign.
+				for _, r := range jsonPayload {
+					if r.Kind != string(cloudflare.RulesetKindManaged) {
+						nonManagedRules = append(nonManagedRules, r)
+					}
+				}
+				jsonPayload = nonManagedRules
+
+				for i, rule := range nonManagedRules {
+					ruleset, _ := api.GetZoneRuleset(context.Background(), zoneID, rule.ID)
+					jsonPayload[i].Rules = ruleset.Rules
+				}
+
+				resourceCount = len(jsonPayload)
+				m, _ := json.Marshal(jsonPayload)
+				json.Unmarshal(m, &jsonStructData)
+			}
 		case "cloudflare_spectrum_application":
 			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)
 			if err != nil {

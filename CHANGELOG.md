@@ -1,5 +1,7 @@
 ## Unreleased 
 
+- generate: add support for `cloudflare_ruleset` ([#305](https://github.com/cloudflare/cf-terraforming/issues/305))
+
 ## 0.4.0 (2021-09-01)
 
 - generate: better validation that `--resource-type` is provided ([#302](https://github.com/cloudflare/cf-terraforming/issues/302))

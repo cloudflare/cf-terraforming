@@ -709,9 +709,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 				case ty.IsCollectionType():
 					switch {
-					case ty.IsListType(), ty.IsSetType():
-						output += writeAttrLine(attrName, structData[attrName], 2, false)
-					case ty.IsMapType():
+					case ty.IsListType(), ty.IsSetType(), ty.IsMapType():
 						output += writeAttrLine(attrName, structData[attrName], 2, false)
 					default:
 						log.Debugf("unexpected collection type %q", ty.FriendlyName())

@@ -789,7 +789,13 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			output += "}\n\n"
 		}
 
+		output, err = tf.FormatString(context.Background(), output)
+		if err != nil {
+			log.Fatalf("failed to format output: %s", err)
+		}
+
 		fmt.Fprint(cmd.OutOrStdout(), output)
+
 	}
 }
 

@@ -17,7 +17,8 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
           id      = "78723a9e0c7c4c6dbec5684cb766231d"
         }
       }
-      id = "70339d97bdb34195bbf054b1ebe81f76"
+      id      = "70339d97bdb34195bbf054b1ebe81f76"
+      version = "latest"
     }
   }
 }
@@ -35,6 +36,12 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     id          = "549e64153ff14d2cb5a5ef88c1f5bdbc"
     ref         = "549e64153ff14d2cb5a5ef88c1f5bdbc"
     version     = "1"
+    ratelimit {
+      characteristics     = ["ip.src", "cf.colo.id"]
+      mitigation_timeout  = 30
+      period              = 60
+      requests_per_period = 100
+    }
   }
 }
 
@@ -52,7 +59,8 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     ref         = "c6893ad10fb344e9b8be3c0c3575adc9"
     version     = "1"
     action_parameters {
-      id = "4d21379b4f9f4bb088e0729962c8b3cf"
+      id      = "4d21379b4f9f4bb088e0729962c8b3cf"
+      version = "latest"
     }
   }
 }
@@ -148,7 +156,8 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
           id      = "34158d546873469a8f8ccee19139627b"
         }
       }
-      id = "efb7b8c949ac4650a09736fc376e9aee"
+      id      = "efb7b8c949ac4650a09736fc376e9aee"
+      version = "latest"
     }
   }
 }

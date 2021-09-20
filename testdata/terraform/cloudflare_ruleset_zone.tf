@@ -36,6 +36,12 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     id          = "549e64153ff14d2cb5a5ef88c1f5bdbc"
     ref         = "549e64153ff14d2cb5a5ef88c1f5bdbc"
     version     = "1"
+    ratelimit {
+      characteristics     = ["ip.src", "cf.colo.id"]
+      mitigation_timeout  = 30
+      period              = 60
+      requests_per_period = 100
+    }
   }
 }
 

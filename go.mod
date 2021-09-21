@@ -5,11 +5,10 @@ go 1.16
 require (
 	cloud.google.com/go/storage v1.16.1 // indirect
 	github.com/aws/aws-sdk-go v1.40.45 // indirect
-	github.com/cloudflare/cloudflare-go v0.23.0
+	github.com/cloudflare/cloudflare-go v0.24.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
-	github.com/hashicorp/go-getter v1.5.3 // indirect
 	github.com/hashicorp/terraform-exec v0.14.0
 	github.com/hashicorp/terraform-json v0.12.0
 	github.com/klauspost/compress v1.13.6 // indirect

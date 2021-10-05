@@ -255,8 +255,9 @@ github.com/hashicorp/serf v0.8.2/go.mod h1:6hOLApaqBFA1NXqRQAsxw9QxuDEvNxSQRwA/J
 github.com/hashicorp/serf v0.9.5/go.mod h1:UWDWwZeL5cuWDJdl0C6wrvrUwEqtQ4ZKBKKENpqIUyk=
 github.com/hashicorp/terraform-exec v0.14.0 h1:UQoUcxKTZZXhyyK68Cwn4mApT4mnFPmEXPiqaHL9r+w=
 github.com/hashicorp/terraform-exec v0.14.0/go.mod h1:qrAASDq28KZiMPDnQ02sFS9udcqEkRly002EA2izXTA=
-github.com/hashicorp/terraform-json v0.12.0 h1:8czPgEEWWPROStjkWPUnTQDXmpmZPlkQAwYYLETaTvw=
 github.com/hashicorp/terraform-json v0.12.0/go.mod h1:pmbq9o4EuL43db5+0ogX10Yofv1nozM+wskr/bGFJpI=
+github.com/hashicorp/terraform-json v0.13.0 h1:Li9L+lKD1FO5RVFRM1mMMIBDoUHslOniyEi5CM+FWGY=
+github.com/hashicorp/terraform-json v0.13.0/go.mod h1:y5OdLBCT+rxbwnpxZs9kGL7R9ExU76+cpdY8zHwoazk=
 github.com/huandu/xstrings v1.3.2/go.mod h1:y5/lhBue+AyNmUVz9RLU9xbLR0o4KIIExikq4ovT0aE=
 github.com/ianlancetaylor/demangle v0.0.0-20181102032728-5e5cf60278f6/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=
 github.com/ianlancetaylor/demangle v0.0.0-20200824232613-28f6c0f3b639/go.mod h1:aSSvb/t6k1mPoxDqO4vJh6VOCGPwU4O0C2/Eqndh1Sc=

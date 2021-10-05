@@ -10,7 +10,7 @@ require (
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/googleapis/gax-go/v2 v2.1.1 // indirect
 	github.com/hashicorp/terraform-exec v0.14.0
-	github.com/hashicorp/terraform-json v0.12.0
+	github.com/hashicorp/terraform-json v0.13.0
 	github.com/klauspost/compress v1.13.6 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect

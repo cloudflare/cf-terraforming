@@ -6,10 +6,6 @@ resource "cloudflare_zone_settings_override" "terraform_managed_resource" {
       html = "off"
       js   = "off"
     }
-    mobile_redirect {
-      status    = "off"
-      strip_uri = false
-    }
     security_header {
       enabled            = true
       include_subdomains = true

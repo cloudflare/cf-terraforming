@@ -688,8 +688,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["zero_rtt"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["0rtt"]
 
 				// Mobile subdomain redirects
-				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_subdomain"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_redirect"]
-				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_subdomain"].(map[string]interface{})["mobile_subdomain"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_redirect"].(map[string]interface{})["mobile_subdomain"]
+				if jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_redirect"].(map[string]interface{})["status"] == "off" {
+					jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["mobile_redirect"] = nil
+				}
 
 				// HSTS
 				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["enabled"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["enabled"]

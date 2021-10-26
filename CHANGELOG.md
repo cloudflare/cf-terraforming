@@ -1,7 +1,10 @@
 ## Unreleased 
 
+## 0.5.0 (2021-10-26)
+
 - generate: add support for `cloudflare_ruleset` ([#305](https://github.com/cloudflare/cf-terraforming/issues/305))
 - generate: don't export "universal" `cloudflare_certificate_pack` ([#306](https://github.com/cloudflare/cf-terraforming/issues/306))
+- generate: don't export "mobile_redirect" `cloudflare_zone_settings_override` ([#320](https://github.com/cloudflare/cf-terraforming/issues/320))
 
 ## 0.4.0 (2021-09-01)
 

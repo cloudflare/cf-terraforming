@@ -147,7 +147,7 @@ $ cf-terraforming import \
 
 The following resources can be used with both `generate` and `import`
 
-Last updated Aug 31, 2021
+Last updated Nov 2, 2021
 
 | Resource | Supported |
 |----------|-----------|
@@ -183,7 +183,7 @@ Last updated Aug 31, 2021
 | [cloudflare_magic_firewall_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/magic_firewall_ruleset.html) | ❌ |
 | [cloudflare_origin_ca_certificate](https://www.terraform.io/docs/providers/cloudflare/r/origin_ca_certificate.html) | ✅ |
 | [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule.html) | ✅ |
-| [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html) | ❌ |
+| [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit.html) | ✅ |
 | [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record.html) | ✅ |
 | [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset.html) | ✅ |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application.html) | ✅ |

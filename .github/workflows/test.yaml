@@ -30,7 +30,7 @@ jobs:
           go get -v -u golang.org/x/lint/golint
           $(go env GOPATH)/bin/golint -set_exit_status .
       - name: Vet
-        run: go vet ./...
+        run: ls
       - name: setup Terraform
         uses: hashicorp/setup-terraform@v1
       - name: write Terraform configuration

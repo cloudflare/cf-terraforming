@@ -22,11 +22,13 @@ resource "cloudflare_rate_limit" "terraform_managed_resource" {
       url_pattern = "example.com"
     }
     response {
-      headers {
-        name  = "My_origin_field"
-        op    = "eq"
-        value = "block_request"
-      }
+      headers = [
+       {
+           name  = "My_origin_field"
+           op    = "eq"
+           value = "block_request"
+       }
+      ]
       origin_traffic = false
       statuses       = [401, 403]
     }

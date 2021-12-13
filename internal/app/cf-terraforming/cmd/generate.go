@@ -825,22 +825,21 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 				return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
 			}
 		}
-
 	case []interface{}:
 		var stringItems []string
 		var intItems []int
+		var interfaceItems []map[string]interface{}
 
 		for _, item := range value.([]interface{}) {
 			switch item.(type) {
 			case string:
 				stringItems = append(stringItems, item.(string))
 			case map[string]interface{}:
-				return writeAttrLine(key, item.(map[string]interface{}), depth, true)
+				interfaceItems = append(interfaceItems, item.(map[string]interface{}))
 			case float64:
 				intItems = append(intItems, int(item.(float64)))
 			}
 		}
-
 		if len(stringItems) > 0 {
 			return writeAttrLine(key, stringItems, depth, false)
 		}
@@ -848,6 +847,26 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 		if len(intItems) > 0 {
 			return writeAttrLine(key, intItems, depth, false)
 		}
+
+		if len(interfaceItems) > 0 {
+			return writeAttrLine(key, interfaceItems, depth, false)
+		}
+
+	case []map[string]interface{}:
+		var stringyInterfaces []string
+		var op string
+		var mapLen = len(value.([]map[string]interface{}))
+		for i, item := range value.([]map[string]interface{}) {
+			// Use an empty key to prevent rendering the key
+			op = writeAttrLine("", item, depth, true)
+			// if condition handles adding new line for just the last element
+			if i != mapLen-1 {
+				op = strings.TrimRight(op, "\n")
+			}
+			stringyInterfaces = append(stringyInterfaces, op)
+		}
+		return fmt.Sprintf("%s%s = [ \n%s ]\n", strings.Repeat(" ", depth), key, strings.Join(stringyInterfaces, ",\n"))
+
 	case []int:
 		stringyInts := []string{}
 		for _, int := range value.([]int) {

@@ -15,6 +15,7 @@ write the Terraform configuration to describe them.
 > NOTE: If you would like to export resources compatible with Terraform < 0.12.x,
 > you will need to download an older release as this tool no longer supports it.
 
+
 ## Usage
 
 ```

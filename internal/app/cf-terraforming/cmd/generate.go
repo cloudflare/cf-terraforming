@@ -494,11 +494,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 
 			for i := 0; i < resourceCount; i++ {
+				var bypassItems []string
+
 				// Remap match.request.url to match.request.url_pattern
 				jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["request"].(map[string]interface{})["url_pattern"] = jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["request"].(map[string]interface{})["url"]
 
 				// Remap bypass to bypass_url_patterns
-				jsonStructData[i].(map[string]interface{})["bypass_url_patterns"] = jsonStructData[i].(map[string]interface{})["bypass"]
+				for _, item := range jsonStructData[i].(map[string]interface{})["bypass"].([]interface{}) {
+					bypassItems = append(bypassItems, item.(map[string]interface{})["value"].(string))
+				}
+				jsonStructData[i].(map[string]interface{})["bypass_url_patterns"] = bypassItems
 
 				// Remap match.response.status to match.response.statuses
 				jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["statuses"] = jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["status"]

@@ -1,4 +1,9 @@
-## Unreleased 
+## Unreleased
+
+## 0.6.0 (2021-12-14)
+
+- generate: add support for nested map interfaces in request ([#332](https://github.com/cloudflare/cf-terraforming/pull/332))
+- generate: add support for CLOUDFLARE_API_HOSTNAME ([#332](https://github.com/cloudflare/cf-terraforming/pull/332))
 
 ## 0.5.0 (2021-10-26)
 

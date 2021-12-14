@@ -494,11 +494,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 
 			for i := 0; i < resourceCount; i++ {
+				var bypassItems []string
+
 				// Remap match.request.url to match.request.url_pattern
 				jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["request"].(map[string]interface{})["url_pattern"] = jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["request"].(map[string]interface{})["url"]
 
 				// Remap bypass to bypass_url_patterns
-				jsonStructData[i].(map[string]interface{})["bypass_url_patterns"] = jsonStructData[i].(map[string]interface{})["bypass"]
+				for _, item := range jsonStructData[i].(map[string]interface{})["bypass"].([]interface{}) {
+					bypassItems = append(bypassItems, item.(map[string]interface{})["value"].(string))
+				}
+				jsonStructData[i].(map[string]interface{})["bypass_url_patterns"] = bypassItems
 
 				// Remap match.response.status to match.response.statuses
 				jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["statuses"] = jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["status"]
@@ -825,22 +830,21 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 				return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
 			}
 		}
-
 	case []interface{}:
 		var stringItems []string
 		var intItems []int
+		var interfaceItems []map[string]interface{}
 
 		for _, item := range value.([]interface{}) {
 			switch item.(type) {
 			case string:
 				stringItems = append(stringItems, item.(string))
 			case map[string]interface{}:
-				return writeAttrLine(key, item.(map[string]interface{}), depth, true)
+				interfaceItems = append(interfaceItems, item.(map[string]interface{}))
 			case float64:
 				intItems = append(intItems, int(item.(float64)))
 			}
 		}
-
 		if len(stringItems) > 0 {
 			return writeAttrLine(key, stringItems, depth, false)
 		}
@@ -848,6 +852,26 @@ func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) s
 		if len(intItems) > 0 {
 			return writeAttrLine(key, intItems, depth, false)
 		}
+
+		if len(interfaceItems) > 0 {
+			return writeAttrLine(key, interfaceItems, depth, false)
+		}
+
+	case []map[string]interface{}:
+		var stringyInterfaces []string
+		var op string
+		var mapLen = len(value.([]map[string]interface{}))
+		for i, item := range value.([]map[string]interface{}) {
+			// Use an empty key to prevent rendering the key
+			op = writeAttrLine("", item, depth, true)
+			// if condition handles adding new line for just the last element
+			if i != mapLen-1 {
+				op = strings.TrimRight(op, "\n")
+			}
+			stringyInterfaces = append(stringyInterfaces, op)
+		}
+		return fmt.Sprintf("%s%s = [ \n%s ]\n", strings.Repeat(" ", depth), key, strings.Join(stringyInterfaces, ",\n"))
+
 	case []int:
 		stringyInts := []string{}
 		for _, int := range value.([]int) {

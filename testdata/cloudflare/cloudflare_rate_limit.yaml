@@ -38,6 +38,11 @@ interactions:
                     "name": "My_origin_field",
                     "op": "eq",
                     "value": "block_request"
+                  },
+                  {
+                    "name": "Other",
+                    "op": "eq",
+                    "value": "block_request"
                   }
                 ]
               }
@@ -46,6 +51,10 @@ interactions:
               {
                 "name": "url",
                 "value": "example.com/allowed-bypass"
+              },
+              {
+                "name": "url",
+                "value": "example.com/allowed-bypass-other"
               }
             ],
             "login_protect": false,

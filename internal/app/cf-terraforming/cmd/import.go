@@ -16,6 +16,9 @@ import (
 // resourceImportStringFormats contains a mapping of the resource type to the
 // composite ID that is compatible with performing an import.
 var resourceImportStringFormats = map[string]string{
+//
+    "cloudflare_access_application":    ":account_id/:id",  
+//
 	"cloudflare_access_rule":           ":identifer_type/:identifer_value/:id",
 	"cloudflare_account_member":        ":account_id/:id",
 	"cloudflare_argo":                  ":zone_id/argo",
@@ -55,6 +58,15 @@ func runImport() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		var jsonStructData []interface{}
 		switch resourceType {
+//
+		case "cloudflare_access_application":
+			jsonPayload, _, err := api.AccessApplications(context.Background(), accountID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+//
 		case "cloudflare_access_rule":
 			if accountID != "" {
 				jsonPayload, err := api.ListAccountAccessRules(context.Background(), accountID, cloudflare.AccessRule{}, 1)

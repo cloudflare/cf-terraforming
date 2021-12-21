@@ -80,6 +80,9 @@ interactions:
               {
                 "id": "host_header_override",
                 "value": "not-example.com"
+              },
+              {
+                "id": "disable_apps"
               }
             ],
             "priority": 1,

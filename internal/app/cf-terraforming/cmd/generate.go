@@ -718,7 +718,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		output := ""
-
+		// need to keep track of the previous reousrce ID for creating dependancies for FW and Page rules.
+		previousResourceID := ""
 		for i := 0; i < resourceCount; i++ {
 			structData := jsonStructData[i].(map[string]interface{})
 
@@ -739,6 +740,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
 
+			if previousResourceID != "" && resourceType == "cloudflare_firewall_rule" {
+				output += strings.Join([]string{"depends_on =", strings.Trim(fmt.Sprintf("[%s.%s]", resourceType, previousResourceID), "\""), "\n"}, "")
+			}
+			//update our previous resourceID to our current resourceID
+			previousResourceID = resourceID
+
 			sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
 			for k := range r.Block.Attributes {
 				sortedBlockAttributes = append(sortedBlockAttributes, k)
@@ -747,6 +754,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			// Block attributes are for any attributes where assignment is involved.
 			for _, attrName := range sortedBlockAttributes {
+
 				// Don't bother outputting the ID for the resource as that is only for
 				// internal use (such as importing state).
 				if attrName == "id" {
@@ -803,7 +811,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		fmt.Fprint(cmd.OutOrStdout(), output)
-
 	}
 }
 

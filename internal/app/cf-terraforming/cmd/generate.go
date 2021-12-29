@@ -634,9 +634,21 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			m, _ := json.Marshal(jsonPayload.Routes)
 			json.Unmarshal(m, &jsonStructData)
 
-			// remap "script_name" to the "script" value.
+			/*
+				remap "script_name" to the "script" value.
+				Add zone_id to each resource as well.
+
+				The reason we're adding zone_id here is that its a required field.
+				Its needs to be included when using either `filter` or `routes` endpoint.
+				Currently, we don't add it when using the `routes` endpoint due to logic below
+				where we only add `zone_id` if an `accountID` is not available (added for page_rules)
+				https://github.com/cloudflare/cf-terraforming/pull/259.
+
+				This just forces zone_id to exist for cloudflare_worker_route.
+			*/
 			for i := 0; i < resourceCount; i++ {
 				jsonStructData[i].(map[string]interface{})["script_name"] = jsonStructData[i].(map[string]interface{})["script"]
+				jsonStructData[i].(map[string]interface{})["zone_id"] = zoneID
 			}
 		case "cloudflare_zone":
 			jsonPayload, err := api.ListZones(context.Background())

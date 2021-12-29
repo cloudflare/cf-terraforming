@@ -1,0 +1,34 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/workers/filters
+      method: GET
+    response:
+      body: |
+        {
+          "success": true,
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "id": "9a7806061c88ada191ed06f989cc3dac",
+              "pattern": "example.com/*",
+              "enabled": true,
+              "request_limit_fail_open": false
+            }
+          ]
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

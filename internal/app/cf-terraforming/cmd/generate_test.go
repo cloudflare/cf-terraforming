@@ -115,7 +115,7 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare ruleset":                                {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone"},
 		"cloudflare spectrum application":                   {identiferType: "zone", resourceType: "cloudflare_spectrum_application", testdataFilename: "cloudflare_spectrum_application"},
 		"cloudflare WAF override":                           {identiferType: "zone", resourceType: "cloudflare_waf_override", testdataFilename: "cloudflare_waf_override"},
-		"cloudflare worker route (filter)":                  {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route_filter"},
+		"cloudflare worker route (filters)":                 {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route_filters"},
 		"cloudflare worker route (routes)":                  {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route_routes"},
 		"cloudflare workers kv namespace":                   {identiferType: "account", resourceType: "cloudflare_workers_kv_namespace", testdataFilename: "cloudflare_workers_kv_namespace"},
 		"cloudflare zone lockdown":                          {identiferType: "zone", resourceType: "cloudflare_zone_lockdown", testdataFilename: "cloudflare_zone_lockdown"},
@@ -149,7 +149,17 @@ func TestResourceGeneration(t *testing.T) {
 			storedAccountID := viper.GetString("account")
 			storedZoneID := viper.GetString("zone")
 
-			if tc.identiferType == "account" {
+			// edge case for the weird workflow that is cloudflare_worker_routes
+			if tc.testdataFilename == "cloudflare_worker_route_routes" {
+				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
+					&http.Client{
+						Transport: r,
+					},
+				), cloudflare.UsingAccount(cloudflareTestAccountID))
+				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID, "--account", cloudflareTestAccountID)
+				accountID = storedAccountID
+				zoneID = storedZoneID
+			} else if tc.identiferType == "account" {
 				zoneID = ""
 				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
 					&http.Client{

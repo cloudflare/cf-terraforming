@@ -148,7 +148,12 @@ func flattenAttrMap(l []interface{}) map[string]interface{} {
 			}
 
 			if val, ok := t["value"]; ok {
-				attrVal = val
+				if val == nil {
+					log.Debugf("Found nil 'value' for %s attempting to flattenAttrMap, coercing to true", attrID)
+					attrVal = true
+				} else {
+					attrVal = val
+				}
 			} else {
 				log.Debug("no 'value' in map when attempting to flattenAttrMap")
 			}

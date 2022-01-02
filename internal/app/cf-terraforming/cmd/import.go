@@ -16,9 +16,7 @@ import (
 // resourceImportStringFormats contains a mapping of the resource type to the
 // composite ID that is compatible with performing an import.
 var resourceImportStringFormats = map[string]string{
-//
     "cloudflare_access_application":    ":account_id/:id",  
-//
 	"cloudflare_access_rule":           ":identifer_type/:identifer_value/:id",
 	"cloudflare_account_member":        ":account_id/:id",
 	"cloudflare_argo":                  ":zone_id/argo",

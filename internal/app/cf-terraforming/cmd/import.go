@@ -58,7 +58,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		var jsonStructData []interface{}
 		switch resourceType {
-//
 		case "cloudflare_access_application":
 			jsonPayload, _, err := api.AccessApplications(context.Background(), accountID, cloudflare.PaginationOptions{})
 			if err != nil {
@@ -66,7 +65,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
-//
 		case "cloudflare_access_rule":
 			if accountID != "" {
 				jsonPayload, err := api.ListAccountAccessRules(context.Background(), accountID, cloudflare.AccessRule{}, 1)

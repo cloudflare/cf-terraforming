@@ -38,9 +38,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		zoneID = viper.GetString("zone")
-		//
 		packageID = viper.GetString("package")
-		//
 		accountID = viper.GetString("account")
 
 		tmpDir, err := ioutil.TempDir("", "tfinstall")

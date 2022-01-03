@@ -9,7 +9,6 @@ import (
 )
 
 var log = logrus.New()
-//var cfgFile, zoneID, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
 var cfgFile, zoneID, packageID, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
 var verbose bool
 var api *cloudflare.API

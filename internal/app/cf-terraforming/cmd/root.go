@@ -9,7 +9,8 @@ import (
 )
 
 var log = logrus.New()
-var cfgFile, zoneID, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
+//var cfgFile, zoneID, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
+var cfgFile, zoneID, packageID, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
 var verbose bool
 var api *cloudflare.API
 var terraformImportCmdPrefix = "terraform import"
@@ -51,6 +52,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&zoneID, "zone", "z", "", "Limit the export to a single zone ID")
 	viper.BindPFlag("zone", rootCmd.PersistentFlags().Lookup("zone"))
 	viper.BindEnv("zone", "CLOUDFLARE_ZONE_ID")
+
+	// Package selection
+	rootCmd.PersistentFlags().StringVarP(&packageID, "package", "p", "", "Limit the export to a single package ID")
+	viper.BindPFlag("package", rootCmd.PersistentFlags().Lookup("package"))
+	viper.BindEnv("package", "CLOUDFLARE_PACKAGE_ID")
 
 	// Account
 	rootCmd.PersistentFlags().StringVarP(&accountID, "account", "a", "", "Use specific account ID for commands")

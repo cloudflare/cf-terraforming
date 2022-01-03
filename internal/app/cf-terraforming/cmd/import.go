@@ -34,6 +34,8 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_record":                ":zone_id/:id",
 	"cloudflare_spectrum_application":  ":zone_id/:id",
 	"cloudflare_waf_override":          ":zone_id/:id",
+	"cloudflare_waf_package":           ":zone_id/:id",
+	"cloudflare_waf_group":             ":zone_id/:id",
 	"cloudflare_worker_route":          ":zone_id/:id",
 	"cloudflare_workers_kv_namespace":  ":id",
 	"cloudflare_zone":                  ":id",
@@ -219,6 +221,13 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_waf_package":
 			jsonPayload, err := api.ListWAFPackages(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_waf_group":
+			jsonPayload, err := api.ListWAFGroups(context.Background(), zoneID, packageID)
 			if err != nil {
 				log.Fatal(err)
 			}

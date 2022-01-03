@@ -38,6 +38,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		zoneID = viper.GetString("zone")
+		//
+		packageID = viper.GetString("package")
+		//
 		accountID = viper.GetString("account")
 
 		tmpDir, err := ioutil.TempDir("", "tfinstall")
@@ -608,6 +611,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_waf_package":
 			jsonPayload, err := api.ListWAFPackages(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_waf_group":
+			jsonPayload, err := api.ListWAFGroups(context.Background(), zoneID, packageID)
 			if err != nil {
 				log.Fatal(err)
 			}

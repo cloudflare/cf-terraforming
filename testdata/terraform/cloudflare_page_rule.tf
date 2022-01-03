@@ -38,6 +38,7 @@ resource "cloudflare_page_rule" "terraform_managed_resource" {
       ttl   = 0
     }
     browser_cache_ttl    = 1800
+    disable_apps         = true
     host_header_override = "not-example.com"
   }
 }

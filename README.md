@@ -61,13 +61,13 @@ export CLOUDFLARE_API_TOKEN='Hzsq3Vub-7Y-hSTlAaLH3Jq_YfTUOCcgf22_Fs-j'
 export CLOUDFLARE_EMAIL='user@example.com'
 export CLOUDFLARE_API_KEY='1150bed3f45247b99f7db9696fffa17cbx9'
 
-# specify Account ID
-export CLOUDFLARE_ACCOUNT_ID='81b06ss3228f488fh84e5e993c2dc17'
+# specify zone ID
+export CLOUDFLARE_ZONE_ID='81b06ss3228f488fh84e5e993c2dc17'
 
 # now call cf-terraforming, e.g.
 cf-terraforming generate \
   --resource-type "cloudflare_record" \
-  --account $CLOUDFLARE_ACCOUNT_ID
+  --zone $CLOUDFLARE_ZONE_ID
 ```
 
 cf-terraforming supports the following environment variables:
@@ -89,7 +89,7 @@ token: "<token>"
 
 ```bash
 $ cf-terraforming generate \
-  --account $CLOUDFLARE_ACCOUNT_ID \
+  --zone $CLOUDFLARE_ZONE_ID \
   --resource-type "cloudflare_record"
 ```
 
@@ -113,6 +113,7 @@ resource "cloudflare_record" "terraform_managed_resource" {
   balancers, spectrum applications, etc)
 * A valid Cloudflare API key and sufficient permissions to access the resources
   you are requesting via the API
+* An initialised Terrafrom directory
 
 ## Installation
 

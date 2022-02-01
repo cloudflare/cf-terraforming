@@ -5,9 +5,8 @@ go 1.16
 require (
 	cloud.google.com/go/storage v1.18.2 // indirect
 	github.com/aws/aws-sdk-go v1.42.23 // indirect
-	github.com/cloudflare/cloudflare-go v0.29.0
+	github.com/cloudflare/cloudflare-go v0.31.0
 	github.com/dnaeon/go-vcr v1.2.0
-	github.com/hashicorp/hc-install v0.3.1 // indirect
 	github.com/hashicorp/terraform-exec v0.15.0
 	github.com/hashicorp/terraform-json v0.13.0
 	github.com/klauspost/compress v1.13.6 // indirect

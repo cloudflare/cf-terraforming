@@ -66,6 +66,11 @@ func testDataFile(filename string) string {
 
 func sharedPreRun(cmd *cobra.Command, args []string) {
 	accountID = viper.GetString("account")
+	zoneID = viper.GetString("zone")
+
+	if accountID != "" && zoneID != "" {
+		log.Fatal("--account and --zone are mutually exclusive and cannot be used together")
+	}
 
 	if apiToken = viper.GetString("token"); apiToken == "" {
 		if apiEmail = viper.GetString("email"); apiEmail == "" {

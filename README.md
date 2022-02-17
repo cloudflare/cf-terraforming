@@ -115,27 +115,7 @@ resource "cloudflare_record" "terraform_managed_resource" {
   balancers, spectrum applications, etc)
 * A valid Cloudflare API key and sufficient permissions to access the resources
   you are requesting via the API
-* An initialised Terraform directory
-
-### Terraform directory
-
-To set up a terraform directory you need a config file `main.tf` containing
-
-```
-terraform {
-    required_providers {
-        cloudflare = {
-            source = "cloudflare/cloudflare"
-        }	
-    }
-}
-
-provider "cloudflare" {
-# api_token  = ""  ## Commented out as we are using an environment var
-}
-```
-
-You then need to run `terraform init` within this directory to initialize it.
+* An initialised Terraform directory (`terraform init` has run and providers installed). See the [provider documentation](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs) if you have not yet setup the Terraform directory.
 
 ## Installation
 

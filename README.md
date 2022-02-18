@@ -12,6 +12,8 @@ This tool is ideal if you already have Cloudflare resources defined but want to
 start managing them via Terraform, and don't want to spend the time to manually
 write the Terraform configuration to describe them.
 
+Read the [announcement blog](https://blog.cloudflare.com/cloudflares-partnership-with-hashicorp-and-bootstrapping-terraform-with-cf-terraforming/) for further details on using `cf-terraforming` in your workflow.
+
 > NOTE: If you would like to export resources compatible with Terraform < 0.12.x,
 > you will need to download an older release as this tool no longer supports it.
 
@@ -113,7 +115,7 @@ resource "cloudflare_record" "terraform_managed_resource" {
   balancers, spectrum applications, etc)
 * A valid Cloudflare API key and sufficient permissions to access the resources
   you are requesting via the API
-* An initialised Terrafrom directory
+* An initialised Terraform directory (`terraform init` has run and providers installed). See the [provider documentation](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs) if you have not yet setup the Terraform directory.
 
 ## Installation
 

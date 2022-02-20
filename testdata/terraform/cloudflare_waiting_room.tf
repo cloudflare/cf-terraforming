@@ -1,15 +1,15 @@
 resource "cloudflare_waiting_room" "terraform_managed_resource" {
-  zone_id                 = "0da42c8d2132a9ddaf714f9e7c920711"
-  name                    = "production_webinar"
+  custom_page_html        = "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"
   description             = "Production - DO NOT MODIFY"
-  suspended               = false
+  disable_session_renewal = false
   host                    = "shop.example.com"
+  json_response_enabled   = false
+  name                    = "production_webinar"
+  new_users_per_minute    = 1000
   path                    = "/shop/checkout"
   queue_all               = true
-  new_users_per_minute    = 1000
-  total_active_users      = 1000
   session_duration        = 10
-  disable_session_renewal = false
-  json_response_enabled   = false
-  custom_page_html        = "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"
+  suspended               = false
+  total_active_users      = 1000
+  zone_id                 = "0da42c8d2132a9ddaf714f9e7c920711"
 }

@@ -194,6 +194,7 @@ Last updated Nov 2, 2021
 | [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override) | ✅ |
 | [cloudflare_waf_package](https://www.terraform.io/docs/providers/cloudflare/r/waf_package) | ❌ |
 | [cloudflare_waf_rule](https://www.terraform.io/docs/providers/cloudflare/r/waf_rule) | ❌ |
+| [cloudflare_waiting_room](https://www.terraform.io/docs/providers/cloudflare/r/waiting_room) | ✅ |
 | [cloudflare_worker_cron_trigger](https://www.terraform.io/docs/providers/cloudflare/r/worker_cron_trigger) | ❌ |
 | [cloudflare_worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route) | ✅ |
 | [cloudflare_worker_script](https://www.terraform.io/docs/providers/cloudflare/r/worker_script) | ❌ |

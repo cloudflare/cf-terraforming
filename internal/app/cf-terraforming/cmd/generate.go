@@ -364,6 +364,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["ssl"].(map[string]interface{})["validation_errors"] = nil
+			}
 		case "cloudflare_custom_ssl":
 			jsonPayload, err := api.ListSSL(context.Background(), zoneID)
 			if err != nil {

@@ -107,6 +107,15 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
+			
+			var customerManagedCertificates []cloudflare.CertificatePack
+			for _, r := range jsonPayload {
+				if r.Type != "universal" {
+					customerManagedCertificates = append(customerManagedCertificates, r)
+				}
+			}
+			jsonPayload = customerManagedCertificates
+			
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_custom_pages":

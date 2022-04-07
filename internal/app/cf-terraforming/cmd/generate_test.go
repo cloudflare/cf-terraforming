@@ -133,7 +133,8 @@ func TestResourceGeneration(t *testing.T) {
 	for name, tc := range tests {
 
 		t.Run(name, func(t *testing.T) {
-			// Reset the environment variables used in test
+			// Reset the environment variables used in test to ensure we don't
+			// have both present at once.
 			viper.Set("zone", "")
 			viper.Set("account", "")
 

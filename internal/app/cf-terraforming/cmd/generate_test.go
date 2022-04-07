@@ -131,7 +131,12 @@ func TestResourceGeneration(t *testing.T) {
 	}
 
 	for name, tc := range tests {
+
 		t.Run(name, func(t *testing.T) {
+			// Reset the environment variables used in test
+			viper.Set("zone", "")
+			viper.Set("account", "")
+
 			r, err := recorder.New("../../../../testdata/cloudflare/" + tc.testdataFilename)
 			if err != nil {
 				log.Fatal(err)
@@ -146,11 +151,9 @@ func TestResourceGeneration(t *testing.T) {
 			})
 
 			output := ""
-			storedAccountID := viper.GetString("account")
-			storedZoneID := viper.GetString("zone")
 
 			if tc.identiferType == "account" {
-				zoneID = ""
+				viper.Set("account", cloudflareTestAccountID)
 				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
 					&http.Client{
 						Transport: r,
@@ -158,16 +161,17 @@ func TestResourceGeneration(t *testing.T) {
 				), cloudflare.UsingAccount(cloudflareTestAccountID))
 
 				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
-				zoneID = storedZoneID
+
 			} else {
-				accountID = ""
+				viper.Set("zone", cloudflareTestZoneID)
 				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
 					&http.Client{
 						Transport: r,
 					},
 				))
+
 				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
-				accountID = storedAccountID
+
 			}
 
 			expected := testDataFile(tc.testdataFilename + ".tf")

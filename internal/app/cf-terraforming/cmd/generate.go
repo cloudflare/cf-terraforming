@@ -8,8 +8,10 @@ import (
 	"sort"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/hashicorp/go-version"
+	"github.com/hashicorp/hc-install/product"
+	"github.com/hashicorp/hc-install/releases"
 	"github.com/hashicorp/terraform-exec/tfexec"
-	"github.com/hashicorp/terraform-exec/tfinstall"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zclconf/go-cty/cty"
@@ -46,9 +48,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 		defer os.RemoveAll(tmpDir)
 
-		execPath, err := tfinstall.Find(context.Background(), tfinstall.LatestVersion(tmpDir, false))
+		installer := &releases.ExactVersion{
+			Product: product.Terraform,
+			Version: version.Must(version.NewVersion("1.0.6")),
+		}
+
+		execPath, err := installer.Install(context.Background())
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("error installing Terraform: %s", err)
 		}
 
 		// Setup and configure Terraform to operate in the temporary directory where

@@ -71,7 +71,7 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 	hostname = viper.GetString("hostname")
 
 	if accountID != "" && zoneID != "" {
-		log.Fatal("--account and --zone are mutually exclusive and cannot be used together")
+		log.Debug("--account and --zone are mutually exclusive, support for both is deprecated")
 	}
 
 	if apiToken = viper.GetString("token"); apiToken == "" {

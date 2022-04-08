@@ -67,6 +67,7 @@ func testDataFile(filename string) string {
 func sharedPreRun(cmd *cobra.Command, args []string) {
 	accountID = viper.GetString("account")
 	zoneID = viper.GetString("zone")
+	hostname = viper.GetString("hostname")
 
 	if accountID != "" && zoneID != "" {
 		log.Fatal("--account and --zone are mutually exclusive and cannot be used together")
@@ -105,9 +106,8 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		options = append(options, cloudflare.UsingAccount(accountID))
 	}
 
-	var apiHost string
-	if apiHost = os.Getenv("CLOUDFLARE_API_HOSTNAME"); apiHost != "" {
-		options = append(options, cloudflare.BaseURL("https://"+apiHost+"/client/v4"))
+	if hostname != "" {
+		options = append(options, cloudflare.BaseURL("https://"+hostname+"/client/v4"))
 	}
 
 	var err error

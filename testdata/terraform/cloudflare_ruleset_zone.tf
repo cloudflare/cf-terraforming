@@ -146,3 +146,62 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     }
   }
 }
+
+resource "cloudflare_ruleset" "terraform_managed_resource" {
+  kind    = "zone"
+  name    = "default"
+  phase   = "http_request_late_transform"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
+  rules {
+    action      = "rewrite"
+    description = "test transform"
+    enabled     = true
+    expression  = "(http.request.uri.path eq \"example.com\")"
+    id          = "e5b61605d6cf4ce08f729c17d42d76ef"
+    ref         = "e5b61605d6cf4ce08f729c17d42d76ef"
+    version     = "1"
+    action_parameters {
+      headers {
+        name      = "example-http-header-2"
+        operation = "remove"
+      }
+      headers {
+        name      = "example-http-header-1"
+        operation = "remove"
+      }
+    }
+  }
+  rules {
+    action      = "rewrite"
+    description = "test transform set"
+    enabled     = true
+    expression  = "(http.request.uri.path eq \"example.com\")"
+    id          = "8ec764cf386940c89dd83dbab7bb4c16"
+    ref         = "8ec764cf386940c89dd83dbab7bb4c16"
+    version     = "1"
+    action_parameters {
+      headers {
+        expression = "(ip.geoip.continent eq \"T1\")"
+        name       = "example-http-static-header-1"
+        operation  = "set"
+        value      = "my-http-header-1"
+      }
+    }
+  }
+  rules {
+    action      = "rewrite"
+    description = "test uri rewrite set"
+    enabled     = false
+    expression  = "(http.request.uri.path eq \"pumpkin.com\")"
+    id          = "d0f1b4fdb4234adf9c6de9b614424836"
+    ref         = "d0f1b4fdb4234adf9c6de9b614424836"
+    version     = "1"
+    action_parameters {
+      uri {
+        path {
+          value = "/spaceship"
+        }
+      }
+    }
+  }
+}

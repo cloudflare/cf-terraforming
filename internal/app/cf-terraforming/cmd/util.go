@@ -345,7 +345,6 @@ func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attr
 				log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 			}
 		case ty.IsListType(), ty.IsSetType():
-
 			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], true)
 		default:
 			log.Debugf("unexpected nested type %T for %s", ty, attrName)

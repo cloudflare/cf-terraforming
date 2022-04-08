@@ -108,6 +108,7 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare rate limit":                             {identiferType: "zone", resourceType: "cloudflare_rate_limit", testdataFilename: "cloudflare_rate_limit"},
 		"cloudflare record CAA":                             {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record_caa"},
 		"cloudflare record PTR":                             {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record_ptr"},
+		"cloudflare record TXT SPF":                         {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record_txt_spf"},
 		"cloudflare record simple":                          {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record"},
 		"cloudflare record subdomain":                       {identiferType: "zone", resourceType: "cloudflare_record", testdataFilename: "cloudflare_record_subdomain"},
 		"cloudflare ruleset":                                {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone"},

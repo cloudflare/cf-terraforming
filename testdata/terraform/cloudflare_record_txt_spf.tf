@@ -1,6 +1,5 @@
-
 resource "cloudflare_record" "terraform_managed_resource" {
-  name    = "txtspf.example.com"
+  name    = "txtspf"
   proxied = false
   ttl     = 1
   type    = "TXT"

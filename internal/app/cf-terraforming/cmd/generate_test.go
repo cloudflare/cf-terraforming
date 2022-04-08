@@ -43,22 +43,24 @@ var (
 
 func TestGenerate_writeAttrLine(t *testing.T) {
 	tests := map[string]struct {
-		key   string
-		value interface{}
-		want  string
+		key      string
+		value    interface{}
+		required bool
+		want     string
 	}{
-		"value is string":           {key: "a", value: "b", want: fmt.Sprintf("a = %q\n", "b")},
-		"value is int":              {key: "a", value: 1, want: "a = 1\n"},
-		"value is float":            {key: "a", value: 1.0, want: "a = 1\n"},
-		"value is bool":             {key: "a", value: true, want: "a = true\n"},
-		"value is list of strings":  {key: "a", value: listOfString, want: "a = [ \"b\", \"c\", \"d\" ]\n"},
-		"value is block of strings": {key: "a", value: configBlockOfStrings, want: "a = {\nc = \"d\"\ne = \"f\"\n}\n"},
-		"value is nil":              {key: "a", value: nil, want: ""},
+		"value is string":           {key: "a", value: "b", required: false, want: fmt.Sprintf("a = %q\n", "b")},
+		"value is int":              {key: "a", value: 1, required: false, want: "a = 1\n"},
+		"value is float":            {key: "a", value: 1.0, required: false, want: "a = 1\n"},
+		"value is bool":             {key: "a", value: true, required: false, want: "a = true\n"},
+		"value is list of strings":  {key: "a", value: listOfString, required: false, want: "a = [ \"b\", \"c\", \"d\" ]\n"},
+		"value is block of strings": {key: "a", value: configBlockOfStrings, required: false, want: "a = {\nc = \"d\"\ne = \"f\"\n}\n"},
+		"value is nil":              {key: "a", value: nil, required: false, want: ""},
+		"value is required nil":     {key: "a", value: nil, required: true, want: ""},
 	}
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := writeAttrLine(tc.key, tc.value, false)
+			got := writeAttrLine(tc.key, tc.value, false, tc.required)
 			assert.Equal(t, tc.want, got)
 		})
 	}

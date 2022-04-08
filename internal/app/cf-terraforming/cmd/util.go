@@ -344,12 +344,12 @@ func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attr
 		case ty.IsPrimitiveType():
 			switch ty {
 			case cty.String, cty.Bool, cty.Number:
-				nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false, schemaBlock.Attributes[attrName].Required)
+				nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false)
 			default:
 				log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 			}
 		case ty.IsListType(), ty.IsSetType():
-			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], true, schemaBlock.Attributes[attrName].Required)
+			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], true)
 		default:
 			log.Debugf("unexpected nested type %T for %s", ty, attrName)
 		}
@@ -360,7 +360,7 @@ func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attr
 
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
-func writeAttrLine(key string, value interface{}, usedInBlock bool, isRequired bool) string {
+func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 	switch values := value.(type) {
 	case map[string]interface{}:
 		sortedKeys := make([]string, 0, len(values))
@@ -371,7 +371,7 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool, isRequired b
 
 		s := ""
 		for _, v := range sortedKeys {
-			s += writeAttrLine(v, values[v], false, isRequired)
+			s += writeAttrLine(v, values[v], false)
 		}
 
 		if usedInBlock {
@@ -399,15 +399,15 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool, isRequired b
 			}
 		}
 		if len(stringItems) > 0 {
-			return writeAttrLine(key, stringItems, false, isRequired)
+			return writeAttrLine(key, stringItems, false)
 		}
 
 		if len(intItems) > 0 {
-			return writeAttrLine(key, intItems, false, isRequired)
+			return writeAttrLine(key, intItems, false)
 		}
 
 		if len(interfaceItems) > 0 {
-			return writeAttrLine(key, interfaceItems, false, isRequired)
+			return writeAttrLine(key, interfaceItems, false)
 		}
 
 	case []map[string]interface{}:
@@ -416,7 +416,7 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool, isRequired b
 		var mapLen = len(value.([]map[string]interface{}))
 		for i, item := range value.([]map[string]interface{}) {
 			// Use an empty key to prevent rendering the key
-			op = writeAttrLine("", item, true, isRequired)
+			op = writeAttrLine("", item, true)
 			// if condition handles adding new line for just the last element
 			if i != mapLen-1 {
 				op = strings.TrimRight(op, "\n")
@@ -449,13 +449,6 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool, isRequired b
 		return fmt.Sprintf("%s = %0.f\n", key, value)
 	case bool:
 		return fmt.Sprintf("%s = %t\n", key, value)
-	case nil:
-		// required attributes need to be written out,
-		// so we output a value of an empty string
-		if isRequired {
-			return fmt.Sprintf("%s = %s\n", key, "\"\"")
-		}
-		return ""
 	default:
 		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
 		return ""

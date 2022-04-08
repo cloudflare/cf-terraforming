@@ -33,7 +33,7 @@ jobs:
         run: go vet ./...
       - name: setup Terraform
         uses: hashicorp/setup-terraform@v1
-      - name: write Terraform configuration
+      - name: write Terraform provider configuration
         run: |
             cat > main.tf <<EOF
             terraform {
@@ -45,8 +45,8 @@ jobs:
               }
             }
             EOF
-      - name: terraform init
-        run: terraform init
+      - name: terraform init -upgrade
+        run: terraform init -upgrade
       - name: go test
         env:
             CLOUDFLARE_EMAIL: noone@cloudflare.com

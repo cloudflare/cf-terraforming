@@ -612,7 +612,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 									}
 									ruleHeaders[rule.ID] = append(ruleHeaders[rule.ID], header)
 								}
-
 							}
 						}
 

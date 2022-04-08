@@ -1,9 +1,8 @@
 resource "cloudflare_ruleset" "terraform_managed_resource" {
-  description = ""
-  kind        = "zone"
-  name        = "Zone sanitize ruleset"
-  phase       = "http_request_sanitize"
-  zone_id     = "0da42c8d2132a9ddaf714f9e7c920711"
+  kind    = "zone"
+  name    = "Zone sanitize ruleset"
+  phase   = "http_request_sanitize"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
     action     = "execute"
     enabled    = true
@@ -25,11 +24,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
 }
 
 resource "cloudflare_ruleset" "terraform_managed_resource" {
-  description = ""
-  kind        = "zone"
-  name        = "default"
-  phase       = "http_ratelimit"
-  zone_id     = "0da42c8d2132a9ddaf714f9e7c920711"
+  kind    = "zone"
+  name    = "default"
+  phase   = "http_ratelimit"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
     action      = "block"
     description = "fwewe"
@@ -48,11 +46,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
 }
 
 resource "cloudflare_ruleset" "terraform_managed_resource" {
-  description = ""
-  kind        = "zone"
-  name        = "zone"
-  phase       = "ddos_l7"
-  zone_id     = "0da42c8d2132a9ddaf714f9e7c920711"
+  kind    = "zone"
+  name    = "zone"
+  phase   = "ddos_l7"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
     action      = "execute"
     description = "zone"
@@ -69,11 +66,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
 }
 
 resource "cloudflare_ruleset" "terraform_managed_resource" {
-  description = ""
-  kind        = "zone"
-  name        = "zone"
-  phase       = "http_request_firewall_managed"
-  zone_id     = "0da42c8d2132a9ddaf714f9e7c920711"
+  kind    = "zone"
+  name    = "zone"
+  phase   = "http_request_firewall_managed"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
     action      = "execute"
     description = "zone"
@@ -152,11 +148,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
 }
 
 resource "cloudflare_ruleset" "terraform_managed_resource" {
-  description = ""
-  kind        = "zone"
-  name        = "default"
-  phase       = "http_request_late_transform"
-  zone_id     = "0da42c8d2132a9ddaf714f9e7c920711"
+  kind    = "zone"
+  name    = "default"
+  phase   = "http_request_late_transform"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
     action      = "rewrite"
     description = "test transform"

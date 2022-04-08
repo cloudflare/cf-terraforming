@@ -33,20 +33,20 @@ jobs:
         run: go vet ./...
       - name: setup Terraform
         uses: hashicorp/setup-terraform@v1
-      - name: write Terraform provider configuration
+      - name: write Terraform configuration
         run: |
             cat > main.tf <<EOF
             terraform {
               required_providers {
                 cloudflare = {
                   source = "cloudflare/cloudflare"
-                  version = "~> 3.12"
+                  version = "~> 3"
                 }
               }
             }
             EOF
-      - name: terraform init -upgrade
-        run: terraform init -upgrade
+      - name: terraform init
+        run: terraform init
       - name: go test
         env:
             CLOUDFLARE_EMAIL: noone@cloudflare.com

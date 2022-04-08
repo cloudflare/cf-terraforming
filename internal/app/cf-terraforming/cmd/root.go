@@ -9,7 +9,7 @@ import (
 )
 
 var log = logrus.New()
-var cfgFile, zoneID, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
+var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
 var verbose bool
 var api *cloudflare.API
 var terraformImportCmdPrefix = "terraform import"
@@ -69,6 +69,10 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&apiToken, "token", "t", "", "API Token")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 	viper.BindEnv("token", "CLOUDFLARE_API_TOKEN")
+
+	rootCmd.PersistentFlags().StringVarP(&hostname, "hostname", "", "", "Hostname to use to query the API")
+	viper.BindPFlag("hostname", rootCmd.PersistentFlags().Lookup("hostname"))
+	viper.BindEnv("hostname", "CLOUDFLARE_API_HOSTNAME")
 
 	// Debug logging mode
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Specify verbose output (same as setting log level to debug)")

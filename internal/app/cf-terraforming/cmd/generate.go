@@ -8,6 +8,7 @@ import (
 	"sort"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/google/uuid"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
@@ -61,7 +62,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured.
 		workingDir := viper.GetString("terraform-install-path")
-		log.Debugf("initialising Terraform in %s", workingDir)
+		log.Debugf("initializing Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {
 			log.Fatal(err)
@@ -591,15 +592,47 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 				}
 				jsonPayload = nonManagedRules
-
+				ruleHeaders := map[string][]map[string]interface{}{}
 				for i, rule := range nonManagedRules {
 					ruleset, _ := api.GetZoneRuleset(context.Background(), zoneID, rule.ID)
 					jsonPayload[i].Rules = ruleset.Rules
+
+					if ruleset.Rules != nil {
+						for _, rule := range ruleset.Rules {
+							if rule.ActionParameters != nil && rule.ActionParameters.Headers != nil {
+								// The structure of the API response for headers differs from the
+								// structure terraform requires. So we collect all the headers
+								// indexed by rule.ID to massage the jsonStructData later
+								for headerName, values := range rule.ActionParameters.Headers {
+									header := map[string]interface{}{
+										"name":       headerName,
+										"operation":  values.Operation,
+										"expression": values.Expression,
+										"value":      values.Value,
+									}
+									ruleHeaders[rule.ID] = append(ruleHeaders[rule.ID], header)
+								}
+							}
+						}
+
+					}
 				}
 
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
+
+				// Make the rules have the correct header structure
+				for i, ruleset := range jsonStructData {
+					for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
+						ID := rule.(map[string]interface{})["id"]
+						headers, exists := ruleHeaders[ID.(string)]
+						if exists {
+							jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+						}
+					}
+				}
+
 			}
 		case "cloudflare_spectrum_application":
 			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)
@@ -729,7 +762,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
 			return
 		}
-
 		// If we don't have any resources to generate, just bail out early.
 		if resourceCount == 0 {
 			fmt.Fprint(cmd.OutOrStdout(), "no resources found to generate. Exiting...")
@@ -812,7 +844,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), 2)
+			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), uuid.New().String(), map[string][]string{})
 			output += "}\n\n"
 		}
 

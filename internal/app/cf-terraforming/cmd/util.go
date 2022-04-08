@@ -110,6 +110,10 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		options = append(options, cloudflare.BaseURL("https://"+apiHost+"/client/v4"))
 	}
 
+	if verbose {
+		options = append(options, cloudflare.Debug(true))
+	}
+
 	var err error
 
 	// Don't initialise a client in CI as this messes with VCR and the ability to

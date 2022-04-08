@@ -54,8 +54,8 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 		"value is bool":             {key: "a", value: true, required: false, want: "a = true\n"},
 		"value is list of strings":  {key: "a", value: listOfString, required: false, want: "a = [ \"b\", \"c\", \"d\" ]\n"},
 		"value is block of strings": {key: "a", value: configBlockOfStrings, required: false, want: "a = {\nc = \"d\"\ne = \"f\"\n}\n"},
-		"value is nil":              {key: "a", value: nil, required: false, want: ""},
 		"value is required nil":     {key: "a", value: nil, required: true, want: "a = \"\"\n"},
+		"value is nil":              {key: "a", value: nil, required: false, want: ""},
 	}
 
 	for name, tc := range tests {

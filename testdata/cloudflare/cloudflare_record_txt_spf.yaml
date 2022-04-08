@@ -1,0 +1,85 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records?page=1&per_page=100
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "9635b9083bd5770bf01b27d53c84b484",
+            "zone_id": "0da42c8d2132a9ddaf714f9e7c920711",
+            "zone_name": "example.com",
+            "name": "txtspf.example.com",
+            "type": "TXT",
+            "content": "\"v=spf1 include:%{ir}.%{v}.%{d}.spf.has.pphosted.com include:amazonses.com ~all\"",
+            "proxiable": false,
+            "proxied": false,
+            "ttl": 1,
+            "locked": false,
+            "meta": {
+              "auto_added": false,
+              "managed_by_apps": false,
+              "managed_by_argo_tunnel": false,
+              "source": "primary"
+            },
+            "created_on": "2021-08-31T02:28:21.34414Z",
+            "modified_on": "2021-08-31T02:31:53.205261Z"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+
+
+
+{
+  "result": [
+    {
+      "id": "3fa55870e622f6a58848f365eda8ace0",
+      "zone_id": "5d373c0960f4a7a1df5cf6105f1a7bcc",
+      "zone_name": "iherbsandbox.biz",
+      "name": "_dmarc.iherbsandbox.biz",
+      "type": "TXT",
+      "content": "\"v=spf1 include:%{ir}.%{v}.%{d}.spf.has.pphosted.com include:amazonses.com include:mail.zendesk.com ~all\"",
+      "proxiable": false,
+      "proxied": false,
+      "ttl": 1,
+      "locked": false,
+      "meta": {
+        "auto_added": false,
+        "managed_by_apps": false,
+        "managed_by_argo_tunnel": false,
+        "source": "primary"
+      },
+      "created_on": "2022-01-18T19:57:39.77057Z",
+      "modified_on": "2022-04-08T14:11:40.991535Z"
+    }
+  ],
+  "success": true,
+  "errors": [],
+  "messages": [],
+  "result_info": {
+    "page": 1,
+    "per_page": 100,
+    "count": 1,
+    "total_count": 1,
+    "total_pages": 1
+  }
+}

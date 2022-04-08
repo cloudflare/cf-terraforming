@@ -8,6 +8,7 @@ import (
 	"sort"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/google/uuid"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
@@ -61,7 +62,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured.
 		workingDir := viper.GetString("terraform-install-path")
-		log.Debugf("initialising Terraform in %s", workingDir)
+		log.Debugf("initializing Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {
 			log.Fatal(err)
@@ -591,15 +592,47 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 				}
 				jsonPayload = nonManagedRules
-
+				ruleHeaders := map[string][]map[string]interface{}{}
 				for i, rule := range nonManagedRules {
 					ruleset, _ := api.GetZoneRuleset(context.Background(), zoneID, rule.ID)
 					jsonPayload[i].Rules = ruleset.Rules
+
+					if ruleset.Rules != nil {
+						for _, rule := range ruleset.Rules {
+							if rule.ActionParameters != nil && rule.ActionParameters.Headers != nil {
+								// The structure of the API response for headers differs from the
+								// structure terraform requires. So we collect all the headers
+								// indexed by rule.ID to massage the jsonStructData later
+								for headerName, values := range rule.ActionParameters.Headers {
+									header := map[string]interface{}{
+										"name":       headerName,
+										"operation":  values.Operation,
+										"expression": values.Expression,
+										"value":      values.Value,
+									}
+									ruleHeaders[rule.ID] = append(ruleHeaders[rule.ID], header)
+								}
+							}
+						}
+
+					}
 				}
 
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
+
+				// Make the rules have the correct header structure
+				for i, ruleset := range jsonStructData {
+					for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
+						ID := rule.(map[string]interface{})["id"]
+						headers, exists := ruleHeaders[ID.(string)]
+						if exists {
+							jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+						}
+					}
+				}
+
 			}
 		case "cloudflare_spectrum_application":
 			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)
@@ -729,7 +762,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
 			return
 		}
-
 		// If we don't have any resources to generate, just bail out early.
 		if resourceCount == 0 {
 			fmt.Fprint(cmd.OutOrStdout(), "no resources found to generate. Exiting...")
@@ -778,12 +810,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 				if attrName == "account_id" && accountID != "" {
-					output += writeAttrLine(attrName, accountID, 2, false)
+					output += writeAttrLine(attrName, accountID, false)
 					continue
 				}
 
 				if attrName == "zone_id" && zoneID != "" && accountID == "" {
-					output += writeAttrLine(attrName, zoneID, 2, false)
+					output += writeAttrLine(attrName, zoneID, false)
 					continue
 				}
 
@@ -792,14 +824,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				case ty.IsPrimitiveType():
 					switch ty {
 					case cty.String, cty.Bool, cty.Number:
-						output += writeAttrLine(attrName, structData[attrName], 2, false)
+						output += writeAttrLine(attrName, structData[attrName], false)
 					default:
 						log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 					}
 				case ty.IsCollectionType():
 					switch {
 					case ty.IsListType(), ty.IsSetType(), ty.IsMapType():
-						output += writeAttrLine(attrName, structData[attrName], 2, false)
+						output += writeAttrLine(attrName, structData[attrName], false)
 					default:
 						log.Debugf("unexpected collection type %q", ty.FriendlyName())
 					}
@@ -812,7 +844,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), 2)
+			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), uuid.New().String(), map[string][]string{})
 			output += "}\n\n"
 		}
 
@@ -824,102 +856,4 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		fmt.Fprint(cmd.OutOrStdout(), output)
 
 	}
-}
-
-// writeAttrLine outputs a line of HCL configuration with a configurable depth
-// for known types.
-func writeAttrLine(key string, value interface{}, depth int, usedInBlock bool) string {
-	switch values := value.(type) {
-	case map[string]interface{}:
-		sortedKeys := make([]string, 0, len(values))
-		for k := range values {
-			sortedKeys = append(sortedKeys, k)
-		}
-		sort.Strings(sortedKeys)
-
-		s := ""
-		for _, v := range sortedKeys {
-			s += writeAttrLine(v, values[v], depth+2, false)
-		}
-
-		if usedInBlock {
-			if s != "" {
-				return fmt.Sprintf("%s%s {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
-			}
-		} else {
-			if s != "" {
-				return fmt.Sprintf("%s%s = {\n%s%s}\n", strings.Repeat(" ", depth), key, s, strings.Repeat(" ", depth))
-			}
-		}
-	case []interface{}:
-		var stringItems []string
-		var intItems []int
-		var interfaceItems []map[string]interface{}
-
-		for _, item := range value.([]interface{}) {
-			switch item.(type) {
-			case string:
-				stringItems = append(stringItems, item.(string))
-			case map[string]interface{}:
-				interfaceItems = append(interfaceItems, item.(map[string]interface{}))
-			case float64:
-				intItems = append(intItems, int(item.(float64)))
-			}
-		}
-		if len(stringItems) > 0 {
-			return writeAttrLine(key, stringItems, depth, false)
-		}
-
-		if len(intItems) > 0 {
-			return writeAttrLine(key, intItems, depth, false)
-		}
-
-		if len(interfaceItems) > 0 {
-			return writeAttrLine(key, interfaceItems, depth, false)
-		}
-
-	case []map[string]interface{}:
-		var stringyInterfaces []string
-		var op string
-		var mapLen = len(value.([]map[string]interface{}))
-		for i, item := range value.([]map[string]interface{}) {
-			// Use an empty key to prevent rendering the key
-			op = writeAttrLine("", item, depth, true)
-			// if condition handles adding new line for just the last element
-			if i != mapLen-1 {
-				op = strings.TrimRight(op, "\n")
-			}
-			stringyInterfaces = append(stringyInterfaces, op)
-		}
-		return fmt.Sprintf("%s%s = [ \n%s ]\n", strings.Repeat(" ", depth), key, strings.Join(stringyInterfaces, ",\n"))
-
-	case []int:
-		stringyInts := []string{}
-		for _, int := range value.([]int) {
-			stringyInts = append(stringyInts, fmt.Sprintf("%d", int))
-		}
-		return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(stringyInts, ", "))
-	case []string:
-		var items []string
-		for _, item := range value.([]string) {
-			items = append(items, fmt.Sprintf("%q", item))
-		}
-		if len(items) > 0 {
-			return fmt.Sprintf("%s%s = [ %s ]\n", strings.Repeat(" ", depth), key, strings.Join(items, ", "))
-		}
-	case string:
-		if value != "" {
-			return fmt.Sprintf("%s%s = %q\n", strings.Repeat(" ", depth), key, value)
-		}
-	case int:
-		return fmt.Sprintf("%s%s = %d\n", strings.Repeat(" ", depth), key, value)
-	case float64:
-		return fmt.Sprintf("%s%s = %0.f\n", strings.Repeat(" ", depth), key, value)
-	case bool:
-		return fmt.Sprintf("%s%s = %t\n", strings.Repeat(" ", depth), key, value)
-	default:
-		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
-		return ""
-	}
-	return ""
 }

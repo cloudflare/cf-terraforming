@@ -15,4 +15,12 @@ resource "cloudflare_load_balancer" "terraform_managed_resource" {
   steering_policy      = "dynamic_latency"
   ttl                  = 30
   zone_id              = "0da42c8d2132a9ddaf714f9e7c920711"
+  pop_pools {
+    pool_ids = ""
+    pop      = ""
+  }
+  region_pools {
+    pool_ids = ""
+    region   = ""
+  }
 }

@@ -12,8 +12,4 @@ resource "cloudflare_load_balancer_monitor" "terraform_managed_resource" {
   retries          = 0
   timeout          = 3
   type             = "https"
-  header {
-    header = ""
-    values = ""
-  }
 }

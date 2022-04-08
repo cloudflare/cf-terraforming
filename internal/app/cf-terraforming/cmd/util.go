@@ -354,3 +354,101 @@ func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attr
 
 	return nestedBlockOutput
 }
+
+// writeAttrLine outputs a line of HCL configuration with a configurable depth
+// for known types.
+func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
+	switch values := value.(type) {
+	case map[string]interface{}:
+		sortedKeys := make([]string, 0, len(values))
+		for k := range values {
+			sortedKeys = append(sortedKeys, k)
+		}
+		sort.Strings(sortedKeys)
+
+		s := ""
+		for _, v := range sortedKeys {
+			s += writeAttrLine(v, values[v], false)
+		}
+
+		if usedInBlock {
+			if s != "" {
+				return fmt.Sprintf("%s {\n%s}\n", key, s)
+			}
+		} else {
+			if s != "" {
+				return fmt.Sprintf("%s = {\n%s}\n", key, s)
+			}
+		}
+	case []interface{}:
+		var stringItems []string
+		var intItems []int
+		var interfaceItems []map[string]interface{}
+
+		for _, item := range value.([]interface{}) {
+			switch item.(type) {
+			case string:
+				stringItems = append(stringItems, item.(string))
+			case map[string]interface{}:
+				interfaceItems = append(interfaceItems, item.(map[string]interface{}))
+			case float64:
+				intItems = append(intItems, int(item.(float64)))
+			}
+		}
+		if len(stringItems) > 0 {
+			return writeAttrLine(key, stringItems, false)
+		}
+
+		if len(intItems) > 0 {
+			return writeAttrLine(key, intItems, false)
+		}
+
+		if len(interfaceItems) > 0 {
+			return writeAttrLine(key, interfaceItems, false)
+		}
+
+	case []map[string]interface{}:
+		var stringyInterfaces []string
+		var op string
+		var mapLen = len(value.([]map[string]interface{}))
+		for i, item := range value.([]map[string]interface{}) {
+			// Use an empty key to prevent rendering the key
+			op = writeAttrLine("", item, true)
+			// if condition handles adding new line for just the last element
+			if i != mapLen-1 {
+				op = strings.TrimRight(op, "\n")
+			}
+			stringyInterfaces = append(stringyInterfaces, op)
+		}
+		return fmt.Sprintf("%s = [ \n%s ]\n", key, strings.Join(stringyInterfaces, ",\n"))
+
+	case []int:
+		stringyInts := []string{}
+		for _, int := range value.([]int) {
+			stringyInts = append(stringyInts, fmt.Sprintf("%d", int))
+		}
+		return fmt.Sprintf("%s = [ %s ]\n", key, strings.Join(stringyInts, ", "))
+	case []string:
+		var items []string
+		for _, item := range value.([]string) {
+			items = append(items, fmt.Sprintf("%q", item))
+		}
+		if len(items) > 0 {
+			return fmt.Sprintf("%s = [ %s ]\n", key, strings.Join(items, ", "))
+		}
+	case string:
+		if value != "" {
+			return fmt.Sprintf("%s = %q\n", key, value)
+		}
+	case int:
+		return fmt.Sprintf("%s = %d\n", key, value)
+	case float64:
+		return fmt.Sprintf("%s = %0.f\n", key, value)
+	case bool:
+		return fmt.Sprintf("%s = %t\n", key, value)
+	default:
+		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
+		return ""
+	}
+	return ""
+}

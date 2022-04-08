@@ -451,7 +451,7 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool, isRequired b
 		return fmt.Sprintf("%s = %t\n", key, value)
 	case nil:
 		// required attributes need to be written out,
-		// so we toss in a value of an empty string
+		// so we output a value of an empty string
 		if isRequired {
 			return fmt.Sprintf("%s = %s\n", key, "\"\"")
 		}

@@ -162,11 +162,11 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     version     = "1"
     action_parameters {
       headers {
-        name      = "example-http-header-2"
+        name      = "example-http-header-1"
         operation = "remove"
       }
       headers {
-        name      = "example-http-header-1"
+        name      = "example-http-header-2"
         operation = "remove"
       }
     }

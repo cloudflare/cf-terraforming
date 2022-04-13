@@ -8,7 +8,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/go-version v1.4.0
 	github.com/hashicorp/hc-install v0.3.1
-	github.com/hashicorp/terraform-exec v0.16.0
+	github.com/hashicorp/terraform-exec v0.16.1
 	github.com/hashicorp/terraform-json v0.13.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.8.1

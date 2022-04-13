@@ -148,62 +148,62 @@ $ cf-terraforming import \
 
 ## Supported Resources
 
-The following resources can be used with both `generate` and `import`
+Any resources not listed are currently not supported.
 
-Last updated Nov 2, 2021
+Last updated Apr 13, 2021
 
-| Resource | Supported |
-|----------|-----------|
-| [cloudflare_access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application) | ✅ |
-| [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group) | ❌ |
-| [cloudflare_access_identity_provider](https://www.terraform.io/docs/providers/cloudflare/r/access_identity_provider) | ✅ |
-| [cloudflare_access_mutual_tls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/access_mutual_tls_certificate) | ❌ |
-| [cloudflare_access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy) | ❌ |
-| [cloudflare_access_rule](https://www.terraform.io/docs/providers/cloudflare/r/access_rule) | ✅ |
-| [cloudflare_access_service_token](https://www.terraform.io/docs/providers/cloudflare/r/access_service_token) | ✅ |
-| [cloudflare_account_member](https://www.terraform.io/docs/providers/cloudflare/r/account_member) | ✅ |
-| [cloudflare_api_token](https://www.terraform.io/docs/providers/cloudflare/r/api_token) | ❌ |
-| [cloudflare_argo](https://www.terraform.io/docs/providers/cloudflare/r/argo) | ✅ |
-| [cloudflare_argo_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/argo_tunnel) | ✅ |
-| [cloudflare_authenticated_origin_pulls](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls) | ❌ |
-| [cloudflare_authenticated_origin_pulls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls_certificate) | ❌ |
-| [cloudflare_byo_ip_prefix](https://www.terraform.io/docs/providers/cloudflare/r/byo_ip_prefix) | ✅ |
-| [cloudflare_certificate_pack]Ï(https://www.terraform.io/docs/providers/cloudflare/r/certificate_pack) | ✅ |
-| [cloudflare_custom_hostname](https://www.terraform.io/docs/providers/cloudflare/r/custom_hostname) | ✅ |
-| [cloudflare_custom_hostname_fallback_origin](https://www.terraform.io/docs/providers/cloudflare/r/custom_hostname_fallback_origin) | ✅ |
-| [cloudflare_custom_pages](https://www.terraform.io/docs/providers/cloudflare/r/custom_pages) | ✅ |
-| [cloudflare_custom_ssl](https://www.terraform.io/docs/providers/cloudflare/r/custom_ssl) | ❌ |
-| [cloudflare_filter](https://www.terraform.io/docs/providers/cloudflare/r/filter) | ✅ |
-| [cloudflare_firewall_rule](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule) | ✅ |
-| [cloudflare_healthcheck](https://www.terraform.io/docs/providers/cloudflare/r/healthcheck) | ✅ |
-| [cloudflare_ip_list](https://www.terraform.io/docs/providers/cloudflare/r/ip_list) | ❌ |
-| [cloudflare_load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer) | ✅ |
-| [cloudflare_load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor) | ✅ |
-| [cloudflare_load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool) | ✅ |
-| [cloudflare_logpull_retention](https://www.terraform.io/docs/providers/cloudflare/r/logpull_retention) | ❌ |
-| [cloudflare_logpush_job](https://www.terraform.io/docs/providers/cloudflare/r/logpush_job) | ✅ |
-| [cloudflare_logpush_ownership_challenge](https://www.terraform.io/docs/providers/cloudflare/r/logpush_ownership_challenge) | ❌ |
-| [cloudflare_magic_firewall_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/magic_firewall_ruleset) | ❌ |
-| [cloudflare_origin_ca_certificate](https://www.terraform.io/docs/providers/cloudflare/r/origin_ca_certificate) | ✅ |
-| [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule) | ✅ |
-| [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit) | ✅ |
-| [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record) | ✅ |
-| [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset) | ✅ |
-| [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application) | ✅ |
-| [cloudflare_waf_group](https://www.terraform.io/docs/providers/cloudflare/r/waf_group) | ❌ |
-| [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override) | ✅ |
-| [cloudflare_waf_package](https://www.terraform.io/docs/providers/cloudflare/r/waf_package) | ❌ |
-| [cloudflare_waf_rule](https://www.terraform.io/docs/providers/cloudflare/r/waf_rule) | ❌ |
-| [cloudflare_waiting_room](https://www.terraform.io/docs/providers/cloudflare/r/waiting_room) | ✅ |
-| [cloudflare_worker_cron_trigger](https://www.terraform.io/docs/providers/cloudflare/r/worker_cron_trigger) | ❌ |
-| [cloudflare_worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route) | ✅ |
-| [cloudflare_worker_script](https://www.terraform.io/docs/providers/cloudflare/r/worker_script) | ❌ |
-| [cloudflare_workers_kv](https://www.terraform.io/docs/providers/cloudflare/r/workers_kv) | ❌ |
-| [cloudflare_workers_kv_namespace](https://www.terraform.io/docs/providers/cloudflare/r/workers_kv_namespace) | ✅ |
-| [cloudflare_zone](https://www.terraform.io/docs/providers/cloudflare/r/zone) | ✅ |
-| [cloudflare_zone_dnssec](https://www.terraform.io/docs/providers/cloudflare/r/zone_dnssec) | ❌ |
-| [cloudflare_zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown) | ✅ |
-| [cloudflare_zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override) | ✅ |
+| Resource | Resource Scope | Generate Supported | Import Supported |
+|----------|-----------|----------|----------|
+| [cloudflare_access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application) | Account | ✅ | ❌ |
+| [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group) | Account | ✅ | ❌ |
+| [cloudflare_access_identity_provider](https://www.terraform.io/docs/providers/cloudflare/r/access_identity_provider) | Account | ✅ | ❌ |
+| [cloudflare_access_mutual_tls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/access_mutual_tls_certificate) | Account | ✅ | ❌ |
+| [cloudflare_access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy) | Account | ❌ | ❌ |
+| [cloudflare_access_rule](https://www.terraform.io/docs/providers/cloudflare/r/access_rule) | Account | ✅ | ✅ |
+| [cloudflare_access_service_token](https://www.terraform.io/docs/providers/cloudflare/r/access_service_token) | Account | ✅ | ❌ |
+| [cloudflare_account_member](https://www.terraform.io/docs/providers/cloudflare/r/account_member) | Account | ✅ | ✅ |
+| [cloudflare_api_token](https://www.terraform.io/docs/providers/cloudflare/r/api_token) | User | ❌ | ❌ |
+| [cloudflare_argo](https://www.terraform.io/docs/providers/cloudflare/r/argo) | Zone | ✅ | ✅ |
+| [cloudflare_argo_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/argo_tunnel) | Account | ✅ | ✅ |
+| [cloudflare_authenticated_origin_pulls](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls) | Zone | ❌ | ❌ |
+| [cloudflare_authenticated_origin_pulls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls_certificate) | Zone | ❌ | ❌ |
+| [cloudflare_byo_ip_prefix](https://www.terraform.io/docs/providers/cloudflare/r/byo_ip_prefix) | Account | ✅ | ✅ |
+| [cloudflare_certificate_pack]Ï(https://www.terraform.io/docs/providers/cloudflare/r/certificate_pack) | Zone | ✅ | ✅ |
+| [cloudflare_custom_hostname](https://www.terraform.io/docs/providers/cloudflare/r/custom_hostname) | Zone | ✅ | ✅ |
+| [cloudflare_custom_hostname_fallback_origin](https://www.terraform.io/docs/providers/cloudflare/r/custom_hostname_fallback_origin) | Account | ✅ | ❌ |
+| [cloudflare_custom_pages](https://www.terraform.io/docs/providers/cloudflare/r/custom_pages) | Account or Zone | ✅ | ✅ |
+| [cloudflare_custom_ssl](https://www.terraform.io/docs/providers/cloudflare/r/custom_ssl) | Zone | ✅ | ✅ |
+| [cloudflare_filter](https://www.terraform.io/docs/providers/cloudflare/r/filter) | Zone | ✅ | ✅ |
+| [cloudflare_firewall_rule](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule) | Zone | ✅ | ✅ |
+| [cloudflare_healthcheck](https://www.terraform.io/docs/providers/cloudflare/r/healthcheck) | Zone | ✅ | ❌ |
+| [cloudflare_ip_list](https://www.terraform.io/docs/providers/cloudflare/r/ip_list) | Account | ❌ | ✅ |
+| [cloudflare_load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer) | Zone | ✅ | ❌ |
+| [cloudflare_load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor) | Account | ✅ | ❌ |
+| [cloudflare_load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool) | Account | ✅ | ❌ |
+| [cloudflare_logpull_retention](https://www.terraform.io/docs/providers/cloudflare/r/logpull_retention) | Zone | ❌ | ❌ |
+| [cloudflare_logpush_job](https://www.terraform.io/docs/providers/cloudflare/r/logpush_job) | Zone | ✅ | ❌ |
+| [cloudflare_logpush_ownership_challenge](https://www.terraform.io/docs/providers/cloudflare/r/logpush_ownership_challenge) | Zone | ❌ | ❌ |
+| [cloudflare_magic_firewall_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/magic_firewall_ruleset) | Account | ❌ | ❌ |
+| [cloudflare_origin_ca_certificate](https://www.terraform.io/docs/providers/cloudflare/r/origin_ca_certificate) | Zone | ✅ | ✅ |
+| [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule) | Zone | ✅ | ✅ |
+| [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit) | Zone | ✅ | ✅ |
+| [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record) | Zone | ✅ | ✅ |
+| [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset) | Account or Zone | ✅ | ❌ |
+| [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application) | Zone | ✅ | ✅ |
+| [cloudflare_waf_group](https://www.terraform.io/docs/providers/cloudflare/r/waf_group) | Zone | ❌ | ❌ |
+| [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override) | Zone | ✅ | ✅ |
+| [cloudflare_waf_package](https://www.terraform.io/docs/providers/cloudflare/r/waf_package) | Zone | ✅ | ❌ |
+| [cloudflare_waf_rule](https://www.terraform.io/docs/providers/cloudflare/r/waf_rule) | Zone | ❌ | ❌ |
+| [cloudflare_waiting_room](https://www.terraform.io/docs/providers/cloudflare/r/waiting_room) | Zone | ✅ | ✅ |
+| [cloudflare_worker_cron_trigger](https://www.terraform.io/docs/providers/cloudflare/r/worker_cron_trigger) | Account | ❌ | ❌ |
+| [cloudflare_worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route) | Zone | ✅ | ✅ |
+| [cloudflare_worker_script](https://www.terraform.io/docs/providers/cloudflare/r/worker_script) | Account | ❌ | ❌ |
+| [cloudflare_workers_kv](https://www.terraform.io/docs/providers/cloudflare/r/workers_kv) | Account | ❌ | ❌ |
+| [cloudflare_workers_kv_namespace](https://www.terraform.io/docs/providers/cloudflare/r/workers_kv_namespace) | Account | ✅ | ✅ |
+| [cloudflare_zone](https://www.terraform.io/docs/providers/cloudflare/r/zone) | Account | ✅ | ✅ |
+| [cloudflare_zone_dnssec](https://www.terraform.io/docs/providers/cloudflare/r/zone_dnssec) | Zone | ❌ | ❌ |
+| [cloudflare_zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown) | Zone | ✅ | ✅ |
+| [cloudflare_zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override) | Zone | ✅ | ❌ |
 
 ## Testing
 

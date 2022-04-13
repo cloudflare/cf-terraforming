@@ -607,15 +607,23 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if ruleset.Rules != nil {
 						for _, rule := range ruleset.Rules {
 							if rule.ActionParameters != nil && rule.ActionParameters.Headers != nil {
+
+								// Sort the headers to have deterministic config output
+								keys := make([]string, 0, len(rule.ActionParameters.Headers))
+								for k := range rule.ActionParameters.Headers {
+									keys = append(keys, k)
+								}
+								sort.Strings(keys)
+
 								// The structure of the API response for headers differs from the
 								// structure terraform requires. So we collect all the headers
 								// indexed by rule.ID to massage the jsonStructData later
-								for headerName, values := range rule.ActionParameters.Headers {
+								for _, headerName := range keys {
 									header := map[string]interface{}{
 										"name":       headerName,
-										"operation":  values.Operation,
-										"expression": values.Expression,
-										"value":      values.Value,
+										"operation":  rule.ActionParameters.Headers[headerName].Operation,
+										"expression": rule.ActionParameters.Headers[headerName].Expression,
+										"value":      rule.ActionParameters.Headers[headerName].Value,
 									}
 									ruleHeaders[rule.ID] = append(ruleHeaders[rule.ID], header)
 								}
@@ -631,15 +639,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				// Make the rules have the correct header structure
 				for i, ruleset := range jsonStructData {
-					for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
-						ID := rule.(map[string]interface{})["id"]
-						headers, exists := ruleHeaders[ID.(string)]
-						if exists {
-							jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+					if ruleset.(map[string]interface{})["rules"] != nil {
+						for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
+							ID := rule.(map[string]interface{})["id"]
+							headers, exists := ruleHeaders[ID.(string)]
+							if exists {
+								jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+							}
 						}
 					}
 				}
-
 			}
 		case "cloudflare_spectrum_application":
 			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)

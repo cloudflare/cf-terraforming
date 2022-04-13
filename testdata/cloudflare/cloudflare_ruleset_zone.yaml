@@ -145,6 +145,15 @@ interactions:
             "version": "4",
             "last_updated": "2022-02-07T16:58:54.317608Z",
             "phase": "http_request_late_transform"
+          },
+          {
+            "id": "0800fc577294c34e0b28ad2839435945",
+            "name": "default",
+            "description": "Some ruleset",
+            "kind": "zone",
+            "version": "2",
+            "last_updated": "2022-04-07T16:58:54.317608Z",
+            "phase": "http_request_late_transform"
           }
         ],
         "success": true,
@@ -462,6 +471,16 @@ interactions:
                   },
                   "example-http-header-2": {
                     "operation": "remove"
+                  },
+                  "example-http-header-3": {
+                    "operation": "set",
+                    "value": "space-header",
+                    "expression": "(ip.geoip.continent eq \"pluto\")"
+                  }
+                },
+                "uri": {
+                  "path": {
+                    "value": "/aquarii_b"
                   }
                 }
               },
@@ -506,7 +525,7 @@ interactions:
               "last_updated": "2022-05-07T16:58:54.317608Z",
               "ref": "d0f1b4fdb4234adf9c6de9b614424836",
               "enabled": false
-            }         
+            }
           ],
           "last_updated": "2022-02-07T16:58:54.317608Z",
           "phase": "http_request_late_transform"

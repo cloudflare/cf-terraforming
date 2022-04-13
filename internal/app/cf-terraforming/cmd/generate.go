@@ -417,6 +417,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				for originCounter, _ := range jsonStructData[i].(map[string]interface{})["origins"].([]interface{}) {
+					if jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"] != nil {
+						jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["header"] = "Host"
+						jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["values"] = jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["Host"]
+					}
+				}
+			}
 		case "cloudflare_load_balancer_monitor":
 			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background())
 			if err != nil {

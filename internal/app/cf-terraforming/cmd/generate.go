@@ -631,15 +631,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				// Make the rules have the correct header structure
 				for i, ruleset := range jsonStructData {
-					for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
-						ID := rule.(map[string]interface{})["id"]
-						headers, exists := ruleHeaders[ID.(string)]
-						if exists {
-							jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+					if ruleset.(map[string]interface{})["rules"] != nil {
+						for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
+							ID := rule.(map[string]interface{})["id"]
+							headers, exists := ruleHeaders[ID.(string)]
+							if exists {
+								jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+							}
 						}
 					}
 				}
-
 			}
 		case "cloudflare_spectrum_application":
 			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)

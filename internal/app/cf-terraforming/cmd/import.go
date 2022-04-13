@@ -96,7 +96,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_byo_ip_prefix":
-			jsonPayload, err := api.ListPrefixes(context.Background())
+			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -158,7 +158,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_ip_list":
-			jsonPayload, err := api.ListIPLists(context.Background())
+			jsonPayload, err := api.ListIPLists(context.Background(), accountID)
 			if err != nil {
 				log.Fatal(err)
 			}

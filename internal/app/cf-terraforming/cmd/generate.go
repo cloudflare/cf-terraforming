@@ -156,6 +156,51 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
 			}
+		case "cloudflare_access_policy":
+			if accountID != "" {
+				applications, _, err := api.AccessApplications(context.Background(), accountID, cloudflare.PaginationOptions{})
+				if err != nil {
+					log.Fatal(err)
+				}
+				for _, application := range applications {
+					jsonPayload, _, err := api.AccessPolicies(context.Background(), accountID, application.ID, cloudflare.PaginationOptions{})
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					var intermediateJsonStructData []interface{}
+					m, _ := json.Marshal(jsonPayload)
+					json.Unmarshal(m, &intermediateJsonStructData)
+					for i := 0; i < len(jsonPayload); i++ {
+						intermediateJsonStructData[i].(map[string]interface{})["id"] = sanitiseTerraformResourceName(intermediateJsonStructData[i].(map[string]interface{})["name"].(string))
+						intermediateJsonStructData[i].(map[string]interface{})["application_id"] = application.ID
+					}
+					jsonStructData = append(jsonStructData, intermediateJsonStructData...)
+				}
+
+				resourceCount = len(jsonStructData)
+			} else {
+				applications, _, err := api.ZoneLevelAccessApplications(context.Background(), zoneID, cloudflare.PaginationOptions{})
+				if err != nil {
+					log.Fatal(err)
+				}
+				for _, application := range applications {
+					jsonPayload, _, err := api.ZoneLevelAccessPolicies(context.Background(), zoneID, application.ID, cloudflare.PaginationOptions{})
+					if err != nil {
+						log.Fatal(err)
+					}
+					var intermediateJsonStructData []interface{}
+					m, _ := json.Marshal(jsonPayload)
+					json.Unmarshal(m, &intermediateJsonStructData)
+					for i := 0; i < len(jsonPayload); i++ {
+						intermediateJsonStructData[i].(map[string]interface{})["id"] = sanitiseTerraformResourceName(intermediateJsonStructData[i].(map[string]interface{})["name"].(string))
+						intermediateJsonStructData[i].(map[string]interface{})["application_id"] = application.ID
+					}
+					jsonStructData = append(jsonStructData, intermediateJsonStructData...)
+				}
+
+				resourceCount = len(jsonStructData)
+			}
 		case "cloudflare_access_service_token":
 			if accountID != "" {
 				jsonPayload, _, err := api.AccessServiceTokens(context.Background(), accountID)

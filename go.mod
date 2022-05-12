@@ -3,7 +3,7 @@ module github.com/cloudflare/cf-terraforming
 go 1.17
 
 require (
-	github.com/cloudflare/cloudflare-go v0.38.0
+	github.com/cloudflare/cloudflare-go v0.39.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/go-version v1.4.0
@@ -22,9 +22,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
-	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
-	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect

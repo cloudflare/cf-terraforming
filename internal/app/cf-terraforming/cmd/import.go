@@ -25,6 +25,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_custom_pages":          ":identifer_type/:identifer_value/:id",
 	"cloudflare_filter":                ":zone_id/:id",
 	"cloudflare_firewall_rule":         ":zone_id/:id",
+	"cloudflare_healthcheck":           ":zone_id/:id",
 	"cloudflare_custom_hostname":       ":zone_id/:id",
 	"cloudflare_custom_ssl":            ":zone_id/:id",
 	"cloudflare_ip_list":               ":account_id/:id",
@@ -137,6 +138,13 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_firewall_rule":
 			jsonPayload, err := api.FirewallRules(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_healthcheck":
+			jsonPayload, err := api.Healthchecks(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}

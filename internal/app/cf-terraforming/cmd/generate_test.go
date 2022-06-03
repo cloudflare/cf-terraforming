@@ -173,7 +173,7 @@ func TestResourceGeneration(t *testing.T) {
 
 			}
 
-			expected := testDataFile(tc.testdataFilename + ".tf")
+			expected := testDataFile(tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}

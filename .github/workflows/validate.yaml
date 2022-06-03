@@ -1,0 +1,19 @@
+on:
+  push:
+    paths-ignore:
+    - 'README.md'
+    - 'CHANGELOG.md'
+    - 'LICENSE'
+
+name: Validate
+jobs:
+  validate:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: validate generated terraform configuration
+        run: make validate-tf

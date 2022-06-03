@@ -55,7 +55,7 @@ func testDataFile(filename string) string {
 		panic(err)
 	}
 
-	fullpath := dir.Name() + "/" + filename
+	fullpath := dir.Name() + "/" + filename + "/test.tf"
 	if _, err := os.Stat(fullpath); os.IsNotExist(err) {
 		panic(fmt.Errorf("terraform testdata file does not exist at %s", fullpath))
 	}

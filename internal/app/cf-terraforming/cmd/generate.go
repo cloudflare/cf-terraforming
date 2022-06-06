@@ -249,7 +249,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[0].(map[string]interface{})["value"]
 			}
 		case "cloudflare_argo_tunnel":
-			jsonPayload, err := api.ArgoTunnels(context.Background(), accountID)
+			jsonPayload, err := api.Tunnels(context.Background(), cloudflare.TunnelListParams{
+				AccountID: accountID,
+				IsDeleted: cloudflare.BoolPtr(false),
+			})
+
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -257,6 +261,17 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				secret, err := api.TunnelToken(context.Background(), cloudflare.TunnelTokenParams{
+					AccountID: accountID,
+					ID:        jsonStructData[i].(map[string]interface{})["id"].(string),
+				})
+				if err != nil {
+					log.Fatal(err)
+				}
+				jsonStructData[i].(map[string]interface{})["secret"] = secret
+			}
 		case "cloudflare_byo_ip_prefix":
 			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {

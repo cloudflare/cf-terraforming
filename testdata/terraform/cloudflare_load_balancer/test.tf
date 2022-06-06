@@ -4,7 +4,6 @@ resource "cloudflare_load_balancer" "terraform_managed_resource" {
   enabled          = true
   fallback_pool_id = "17b5962d775c646f3f9725cbc7a53df4"
   name             = "www.example.com"
-  proxied          = true
   session_affinity = "cookie"
   session_affinity_attributes = {
     drain_duration = 100

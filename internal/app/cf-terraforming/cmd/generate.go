@@ -829,8 +829,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 
-				// Skip unusable timestamps
-				if contains([]string{"modified_on", "created_on"}, attrName) {
+				// No need to output computed attributes.
+				if r.Block.Attributes[attrName].Computed && !r.Block.Attributes[attrName].Optional {
 					continue
 				}
 

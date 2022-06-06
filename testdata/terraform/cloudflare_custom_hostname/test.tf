@@ -1,17 +1,7 @@
 resource "cloudflare_custom_hostname" "terraform_managed_resource" {
   custom_origin_server = "origin2.example.com"
   hostname             = "app.example.com"
-  ownership_verification = {
-    name  = "_cf-custom-hostname.app.example.com"
-    type  = "txt"
-    value = "5cc07c04-ea62-4a5a-95f0-419334a875a4"
-  }
-  ownership_verification_http = {
-    http_body = "5cc07c04-ea62-4a5a-95f0-419334a875a4"
-    http_url  = "http://custom.test.com/.well-known/cf-custom-hostname-challenge/0d89c70d-ad9f-4843-b99f-6cc0252067e9"
-  }
-  status  = "pending"
-  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
+  zone_id              = "0da42c8d2132a9ddaf714f9e7c920711"
   ssl {
     settings {
       ciphers         = ["ECDHE-RSA-AES128-GCM-SHA256", "AES128-SHA"]

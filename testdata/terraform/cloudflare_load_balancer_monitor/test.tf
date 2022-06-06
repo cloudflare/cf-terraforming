@@ -9,7 +9,7 @@ resource "cloudflare_load_balancer_monitor" "terraform_managed_resource" {
   path             = "/health"
   port             = 8080
   probe_zone       = "example.com"
-  retries          = 0
+  retries          = 1
   timeout          = 3
   type             = "https"
 }

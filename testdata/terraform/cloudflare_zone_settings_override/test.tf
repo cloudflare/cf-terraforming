@@ -49,7 +49,6 @@ resource "cloudflare_zone_settings_override" "terraform_managed_resource" {
     server_side_exclude         = "on"
     sort_query_string_for_cache = "off"
     ssl                         = "strict"
-    tls_1_2_only                = "off"
     tls_1_3                     = "on"
     tls_client_auth             = "off"
     true_client_ip_header       = "off"

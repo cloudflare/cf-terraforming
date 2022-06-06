@@ -419,7 +419,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 
 			for i := 0; i < resourceCount; i++ {
-				for originCounter, _ := range jsonStructData[i].(map[string]interface{})["origins"].([]interface{}) {
+				for originCounter := range jsonStructData[i].(map[string]interface{})["origins"].([]interface{}) {
 					if jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"] != nil {
 						jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["header"] = "Host"
 						jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["values"] = jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["Host"]
@@ -830,6 +830,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 				// No need to output computed attributes.
+				// No need to output computed attributes that are also not
+				// optional.
 				if r.Block.Attributes[attrName].Computed && !r.Block.Attributes[attrName].Optional {
 					continue
 				}

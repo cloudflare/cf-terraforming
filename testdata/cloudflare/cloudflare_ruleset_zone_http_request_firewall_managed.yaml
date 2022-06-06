@@ -1,0 +1,198 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "a6905ff86d3844cebc1a88dd80c659e7",
+            "name": "Bot Fight Mode for Likely Bots",
+            "description": "",
+            "source": "firewall_managed",
+            "kind": "managed",
+            "version": "4",
+            "last_updated": "2021-07-01T16:59:14.386598Z",
+            "phase": "http_request_firewall_managed"
+          },
+          {
+            "id": "48ba18287c544bd7bdbe842a294f1ae2",
+            "name": "Bot Fight Mode for Definite Bots",
+            "description": "",
+            "source": "firewall_managed",
+            "kind": "managed",
+            "version": "4",
+            "last_updated": "2021-07-01T16:59:17.970712Z",
+            "phase": "http_request_firewall_managed"
+          },
+          {
+            "id": "4c971a697dd249939460f4520dcd7184",
+            "name": "zone",
+            "description": "",
+            "source": "firewall_managed",
+            "kind": "zone",
+            "version": "2",
+            "last_updated": "2021-09-03T06:42:41.341405Z",
+            "phase": "http_request_firewall_managed"
+          },
+          {
+            "id": "c2e184081120413c86c3ab7e14069605",
+            "name": "Cloudflare Exposed Credentials Check Ruleset",
+            "description": "Exposed credentials check rules",
+            "source": "firewall_managed",
+            "kind": "managed",
+            "version": "32",
+            "last_updated": "2021-09-06T16:39:15.601436Z",
+            "phase": "http_request_firewall_managed"
+          },
+          {
+            "id": "efb7b8c949ac4650a09736fc376e9aee",
+            "name": "Cloudflare Managed Ruleset",
+            "description": "Created by the Cloudflare security team, this ruleset is designed to provide fast and effective protection for all your applications. It is frequently updated to cover new vulnerabilities and reduce false positives.",
+            "source": "firewall_managed",
+            "kind": "managed",
+            "version": "30",
+            "last_updated": "2021-09-06T16:39:16.550214Z",
+            "phase": "http_request_firewall_managed"
+          },
+          {
+            "id": "4814384a9e5d4991b9815dcfc25d2f1f",
+            "name": "Cloudflare OWASP Core Ruleset",
+            "description": "Cloudflare's implementation of the Open Web Application Security Project (OWASP) ModSecurity Core Rule Set. We routinely monitor for updates from OWASP based on the latest version available from the official code repository",
+            "source": "firewall_managed",
+            "kind": "managed",
+            "version": "29",
+            "last_updated": "2021-09-06T16:39:18.773224Z",
+            "phase": "http_request_firewall_managed"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/4c971a697dd249939460f4520dcd7184
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "4c971a697dd249939460f4520dcd7184",
+          "name": "zone",
+          "description": "",
+          "source": "firewall_managed",
+          "kind": "zone",
+          "version": "2",
+          "rules": [
+            {
+              "action": "execute",
+              "action_parameters": {
+                "id": "efb7b8c949ac4650a09736fc376e9aee",
+                "version": "latest",
+                "overrides": {
+                  "rules": [
+                    {
+                      "id": "5de7edfa648c4d6891dc3e7f84534ffa",
+                      "action": "block"
+                    },
+                    {
+                      "id": "d52aa57408a144afa35e0fd96e3897dc",
+                      "action": "block"
+                    },
+                    {
+                      "id": "7994335d116849f7a0ab6b771d1d0db7",
+                      "action": "block"
+                    },
+                    {
+                      "id": "20e34d3164a340dbb5c5d29203ccff90",
+                      "action": "block"
+                    },
+                    {
+                      "id": "8d9f209f35df412ba4bafe5156335ab1",
+                      "action": "block"
+                    },
+                    {
+                      "id": "8840c3fa2c7947f6b10176ceb8f65558",
+                      "action": "block"
+                    },
+                    {
+                      "id": "48e06376fc6347c0bf08b8ccf82d008b",
+                      "action": "block"
+                    },
+                    {
+                      "id": "8ea0937695984040b528c80a4e6df495",
+                      "action": "block"
+                    },
+                    {
+                      "id": "b777ce009bb346b39be4886055a71165",
+                      "action": "block"
+                    },
+                    {
+                      "id": "cb5b6de178d3488d8649da8608b7b3a2",
+                      "action": "block"
+                    },
+                    {
+                      "id": "390b6273c8dc4366b36e52fc6f35c356",
+                      "action": "block"
+                    },
+                    {
+                      "id": "8ac6964456494da6b098a93c35f86fc9",
+                      "action": "block"
+                    },
+                    {
+                      "id": "5ac122b3972c4247a247f3271045f374",
+                      "action": "block"
+                    },
+                    {
+                      "id": "b1efd337665d49f5950f892971120c4b",
+                      "action": "block"
+                    },
+                    {
+                      "id": "34158d546873469a8f8ccee19139627b",
+                      "action": "block"
+                    }
+                  ]
+                }
+              },
+              "expression": "(http.cookie eq \"jb_testing=true\")",
+              "description": "zone",
+              "last_updated": "2021-09-03T06:42:41.341405Z",
+              "enabled": false
+            }
+          ],
+          "last_updated": "2021-09-03T06:42:41.341405Z",
+          "phase": "http_request_firewall_managed"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

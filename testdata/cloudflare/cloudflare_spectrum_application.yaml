@@ -29,10 +29,7 @@ interactions:
             "proxy_protocol": "off",
             "ip_firewall": true,
             "tls": "full",
-            "edge_ips": {
-              "type": "dynamic",
-              "connectivity": "all"
-            },
+            "edge_ips": ["198.51.100.1"],
             "traffic_type": "direct",
             "argo_smart_routing": true,
             "created_on": "2014-01-02T02:20:00Z",

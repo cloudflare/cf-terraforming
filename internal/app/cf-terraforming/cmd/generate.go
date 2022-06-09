@@ -666,9 +666,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if ruleset.(map[string]interface{})["rules"] != nil {
 						for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
 							ID := rule.(map[string]interface{})["id"]
-							headers, exists := ruleHeaders[ID.(string)]
-							if exists {
-								jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+							if ID != nil {
+								headers, exists := ruleHeaders[ID.(string)]
+								if exists {
+									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+								}
 							}
 						}
 					}
@@ -844,7 +846,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 
-				// No need to output computed attributes.
 				// No need to output computed attributes that are also not
 				// optional.
 				if r.Block.Attributes[attrName].Computed && !r.Block.Attributes[attrName].Optional {

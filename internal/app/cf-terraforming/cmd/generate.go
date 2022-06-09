@@ -685,6 +685,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				if jsonStructData[i].(map[string]interface{})["edge_ips"] != nil {
+					jsonStructData[i].(map[string]interface{})["edge_ips"] = jsonStructData[i].(map[string]interface{})["edge_ips"].(map[string]interface{})["ips"]
+				}
+			}
 		case "cloudflare_waf_override":
 			jsonPayload, err := api.ListWAFOverrides(context.Background(), zoneID)
 			if err != nil {

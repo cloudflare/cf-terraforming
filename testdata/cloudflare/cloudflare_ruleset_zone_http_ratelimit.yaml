@@ -1,0 +1,93 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "bf47a1e2d1f1402aa85eb8f507e3ff5b",
+            "name": "default",
+            "description": "",
+            "source": "rate_limit",
+            "kind": "zone",
+            "version": "1",
+            "last_updated": "2021-08-29T21:59:21.447624Z",
+            "phase": "http_ratelimit"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/bf47a1e2d1f1402aa85eb8f507e3ff5b
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "bf47a1e2d1f1402aa85eb8f507e3ff5b",
+          "name": "default",
+          "description": "",
+          "source": "rate_limit",
+          "kind": "zone",
+          "version": "1",
+          "rules": [
+            {
+              "id": "549e64153ff14d2cb5a5ef88c1f5bdbc",
+              "version": "1",
+              "action": "block",
+              "ratelimit": {
+                "characteristics": [
+                  "ip.src",
+                  "cf.colo.id"
+                ],
+                "period": 60,
+                "requests_per_period": 100,
+                "mitigation_timeout": 30,
+                "mitigation_expression": ""
+              },
+              "expression": "(http.cookie eq \"namwe=value\")",
+              "description": "fwewe",
+              "last_updated": "2021-08-29T21:59:21.447624Z",
+              "ref": "549e64153ff14d2cb5a5ef88c1f5bdbc",
+              "enabled": false
+            }
+          ],
+          "last_updated": "2021-08-29T21:59:21.447624Z",
+          "phase": "http_ratelimit"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

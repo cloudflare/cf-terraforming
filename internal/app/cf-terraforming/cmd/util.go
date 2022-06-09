@@ -55,7 +55,7 @@ func testDataFile(filename string) string {
 		panic(err)
 	}
 
-	fullpath := dir.Name() + "/" + filename
+	fullpath := dir.Name() + "/" + filename + "/test.tf"
 	if _, err := os.Stat(fullpath); os.IsNotExist(err) {
 		panic(fmt.Errorf("terraform testdata file does not exist at %s", fullpath))
 	}
@@ -200,6 +200,12 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 
 			sort.Strings(sortedInnerAttributes)
 
+			for attrName, attrConfig := range schemaBlock.NestedBlocks[block].Block.Attributes {
+				if attrConfig.Computed && !attrConfig.Optional {
+					schemaBlock.NestedBlocks[block].Block.Attributes[attrName].AttributeType = cty.NilType
+				}
+			}
+
 			nestedBlockOutput := ""
 
 			// If the attribute we're looking at has further nesting, we'll
@@ -247,7 +253,6 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 					output += block + " {\n"
 					output += nestedBlockOutput
 					output += "}\n"
-
 				}
 
 			// Case for if the inner block's attributes are a list of map interfaces,

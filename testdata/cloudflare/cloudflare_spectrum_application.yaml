@@ -30,8 +30,7 @@ interactions:
             "ip_firewall": true,
             "tls": "full",
             "edge_ips": {
-              "type": "dynamic",
-              "connectivity": "all"
+              "ips": ["198.51.100.1"]
             },
             "traffic_type": "direct",
             "argo_smart_routing": true,

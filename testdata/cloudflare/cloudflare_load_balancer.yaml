@@ -24,6 +24,7 @@ interactions:
             "name": "www.example.com",
             "enabled": true,
             "ttl": 30,
+            "proxied": false,
             "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
             "default_pools": [
               "17b5962d775c646f3f9725cbc7a53df4",
@@ -52,7 +53,6 @@ interactions:
                 "00920f38ce07c2e2f4df50b1f61d4194"
               ]
             },
-            "proxied": true,
             "steering_policy": "dynamic_latency",
             "session_affinity": "cookie",
             "session_affinity_attributes": {

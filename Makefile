@@ -5,6 +5,7 @@ CLOUDFLARE_API_KEY    ?= aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 CLOUDFLARE_ZONE_ID    ?= 00deadb33f000000000000000000000000000
 CLOUDFLARE_ACCOUNT_ID ?= 00deadb33f000000000000000000000000000
 VERSION               ?= $$(git describe --tags --abbrev=0)-dev+$$(git rev-parse --short=12 HEAD)
+ROOT_DIR               = $$PWD
 
 HASHICORP_CHECKPOINT_TIMEMOUT ?= 30000
 
@@ -27,4 +28,7 @@ test:
 fmt:
 	gofmt -w $(GO_FILES)
 
-.PHONY: build test fmt
+validate-tf:
+	@bash scripts/validate-tf.sh
+
+.PHONY: build test fmt validate-tf

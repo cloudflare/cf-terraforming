@@ -249,7 +249,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[0].(map[string]interface{})["value"]
 			}
 		case "cloudflare_argo_tunnel":
-			jsonPayload, err := api.ArgoTunnels(context.Background(), accountID)
+			jsonPayload, err := api.Tunnels(context.Background(), cloudflare.TunnelListParams{
+				AccountID: accountID,
+				IsDeleted: cloudflare.BoolPtr(false),
+			})
+
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -257,6 +261,17 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				secret, err := api.TunnelToken(context.Background(), cloudflare.TunnelTokenParams{
+					AccountID: accountID,
+					ID:        jsonStructData[i].(map[string]interface{})["id"].(string),
+				})
+				if err != nil {
+					log.Fatal(err)
+				}
+				jsonStructData[i].(map[string]interface{})["secret"] = secret
+			}
 		case "cloudflare_byo_ip_prefix":
 			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {
@@ -419,7 +434,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			json.Unmarshal(m, &jsonStructData)
 
 			for i := 0; i < resourceCount; i++ {
-				for originCounter, _ := range jsonStructData[i].(map[string]interface{})["origins"].([]interface{}) {
+				for originCounter := range jsonStructData[i].(map[string]interface{})["origins"].([]interface{}) {
 					if jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"] != nil {
 						jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["header"] = "Host"
 						jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["values"] = jsonStructData[i].(map[string]interface{})["origins"].([]interface{})[originCounter].(map[string]interface{})["header"].(map[string]interface{})["Host"]
@@ -651,9 +666,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if ruleset.(map[string]interface{})["rules"] != nil {
 						for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
 							ID := rule.(map[string]interface{})["id"]
-							headers, exists := ruleHeaders[ID.(string)]
-							if exists {
-								jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+							if ID != nil {
+								headers, exists := ruleHeaders[ID.(string)]
+								if exists {
+									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+								}
 							}
 						}
 					}
@@ -668,6 +685,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				if jsonStructData[i].(map[string]interface{})["edge_ips"] != nil {
+					jsonStructData[i].(map[string]interface{})["edge_ips"] = jsonStructData[i].(map[string]interface{})["edge_ips"].(map[string]interface{})["ips"]
+				}
+			}
 		case "cloudflare_waf_override":
 			jsonPayload, err := api.ListWAFOverrides(context.Background(), zoneID)
 			if err != nil {
@@ -782,6 +805,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["max_age"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["max_age"]
 				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["preload"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["preload"]
 				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["nosniff"] = jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["security_header"].(map[string]interface{})["strict_transport_security"].(map[string]interface{})["nosniff"]
+
+				// tls_1_2_only is deprecated in favour of min_tls
+				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["tls_1_2_only"] = nil
 			}
 		default:
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
@@ -829,8 +855,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 
-				// Skip unusable timestamps
-				if contains([]string{"modified_on", "created_on"}, attrName) {
+				// No need to output computed attributes that are also not
+				// optional.
+				if r.Block.Attributes[attrName].Computed && !r.Block.Attributes[attrName].Optional {
 					continue
 				}
 

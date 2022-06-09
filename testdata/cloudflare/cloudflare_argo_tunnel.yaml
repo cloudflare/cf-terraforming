@@ -7,7 +7,7 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/cfd_tunnel
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/cfd_tunnel?is_deleted=false
     method: GET
   response:
     body: |
@@ -30,6 +30,30 @@ interactions:
             ]
           }
         ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/cfd_tunnel/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/token
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": "AQIDBAUGBwgBAgMEBQYHCAECAwQFBgcIAQIDBAUGBwg="
       }
     headers:
       Content-Type:

@@ -34,7 +34,7 @@ interactions:
             },
             "port": 8080,
             "timeout": 3,
-            "retries": 0,
+            "retries": 1,
             "interval": 90,
             "expected_body": "alive",
             "expected_codes": "2xx",

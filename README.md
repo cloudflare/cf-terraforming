@@ -168,7 +168,7 @@ Last updated Apr 13, 2021
 | [cloudflare_authenticated_origin_pulls](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls) | Zone | ❌ | ❌ |
 | [cloudflare_authenticated_origin_pulls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls_certificate) | Zone | ❌ | ❌ |
 | [cloudflare_byo_ip_prefix](https://www.terraform.io/docs/providers/cloudflare/r/byo_ip_prefix) | Account | ✅ | ✅ |
-| [cloudflare_certificate_pack]Ï(https://www.terraform.io/docs/providers/cloudflare/r/certificate_pack) | Zone | ✅ | ✅ |
+| [cloudflare_certificate_pack](https://www.terraform.io/docs/providers/cloudflare/r/certificate_pack) | Zone | ✅ | ✅ |
 | [cloudflare_custom_hostname](https://www.terraform.io/docs/providers/cloudflare/r/custom_hostname) | Zone | ✅ | ✅ |
 | [cloudflare_custom_hostname_fallback_origin](https://www.terraform.io/docs/providers/cloudflare/r/custom_hostname_fallback_origin) | Account | ✅ | ❌ |
 | [cloudflare_custom_pages](https://www.terraform.io/docs/providers/cloudflare/r/custom_pages) | Account or Zone | ✅ | ✅ |

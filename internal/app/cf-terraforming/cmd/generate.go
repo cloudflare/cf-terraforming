@@ -459,6 +459,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				// Workaround for LogpushJob.Filter being empty with a custom
+				// marshaler and returning `{"where":{}}` as the "empty" value.
+				if jsonStructData[i].(map[string]interface{})["filter"] == `{"where":{}}` {
+					jsonStructData[i].(map[string]interface{})["filter"] = nil
+				}
+			}
+
 		case "cloudflare_origin_ca_certificate":
 			jsonPayload, err := api.OriginCertificates(context.Background(), cloudflare.OriginCACertificateListOptions{ZoneID: zoneID})
 			if err != nil {

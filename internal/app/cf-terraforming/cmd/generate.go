@@ -459,6 +459,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				// Workaround for LogpushJob.Filter being empty with a custom
+				// marshaler and returning `{"where":{}}` as the "empty" value.
+				if jsonStructData[i].(map[string]interface{})["filter"] == `{"where":{}}` {
+					jsonStructData[i].(map[string]interface{})["filter"] = nil
+				}
+			}
+
 		case "cloudflare_origin_ca_certificate":
 			jsonPayload, err := api.OriginCertificates(context.Background(), cloudflare.OriginCACertificateListOptions{ZoneID: zoneID})
 			if err != nil {
@@ -625,6 +634,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonPayload = nonManagedRules
 				ruleHeaders := map[string][]map[string]interface{}{}
 				for i, rule := range nonManagedRules {
+
 					ruleset, _ := api.GetZoneRuleset(context.Background(), zoneID, rule.ID)
 					jsonPayload[i].Rules = ruleset.Rules
 
@@ -671,6 +681,26 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 								if exists {
 									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
 								}
+							}
+						}
+					}
+				}
+			}
+
+			for i := 0; i < resourceCount; i++ {
+				if jsonStructData[i].(map[string]interface{})["rules"] != nil {
+					for ruleCounter := range jsonStructData[i].(map[string]interface{})["rules"].([]interface{}) {
+						if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"] != nil {
+							if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"] != nil {
+								if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["enabled"] == true {
+									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["status"] = "enabled"
+								}
+
+								if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["enabled"] == false {
+									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["status"] = "disabled"
+								}
+
+								jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["enabled"] = nil
 							}
 						}
 					}

@@ -1,0 +1,40 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/logpush/jobs
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": 1,
+            "enabled": false,
+            "name": "example.com",
+            "dataset": "http_requests",
+            "filter": "{\"where\":{\"and\":[{\"key\":\"ClientRequestPath\",\"operator\":\"contains\",\"value\":\"/static\"},{\"key\":\"ClientRequestHost\",\"operator\":\"eq\",\"value\":\"example.com\"}]}}",
+            "logpull_options": "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339",
+            "destination_conf": "s3://mybucket/logs?region=us-west-2",
+            "last_complete": null,
+            "last_error": null,
+            "error_message": null
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

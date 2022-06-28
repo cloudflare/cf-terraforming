@@ -6,7 +6,7 @@ require (
 	github.com/cloudflare/cloudflare-go v0.43.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/google/uuid v1.3.0
-	github.com/hashicorp/go-version v1.5.0
+	github.com/hashicorp/go-version v1.6.0
 	github.com/hashicorp/hc-install v0.4.0
 	github.com/hashicorp/terraform-exec v0.17.1
 	github.com/hashicorp/terraform-json v0.14.0

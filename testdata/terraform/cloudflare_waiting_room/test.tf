@@ -8,6 +8,7 @@ resource "cloudflare_waiting_room" "terraform_managed_resource" {
   new_users_per_minute    = 1000
   path                    = "/shop/checkout"
   queue_all               = true
+  queueing_method         = "fifo"
   session_duration        = 10
   suspended               = false
   total_active_users      = 1000

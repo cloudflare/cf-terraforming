@@ -112,7 +112,19 @@ interactions:
                 "version": "latest",
                 "overrides": {
                   "action": "log",
-                  "enabled": false
+                  "enabled": false,
+                  "categories": [
+                    {
+                      "category": "paranoia-level-2",
+                      "enabled": false
+                    }
+                  ],
+                  "rules": [
+                    {
+                      "id": "6179ae15870a4bb7b2d480d4843b323c",
+                      "enabled": false
+                    }
+                  ]
                 }
               },
               "expression": "(http.cookie eq \"jb_testing=true\")",

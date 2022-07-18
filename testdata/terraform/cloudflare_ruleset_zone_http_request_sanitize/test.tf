@@ -10,8 +10,8 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     action_parameters {
       overrides {
         rules {
-          enabled = true
-          id      = "78723a9e0c7c4c6dbec5684cb766231d"
+          id     = "78723a9e0c7c4c6dbec5684cb766231d"
+          status = "enabled"
         }
       }
       id      = "70339d97bdb34195bbf054b1ebe81f76"

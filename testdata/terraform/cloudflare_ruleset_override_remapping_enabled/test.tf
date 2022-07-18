@@ -10,6 +10,14 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     expression  = "(http.cookie eq \"jb_testing=true\")"
     action_parameters {
       overrides {
+        categories {
+          category = "paranoia-level-2"
+          status   = "enabled"
+        }
+        rules {
+          id     = "6179ae15870a4bb7b2d480d4843b323c"
+          status = "enabled"
+        }
         action = "log"
         status = "enabled"
       }

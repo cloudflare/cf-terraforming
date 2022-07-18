@@ -688,19 +688,41 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 
 			for i := 0; i < resourceCount; i++ {
-				if jsonStructData[i].(map[string]interface{})["rules"] != nil {
-					for ruleCounter := range jsonStructData[i].(map[string]interface{})["rules"].([]interface{}) {
-						if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"] != nil {
-							if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"] != nil {
-								if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["enabled"] == true {
-									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["status"] = "enabled"
+				rules := jsonStructData[i].(map[string]interface{})["rules"]
+				if rules != nil {
+					for ruleCounter := range rules.([]interface{}) {
+						actionParams := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"]
+						if actionParams != nil {
+							overrides := actionParams.(map[string]interface{})["overrides"]
+							if overrides != nil {
+								if overrides.(map[string]interface{})["enabled"] == true {
+									overrides.(map[string]interface{})["status"] = "enabled"
 								}
 
-								if jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["enabled"] == false {
-									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["status"] = "disabled"
+								if overrides.(map[string]interface{})["enabled"] == false {
+									overrides.(map[string]interface{})["status"] = "disabled"
 								}
 
-								jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["overrides"].(map[string]interface{})["enabled"] = nil
+								overrides.(map[string]interface{})["enabled"] = nil
+
+								for key, _ := range overrides.(map[string]interface{}) {
+									overrideRules, ok := overrides.(map[string]interface{})[key].([]interface{})
+									if !ok || overrideRules == nil {
+										continue
+									}
+
+									for j := range overrideRules {
+										if overrideRules[j].(map[string]interface{})["enabled"] == true {
+											overrideRules[j].(map[string]interface{})["status"] = "enabled"
+										}
+
+										if overrideRules[j].(map[string]interface{})["enabled"] == false {
+											overrideRules[j].(map[string]interface{})["status"] = "disabled"
+										}
+
+										overrideRules[j].(map[string]interface{})["enabled"] = nil
+									}
+								}
 							}
 						}
 					}

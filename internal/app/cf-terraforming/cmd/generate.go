@@ -687,6 +687,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
+			// log custom fields specfic transformation fields
+			logCustomFieldsTransform := []string{"cookie_fields", "request_fields", "response_fields"}
+
 			for i := 0; i < resourceCount; i++ {
 				rules := jsonStructData[i].(map[string]interface{})["rules"]
 				if rules != nil {
@@ -722,6 +725,19 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 										overrideRules[j].(map[string]interface{})["enabled"] = nil
 									}
+								}
+							}
+							// check for log custom fields that need to be transformed
+							for _, logCustomFields := range logCustomFieldsTransform {
+								// check if the field exists and make sure it has at least one element
+								if actionParams.(map[string]interface{})[logCustomFields] != nil && len(actionParams.(map[string]interface{})[logCustomFields].([]interface{})) > 0 {
+									// Create a new list to store the data in.
+									var newLogCustomFields []interface{}
+									// iterate over each of the keys and add them to a generic list
+									for logCustomFieldsCounter := range actionParams.(map[string]interface{})[logCustomFields].([]interface{}) {
+										newLogCustomFields = append(newLogCustomFields, actionParams.(map[string]interface{})[logCustomFields].([]interface{})[logCustomFieldsCounter].(map[string]interface{})["name"])
+									}
+									actionParams.(map[string]interface{})[logCustomFields] = newLogCustomFields
 								}
 							}
 						}

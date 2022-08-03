@@ -196,7 +196,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_rate_limit":
-			jsonPayload, _, err := api.ListRateLimits(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			jsonPayload, err := api.ListAllRateLimits(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}

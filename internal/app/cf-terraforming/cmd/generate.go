@@ -532,7 +532,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 		case "cloudflare_rate_limit":
-			jsonPayload, _, err := api.ListRateLimits(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			jsonPayload, err := api.ListAllRateLimits(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}

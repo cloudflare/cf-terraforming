@@ -130,14 +130,14 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				json.Unmarshal(m, &jsonStructData)
 			}
 		case "cloudflare_filter":
-			jsonPayload, err := api.Filters(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			jsonPayload, _, err := api.Filters(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FilterListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_firewall_rule":
-			jsonPayload, err := api.FirewallRules(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			jsonPayload, _, err := api.FirewallRules(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FirewallRuleListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

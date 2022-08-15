@@ -1,0 +1,42 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/managed_headers?status=enabled
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "managed_request_headers": [
+            {
+              "id": "add_visitor_location_headers",
+              "enabled": true,
+              "has_conflict": false
+            }
+          ],
+          "managed_response_headers": [
+            {
+              "id": "remove_x-powered-by_header",
+              "enabled": true,
+              "has_conflict": false
+            }
+          ]
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

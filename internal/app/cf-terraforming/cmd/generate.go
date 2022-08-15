@@ -195,6 +195,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				resourceCount = len(jsonPayload.Result)
 				m, _ := json.Marshal(jsonPayload.Result)
 				json.Unmarshal(m, &jsonStructData)
+
 			} else {
 				jsonPayload, err := api.ListZoneAccessRules(context.Background(), zoneID, cloudflare.AccessRule{}, 1)
 				if err != nil {
@@ -470,7 +471,23 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					jsonStructData[i].(map[string]interface{})["filter"] = nil
 				}
 			}
+		case "cloudflare_managed_headers":
+			// only grab the enabled headers
+			jsonPayload, err := api.ListZoneManagedHeaders(context.Background(), cloudflare.ResourceIdentifier(zoneID), cloudflare.ListManagedHeadersParams{Status: "enabled"})
+			if err != nil {
+				log.Fatal(err)
+			}
 
+			var managedHeaders []cloudflare.ManagedHeaders
+			managedHeaders = append(managedHeaders, jsonPayload)
+
+			resourceCount = len(managedHeaders)
+			m, _ := json.Marshal(managedHeaders)
+			json.Unmarshal(m, &jsonStructData)
+
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["id"] = zoneID
+			}
 		case "cloudflare_origin_ca_certificate":
 			jsonPayload, err := api.OriginCertificates(context.Background(), cloudflare.OriginCACertificateListOptions{ZoneID: zoneID})
 			if err != nil {

@@ -830,13 +830,13 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["status"] = nil
 			}
 		case "cloudflare_zone_lockdown":
-			jsonPayload, err := api.ListZoneLockdowns(context.Background(), zoneID, 1)
+			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			resourceCount = len(jsonPayload.Result)
-			m, _ := json.Marshal(jsonPayload.Result)
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 
 		case "cloudflare_zone_settings_override":

@@ -264,12 +264,12 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_zone_lockdown":
-			jsonPayload, err := api.ListZoneLockdowns(context.Background(), zoneID, 1)
+			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			m, _ := json.Marshal(jsonPayload.Result)
+			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		default:
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for state import", resourceType)

@@ -359,7 +359,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["status"] = nil
 			}
 		case "cloudflare_filter":
-			jsonPayload, err := api.Filters(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			jsonPayload, _, err := api.Filters(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FilterListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -368,7 +368,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_firewall_rule":
-			jsonPayload, err := api.FirewallRules(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			jsonPayload, _, err := api.FirewallRules(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FirewallRuleListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -532,7 +532,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 		case "cloudflare_rate_limit":
-			jsonPayload, _, err := api.ListRateLimits(context.Background(), zoneID, cloudflare.PaginationOptions{})
+			jsonPayload, err := api.ListAllRateLimits(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -830,13 +830,13 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["status"] = nil
 			}
 		case "cloudflare_zone_lockdown":
-			jsonPayload, err := api.ListZoneLockdowns(context.Background(), zoneID, 1)
+			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			resourceCount = len(jsonPayload.Result)
-			m, _ := json.Marshal(jsonPayload.Result)
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 
 		case "cloudflare_zone_settings_override":

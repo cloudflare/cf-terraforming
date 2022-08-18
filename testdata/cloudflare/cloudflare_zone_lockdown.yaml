@@ -7,7 +7,7 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/firewall/lockdowns?page=1&per_page=100
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/firewall/lockdowns?page=1&per_page=50
     method: GET
   response:
     body: |
@@ -32,7 +32,14 @@ interactions:
               }
             ]
           }
-        ]
+        ],
+        "result_info": {
+          "page": 1,
+          "per_page": 50,
+          "count": 1,
+          "total_count": 1,
+          "total_pages": 1
+        }
       }
     headers:
       Content-Type:

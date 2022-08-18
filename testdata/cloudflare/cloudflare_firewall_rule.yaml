@@ -6,8 +6,8 @@ interactions:
     form: {}
     headers:
       Content-Type:
-      - application/json
-    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/firewall/rules
+        - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/firewall/rules?page=1&per_page=50
     method: GET
   response:
     body: |
@@ -34,13 +34,20 @@ interactions:
               "ref": "FIL-100"
             }
           }
-        ]
+        ],
+        "result_info": {
+          "page": 1,
+          "per_page": 100,
+          "count": 1,
+          "total_count": 1,
+          "total_pages": 1
+        }
       }
     headers:
       Content-Type:
-      - application/json
+        - application/json
       Vary:
-      - Accept-Encoding
+        - Accept-Encoding
     status: 200 OK
     code: 200
     duration: ""

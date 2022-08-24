@@ -75,4 +75,18 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       version = "latest"
     }
   }
+  rules {
+    action      = "skip"
+    description = "firewall rule"
+    enabled     = true
+    expression  = "(http.request.uri.path contains \"/filters\")"
+    action_parameters {
+      rules = {
+        efb7b8c949ac4650a09736fc376e9aee = "062a7840e0cb47f7b36acd2d507ce584, 5cLhGXtTafjwPkdy8fmW5QvPiokBuZhi"
+      }
+    }
+    logging {
+      enabled = true
+    }
+  }
 }

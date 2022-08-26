@@ -760,6 +760,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 									actionParams.(map[string]interface{})[logCustomFields] = newLogCustomFields
 								}
 							}
+							// check if our ruleset is of action 'skip'
+							if rules.([]interface{})[ruleCounter].(map[string]interface{})["action"] == "skip" {
+								for rule := range actionParams.(map[string]interface{}) {
+									for key, value := range actionParams.(map[string]interface{})[rule].(map[string]interface{}) {
+										var rulesList []string
+										for _, val := range value.([]interface{}) {
+											rulesList = append(rulesList, val.(string))
+										}
+										actionParams.(map[string]interface{})[rule].(map[string]interface{})[key] = strings.Join(rulesList, ", ")
+									}
+								}
+							}
 						}
 					}
 				}

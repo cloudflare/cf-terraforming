@@ -355,6 +355,8 @@ func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attr
 			}
 		case ty.IsListType(), ty.IsSetType():
 			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], true)
+		case ty.IsMapType():
+			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false)
 		default:
 			log.Debugf("unexpected nested type %T for %s", ty, attrName)
 		}

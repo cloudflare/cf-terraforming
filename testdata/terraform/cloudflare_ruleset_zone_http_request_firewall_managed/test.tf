@@ -89,4 +89,16 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       enabled = true
     }
   }
+  rules {
+    action      = "skip"
+    description = "test skip rule on ip "
+    enabled     = true
+    expression  = "(ip.src eq 1.2.3.4)"
+    action_parameters {
+      ruleset = "current"
+    }
+    logging {
+      enabled = true
+    }
+  }
 }

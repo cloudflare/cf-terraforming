@@ -1,0 +1,110 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+      method: GET
+    response:
+      body: |
+        {
+          "result": [
+            {
+              "id": "4c971a697dd249939460f4520dcd7184",
+              "name": "default",
+              "description": "",
+              "source": "firewall_custom",
+              "kind": "zone",
+              "version": "1",
+              "last_updated": "2021-07-01T16:59:14.386598Z",
+              "phase": "http_request_firewall_custom"
+            }
+          ],
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/4c971a697dd249939460f4520dcd7184
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "id": "4c971a697dd249939460f4520dcd7184",
+            "name": "zone",
+            "description": "",
+            "source": "firewall_custom",
+            "kind": "zone",
+            "version": "2",
+            "rules": [
+              {
+                "id": "062a7840e0cb47f7b36acd2d507ce584",
+                "version": "2",
+                "action": "skip",
+                "expression": "(http.request.uri.path contains \"/filters\")",
+                "description": "firewall rule",
+                "last_updated": "2021-09-03T06:42:41.341405Z",
+                "ref": "062a7840e0cb47f7b36acd2d507ce584",
+                "enabled": true,
+                "logging": {
+                  "enabled": true
+                },
+                "action_parameters": {
+                  "rules":{
+                    "efb7b8c949ac4650a09736fc376e9aee": [
+                      "062a7840e0cb47f7b36acd2d507ce584",
+                      "5cLhGXtTafjwPkdy8fmW5QvPiokBuZhi"
+                    ]
+                  }
+                }
+              },
+              {
+                "id": "8751856eb4cf4dfdaca9a3b5e9376b1c",
+                "version": "2",
+                "action": "skip",
+                "expression": "(ip.src eq 1.2.3.4)",
+                "description": "test skip rule on ip ",
+                "last_updated": "2021-09-03T06:42:41.341405Z",
+                "ref": "8751856eb4cf4dfdaca9a3b5e9376b1c",
+                "enabled": true,
+                "logging": {
+                  "enabled": true
+                },
+                "action_parameters": {
+                    "ruleset": "current"
+                }
+              }
+            ],
+            "last_updated": "2021-09-03T06:42:41.341405Z",
+            "phase": "http_request_firewall_custom"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

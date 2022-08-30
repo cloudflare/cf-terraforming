@@ -763,12 +763,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 							// check if our ruleset is of action 'skip'
 							if rules.([]interface{})[ruleCounter].(map[string]interface{})["action"] == "skip" {
 								for rule := range actionParams.(map[string]interface{}) {
-									for key, value := range actionParams.(map[string]interface{})[rule].(map[string]interface{}) {
-										var rulesList []string
-										for _, val := range value.([]interface{}) {
-											rulesList = append(rulesList, val.(string))
+									// "rules" is the only map[string][]string we need to remap. The others are all []string and are handled naturally.
+									if rule == "rules" {
+										for key, value := range actionParams.(map[string]interface{})[rule].(map[string]interface{}) {
+											var rulesList []string
+											for _, val := range value.([]interface{}) {
+												rulesList = append(rulesList, val.(string))
+											}
+											actionParams.(map[string]interface{})[rule].(map[string]interface{})[key] = strings.Join(rulesList, ", ")
 										}
-										actionParams.(map[string]interface{})[rule].(map[string]interface{})[key] = strings.Join(rulesList, ", ")
 									}
 								}
 							}
@@ -960,7 +963,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if r.Block.Attributes[attrName].Computed && !r.Block.Attributes[attrName].Optional {
 					continue
 				}
-
 				if attrName == "account_id" && accountID != "" {
 					output += writeAttrLine(attrName, accountID, false)
 					continue

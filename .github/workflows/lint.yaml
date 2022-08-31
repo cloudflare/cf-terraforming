@@ -1,0 +1,34 @@
+on:
+  push:
+    paths-ignore:
+    - 'README.md'
+    - 'CHANGELOG.md'
+    - 'LICENSE'
+
+name: Lint
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.18]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: install go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+         fetch-depth: 0 # needed for `only-new-issues` to compare diffs
+      - uses: actions/cache@v2.1.3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: latest
+          args: "--config .golintci.yml"
+          only-new-issues: true

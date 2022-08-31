@@ -88,7 +88,6 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 			"zone_id":    zoneID,
 			"account_id": accountID,
 		}).Debug("initializing cloudflare-go")
-
 	} else {
 		log.WithFields(logrus.Fields{
 			"zone_id":    zoneID,
@@ -142,7 +141,7 @@ func sanitiseTerraformResourceName(s string) string {
 }
 
 // flattenAttrMap takes a list of attributes defined as a list of maps comprising of {"id": "attrId", "value": "attrValue"}
-// and flattens it to a single map of {"attrId": "attrValue"}
+// and flattens it to a single map of {"attrId": "attrValue"}.
 func flattenAttrMap(l []interface{}) map[string]interface{} {
 	result := make(map[string]interface{})
 	attrID := ""
@@ -236,12 +235,10 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 					default:
 						log.Debugf("unable to generate recursively nested blocks for %T", s)
 					}
-
 				}
 			}
 
 			switch attrStruct := structData[block].(type) {
-
 			// Case for if the inner block's attributes are a map of interfaces, in
 			// which case we can directly add them to the config.
 			case map[string]interface{}:
@@ -299,7 +296,6 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 							}
 
 							if len(indexedNestedBlocks[currentID]) > 0 {
-
 								currentNestIdx := len(indexedNestedBlocks[currentID]) - 1
 								// Pull out the last nestedblock that we built for this parent
 								// We only need to render the last one because it holds every other all other nested blocks for this parent
@@ -318,22 +314,18 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 								indexedNestedBlocks[currentID][currentNestIdx] = currentNest
 								output += currentNest
 							}
-
 						}
 
 						output += "}\n"
 					}
-
 				}
 
 			default:
 				log.Debugf("unexpected attribute struct type %T for block %s", attrStruct, block)
 			}
-
 		} else {
 			log.Debugf("nested mode %q for %s not recognised", schemaBlock.NestedBlocks[block].NestingMode, block)
 		}
-
 	}
 
 	return output

@@ -15,7 +15,7 @@ var api *cloudflare.API
 var terraformImportCmdPrefix = "terraform import"
 var terraformResourceNamePrefix = "terraform_managed_resource"
 
-// rootCmd represents the base command when called without any subcommands
+// rootCmd represents the base command when called without any subcommands.
 var rootCmd = &cobra.Command{
 	Use:   "cf-terraforming",
 	Short: "Bootstrapping Terraform from existing Cloudflare account",

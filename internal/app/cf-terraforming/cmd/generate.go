@@ -195,7 +195,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				resourceCount = len(jsonPayload.Result)
 				m, _ := json.Marshal(jsonPayload.Result)
 				json.Unmarshal(m, &jsonStructData)
-
 			} else {
 				jsonPayload, err := api.ListZoneAccessRules(context.Background(), zoneID, cloudflare.AccessRule{}, 1)
 				if err != nil {
@@ -605,7 +604,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					default:
 						jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
 					}
-
 				}
 			}
 		case "cloudflare_ruleset":
@@ -654,14 +652,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonPayload = nonManagedRules
 				ruleHeaders := map[string][]map[string]interface{}{}
 				for i, rule := range nonManagedRules {
-
 					ruleset, _ := api.GetZoneRuleset(context.Background(), zoneID, rule.ID)
 					jsonPayload[i].Rules = ruleset.Rules
 
 					if ruleset.Rules != nil {
 						for _, rule := range ruleset.Rules {
 							if rule.ActionParameters != nil && rule.ActionParameters.Headers != nil {
-
 								// Sort the headers to have deterministic config output
 								keys := make([]string, 0, len(rule.ActionParameters.Headers))
 								for k := range rule.ActionParameters.Headers {
@@ -683,7 +679,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 								}
 							}
 						}
-
 					}
 				}
 
@@ -707,7 +702,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			// log custom fields specfic transformation fields
+			// log custom fields specific transformation fields
 			logCustomFieldsTransform := []string{"cookie_fields", "request_fields", "response_fields"}
 
 			for i := 0; i < resourceCount; i++ {
@@ -728,7 +723,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 								overrides.(map[string]interface{})["enabled"] = nil
 
-								for key, _ := range overrides.(map[string]interface{}) {
+								for key := range overrides.(map[string]interface{}) {
 									overrideRules, ok := overrides.(map[string]interface{})[key].([]interface{})
 									if !ok || overrideRules == nil {
 										continue
@@ -1006,6 +1001,5 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		fmt.Fprint(cmd.OutOrStdout(), output)
-
 	}
 }

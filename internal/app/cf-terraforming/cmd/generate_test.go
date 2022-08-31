@@ -140,7 +140,6 @@ func TestResourceGeneration(t *testing.T) {
 	}
 
 	for name, tc := range tests {
-
 		t.Run(name, func(t *testing.T) {
 			// Reset the environment variables used in test to ensure we don't
 			// have both present at once.
@@ -171,7 +170,6 @@ func TestResourceGeneration(t *testing.T) {
 				), cloudflare.UsingAccount(cloudflareTestAccountID))
 
 				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
-
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
 				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
@@ -181,7 +179,6 @@ func TestResourceGeneration(t *testing.T) {
 				))
 
 				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
-
 			}
 
 			expected := testDataFile(tc.testdataFilename)

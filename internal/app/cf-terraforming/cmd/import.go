@@ -16,13 +16,13 @@ import (
 // resourceImportStringFormats contains a mapping of the resource type to the
 // composite ID that is compatible with performing an import.
 var resourceImportStringFormats = map[string]string{
-	"cloudflare_access_rule":           ":identifer_type/:identifer_value/:id",
+	"cloudflare_access_rule":           ":identifier_type/:identifier_value/:id",
 	"cloudflare_account_member":        ":account_id/:id",
 	"cloudflare_argo":                  ":zone_id/argo",
 	"cloudflare_argo_tunnel":           ":account_id/:id",
 	"cloudflare_byo_ip_prefix":         ":id",
 	"cloudflare_certificate_pack":      ":zone_id/:id",
-	"cloudflare_custom_pages":          ":identifer_type/:identifer_value/:id",
+	"cloudflare_custom_pages":          ":identifier_type/:identifier_value/:id",
 	"cloudflare_filter":                ":zone_id/:id",
 	"cloudflare_firewall_rule":         ":zone_id/:id",
 	"cloudflare_healthcheck":           ":zone_id/:id",
@@ -108,7 +108,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			
+
 			var customerManagedCertificates []cloudflare.CertificatePack
 			for _, r := range jsonPayload {
 				if r.Type != "universal" {
@@ -116,7 +116,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 			}
 			jsonPayload = customerManagedCertificates
-			
+
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_custom_pages":
@@ -128,7 +128,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 				m, _ := json.Marshal(jsonPayload)
 				json.Unmarshal(m, &jsonStructData)
-
 			} else {
 				jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{ZoneID: zoneID})
 				if err != nil {
@@ -313,8 +312,8 @@ func buildCompositeID(resourceType, resourceID string) string {
 	s := ""
 	s += fmt.Sprintf("%s %s.%s_%s %s", terraformImportCmdPrefix, resourceType, terraformResourceNamePrefix, resourceID, resourceImportStringFormats[resourceType])
 	replacer := strings.NewReplacer(
-		":identifer_type", identiferType,
-		":identifer_value", identiferValue,
+		":identifier_type", identiferType,
+		":identifier_value", identiferValue,
 		":zone_id", zoneID,
 		":account_id", accountID,
 		":id", resourceID,

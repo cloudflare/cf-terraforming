@@ -179,7 +179,7 @@ interactions:
                 "description": "zone",
                 "last_updated": "2021-09-03T06:42:41.341405Z",
                 "enabled": false
-              },
+              }
             ],
             "last_updated": "2021-09-03T06:42:41.341405Z",
             "phase": "http_request_firewall_managed"

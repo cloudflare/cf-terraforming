@@ -179,27 +179,6 @@ interactions:
                 "description": "zone",
                 "last_updated": "2021-09-03T06:42:41.341405Z",
                 "enabled": false
-              },
-              {
-                "id": "062a7840e0cb47f7b36acd2d507ce584",
-                "version": "2",
-                "action": "skip",
-                "expression": "(http.request.uri.path contains \"/filters\")",
-                "description": "firewall rule",
-                "last_updated": "2021-09-03T06:42:41.341405Z",
-                "ref": "062a7840e0cb47f7b36acd2d507ce584",
-                "enabled": true,
-                "logging": {
-                  "enabled": true
-                },
-                "action_parameters": {
-                  "rules":{
-                    "efb7b8c949ac4650a09736fc376e9aee": [
-                      "062a7840e0cb47f7b36acd2d507ce584",
-                      "5cLhGXtTafjwPkdy8fmW5QvPiokBuZhi"
-                    ]
-                  }
-                }
               }
             ],
             "last_updated": "2021-09-03T06:42:41.341405Z",

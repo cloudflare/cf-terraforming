@@ -86,7 +86,7 @@ interactions:
                 "ref": "8751856eb4cf4dfdaca9a3b5e9376b1c",
                 "enabled": true,
                 "logging": {
-                  "enabled": true
+                  "enabled": false
                 },
                 "action_parameters": {
                     "ruleset": "current"

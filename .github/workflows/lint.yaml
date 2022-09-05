@@ -36,3 +36,4 @@ jobs:
           version: latest
           args: "--config .golintci.yml"
           only-new-issues: true
+          skip-cache: true

@@ -5,6 +5,10 @@ on:
     - 'CHANGELOG.md'
     - 'LICENSE'
 
+permissions:
+  contents: read
+  pull-requests: read
+
 name: Lint
 jobs:
   test:

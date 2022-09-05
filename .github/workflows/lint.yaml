@@ -1,9 +1,4 @@
-on:
-  push:
-    paths-ignore:
-    - 'README.md'
-    - 'CHANGELOG.md'
-    - 'LICENSE'
+on: [pull_request]
 
 permissions:
   contents: read

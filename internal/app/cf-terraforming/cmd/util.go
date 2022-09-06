@@ -243,7 +243,7 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 			// which case we can directly add them to the config.
 			case map[string]interface{}:
 				if attrStruct != nil {
-					nestedBlockOutput += writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct, parentID)
+					nestedBlockOutput += writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct)
 				}
 
 				if nestedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
@@ -259,7 +259,7 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 					repeatedBlockOutput := ""
 
 					if attrStruct != nil {
-						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v, parentID)
+						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v)
 					}
 
 					// Write the block if we had data for it, or if it is a required block.
@@ -281,7 +281,7 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 				for _, v := range attrStruct {
 					repeatedBlockOutput := ""
 					if attrStruct != nil {
-						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}), parentID)
+						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}))
 					}
 
 					// Write the block if we had data for it, or if it is a required block.
@@ -331,7 +331,7 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 	return output
 }
 
-func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attrStruct map[string]interface{}, parentID string) string {
+func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attrStruct map[string]interface{}) string {
 	nestedBlockOutput := ""
 
 	for _, attrName := range attributes {

@@ -769,6 +769,27 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 										}
 									}
 								}
+								// do we have a logging parameter in our rule?
+								if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"] != nil {
+									// make sure it has data
+									if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] != nil {
+										/*
+											enabled = true -> status = 'enabled'
+											enabled = flase -> status = 'disabled'
+											Also lets only add 'status' if it doesn't already exist
+										*/
+										if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] == true &&
+											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] == nil {
+											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] = "enabled"
+											delete(rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{}), "enabled")
+										}
+										if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] == false &&
+											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] == nil {
+											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] = "disabled"
+											delete(rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{}), "enabled")
+										}
+									}
+								}
 							}
 						}
 					}

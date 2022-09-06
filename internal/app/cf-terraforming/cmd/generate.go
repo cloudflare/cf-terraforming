@@ -781,10 +781,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 										if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] == true &&
 											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] == nil {
 											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] = "enabled"
+											delete(rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{}), "enabled")
 										}
 										if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] == false &&
 											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] == nil {
 											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] = "disabled"
+											delete(rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{}), "enabled")
 										}
 									}
 								}

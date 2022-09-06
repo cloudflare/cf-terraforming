@@ -14,8 +14,7 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       }
     }
     logging {
-      enabled = true
-      status  = "enabled"
+      status = "enabled"
     }
   }
   rules {
@@ -27,8 +26,7 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       ruleset = "current"
     }
     logging {
-      enabled = false
-      status  = "disabled"
+      status = "disabled"
     }
   }
 }

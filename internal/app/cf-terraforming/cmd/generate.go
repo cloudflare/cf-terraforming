@@ -412,6 +412,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount = len(jsonPayload)
 			m, _ := json.Marshal(jsonPayload)
 			json.Unmarshal(m, &jsonStructData)
+		case "cloudflare_ip_list":
+			jsonPayload, err := api.ListIPLists(context.Background(), accountID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			json.Unmarshal(m, &jsonStructData)
 		case "cloudflare_load_balancer":
 			jsonPayload, err := api.ListLoadBalancers(context.Background(), zoneID)
 			if err != nil {

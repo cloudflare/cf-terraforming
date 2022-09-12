@@ -248,6 +248,24 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				key := b.(map[string]interface{})["id"].(string)
 				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[0].(map[string]interface{})["value"]
 			}
+		case "cloudflare_api_shield":
+			jsonPayload, _, err := api.GetAPIShieldConfiguration(context.Background(), cloudflare.ZoneIdentifier(zoneID))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			var newPayload []cloudflare.APIShield
+			newPayload = append(newPayload, jsonPayload)
+
+			resourceCount = len(newPayload)
+			m, _ := json.Marshal(newPayload)
+			json.Unmarshal(m, &jsonStructData)
+
+			// this doesn't have an ID associated with it, so lets just use zoneID
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["id"] = zoneID
+			}
+
 		case "cloudflare_argo_tunnel":
 			jsonPayload, err := api.Tunnels(
 				context.Background(),

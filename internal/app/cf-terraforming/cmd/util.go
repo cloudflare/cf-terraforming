@@ -19,6 +19,8 @@ import (
 	"github.com/zclconf/go-cty/cty"
 )
 
+var hasNumber = regexp.MustCompile("[0-9]+").MatchString
+
 func contains(slice []string, item string) bool {
 	set := make(map[string]struct{}, len(slice))
 	for _, s := range slice {
@@ -369,9 +371,8 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 		sort.Strings(sortedKeys)
 
 		s := ""
-		// check if our key has an integer in the string. If it does we need to wrap it with quotes.
-		hasNumber := regexp.MustCompile("[0-9]+").MatchString
 		for _, v := range sortedKeys {
+			// check if our key has an integer in the string. If it does we need to wrap it with quotes.
 			if hasNumber(v) {
 				s += writeAttrLine(fmt.Sprintf("\"%s\"", v), values[v], false)
 			} else {

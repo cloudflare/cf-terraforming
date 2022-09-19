@@ -369,8 +369,14 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 		sort.Strings(sortedKeys)
 
 		s := ""
+		// check if our key has an integer in the string. If it does we need to wrap it with quotes.
+		hasNumber := regexp.MustCompile("[0-9]+").MatchString
 		for _, v := range sortedKeys {
-			s += writeAttrLine(v, values[v], false)
+			if hasNumber(v) {
+				s += writeAttrLine(fmt.Sprintf("\"%s\"", v), values[v], false)
+			} else {
+				s += writeAttrLine(v, values[v], false)
+			}
 		}
 
 		if usedInBlock {
@@ -388,13 +394,14 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 		var interfaceItems []map[string]interface{}
 
 		for _, item := range value.([]interface{}) {
-			switch item.(type) {
+
+			switch item := item.(type) {
 			case string:
-				stringItems = append(stringItems, item.(string))
+				stringItems = append(stringItems, item)
 			case map[string]interface{}:
-				interfaceItems = append(interfaceItems, item.(map[string]interface{}))
+				interfaceItems = append(interfaceItems, item)
 			case float64:
-				intItems = append(intItems, int(item.(float64)))
+				intItems = append(intItems, int(item))
 			}
 		}
 		if len(stringItems) > 0 {

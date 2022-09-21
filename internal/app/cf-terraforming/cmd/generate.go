@@ -338,6 +338,30 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 				jsonStructData[i].(map[string]interface{})["secret"] = secret
 			}
+		case "cloudflare_user_agent_blocking_rule":
+			page := 1
+			var jsonPayload []cloudflare.UserAgentRule
+			for {
+				res, err := api.ListUserAgentRules(context.Background(), zoneID, page)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				jsonPayload = append(jsonPayload, res.Result...)
+				res.ResultInfo = res.ResultInfo.Next()
+
+				if res.ResultInfo.Done() {
+					break
+				}
+				page = page + 1
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err := json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_byo_ip_prefix":
 			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {

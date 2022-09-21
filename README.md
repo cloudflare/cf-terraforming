@@ -162,6 +162,7 @@ Last updated Apr 13, 2021
 | [cloudflare_access_rule](https://www.terraform.io/docs/providers/cloudflare/r/access_rule) | Account | ✅ | ✅ |
 | [cloudflare_access_service_token](https://www.terraform.io/docs/providers/cloudflare/r/access_service_token) | Account | ✅ | ❌ |
 | [cloudflare_account_member](https://www.terraform.io/docs/providers/cloudflare/r/account_member) | Account | ✅ | ✅ |
+| [cloudflare_api_shield](https://www.terraform.io/docs/providers/cloudflare/r/api_shield) | Zone | ✅ | ❌ |
 | [cloudflare_api_token](https://www.terraform.io/docs/providers/cloudflare/r/api_token) | User | ❌ | ❌ |
 | [cloudflare_argo](https://www.terraform.io/docs/providers/cloudflare/r/argo) | Zone | ✅ | ✅ |
 | [cloudflare_argo_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/argo_tunnel) | Account | ✅ | ✅ |

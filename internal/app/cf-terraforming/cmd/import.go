@@ -65,7 +65,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 
 				m, _ := json.Marshal(jsonPayload.Result)
-				json.Unmarshal(m, &jsonStructData)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
 			} else {
 				jsonPayload, err := api.ListZoneAccessRules(context.Background(), zoneID, cloudflare.AccessRule{}, 1)
 				if err != nil {
@@ -73,7 +76,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 
 				m, _ := json.Marshal(jsonPayload.Result)
-				json.Unmarshal(m, &jsonStructData)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		case "cloudflare_account_member":
 			jsonPayload, _, err := api.AccountMembers(context.Background(), accountID, cloudflare.PaginationOptions{})
@@ -81,28 +87,40 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_argo":
 			jsonPayload := []cloudflare.ArgoFeatureSetting{{
 				ID: fmt.Sprintf("%x", md5.Sum([]byte(time.Now().String()))),
 			}}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err := json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_argo_tunnel":
 			jsonPayload, err := api.ArgoTunnels(context.Background(), accountID)
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_byo_ip_prefix":
 			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_certificate_pack":
 			jsonPayload, err := api.ListCertificatePacks(context.Background(), zoneID)
 			if err != nil {
@@ -118,7 +136,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			jsonPayload = customerManagedCertificates
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_custom_pages":
 			if accountID != "" {
 				jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{AccountID: accountID})
@@ -127,7 +148,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 
 				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
 			} else {
 				jsonPayload, err := api.CustomPages(context.Background(), &cloudflare.CustomPageOptions{ZoneID: zoneID})
 				if err != nil {
@@ -135,7 +159,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 
 				m, _ := json.Marshal(jsonPayload)
-				json.Unmarshal(m, &jsonStructData)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
 			}
 		case "cloudflare_filter":
 			jsonPayload, _, err := api.Filters(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FilterListParams{})
@@ -143,28 +170,40 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_firewall_rule":
 			jsonPayload, _, err := api.FirewallRules(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FirewallRuleListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_healthcheck":
 			jsonPayload, err := api.Healthchecks(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_custom_hostname":
 			jsonPayload, _, err := api.CustomHostnames(context.Background(), zoneID, 1, cloudflare.CustomHostname{})
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_custom_ssl":
 			jsonPayload, err := api.ListSSL(context.Background(), zoneID)
 			if err != nil {
@@ -172,21 +211,30 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_ip_list":
 			jsonPayload, err := api.ListIPLists(context.Background(), accountID)
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_logpush_job":
 			jsonPayload, err := api.LogpushJobs(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_origin_ca_certificate":
 			jsonPayload, err := api.OriginCertificates(context.Background(), cloudflare.OriginCACertificateListOptions{ZoneID: zoneID})
 			if err != nil {
@@ -194,7 +242,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_page_rule":
 			jsonPayload, err := api.ListPageRules(context.Background(), zoneID)
 			if err != nil {
@@ -202,7 +253,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_rate_limit":
 			jsonPayload, err := api.ListAllRateLimits(context.Background(), zoneID)
 			if err != nil {
@@ -210,14 +264,20 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_record":
 			jsonPayload, err := api.DNSRecords(context.Background(), zoneID, cloudflare.DNSRecord{})
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_spectrum_application":
 			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)
 			if err != nil {
@@ -225,7 +285,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_waf_override":
 			jsonPayload, err := api.ListWAFOverrides(context.Background(), zoneID)
 			if err != nil {
@@ -233,21 +296,30 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_waf_package":
 			jsonPayload, err := api.ListWAFPackages(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_waiting_room":
 			jsonPayload, err := api.ListWaitingRooms(context.Background(), zoneID)
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_workers_kv_namespace":
 			jsonPayload, err := api.ListWorkersKVNamespaces(context.Background())
 			if err != nil {
@@ -255,7 +327,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_worker_route":
 			jsonPayload, err := api.ListWorkerRoutes(context.Background(), zoneID)
 			if err != nil {
@@ -263,14 +338,20 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload.Routes)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_zone":
 			jsonPayload, err := api.ListZones(context.Background())
 			if err != nil {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_zone_lockdown":
 			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})
 			if err != nil {
@@ -278,7 +359,10 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 
 			m, _ := json.Marshal(jsonPayload)
-			json.Unmarshal(m, &jsonStructData)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		default:
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for state import", resourceType)
 			return

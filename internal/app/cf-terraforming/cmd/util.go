@@ -31,15 +31,15 @@ func contains(slice []string, item string) bool {
 	return ok
 }
 
-func executeCommandC(root *cobra.Command, args ...string) (c *cobra.Command, output string, err error) {
+func executeCommandC(root *cobra.Command, args ...string) (output string, err error) {
 	buf := new(bytes.Buffer)
 	root.SetOut(buf)
 	root.SetErr(buf)
 	root.SetArgs(args)
 
-	c, err = root.ExecuteC()
+	_, err = root.ExecuteC()
 
-	return c, buf.String(), err
+	return buf.String(), err
 }
 
 // testDataFile slurps a local test case into memory and returns it while
@@ -395,7 +395,6 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 		var interfaceItems []map[string]interface{}
 
 		for _, item := range value.([]interface{}) {
-
 			switch item := item.(type) {
 			case string:
 				stringItems = append(stringItems, item)

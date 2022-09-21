@@ -65,7 +65,7 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 }
 
 func TestGenerate_ResourceNotSupported(t *testing.T) {
-	_, output, err := executeCommandC(rootCmd, "generate", "--resource-type", "notreal")
+	output, err := executeCommandC(rootCmd, "generate", "--resource-type", "notreal")
 
 	if assert.Nil(t, err) {
 		assert.Contains(t, output, "\"notreal\" is not yet supported for automatic generation")
@@ -152,7 +152,12 @@ func TestResourceGeneration(t *testing.T) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			defer r.Stop()
+			defer func() {
+				err := r.Stop()
+				if err != nil {
+					log.Fatal(err)
+				}
+			}()
 
 			r.AddFilter(func(i *cassette.Interaction) error {
 				delete(i.Request.Headers, "X-Auth-Email")
@@ -171,7 +176,7 @@ func TestResourceGeneration(t *testing.T) {
 					},
 				), cloudflare.UsingAccount(cloudflareTestAccountID))
 
-				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
+				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
 				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
@@ -180,7 +185,7 @@ func TestResourceGeneration(t *testing.T) {
 					},
 				))
 
-				_, output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
+				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
 			}
 
 			expected := testDataFile(tc.testdataFilename)

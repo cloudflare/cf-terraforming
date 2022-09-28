@@ -530,7 +530,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_load_balancer":
-			jsonPayload, err := api.ListLoadBalancers(context.Background(), zoneID)
+			jsonPayload, err := api.ListLoadBalancers(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListLoadBalancerParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -547,7 +547,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["fallback_pool_id"] = jsonStructData[i].(map[string]interface{})["fallback_pool"]
 			}
 		case "cloudflare_load_balancer_pool":
-			jsonPayload, err := api.ListLoadBalancerPools(context.Background())
+			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerPoolParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -568,7 +568,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 		case "cloudflare_load_balancer_monitor":
-			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background())
+			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerMonitorParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

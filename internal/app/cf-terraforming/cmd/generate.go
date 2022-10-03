@@ -288,24 +288,27 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[0].(map[string]interface{})["value"]
 			}
 		case "cloudflare_api_shield":
-			jsonPayload, _, err := api.GetAPIShieldConfiguration(context.Background(), cloudflare.ZoneIdentifier(zoneID))
+			jsonPayload := []cloudflare.APIShield{}
+			apiShieldConfig, _, err := api.GetAPIShieldConfiguration(context.Background(), cloudflare.ZoneIdentifier(zoneID))
 			if err != nil {
 				log.Fatal(err)
 			}
+			// the response can contain an empty APIShield struct. Verify we have data before we attempt to do anything
+			jsonPayload = append(jsonPayload, apiShieldConfig)
 
-			var newPayload []cloudflare.APIShield
-			newPayload = append(newPayload, jsonPayload)
-
-			resourceCount = len(newPayload)
-			m, _ := json.Marshal(newPayload)
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
 			err = json.Unmarshal(m, &jsonStructData)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			// this doesn't have an ID associated with it, so lets just use zoneID
-			for i := 0; i < resourceCount; i++ {
-				jsonStructData[i].(map[string]interface{})["id"] = zoneID
+			// this is only every a 1:1 so we can just verify if the 0th element has they key we expect
+			jsonStructData[0].(map[string]interface{})["id"] = zoneID
+
+			if jsonStructData[0].(map[string]interface{})["auth_id_characteristics"] == nil {
+				// force a no resources return by setting resourceCount to 0
+				resourceCount = 0
 			}
 
 		case "cloudflare_argo_tunnel":

@@ -941,6 +941,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 									}
 								}
 							}
+							// Cache Rules transformation
+							if jsonStructData[i].(map[string]interface{})["phase"] == "http_request_cache_settings" {
+								fmt.Println(jsonStructData[i])
+								if c, ok := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"]; ok {
+									if s, sok := c.(map[string]interface{})["query_string"].(map[string]interface{})["include"]; sok && s == "*" {
+										rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["include"] = nil
+										rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["ignore"] = false
+
+									}
+									if s, sok := c.(map[string]interface{})["query_string"].(map[string]interface{})["exclude"]; sok && s == "*" {
+										rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["exclude"] = nil
+										rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["ignore"] = true
+										fmt.Println(rules)
+									}
+								}
+							}
 						}
 					}
 				}

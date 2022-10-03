@@ -1,0 +1,116 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "a6905ff86d3844cebc1a88dd80c659e7",
+            "name": "default",
+            "description": "",
+            "source": "zone",
+            "kind": "managed",
+            "version": "4",
+            "last_updated": "2021-07-01T16:59:14.386598Z",
+            "phase": "http_request_cache_settings"
+          },
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/a6905ff86d3844cebc1a88dd80c659e7
+    method: GET
+  response:
+    body: |
+        {
+          "result": {
+            "id": "a6905ff86d3844cebc1a88dd80c659e7",
+            "name": "default",
+            "description": "",
+            "kind": "zone",
+            "version": "3",
+            "rules": [
+              {
+                "id": "0f24aab3002347a9a4ac01520e6893d0",
+                "version": "3",
+                "action": "set_cache_settings",
+                "expression": "(http.host eq \"example.com\")",
+                "description": "test cache rule",
+                "last_updated": "2022-09-28T17:21:21.510301Z",
+                "ref": "0f24aab3002347a9a4ac01520e6893d0",
+                "enabled": false,
+                "action_parameters": {
+                  "cache": true,
+                  "edge_ttl": {
+                    "mode": "override_origin",
+                    "default": 30,
+                    "status_code_ttl": [
+                      {
+                        "status_code": 100,
+                        "value": 30
+                      }
+                    ]
+                  },
+                  "browser_ttl": {
+                    "mode": "respect_origin"
+                  },
+                  "serve_stale": {
+                    "disable_stale_while_updating": true
+                  },
+                  "respect_strong_etags": true,
+                  "cache_key": {
+                    "cache_by_device_type": true,
+                    "ignore_query_strings_order": false,
+                    "cache_deception_armor": true,
+                    "custom_key": {
+                      "query_string": {
+                        "exclude": "*"
+                      },
+                      "host": {
+                        "resolved": false
+                      }
+                    }
+                  },
+                  "origin_error_page_passthru": true
+                }
+              }
+            ],
+            "last_updated": "2022-09-28T17:21:21.510301Z",
+            "phase": "http_request_cache_settings"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

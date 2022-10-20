@@ -153,7 +153,7 @@ Any resources not listed are currently not supported.
 Last updated Apr 13, 2021
 
 | Resource | Resource Scope | Generate Supported | Import Supported |
-|----------|-----------|----------|----------|
+|----------|-----------|----------|---------|
 | [cloudflare_access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application) | Account | ✅ | ❌ |
 | [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group) | Account | ✅ | ❌ |
 | [cloudflare_access_identity_provider](https://www.terraform.io/docs/providers/cloudflare/r/access_identity_provider) | Account | ✅ | ❌ |
@@ -187,6 +187,7 @@ Last updated Apr 13, 2021
 | [cloudflare_magic_firewall_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/magic_firewall_ruleset) | Account | ❌ | ❌ |
 | [cloudflare_origin_ca_certificate](https://www.terraform.io/docs/providers/cloudflare/r/origin_ca_certificate) | Zone | ✅ | ✅ |
 | [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule) | Zone | ✅ | ✅ |
+| [cloudflare_pages_project](https://www.terraform.io/docs/providers/cloudflare/r/pages_project) | Account | ✅ | ✅ |
 | [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit) | Zone | ✅ | ✅ |
 | [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record) | Zone | ✅ | ✅ |
 | [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset) | Account or Zone | ✅ | ❌ |

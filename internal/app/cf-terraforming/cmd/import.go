@@ -31,6 +31,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_ip_list":               ":account_id/:id",
 	"cloudflare_origin_ca_certificate": ":id",
 	"cloudflare_page_rule":             ":zone_id/:id",
+	"cloudflare_pages_project":         ":account_id/:id",
 	"cloudflare_rate_limit":            ":zone_id/:id",
 	"cloudflare_record":                ":zone_id/:id",
 	"cloudflare_spectrum_application":  ":zone_id/:id",
@@ -256,6 +257,19 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			err = json.Unmarshal(m, &jsonStructData)
 			if err != nil {
 				log.Fatal(err)
+			}
+		case "cloudflare_pages_project":
+			jsonPayload, _, err := api.ListPagesProjects(context.Background(), accountID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i, _ := range jsonStructData {
+				jsonStructData[i].(map[string]interface{})["id"] = jsonStructData[i].(map[string]interface{})["name"]
 			}
 		case "cloudflare_rate_limit":
 			jsonPayload, err := api.ListAllRateLimits(context.Background(), zoneID)

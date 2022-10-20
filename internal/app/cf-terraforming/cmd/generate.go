@@ -685,6 +685,25 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 				}
 			}
+
+		//case "cloudflare_pages_domain":
+		//	jsonPayload, err := api.GetPagesDomain(context.Background(), cloudflare.PagesDomainParameters{AccountID: accountID})
+		case "cloudflare_pages_project":
+			jsonPayload, _, err := api.ListPagesProjects(context.Background(), accountID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["latest_deployment"] = nil
+				jsonStructData[i].(map[string]interface{})["canonical_deployment"] = nil
+			}
+
 		case "cloudflare_rate_limit":
 			jsonPayload, err := api.ListAllRateLimits(context.Background(), zoneID)
 			if err != nil {

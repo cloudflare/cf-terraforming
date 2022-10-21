@@ -268,7 +268,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			for i, _ := range jsonStructData {
+			for i := range jsonStructData {
 				jsonStructData[i].(map[string]interface{})["id"] = jsonStructData[i].(map[string]interface{})["name"]
 			}
 		case "cloudflare_rate_limit":

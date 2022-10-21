@@ -7,7 +7,7 @@ interactions:
       headers:
         Content-Type:
           - application/json
-      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/pages/projects
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/pages/projects/test_project
       method: GET
     response:
       body: |

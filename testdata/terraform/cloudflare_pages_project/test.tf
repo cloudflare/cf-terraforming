@@ -1,6 +1,6 @@
 resource "cloudflare_pages_project" "terraform_managed_resource" {
   account_id = "f037e56e89293a057740de681ac9abbe"
-  name = "Test Pages Project"
+  name = "test_project"
   production_branch = "main"
   build_config {
     build_command = "npm run build"

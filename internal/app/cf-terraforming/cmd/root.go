@@ -137,11 +137,13 @@ func initConfig() {
 		log.Debug("using config file:", viper.ConfigFileUsed())
 	}
 
-	var cfgLogLevel = logrus.InfoLevel
+	// var cfgLogLevel = logrus.InfoLevel
 
-	if verbose {
-		cfgLogLevel = logrus.DebugLevel
-	}
+	// if verbose {
+	// 	cfgLogLevel = logrus.DebugLevel
+	// }
+	var cfgLogLevel = logrus.InfoLevel
+	cfgLogLevel = logrus.DebugLevel
 
 	log.SetLevel(cfgLogLevel)
 }

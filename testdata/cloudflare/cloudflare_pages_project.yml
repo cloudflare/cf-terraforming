@@ -7,294 +7,301 @@ interactions:
       headers:
         Content-Type:
           - application/json
-      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/pages/projects/test_project
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/pages/projects
       method: GET
     response:
       body: |
         {
-          "name": "Test Pages Project",
-          "id": "5a321fc7-3162-7d36-adce-1213996a7",
-          "created_on": "2021-01-01T00:00:00Z",
-          "subdomain": "test.pages.dev",
-          "domains": [
-            "testdomain.com",
-            "testdomain.org"
-          ],
-          "production_branch": "main",
-          "source": {
-            "type": "github",
-            "config": {
-              "owner": "cloudflare",
-              "repo_name": "pages-test",
-              "production_branch": "main",
-              "pr_comments_enabled": true,
-              "deployments_enabled": true,
-              "preview_deployment_setting": "custom",
-              "preview_branch_includes": [
-                "release/*",
-                "production",
-                "main"
+          "success": true,
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "name": "Test Pages Project",
+              "id": "5a321fc7-3162-7d36-adce-1213996a7",
+              "created_on": "2021-01-01T00:00:00Z",
+              "subdomain": "test.pages.dev",
+              "domains": [
+                "testdomain.com",
+                "testdomain.org"
               ],
-              "preview_branch_excludes": [
-                "dependabot/*",
-                "dev",
-                "*/ignore"
-              ]
-            }
-          },
-          "build_config": {
-            "build_command": "npm run build",
-            "destination_dir": "build",
-            "root_dir": "/",
-            "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
-            "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
-          },
-          "deployment_configs": {
-            "preview": {
-              "env_vars": {
-                "BUILD_VERSION": {
-                  "value": "1.2"
+              "production_branch": "main",
+              "source": {
+                "type": "github",
+                "config": {
+                  "owner": "cloudflare",
+                  "repo_name": "pages-test",
+                  "production_branch": "main",
+                  "pr_comments_enabled": true,
+                  "deployments_enabled": true,
+                  "preview_deployment_setting": "custom",
+                  "preview_branch_includes": [
+                    "release/*",
+                    "production",
+                    "main"
+                  ],
+                  "preview_branch_excludes": [
+                    "dependabot/*",
+                    "dev",
+                    "*/ignore"
+                  ]
+                }
+              },
+              "build_config": {
+                "build_command": "npm run build",
+                "destination_dir": "build",
+                "root_dir": "/",
+                "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
+                "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
+              },
+              "deployment_configs": {
+                "preview": {
+                  "env_vars": {
+                    "BUILD_VERSION": {
+                      "value": "1.2"
+                    },
+                    "ENVIRONMENT": {
+                      "value": "preview"
+                    }
+                  },
+                  "d1_databases": {
+                    "D1_BINDING": {
+                      "id": "a94509c6-0757-43f3-b053-474b0ab10935"
+                    }
+                  },
+                  "kv_namespaces": {
+                    "KV_BINDING": {
+                      "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
+                    }
+                  },
+                  "durable_object_namespaces": {
+                    "DO_BINDING": {
+                      "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
+                    }
+                  },
+                  "r2_buckets": {
+                    "R2_BINDING": {
+                      "name": "some-bucket"
+                    }
+                  },
+                  "compatibility_date": "2022-08-15",
+                  "compatibility_flags": [
+                    "preview_flag"
+                  ]
                 },
-                "ENVIRONMENT": {
-                  "value": "preview"
+                "production": {
+                  "env_vars": {
+                    "BUILD_VERSION": {
+                      "value": "1.2"
+                    },
+                    "ENV": {
+                      "value": "production"
+                    }
+                  },
+                  "d1_databases": {
+                    "D1_BINDING_1": {
+                      "id": "a94509c6-0757-43f3-b053-474b0ab10935"
+                    },
+                    "D1_BINDING_2": {
+                      "id": "a399414b-c697-409a-a688-377db6433cd9"
+                    }
+                  },
+                  "kv_namespaces": {
+                    "KV_BINDING_1": {
+                      "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
+                    },
+                    "KV_BINDING_2": {
+                      "namespace_id": "3cdca5f8bb22bc390deee10ebbb36be5"
+                    }
+                  },
+                  "durable_object_namespaces": {
+                    "DO_BINDING_1": {
+                      "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
+                    },
+                    "DO_BINDING_2": {
+                      "namespace_id": "3cdca5f8bb22bc390deee10ebbb36be5"
+                    }
+                  },
+                  "r2_buckets": {
+                    "R2_BINDING_1": {
+                      "name": "some-bucket"
+                    },
+                    "R2_BINDING_2": {
+                      "name": "other-bucket"
+                    }
+                  },
+                  "compatibility_date": "2022-08-15",
+                  "compatibility_flags": [
+                    "production_flag"
+                  ]
                 }
               },
-              "d1_databases": {
-                "D1_BINDING": {
-                  "id": "a94509c6-0757-43f3-b053-474b0ab10935"
-                }
-              },
-              "kv_namespaces": {
-                "KV_BINDING": {
-                  "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
-                }
-              },
-              "durable_object_namespaces": {
-                "DO_BINDING": {
-                  "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
-                }
-              },
-              "r2_buckets": {
-                "R2_BINDING": {
-                  "name": "some-bucket"
-                }
-              },
-              "compatibility_date": "2022-08-15",
-              "compatibility_flags": [
-                "preview_flag"
-              ]
-            },
-            "production": {
-              "env_vars": {
-                "BUILD_VERSION": {
-                  "value": "1.2"
-                },
-                "ENV": {
-                  "value": "production"
-                }
-              },
-              "d1_databases": {
-                "D1_BINDING_1": {
-                  "id": "a94509c6-0757-43f3-b053-474b0ab10935"
-                },
-                "D1_BINDING_2": {
-                  "id": "a399414b-c697-409a-a688-377db6433cd9"
-                }
-              },
-              "kv_namespaces": {
-                "KV_BINDING_1": {
-                  "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
-                },
-                "KV_BINDING_2": {
-                  "namespace_id": "3cdca5f8bb22bc390deee10ebbb36be5"
-                }
-              },
-              "durable_object_namespaces": {
-                "DO_BINDING_1": {
-                  "namespace_id": "5eb63bbbe01eeed093cb22bb8f5acdc3"
-                },
-                "DO_BINDING_2": {
-                  "namespace_id": "3cdca5f8bb22bc390deee10ebbb36be5"
-                }
-              },
-              "r2_buckets": {
-                "R2_BINDING_1": {
-                  "name": "some-bucket"
-                },
-                "R2_BINDING_2": {
-                  "name": "other-bucket"
-                }
-              },
-              "compatibility_date": "2022-08-15",
-              "compatibility_flags": [
-                "production_flag"
-              ]
-            }
-          },
-          "latest_deployment": {
-            "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
-            "short_id": "c35216d1",
-            "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
-            "project_name": "pages-test",
-            "environment": "preview",
-            "production_branch": "main",
-            "url": "https://c35216d1.pages-test.pages.dev",
-            "created_on": "2021-03-09T00:55:03.923456Z",
-            "modified_on": "2021-03-09T00:58:59.045655Z",
-            "aliases": [
-              "https://branchname.pages-test.pages.dev"
-            ],
-            "latest_stage": {
-              "name": "deploy",
-              "started_on": "2021-03-09T00:55:03.923456Z",
-              "ended_on": "2021-03-09T00:58:59.045655Z",
-              "status": "success"
-            },
-            "env_vars": {
-              "BUILD_VERSION": {
-                "value": "1.2"
-              },
-              "ENV": {
-                "value": "STAGING"
-              }
-            },
-            "compatibility_date": "2022-08-15",
-            "compatibility_flags": [
-              "deployment_flag"
-            ],
-            "deployment_trigger": {
-              "type": "ad_hoc",
-              "metadata": {
-                "branch": "main",
-                "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
-                "commit_message": "Update index.html"
-              }
-            },
-            "stages": [
-              {
-                "name": "queued",
-                "started_on": "2021-06-03T15:38:15.608194Z",
-                "ended_on": "2021-06-03T15:39:03.134378Z",
-                "status": "active"
-              },
-              {
-                "name": "test_stage_1",
-                "started_on": null,
-                "ended_on": null,
-                "status": "idle"
-              }
-            ],
-            "build_config": {
-              "build_command": "npm run build",
-              "destination_dir": "build",
-              "root_dir": "/",
-              "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
-              "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
-            },
-            "source": {
-              "type": "github",
-              "config": {
-                "owner": "cloudflare",
-                "repo_name": "pages-test",
+              "latest_deployment": {
+                "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
+                "short_id": "c35216d1",
+                "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
+                "project_name": "pages-test",
+                "environment": "preview",
                 "production_branch": "main",
-                "pr_comments_enabled": true,
-                "deployments_enabled": true,
-                "preview_deployment_setting": "custom",
-                "preview_branch_includes": [
-                  "release/*",
-                  "production",
-                  "main"
+                "url": "https://c35216d1.pages-test.pages.dev",
+                "created_on": "2021-03-09T00:55:03.923456Z",
+                "modified_on": "2021-03-09T00:58:59.045655Z",
+                "aliases": [
+                  "https://branchname.pages-test.pages.dev"
                 ],
-                "preview_branch_excludes": [
-                  "dependabot/*",
-                  "dev",
-                  "*/ignore"
-                ]
-              }
-            }
-          },
-          "canonical_deployment": {
-            "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
-            "short_id": "c35216d1",
-            "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
-            "project_name": "pages-test",
-            "environment": "preview",
-            "url": "https://c35216d1.pages-test.pages.dev",
-            "created_on": "2021-03-09T00:55:03.923456Z",
-            "modified_on": "2021-03-09T00:58:59.045655Z",
-            "production_branch": "main",
-            "aliases": [
-              "https://branchname.pages-test.pages.dev"
-            ],
-            "latest_stage": {
-              "name": "deploy",
-              "started_on": "2021-03-09T00:55:03.923456Z",
-              "ended_on": "2021-03-09T00:58:59.045655Z",
-              "status": "success"
-            },
-            "env_vars": {
-              "BUILD_VERSION": {
-                "value": "1.2"
+                "latest_stage": {
+                  "name": "deploy",
+                  "started_on": "2021-03-09T00:55:03.923456Z",
+                  "ended_on": "2021-03-09T00:58:59.045655Z",
+                  "status": "success"
+                },
+                "env_vars": {
+                  "BUILD_VERSION": {
+                    "value": "1.2"
+                  },
+                  "ENV": {
+                    "value": "STAGING"
+                  }
+                },
+                "compatibility_date": "2022-08-15",
+                "compatibility_flags": [
+                  "deployment_flag"
+                ],
+                "deployment_trigger": {
+                  "type": "ad_hoc",
+                  "metadata": {
+                    "branch": "main",
+                    "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
+                    "commit_message": "Update index.html"
+                  }
+                },
+                "stages": [
+                  {
+                    "name": "queued",
+                    "started_on": "2021-06-03T15:38:15.608194Z",
+                    "ended_on": "2021-06-03T15:39:03.134378Z",
+                    "status": "active"
+                  },
+                  {
+                    "name": "test_stage_1",
+                    "started_on": null,
+                    "ended_on": null,
+                    "status": "idle"
+                  }
+                ],
+                "build_config": {
+                  "build_command": "npm run build",
+                  "destination_dir": "build",
+                  "root_dir": "/",
+                  "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
+                  "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
+                },
+                "source": {
+                  "type": "github",
+                  "config": {
+                    "owner": "cloudflare",
+                    "repo_name": "pages-test",
+                    "production_branch": "main",
+                    "pr_comments_enabled": true,
+                    "deployments_enabled": true,
+                    "preview_deployment_setting": "custom",
+                    "preview_branch_includes": [
+                      "release/*",
+                      "production",
+                      "main"
+                    ],
+                    "preview_branch_excludes": [
+                      "dependabot/*",
+                      "dev",
+                      "*/ignore"
+                    ]
+                  }
+                }
               },
-              "ENV": {
-                "value": "STAGING"
-              }
-            },
-            "compatibility_date": "2022-08-15",
-            "compatibility_flags": [
-              "deployment_flag"
-            ],
-            "deployment_trigger": {
-              "type": "ad_hoc",
-              "metadata": {
-                "branch": "main",
-                "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
-                "commit_message": "Update index.html"
-              }
-            },
-            "stages": [
-              {
-                "name": "queued",
-                "started_on": "2021-06-03T15:38:15.608194Z",
-                "ended_on": "2021-06-03T15:39:03.134378Z",
-                "status": "active"
-              },
-              {
-                "name": "test_stage_1",
-                "started_on": null,
-                "ended_on": null,
-                "status": "idle"
-              }
-            ],
-            "build_config": {
-              "build_command": "npm run build",
-              "destination_dir": "build",
-              "root_dir": "/",
-              "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
-              "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
-            },
-            "source": {
-              "type": "github",
-              "config": {
-                "owner": "cloudflare",
-                "repo_name": "pages-test",
+              "canonical_deployment": {
+                "id": "c35216d1-ebac-1a3a-d56c-ad74e54e5",
+                "short_id": "c35216d1",
+                "project_id": "5a321fc7-3162-7d36-adce-1213996a7",
+                "project_name": "pages-test",
+                "environment": "preview",
+                "url": "https://c35216d1.pages-test.pages.dev",
+                "created_on": "2021-03-09T00:55:03.923456Z",
+                "modified_on": "2021-03-09T00:58:59.045655Z",
                 "production_branch": "main",
-                "pr_comments_enabled": true,
-                "deployments_enabled": true,
-                "preview_deployment_setting": "custom",
-                "preview_branch_includes": [
-                  "release/*",
-                  "production",
-                  "main"
+                "aliases": [
+                  "https://branchname.pages-test.pages.dev"
                 ],
-                "preview_branch_excludes": [
-                  "dependabot/*",
-                  "dev",
-                  "*/ignore"
-                ]
+                "latest_stage": {
+                  "name": "deploy",
+                  "started_on": "2021-03-09T00:55:03.923456Z",
+                  "ended_on": "2021-03-09T00:58:59.045655Z",
+                  "status": "success"
+                },
+                "env_vars": {
+                  "BUILD_VERSION": {
+                    "value": "1.2"
+                  },
+                  "ENV": {
+                    "value": "STAGING"
+                  }
+                },
+                "compatibility_date": "2022-08-15",
+                "compatibility_flags": [
+                  "deployment_flag"
+                ],
+                "deployment_trigger": {
+                  "type": "ad_hoc",
+                  "metadata": {
+                    "branch": "main",
+                    "commit_hash": "fa26be19de6bff93f70bc2308434e4a440bbad02",
+                    "commit_message": "Update index.html"
+                  }
+                },
+                "stages": [
+                  {
+                    "name": "queued",
+                    "started_on": "2021-06-03T15:38:15.608194Z",
+                    "ended_on": "2021-06-03T15:39:03.134378Z",
+                    "status": "active"
+                  },
+                  {
+                    "name": "test_stage_1",
+                    "started_on": null,
+                    "ended_on": null,
+                    "status": "idle"
+                  }
+                ],
+                "build_config": {
+                  "build_command": "npm run build",
+                  "destination_dir": "build",
+                  "root_dir": "/",
+                  "web_analytics_tag": "0ee1d926cd60d2618a108d4232a75b73",
+                  "web_analytics_token": "c05bb382259183db3a0a822b64c11459"
+                },
+                "source": {
+                  "type": "github",
+                  "config": {
+                    "owner": "cloudflare",
+                    "repo_name": "pages-test",
+                    "production_branch": "main",
+                    "pr_comments_enabled": true,
+                    "deployments_enabled": true,
+                    "preview_deployment_setting": "custom",
+                    "preview_branch_includes": [
+                      "release/*",
+                      "production",
+                      "main"
+                    ],
+                    "preview_branch_excludes": [
+                      "dependabot/*",
+                      "dev",
+                      "*/ignore"
+                    ]
+                  }
+                }
               }
             }
-          }
+          ]
         }
       headers:
         Content-Type:

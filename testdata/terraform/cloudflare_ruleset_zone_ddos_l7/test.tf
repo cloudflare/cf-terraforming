@@ -9,6 +9,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     enabled     = true
     expression  = "true"
     action_parameters {
+      overrides {
+        sensitivity_level = "medium"
+      }
       id      = "4d21379b4f9f4bb088e0729962c8b3cf"
       version = "latest"
     }

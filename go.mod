@@ -12,7 +12,7 @@ require (
 	github.com/hashicorp/terraform-json v0.14.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.9.0
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.13.0
 	github.com/stretchr/testify v1.8.1
 	github.com/zclconf/go-cty v1.11.1

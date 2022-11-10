@@ -43,32 +43,32 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		zoneID = viper.GetString("zone")
 		accountID = viper.GetString("account")
 
-		tmpDir, err := ioutil.TempDir("", "tfinstall")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer os.RemoveAll(tmpDir)
+		var execPath, workingDir string
+		workingDir = viper.GetString("terraform-install-path")
+		execPath = viper.GetString("terraform-path")
 
-		installer := &releases.ExactVersion{
-			Product: product.Terraform,
-			Version: version.Must(version.NewVersion("1.0.6")),
-		}
+		//Install terraform if no existing installation was provided
+		if execPath == "" {
+			tmpDir, err := ioutil.TempDir("", "tfinstall")
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer os.RemoveAll(tmpDir)
 
-		execPath, err := installer.Install(context.Background())
-		if err != nil {
-			log.Fatalf("error installing Terraform: %s", err)
+			installer := &releases.ExactVersion{
+				Product: product.Terraform,
+				Version: version.Must(version.NewVersion("1.0.6")),
+			}
+
+			execPath, err = installer.Install(context.Background())
+			if err != nil {
+				log.Fatalf("error installing Terraform: %s", err)
+			}
 		}
 
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured.
-		workingDir := viper.GetString("terraform-install-path")
-		log.Debugf("initializing Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		err = tf.Init(context.Background(), tfexec.Upgrade(true))
 		if err != nil {
 			log.Fatal(err)
 		}

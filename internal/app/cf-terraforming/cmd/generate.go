@@ -55,9 +55,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 			defer os.RemoveAll(tmpDir)
 
-			installer := &releases.ExactVersion{
-				Product: product.Terraform,
-				Version: version.Must(version.NewVersion("1.0.6")),
+			installConstraints, err := version.NewConstraint("~> 1.0")
+			if err != nil {
+				log.Fatal("failed to parse version constraints for installation version")
+			}
+
+			installer := &releases.LatestVersion{
+				Product:     product.Terraform,
+				Constraints: installConstraints,
 			}
 
 			execPath, err = installer.Install(context.Background())

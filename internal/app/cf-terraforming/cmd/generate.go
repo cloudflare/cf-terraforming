@@ -45,7 +45,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		var execPath, workingDir string
 		workingDir = viper.GetString("terraform-install-path")
-		execPath = viper.GetString("terraform-path")
+		execPath = viper.GetString("terraform-binary-path")
 
 		//Install terraform if no existing installation was provided
 		if execPath == "" {

@@ -43,37 +43,38 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		zoneID = viper.GetString("zone")
 		accountID = viper.GetString("account")
 
-		tmpDir, err := ioutil.TempDir("", "tfinstall")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer os.RemoveAll(tmpDir)
+		var execPath, workingDir string
+		workingDir = viper.GetString("terraform-install-path")
+		execPath = viper.GetString("terraform-binary-path")
 
-		installConstraints, err := version.NewConstraint("~> 1.0")
-		if err != nil {
-			log.Fatal("failed to parse version constraints for installation version")
-		}
+		//Download terraform if no existing binary was provided
+		if execPath == "" {
+			tmpDir, err := ioutil.TempDir("", "tfinstall")
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer os.RemoveAll(tmpDir)
 
-		installer := &releases.LatestVersion{
-			Product:     product.Terraform,
-			Constraints: installConstraints,
-		}
+			installConstraints, err := version.NewConstraint("~> 1.0")
+			if err != nil {
+				log.Fatal("failed to parse version constraints for installation version")
+			}
 
-		execPath, err := installer.Install(context.Background())
-		if err != nil {
-			log.Fatalf("error installing Terraform: %s", err)
+			installer := &releases.LatestVersion{
+				Product:     product.Terraform,
+				Constraints: installConstraints,
+			}
+
+			execPath, err = installer.Install(context.Background())
+			if err != nil {
+				log.Fatalf("error installing Terraform: %s", err)
+			}
 		}
 
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured.
-		workingDir := viper.GetString("terraform-install-path")
 		log.Debugf("initializing Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		err = tf.Init(context.Background(), tfexec.Upgrade(true))
 		if err != nil {
 			log.Fatal(err)
 		}

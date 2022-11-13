@@ -9,7 +9,7 @@ import (
 )
 
 var log = logrus.New()
-var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath string
+var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath string
 var verbose bool
 var api *cloudflare.API
 var terraformImportCmdPrefix = "terraform import"
@@ -103,11 +103,18 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&resourceType, "resource-type", "", "Which resource you wish to generate")
 
-	rootCmd.PersistentFlags().StringVar(&terraformInstallPath, "terraform-install-path", ".", "Path to the Terraform installation")
+	rootCmd.PersistentFlags().StringVar(&terraformInstallPath, "terraform-install-path", ".", "Path to an initialized Terraform working directory")
 
 	if err = viper.BindPFlag("terraform-install-path", rootCmd.PersistentFlags().Lookup("terraform-install-path")); err != nil {
 		log.Fatal(err)
 	}
+
+	rootCmd.PersistentFlags().StringVar(&terraformBinaryPath, "terraform-binary-path", "", "Path to an existing Terraform binary (otherwise, one will be downloaded)")
+
+	if err = viper.BindPFlag("terraform-binary-path", rootCmd.PersistentFlags().Lookup("terraform-binary-path")); err != nil {
+		log.Fatal(err)
+	}
+
 	if err = viper.BindEnv("terraform-install-path", "CLOUDFLARE_TERRAFORM_INSTALL_PATH"); err != nil {
 		log.Fatal(err)
 	}

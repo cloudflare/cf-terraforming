@@ -321,7 +321,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_workers_kv_namespace":
-			jsonPayload, err := api.ListWorkersKVNamespaces(context.Background())
+			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWorkersKVNamespacesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

@@ -30,15 +30,17 @@ Available Commands:
   version     Print the version number of cf-terraforming
 
 Flags:
-  -a, --account string         Use specific account ID for commands
-  -c, --config string          Path to configuration file (default is $HOME/.cf-terraforming.yaml)
-  -e, --email string           API Email address associated with your account
-  -h, --help                   Help for cf-terraforming
-  -k, --key string             API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
-      --resource-type string   Which resource you wish to generate
-  -t, --token string           API Token
-  -v, --verbose                Specify verbose output (same as setting log level to debug)
-  -z, --zone string            Limit the export to a single zone ID
+  -a, --account string                  Use specific account ID for commands
+  -c, --config string                   Path to configuration file (default is $HOME/.cf-terraforming.yaml)
+  -e, --email string                    API Email address associated with your account
+  -h, --help                            Help for cf-terraforming
+  -k, --key string                      API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
+      --resource-type string            Which resource you wish to generate
+      --terraform-binary-path string    Path to an existing Terraform binary (otherwise, one will be downloaded)
+      --terraform-install-path string   Path to an initialized Terraform working directory (default ".")
+  -t, --token string                    API Token
+  -v, --verbose                         Specify verbose output (same as setting log level to debug)
+  -z, --zone string                     Limit the export to a single zone ID
 
 Use "cf-terraforming [command] --help" for more information about a command.
 ```

@@ -43,32 +43,38 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		zoneID = viper.GetString("zone")
 		accountID = viper.GetString("account")
 
-		tmpDir, err := ioutil.TempDir("", "tfinstall")
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer os.RemoveAll(tmpDir)
+		var execPath, workingDir string
+		workingDir = viper.GetString("terraform-install-path")
+		execPath = viper.GetString("terraform-binary-path")
 
-		installer := &releases.ExactVersion{
-			Product: product.Terraform,
-			Version: version.Must(version.NewVersion("1.0.6")),
-		}
+		//Download terraform if no existing binary was provided
+		if execPath == "" {
+			tmpDir, err := ioutil.TempDir("", "tfinstall")
+			if err != nil {
+				log.Fatal(err)
+			}
+			defer os.RemoveAll(tmpDir)
 
-		execPath, err := installer.Install(context.Background())
-		if err != nil {
-			log.Fatalf("error installing Terraform: %s", err)
+			installConstraints, err := version.NewConstraint("~> 1.0")
+			if err != nil {
+				log.Fatal("failed to parse version constraints for installation version")
+			}
+
+			installer := &releases.LatestVersion{
+				Product:     product.Terraform,
+				Constraints: installConstraints,
+			}
+
+			execPath, err = installer.Install(context.Background())
+			if err != nil {
+				log.Fatalf("error installing Terraform: %s", err)
+			}
 		}
 
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured.
-		workingDir := viper.GetString("terraform-install-path")
 		log.Debugf("initializing Terraform in %s", workingDir)
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		err = tf.Init(context.Background(), tfexec.Upgrade(true))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -288,24 +294,27 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[0].(map[string]interface{})["value"]
 			}
 		case "cloudflare_api_shield":
-			jsonPayload, _, err := api.GetAPIShieldConfiguration(context.Background(), cloudflare.ZoneIdentifier(zoneID))
+			jsonPayload := []cloudflare.APIShield{}
+			apiShieldConfig, _, err := api.GetAPIShieldConfiguration(context.Background(), cloudflare.ZoneIdentifier(zoneID))
 			if err != nil {
 				log.Fatal(err)
 			}
+			// the response can contain an empty APIShield struct. Verify we have data before we attempt to do anything
+			jsonPayload = append(jsonPayload, apiShieldConfig)
 
-			var newPayload []cloudflare.APIShield
-			newPayload = append(newPayload, jsonPayload)
-
-			resourceCount = len(newPayload)
-			m, _ := json.Marshal(newPayload)
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
 			err = json.Unmarshal(m, &jsonStructData)
 			if err != nil {
 				log.Fatal(err)
 			}
 
-			// this doesn't have an ID associated with it, so lets just use zoneID
-			for i := 0; i < resourceCount; i++ {
-				jsonStructData[i].(map[string]interface{})["id"] = zoneID
+			// this is only every a 1:1 so we can just verify if the 0th element has they key we expect
+			jsonStructData[0].(map[string]interface{})["id"] = zoneID
+
+			if jsonStructData[0].(map[string]interface{})["auth_id_characteristics"] == nil {
+				// force a no resources return by setting resourceCount to 0
+				resourceCount = 0
 			}
 
 		case "cloudflare_argo_tunnel":
@@ -530,7 +539,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_load_balancer":
-			jsonPayload, err := api.ListLoadBalancers(context.Background(), zoneID)
+			jsonPayload, err := api.ListLoadBalancers(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListLoadBalancerParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -547,7 +556,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["fallback_pool_id"] = jsonStructData[i].(map[string]interface{})["fallback_pool"]
 			}
 		case "cloudflare_load_balancer_pool":
-			jsonPayload, err := api.ListLoadBalancerPools(context.Background())
+			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerPoolParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -568,7 +577,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 		case "cloudflare_load_balancer_monitor":
-			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background())
+			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerMonitorParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -1015,7 +1024,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_workers_kv_namespace":
-			jsonPayload, err := api.ListWorkersKVNamespaces(context.Background())
+			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWorkersKVNamespacesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

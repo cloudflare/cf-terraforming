@@ -74,7 +74,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	rootCmd.PersistentFlags().StringVarP(&apiKey, "key", "k", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile")
+	rootCmd.PersistentFlags().StringVarP(&apiKey, "key", "k", "", "API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile/api-tokens")
 	if err = viper.BindPFlag("key", rootCmd.PersistentFlags().Lookup("key")); err != nil {
 		log.Fatal(err)
 	}

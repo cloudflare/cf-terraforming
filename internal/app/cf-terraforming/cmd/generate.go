@@ -694,6 +694,57 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 				}
 			}
+
+		case "cloudflare_pages_domain":
+			pagesProjectsPayload, _, err := api.ListPagesProjects(context.Background(), accountID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			type pagesDomainInfo struct {
+				ID          string `json:"id"`
+				Domain      string `json:"domain"`
+				ProjectName string `json:"project_name"`
+			}
+			var domains []pagesDomainInfo
+			for _, project := range pagesProjectsPayload {
+				jsonPayload, err := api.GetPagesDomains(context.Background(), cloudflare.PagesDomainsParameters{
+					AccountID:   accountID,
+					ProjectName: project.Name,
+				})
+				if err != nil {
+					log.Fatal(err)
+				}
+				for _, domain := range jsonPayload {
+					domains = append(domains, pagesDomainInfo{
+						ID:          domain.ID,
+						Domain:      domain.Name,
+						ProjectName: project.Name,
+					})
+				}
+			}
+			resourceCount = len(domains)
+			m, _ := json.Marshal(domains)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+		case "cloudflare_pages_project":
+			jsonPayload, _, err := api.ListPagesProjects(context.Background(), accountID, cloudflare.PaginationOptions{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["latest_deployment"] = nil
+				jsonStructData[i].(map[string]interface{})["canonical_deployment"] = nil
+			}
+
 		case "cloudflare_rate_limit":
 			jsonPayload, err := api.ListAllRateLimits(context.Background(), zoneID)
 			if err != nil {

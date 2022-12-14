@@ -18,11 +18,11 @@ interactions:
             "name": "default",
             "description": "",
             "source": "zone",
-            "kind": "managed",
+            "kind": "zone",
             "version": "4",
             "last_updated": "2021-07-01T16:59:14.386598Z",
             "phase": "http_request_cache_settings"
-          },
+          }
         ],
         "success": true,
         "errors": [],
@@ -106,6 +106,7 @@ interactions:
           "errors": [],
           "messages": []
         }
+
     headers:
       Content-Type:
       - application/json

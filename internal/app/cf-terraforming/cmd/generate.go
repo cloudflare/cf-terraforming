@@ -972,6 +972,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					jsonStructData[i].(map[string]interface{})["edge_ips"] = jsonStructData[i].(map[string]interface{})["edge_ips"].(map[string]interface{})["ips"]
 				}
 			}
+		case "cloudflare_url_normalization_settings":
+			jsonPayload, err := api.URLNormalizationSettings(context.Background(), &cloudflare.ResourceContainer{Identifier: zoneID, Level: cloudflare.ZoneRouteLevel})
+			if err != nil {
+				log.Fatal(err)
+			}
+			var newJsonPayload []interface{}
+			newJsonPayload = append(newJsonPayload, jsonPayload)
+			resourceCount = len(newJsonPayload)
+			m, _ := json.Marshal(newJsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// this is only every a 1:1 so we can just verify if the 0th element has they key we expect
+			jsonStructData[0].(map[string]interface{})["id"] = zoneID
 		case "cloudflare_waf_override":
 			jsonPayload, err := api.ListWAFOverrides(context.Background(), zoneID)
 			if err != nil {
@@ -1145,7 +1161,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 
 			output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
-
 			sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
 			for k := range r.Block.Attributes {
 				sortedBlockAttributes = append(sortedBlockAttributes, k)

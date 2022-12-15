@@ -193,6 +193,7 @@ Last updated Apr 13, 2021
 | [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record) | Zone | ✅ | ✅ |
 | [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset) | Account or Zone | ✅ | ❌ |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application) | Zone | ✅ | ✅ |
+| [cloudflare_url_normalization_settings](https://www.terraform.io/docs/providers/cloudflare/r/url_normalization_settings) | Zone | ✅ | ❌ |
 | [cloudflare_waf_group](https://www.terraform.io/docs/providers/cloudflare/r/waf_group) | Zone | ❌ | ❌ |
 | [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override) | Zone | ✅ | ✅ |
 | [cloudflare_waf_package](https://www.terraform.io/docs/providers/cloudflare/r/waf_package) | Zone | ✅ | ❌ |

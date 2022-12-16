@@ -750,13 +750,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// We only want to remap the "value" to the "content" value for simple
 				// DNS types as the aggregate types use `data` for the structure.
 				if contains(simpleDNSTypes, jsonStructData[i].(map[string]interface{})["type"].(string)) {
-					switch jsonStructData[i].(map[string]interface{})["type"].(string) {
-					// Edge case : when TXT record contains SPF macro that contains % then escape it with an extra %
-					case "TXT":
-						jsonStructData[i].(map[string]interface{})["value"] = strings.Replace(jsonStructData[i].(map[string]interface{})["content"].(string), "%", "%%", -1)
-					default:
-						jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
-					}
+					jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
 				}
 			}
 		case "cloudflare_ruleset":
@@ -1229,6 +1223,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), uuid.New().String(), map[string][]string{})
 			output += "}\n\n"
 		}
+
+		// Any output string field can have a %{ or ${, we escape these characters by
+		// doubling up on the $ or %. See https://developer.hashicorp.com/terraform/language/expressions/strings#quoted-strings
+		output = strings.ReplaceAll(output, "${", "$${")
+		output = strings.ReplaceAll(output, "%{", "%%{")
 
 		output, err = tf.FormatString(context.Background(), output)
 		if err != nil {

@@ -946,12 +946,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 							}
 							// Cache Rules transformation
 							if jsonStructData[i].(map[string]interface{})["phase"] == "http_request_cache_settings" {
-								if c, ok := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"]; ok {
-									if s, sok := c.(map[string]interface{})["query_string"].(map[string]interface{})["include"]; sok && s == "*" {
-										rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["include"] = []interface{}{"*"}
-									}
-									if s, sok := c.(map[string]interface{})["query_string"].(map[string]interface{})["exclude"]; sok && s == "*" {
-										rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["exclude"] = []interface{}{"*"}
+								if ck, ok := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"]; ok {
+									if c, cok := ck.(map[string]interface{})["custom_key"]; cok {
+										if qs, qok := c.(map[string]interface{})["query_string"]; qok {
+											if s, sok := qs.(map[string]interface{})["include"]; sok && s == "*" {
+												rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["include"] = []interface{}{"*"}
+											}
+											if s, sok := qs.(map[string]interface{})["exclude"]; sok && s == "*" {
+												rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["exclude"] = []interface{}{"*"}
+											}
+										}
 									}
 								}
 							}

@@ -41,4 +41,17 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       respect_strong_etags       = true
     }
   }
+  rules {
+    action      = "set_cache_settings"
+    description = "/status/202"
+    enabled     = true
+    expression  = "(http.host eq \"example.com\")"
+    action_parameters {
+      edge_ttl {
+        default = 60
+        mode    = "override_origin"
+      }
+      cache = false
+    }
+  }
 }

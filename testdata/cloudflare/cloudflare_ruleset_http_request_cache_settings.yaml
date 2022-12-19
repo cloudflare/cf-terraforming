@@ -97,6 +97,23 @@ interactions:
                   },
                   "origin_error_page_passthru": true
                 }
+              },
+              {
+                "id": "e5f1bd1386b4464aa8d726ba1e0d51ad",
+                "version": "2",
+                "action": "set_cache_settings",
+                "expression": "(http.host eq \"example.com\")",
+                "description": "/status/202",
+                "last_updated": "2022-09-21T16:36:00.999083Z",
+                "ref": "e5f1bd1386b4464aa8d726ba1e0d51ad",
+                "enabled": true,
+                "action_parameters": {
+                  "cache": false,
+                  "edge_ttl": {
+                    "mode": "override_origin",
+                    "default": 60
+                  }
+                }
               }
             ],
             "last_updated": "2022-09-28T17:21:21.510301Z",

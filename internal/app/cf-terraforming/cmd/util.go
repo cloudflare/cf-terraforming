@@ -219,6 +219,7 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 						indexedNestedBlocks[parentID] = append(indexedNestedBlocks[parentID], nestedBlockOutput)
 
 					case []interface{}:
+						var previousNextedBlockOutput string
 						for _, nestedItem := range s.([]interface{}) {
 							parentID, exists := nestedItem.(map[string]interface{})["id"]
 							if !exists {
@@ -229,9 +230,13 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 							}
 
 							nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), parentID.(string), indexedNestedBlocks)
-							// The indexedNestedBlocks maps helps us know which parent we're rendering the nested block for
-							// So we append the current child's output to it, for when we render it out later
-							indexedNestedBlocks[parentID.(string)] = append(indexedNestedBlocks[parentID.(string)], nestedBlockOutput)
+
+							if previousNextedBlockOutput != nestedBlockOutput {
+								previousNextedBlockOutput = nestedBlockOutput
+								// The indexedNestedBlocks maps helps us know which parent we're rendering the nested block for
+								// So we append the current child's output to it, for when we render it out later
+								indexedNestedBlocks[parentID.(string)] = append(indexedNestedBlocks[parentID.(string)], nestedBlockOutput)
+							}
 						}
 
 					default:

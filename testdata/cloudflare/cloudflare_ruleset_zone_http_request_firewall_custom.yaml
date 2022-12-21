@@ -56,41 +56,53 @@ interactions:
             "version": "2",
             "rules": [
               {
-                "id": "062a7840e0cb47f7b36acd2d507ce584",
+                "id": "88dcb30401e348ba9e1352c2598f2a4c",
                 "version": "2",
                 "action": "skip",
-                "expression": "(http.request.uri.path contains \"/filters\")",
-                "description": "firewall rule",
-                "last_updated": "2021-09-03T06:42:41.341405Z",
-                "ref": "062a7840e0cb47f7b36acd2d507ce584",
+                "expression": "(http.host eq \"test.example.com\")",
+                "description": "test.example.com",
+                "last_updated": "2022-11-24T14:24:14.756247Z",
+                "ref": "88dcb30401e348ba9e1352c2598f2a4c",
                 "enabled": true,
                 "logging": {
                   "enabled": true
                 },
                 "action_parameters": {
-                  "rules":{
-                    "efb7b8c949ac4650a09736fc376e9aee": [
-                      "062a7840e0cb47f7b36acd2d507ce584",
-                      "5cLhGXtTafjwPkdy8fmW5QvPiokBuZhi"
-                    ]
-                  }
+                  "ruleset": "current",
+                  "phases": [
+                    "http_ratelimit",
+                    "http_request_firewall_managed"
+                  ],
+                  "products": [
+                    "zoneLockdown",
+                    "uaBlock",
+                    "bic",
+                    "hot",
+                    "securityLevel",
+                    "rateLimit",
+                    "waf"
+                  ]
                 }
               },
               {
-                "id": "8751856eb4cf4dfdaca9a3b5e9376b1c",
-                "version": "2",
-                "action": "skip",
-                "expression": "(ip.src eq 1.2.3.4)",
-                "description": "test skip rule on ip ",
-                "last_updated": "2021-09-03T06:42:41.341405Z",
-                "ref": "8751856eb4cf4dfdaca9a3b5e9376b1c",
-                "enabled": true,
-                "logging": {
-                  "enabled": false
-                },
-                "action_parameters": {
-                    "ruleset": "current"
-                }
+                "id": "b3cc5e4cc6604f9d90a6a106df867760",
+                "version": "29",
+                "action": "challenge",
+                "expression": "(cf.bot_management.score eq 50 and cf.bot_management.static_resource)",
+                "description": "customRule-test",
+                "last_updated": "2022-11-07T19:03:05.198191Z",
+                "ref": "b3cc5e4cc6604f9d90a6a106df867760",
+                "enabled": true
+              },
+              {
+                "id": "1ecf73bdf7bd4227969a734412b13ad1",
+                "version": "7",
+                "action": "log",
+                "expression": "(cf.waf.score le 20)",
+                "description": "AWAF ML",
+                "last_updated": "2022-12-09T16:53:19.003821Z",
+                "ref": "1ecf73bdf7bd4227969a734412b13ad1",
+                "enabled": false
               }
             ],
             "last_updated": "2021-09-03T06:42:41.341405Z",

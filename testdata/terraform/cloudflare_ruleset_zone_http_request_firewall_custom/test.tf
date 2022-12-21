@@ -5,28 +5,28 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
   zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
     action      = "skip"
-    description = "firewall rule"
+    description = "test.example.com"
     enabled     = true
-    expression  = "(http.request.uri.path contains \"/filters\")"
+    expression  = "(http.host eq \"test.example.com\")"
     action_parameters {
-      rules = {
-        "efb7b8c949ac4650a09736fc376e9aee" = "062a7840e0cb47f7b36acd2d507ce584, 5cLhGXtTafjwPkdy8fmW5QvPiokBuZhi"
-      }
+      phases   = ["http_ratelimit", "http_request_firewall_managed"]
+      products = ["zoneLockdown", "uaBlock", "bic", "hot", "securityLevel", "rateLimit", "waf"]
+      ruleset  = "current"
     }
     logging {
       status = "enabled"
     }
   }
   rules {
-    action      = "skip"
-    description = "test skip rule on ip "
+    action      = "challenge"
+    description = "customRule-test"
     enabled     = true
-    expression  = "(ip.src eq 1.2.3.4)"
-    action_parameters {
-      ruleset = "current"
-    }
-    logging {
-      status = "disabled"
-    }
+    expression  = "(cf.bot_management.score eq 50 and cf.bot_management.static_resource)"
+  }
+  rules {
+    action      = "log"
+    description = "AWAF ML"
+    enabled     = false
+    expression  = "(cf.waf.score le 20)"
   }
 }

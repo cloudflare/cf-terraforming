@@ -3,7 +3,7 @@ module github.com/cloudflare/cf-terraforming
 go 1.17
 
 require (
-	github.com/cloudflare/cloudflare-go v0.56.0
+	github.com/cloudflare/cloudflare-go v0.57.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/google/uuid v1.3.0
 	github.com/hashicorp/go-version v1.6.0

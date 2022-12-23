@@ -1044,7 +1044,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_worker_route":
-			jsonPayload, err := api.ListWorkerRoutes(context.Background(), zoneID)
+			jsonPayload, err := api.ListWorkerRoutes(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListWorkerRoutesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

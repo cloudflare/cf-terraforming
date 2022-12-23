@@ -7,7 +7,7 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/workers/filters
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/workers/routes
     method: GET
   response:
     body: |

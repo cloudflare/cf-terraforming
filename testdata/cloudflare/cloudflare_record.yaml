@@ -1,13 +1,59 @@
 ---
 version: 1
 interactions:
+# can be removed once cloudflare/cloudflare-go#1167 lands and doesn't send
+# the extra parameter.
 - request:
     body: ""
     form: {}
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records?page=1
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records?Priority=&page=1&per_page=50
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "372e67954025e0ba6aaa6d586b9e0b59",
+            "type": "A",
+            "name": "example.com",
+            "content": "198.51.100.4",
+            "proxiable": true,
+            "proxied": false,
+            "ttl": 120,
+            "locked": false,
+            "zone_id": "023e105f4ecef8ad9ca31a8372d0c353",
+            "zone_name": "example.com",
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "data": {},
+            "meta": {
+              "auto_added": true,
+              "source": "primary"
+            }
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records?page=1&per_page=50
     method: GET
   response:
     body: |

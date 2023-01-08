@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
 
@@ -151,7 +152,14 @@ func TestResourceGeneration(t *testing.T) {
 			viper.Set("zone", "")
 			viper.Set("account", "")
 
-			r, err := recorder.New("../../../../testdata/cloudflare/" + tc.testdataFilename)
+			var r *recorder.Recorder
+			var err error
+			if os.Getenv("OVERWRITE_VCR_CASSETTES") == "true" {
+				r, err = recorder.NewAsMode("../../../../testdata/cloudflare/"+tc.testdataFilename, recorder.ModeRecording, http.DefaultTransport)
+			} else {
+				r, err = recorder.New("../../../../testdata/cloudflare/" + tc.testdataFilename)
+			}
+
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -163,9 +171,26 @@ func TestResourceGeneration(t *testing.T) {
 			}()
 
 			r.AddFilter(func(i *cassette.Interaction) error {
+				// Sensitive HTTP headers
 				delete(i.Request.Headers, "X-Auth-Email")
 				delete(i.Request.Headers, "X-Auth-Key")
 				delete(i.Request.Headers, "Authorization")
+
+				// HTTP request headers that we don't need to assert against
+				delete(i.Request.Headers, "User-Agent")
+
+				// HTTP response headers that we don't need to assert against
+				delete(i.Response.Headers, "Cf-Cache-Status")
+				delete(i.Response.Headers, "Cf-Ray")
+				delete(i.Response.Headers, "Date")
+				delete(i.Response.Headers, "Server")
+				delete(i.Response.Headers, "Set-Cookie")
+				delete(i.Response.Headers, "X-Envoy-Upstream-Service-Time")
+
+				if os.Getenv("CLOUDFLARE_DOMAIN") != "" {
+					i.Response.Body = strings.ReplaceAll(i.Response.Body, os.Getenv("CLOUDFLARE_DOMAIN"), "example.com")
+				}
+
 				return nil
 			})
 

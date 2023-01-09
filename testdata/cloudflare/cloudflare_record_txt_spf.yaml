@@ -7,14 +7,11 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records?page=1
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records?Priority=&page=1&per_page=50
     method: GET
   response:
     body: |
       {
-        "success": true,
-        "errors": [],
-        "messages": [],
         "result": [
           {
             "id": "9635b9083bd5770bf01b27d53c84b484",
@@ -33,10 +30,22 @@ interactions:
               "managed_by_argo_tunnel": false,
               "source": "primary"
             },
-            "created_on": "2021-08-31T02:28:21.34414Z",
-            "modified_on": "2021-08-31T02:31:53.205261Z"
+            "comment": null,
+            "tags": [],
+            "created_on": "2023-01-08T23:23:46.708157Z",
+            "modified_on": "2023-01-08T23:23:46.708157Z"
           }
-        ]
+        ],
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result_info": {
+          "page": 1,
+          "per_page": 50,
+          "count": 1,
+          "total_count": 1,
+          "total_pages": 1
+        }
       }
     headers:
       Content-Type:
@@ -46,4 +55,3 @@ interactions:
     status: 200 OK
     code: 200
     duration: ""
-

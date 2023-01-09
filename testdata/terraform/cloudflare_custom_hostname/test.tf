@@ -1,4 +1,7 @@
 resource "cloudflare_custom_hostname" "terraform_managed_resource" {
+  custom_metadata = {
+    key = "value"
+  }
   custom_origin_server = "origin2.example.com"
   hostname             = "app.example.com"
   zone_id              = "0da42c8d2132a9ddaf714f9e7c920711"

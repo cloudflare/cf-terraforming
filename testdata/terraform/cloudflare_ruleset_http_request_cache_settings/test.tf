@@ -54,4 +54,23 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       cache = false
     }
   }
+  rules {
+    action      = "set_cache_settings"
+    description = "test cache rule 2"
+    enabled     = true
+    expression  = "(http.host eq \"example.com\")"
+    action_parameters {
+      edge_ttl {
+        status_code_ttl {
+          value = 300
+          status_code_range {
+            from = 100
+            to   = 200
+          }
+        }
+        mode = "respect_origin"
+      }
+      cache = true
+    }
+  }
 }

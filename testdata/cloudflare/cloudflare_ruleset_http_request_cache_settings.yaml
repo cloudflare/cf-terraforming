@@ -114,6 +114,31 @@ interactions:
                     "default": 60
                   }
                 }
+              },
+              {
+                "id": "cd89ae000de64730bd61651c1b1f7f8c",
+                "version": "1",
+                "action": "set_cache_settings",
+                "expression": "(http.host eq \"example.com\")",
+                "description": "test cache rule 2",
+                "last_updated": "2023-01-12T15:11:57.591876Z",
+                "ref": "cd89ae000de64730bd61651c1b1f7f8c",
+                "enabled": true,
+                "action_parameters": {
+                  "cache": true,
+                  "edge_ttl": {
+                    "mode": "respect_origin",
+                    "status_code_ttl": [
+                      {
+                        "status_code_range": {
+                          "from": 100,
+                          "to": 200
+                        },
+                        "value": 300
+                      }
+                    ]
+                  }
+                }
               }
             ],
             "last_updated": "2022-09-28T17:21:21.510301Z",

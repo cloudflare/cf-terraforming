@@ -73,7 +73,7 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 	hostname = viper.GetString("hostname")
 
 	if accountID != "" && zoneID != "" {
-		log.Debug("--account and --zone are mutually exclusive, support for both is deprecated")
+		log.Fatal("--account and --zone are mutually exclusive, support for both is deprecated")
 	}
 
 	if apiToken = viper.GetString("token"); apiToken == "" {
@@ -98,15 +98,6 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 	}
 
 	var options []cloudflare.Option
-
-	if accountID != "" {
-		log.WithFields(logrus.Fields{
-			"account_id": accountID,
-		}).Debug("configuring Cloudflare API with account")
-
-		// Organization ID was passed, use it to configure the API
-		options = append(options, cloudflare.UsingAccount(accountID))
-	}
 
 	if hostname != "" {
 		options = append(options, cloudflare.BaseURL("https://"+hostname+"/client/v4"))

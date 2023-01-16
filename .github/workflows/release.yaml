@@ -16,7 +16,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: ^1.18
+          go-version-file: 'go.mod'
       - name: Set release VERSION
         run: echo "VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Run GoReleaser
@@ -27,3 +27,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
+
+      # only attempt to bump the cask if the release was successful
+      - name: Bump cf-terraforming cask in cloudflare/homebrew-cloudflare
+        uses: macauley/action-homebrew-bump-cask@v1
+        if: steps.build.outcome == 'success'
+        with:
+          token: ${{ secrets.BUMP_CASK_TOKEN }}
+          tap: cloudflare/homebrew-cloudflare
+          cask: cf-terraforming
+          livecheck: true
+          dryrun: false

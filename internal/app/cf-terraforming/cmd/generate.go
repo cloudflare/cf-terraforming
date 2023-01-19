@@ -8,7 +8,6 @@ import (
 	"sort"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/google/uuid"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
@@ -1224,7 +1223,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), uuid.New().String(), map[string][]string{})
+			output += buildBlocks(r.Block, jsonStructData[i].(map[string]interface{}))
 			output += "}\n\n"
 		}
 

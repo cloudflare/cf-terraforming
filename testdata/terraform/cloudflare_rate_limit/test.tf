@@ -5,12 +5,12 @@ resource "cloudflare_rate_limit" "terraform_managed_resource" {
   threshold           = 10
   zone_id             = "0da42c8d2132a9ddaf714f9e7c920711"
   action {
+    mode    = "ban"
+    timeout = 3600
     response {
       body         = "{\"response\":\"your request has been rate limited\"}"
       content_type = "application/json"
     }
-    mode    = "ban"
-    timeout = 3600
   }
   match {
     request {

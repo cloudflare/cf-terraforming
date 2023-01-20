@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/google/uuid"
 	tfjson "github.com/hashicorp/terraform-json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -220,23 +221,21 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 					case []interface{}:
 						var previousNextedBlockOutput string
 						for _, nestedItem := range s.([]interface{}) {
-							_, exists := nestedItem.(map[string]interface{})["id"]
-							if exists {
-								parentID = nestedItem.(map[string]interface{})["id"].(string)
-							}
+							parentID, exists := nestedItem.(map[string]interface{})["id"]
 							if !exists {
 								// if we fail to find an ID, we tag the current element with a uuid
 								log.Debugf("id not found for nestedItem %#v using uuid terraform_internal_id", nestedItem)
+								parentID = uuid.New().String()
 								nestedItem.(map[string]interface{})["terraform_internal_id"] = parentID
 							}
 
-							nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), parentID, indexedNestedBlocks)
+							nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), parentID.(string), indexedNestedBlocks)
 
 							if previousNextedBlockOutput != nestedBlockOutput {
 								previousNextedBlockOutput = nestedBlockOutput
 								// The indexedNestedBlocks maps helps us know which parent we're rendering the nested block for
 								// So we append the current child's output to it, for when we render it out later
-								indexedNestedBlocks[parentID] = append(indexedNestedBlocks[parentID], nestedBlockOutput)
+								indexedNestedBlocks[parentID.(string)] = append(indexedNestedBlocks[parentID.(string)], nestedBlockOutput)
 							}
 						}
 

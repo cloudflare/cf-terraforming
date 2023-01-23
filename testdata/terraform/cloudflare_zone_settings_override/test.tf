@@ -1,18 +1,6 @@
 resource "cloudflare_zone_settings_override" "terraform_managed_resource" {
   zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   settings {
-    minify {
-      css  = "on"
-      html = "off"
-      js   = "off"
-    }
-    security_header {
-      enabled            = true
-      include_subdomains = true
-      max_age            = 86400
-      nosniff            = true
-      preload            = true
-    }
     always_online               = "on"
     always_use_https            = "off"
     automatic_https_rewrites    = "on"
@@ -57,5 +45,17 @@ resource "cloudflare_zone_settings_override" "terraform_managed_resource" {
     webp                        = "off"
     websockets                  = "on"
     zero_rtt                    = "off"
+    minify {
+      css  = "on"
+      html = "off"
+      js   = "off"
+    }
+    security_header {
+      enabled            = true
+      include_subdomains = true
+      max_age            = 86400
+      nosniff            = true
+      preload            = true
+    }
   }
 }

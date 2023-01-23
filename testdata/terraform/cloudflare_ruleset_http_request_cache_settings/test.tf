@@ -9,10 +9,16 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     enabled     = false
     expression  = "(http.host eq \"example.com\")"
     action_parameters {
+      cache                      = true
+      origin_error_page_passthru = true
+      respect_strong_etags       = true
       browser_ttl {
         mode = "respect_origin"
       }
       cache_key {
+        cache_by_device_type       = true
+        cache_deception_armor      = true
+        ignore_query_strings_order = false
         custom_key {
           host {
             resolved = false
@@ -21,37 +27,28 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
             exclude = ["*"]
           }
         }
-        cache_by_device_type       = true
-        cache_deception_armor      = true
-        ignore_query_strings_order = false
       }
       edge_ttl {
-        status_code_ttl {
-          status_code = 100
-          value       = 30
-        }
         default = 30
         mode    = "override_origin"
+        status_code_ttl {
+          value = 1
+          status_code_range {
+            from = 101
+            to   = 103
+          }
+        }
+        status_code_ttl {
+          value = 1
+          status_code_range {
+            from = 106
+            to   = 110
+          }
+        }
       }
       serve_stale {
         disable_stale_while_updating = true
       }
-      cache                      = true
-      origin_error_page_passthru = true
-      respect_strong_etags       = true
-    }
-  }
-  rules {
-    action      = "set_cache_settings"
-    description = "/status/202"
-    enabled     = true
-    expression  = "(http.host eq \"example.com\")"
-    action_parameters {
-      edge_ttl {
-        default = 60
-        mode    = "override_origin"
-      }
-      cache = false
     }
   }
   rules {
@@ -60,17 +57,59 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     enabled     = true
     expression  = "(http.host eq \"example.com\")"
     action_parameters {
+      cache = true
       edge_ttl {
+        mode = "respect_origin"
         status_code_ttl {
-          value = 300
+          value = 10
           status_code_range {
-            from = 100
-            to   = 200
+            from = 1
+            to   = 2
           }
         }
+        status_code_ttl {
+          value = 1
+          status_code_range {
+            from = 3
+            to   = 4
+          }
+        }
+      }
+    }
+  }
+  rules {
+    action      = "set_cache_settings"
+    description = "test cache rule"
+    enabled     = false
+    expression  = "(http.host eq \"example.com\")"
+    action_parameters {
+      cache                = true
+      respect_strong_etags = true
+      browser_ttl {
         mode = "respect_origin"
       }
-      cache = true
+      cache_key {
+        cache_by_device_type = true
+        custom_key {
+          host {
+            resolved = false
+          }
+          query_string {
+            include = ["*"]
+          }
+        }
+      }
+      edge_ttl {
+        default = 1
+        mode    = "override_origin"
+        status_code_ttl {
+          status_code = 100
+          value       = 5
+        }
+      }
+      serve_stale {
+        disable_stale_while_updating = true
+      }
     }
   }
 }

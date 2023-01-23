@@ -168,13 +168,74 @@ func flattenAttrMap(l []interface{}) map[string]interface{} {
 	return result
 }
 
-// nestBlocks takes a schema and generates all of the appropriate nesting of any
-// top-level blocks as well as nested lists or sets.
-func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, parentID string, indexedNestedBlocks map[string][]string) string {
+func buildBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}) string {
+	attributes := make(map[string]interface{})
+	flatten("", structData, attributes)
+	return nestBlocks(schemaBlock, attributes, "")
+}
+
+// flattening the API response into a queryable map, that follows the nesting layers of our TF resource schema
+// i.e. the following entry: attributes["rules.2.action_parameters.edge_ttl.status_code_ttl.0.status_code_range"]
+// contains map[from:100 to:200].
+func flatten(keyPrefix string, structData interface{}, attributes map[string]interface{}) {
+	switch structData.(type) {
+	case map[string]interface{}:
+		for k1, e1 := range structData.(map[string]interface{}) {
+			switch e1.(type) {
+			case map[string]interface{}:
+				putAttribute(attributes, keyPrefix, k1, e1)
+				if keyPrefix != "" {
+					flatten(fmt.Sprintf("%v.%v", keyPrefix, k1), e1, attributes)
+				} else {
+					flatten(fmt.Sprintf("%v", k1), e1, attributes)
+				}
+			case []interface{}:
+				putAttribute(attributes, keyPrefix, k1, e1)
+				for k2, e2 := range e1.([]interface{}) {
+					putAttribute(attributes, keyPrefix, fmt.Sprintf("%v.%v", k1, k2), e2)
+					if keyPrefix != "" {
+						flatten(fmt.Sprintf("%v.%v", keyPrefix, fmt.Sprintf("%v.%v", k1, k2)), e2, attributes)
+					} else {
+						flatten(fmt.Sprintf("%v.%v", k1, k2), e2, attributes)
+					}
+				}
+			case []map[string]interface{}:
+				putAttribute(attributes, keyPrefix, k1, e1)
+				for k2, e2 := range e1.([]map[string]interface{}) {
+					putAttribute(attributes, keyPrefix, fmt.Sprintf("%v.%v", k1, k2), e2)
+					if keyPrefix != "" {
+						flatten(fmt.Sprintf("%v.%v", keyPrefix, fmt.Sprintf("%v.%v", k1, k2)), e2, attributes)
+					} else {
+						flatten(fmt.Sprintf("%v.%v", k1, k2), e2, attributes)
+					}
+				}
+			default:
+				putAttribute(attributes, keyPrefix, k1, e1)
+			}
+		}
+	case []interface{}:
+		for index, value := range structData.([]interface{}) {
+			flatten(fmt.Sprintf("%v.%v", keyPrefix, index), value, attributes)
+			if keyPrefix != "" {
+				flatten(fmt.Sprintf("%v.%v", keyPrefix, index), value, attributes)
+			} else {
+				flatten(fmt.Sprintf("%v", index), value, attributes)
+			}
+		}
+	}
+}
+
+func putAttribute(attributes map[string]interface{}, keyPrefix, key string, element interface{}) {
+	if keyPrefix != "" {
+		attributes[fmt.Sprintf("%v.%v", keyPrefix, key)] = element
+	} else {
+		attributes[fmt.Sprintf("%v", key)] = element
+	}
+}
+
+func nestBlocks(schemaBlock *tfjson.SchemaBlock, attributes map[string]interface{}, queryPrefix string) string {
 	output := ""
 
-	// Nested blocks are used for configuration options where assignment
-	// isn't required.
 	sortedNestedBlocks := make([]string, 0, len(schemaBlock.NestedBlocks))
 	for k := range schemaBlock.NestedBlocks {
 		sortedNestedBlocks = append(sortedNestedBlocks, k)
@@ -197,130 +258,42 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 				}
 			}
 
-			nestedBlockOutput := ""
-
-			// If the attribute we're looking at has further nesting, we'll
-			// recursively call nestBlocks.
-			if len(schemaBlock.NestedBlocks[block].Block.NestedBlocks) > 0 {
-				if s, ok := structData[block]; ok {
-					switch s.(type) {
-					case map[string]interface{}:
-						nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), parentID, indexedNestedBlocks)
-						indexedNestedBlocks[parentID] = append(indexedNestedBlocks[parentID], nestedBlockOutput)
-
-					case []interface{}:
-						var previousNextedBlockOutput string
-						for _, nestedItem := range s.([]interface{}) {
-							_, exists := nestedItem.(map[string]interface{})["id"]
-							if exists {
-								parentID = nestedItem.(map[string]interface{})["id"].(string)
-							}
-							if !exists {
-								// if we fail to find an ID, we tag the current element with a uuid
-								log.Debugf("id not found for nestedItem %#v using uuid terraform_internal_id", nestedItem)
-								nestedItem.(map[string]interface{})["terraform_internal_id"] = parentID
-							}
-
-							nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), parentID, indexedNestedBlocks)
-
-							if previousNextedBlockOutput != nestedBlockOutput {
-								previousNextedBlockOutput = nestedBlockOutput
-								// The indexedNestedBlocks maps helps us know which parent we're rendering the nested block for
-								// So we append the current child's output to it, for when we render it out later
-								indexedNestedBlocks[parentID] = append(indexedNestedBlocks[parentID], nestedBlockOutput)
-							}
-						}
-
-					default:
-						log.Debugf("unable to generate recursively nested blocks for %T", s)
-					}
-				}
+			// Build a query from block names and array iterators to match the schma level we are at.
+			// i.e. rules.2.action_parameters.edge_ttl.status_code_ttl.0.status_code_range.
+			var query string
+			if queryPrefix == "" {
+				query = block
+			} else {
+				query = fmt.Sprintf("%v.%v", queryPrefix, block)
 			}
 
-			switch attrStruct := structData[block].(type) {
-			// Case for if the inner block's attributes are a map of interfaces, in
-			// which case we can directly add them to the config.
-			case map[string]interface{}:
-				if attrStruct != nil {
-					nestedBlockOutput += writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct)
-				}
+			// Let's query that attribute from our map.
+			attribute := attributes[query]
+			if attribute == nil {
+				continue
+			}
 
-				if nestedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
-					output += block + " {\n"
-					output += nestedBlockOutput
-					output += "}\n"
-				}
-
-			// Case for if the inner block's attributes are a list of map interfaces,
-			// in which case this should be treated as a duplicating block.
-			case []map[string]interface{}:
-				for _, v := range attrStruct {
-					repeatedBlockOutput := ""
-
-					if attrStruct != nil {
-						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v)
-					}
-
-					// Write the block if we had data for it, or if it is a required block.
-					if repeatedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
-						output += block + " {\n"
-						output += repeatedBlockOutput
-
-						if nestedBlockOutput != "" {
-							output += nestedBlockOutput
-						}
-
-						output += "}\n"
-					}
-				}
-
-			// Case for duplicated blocks that commonly end up as an array or list at
-			// the API level.
+			switch attribute.(type) {
 			case []interface{}:
-				for _, v := range attrStruct {
-					repeatedBlockOutput := ""
-					if attrStruct != nil {
-						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}))
-					}
-
-					// Write the block if we had data for it, or if it is a required block.
-					if repeatedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
-						output += block + " {\n"
-						output += repeatedBlockOutput
-						if nestedBlockOutput != "" {
-							// We're processing the nested child blocks for currentId
-							currentID, exists := v.(map[string]interface{})["id"].(string)
-							if !exists {
-								currentID = v.(map[string]interface{})["terraform_internal_id"].(string)
-							}
-
-							if len(indexedNestedBlocks[currentID]) > 0 {
-								currentNestIdx := len(indexedNestedBlocks[currentID]) - 1
-								// Pull out the last nestedblock that we built for this parent
-								// We only need to render the last one because it holds every other all other nested blocks for this parent
-								currentNest := indexedNestedBlocks[currentID][currentNestIdx]
-
-								for ID, nest := range indexedNestedBlocks {
-									if ID != currentID && len(nest) > 0 {
-										// Itereate over all other indexed nested blocks and remove anything from the current block
-										// that belongs to a different parent
-										currentNest = strings.Replace(currentNest, nest[len(nest)-1], "", 1)
-									}
-								}
-								// currentNest is all that needs to be rendered for this parent
-								// re-index to make sure we capture the removal of the nested blocks that dont
-								// belong to this parent
-								indexedNestedBlocks[currentID][currentNestIdx] = currentNest
-								output += currentNest
-							}
-						}
-
-						output += "}\n"
-					}
+				for i, attr := range attribute.([]interface{}) {
+					indexedQuery := fmt.Sprintf("%v.%v", query, i)
+					nestedBlockOutput := nestBlocks(schemaBlock.NestedBlocks[block].Block, attributes, indexedQuery)
+					repeatedBlockOutput := writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attr.(map[string]interface{}))
+					appendBlock(&output, block, nestedBlockOutput, repeatedBlockOutput)
 				}
-
+			case []map[string]interface{}:
+				for i, attr := range attribute.([]map[string]interface{}) {
+					indexedQuery := fmt.Sprintf("%v.%v", query, i)
+					nestedBlockOutput := nestBlocks(schemaBlock.NestedBlocks[block].Block, attributes, indexedQuery)
+					repeatedBlockOutput := writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attr)
+					appendBlock(&output, block, nestedBlockOutput, repeatedBlockOutput)
+				}
+			case map[string]interface{}:
+				nestedBlockOutput := nestBlocks(schemaBlock.NestedBlocks[block].Block, attributes, query)
+				repeatedBlockOutput := writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attribute.(map[string]interface{}))
+				appendBlock(&output, block, nestedBlockOutput, repeatedBlockOutput)
 			default:
-				log.Debugf("unexpected attribute struct type %T for block %s", attrStruct, block)
+				log.Debugf("unexpected attribute struct type %T for block %s", attribute, block)
 			}
 		} else {
 			log.Debugf("nested mode %q for %s not recognised", schemaBlock.NestedBlocks[block].NestingMode, block)
@@ -328,6 +301,25 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 	}
 
 	return output
+}
+
+func appendBlock(output *string, block, nestedBlockOutput, repeatedBlockOutput string) {
+	if repeatedBlockOutput != "" {
+		*output += block + " {\n"
+		*output += repeatedBlockOutput
+
+		if nestedBlockOutput != "" {
+			*output += nestedBlockOutput
+		}
+		*output += "}\n"
+	} else if repeatedBlockOutput == "" && nestedBlockOutput != "" {
+		*output += block + " {\n"
+
+		if nestedBlockOutput != "" {
+			*output += nestedBlockOutput
+		}
+		*output += "}\n"
+	}
 }
 
 func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attrStruct map[string]interface{}) string {

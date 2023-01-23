@@ -8,10 +8,10 @@ import (
 	"sort"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/google/uuid"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
+	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -1151,6 +1151,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		output := ""
 
+		f := hclwrite.NewEmptyFile()
+		rootBody := f.Body()
 		for i := 0; i < resourceCount; i++ {
 			structData := jsonStructData[i].(map[string]interface{})
 
@@ -1168,6 +1170,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				resourceID = fmt.Sprintf("terraform_managed_resource_%s", id)
 			}
+			resource := rootBody.AppendNewBlock("resource", []string{resourceType, resourceID}).Body()
 
 			output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
 			sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
@@ -1190,12 +1193,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 				if attrName == "account_id" && accountID != "" {
-					output += writeAttrLine(attrName, accountID, false)
+					output += writeAttrLine(attrName, accountID, false, resource)
 					continue
 				}
 
 				if attrName == "zone_id" && zoneID != "" && accountID == "" {
-					output += writeAttrLine(attrName, zoneID, false)
+					output += writeAttrLine(attrName, zoneID, false, resource)
 					continue
 				}
 
@@ -1204,14 +1207,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				case ty.IsPrimitiveType():
 					switch ty {
 					case cty.String, cty.Bool, cty.Number:
-						output += writeAttrLine(attrName, structData[attrName], false)
+						output += writeAttrLine(attrName, structData[attrName], false, resource)
 					default:
 						log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 					}
 				case ty.IsCollectionType():
 					switch {
 					case ty.IsListType(), ty.IsSetType(), ty.IsMapType():
-						output += writeAttrLine(attrName, structData[attrName], false)
+						output += writeAttrLine(attrName, structData[attrName], false, resource)
 					default:
 						log.Debugf("unexpected collection type %q", ty.FriendlyName())
 					}
@@ -1224,20 +1227,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			output += nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), uuid.New().String(), map[string][]string{})
-			output += "}\n\n"
+			nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), resource)
+			f.Body().AppendNewline()
 		}
 
+		output = string(f.Bytes())
 		// Any output string field can have a %{ or ${, we escape these characters by
 		// doubling up on the $ or %. See https://developer.hashicorp.com/terraform/language/expressions/strings#quoted-strings
 		output = strings.ReplaceAll(output, "${", "$${")
 		output = strings.ReplaceAll(output, "%{", "%%{")
+		// output = strings.ReplaceAll(output, "\\\"", "\"")
 
-		output, err = tf.FormatString(context.Background(), output)
+		tfOutput, err := tf.FormatString(context.Background(), output)
+		// tfOutput = string(hclwrite.Format(f.Bytes()))
 		if err != nil {
 			log.Fatalf("failed to format output: %s", err)
 		}
-
-		fmt.Fprint(cmd.OutOrStdout(), output)
+		fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 	}
 }

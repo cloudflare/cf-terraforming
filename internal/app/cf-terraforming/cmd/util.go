@@ -11,7 +11,7 @@ import (
 	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
-	"github.com/google/uuid"
+	"github.com/hashicorp/hcl/v2/hclwrite"
 	tfjson "github.com/hashicorp/terraform-json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -180,8 +180,7 @@ func flattenAttrMap(l []interface{}) map[string]interface{} {
 
 // nestBlocks takes a schema and generates all of the appropriate nesting of any
 // top-level blocks as well as nested lists or sets.
-func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, parentID string, indexedNestedBlocks map[string][]string) string {
-	output := ""
+func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, parent *hclwrite.Body) {
 
 	// Nested blocks are used for configuration options where assignment
 	// isn't required.
@@ -207,38 +206,25 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 				}
 			}
 
-			nestedBlockOutput := ""
-
+			var currentNode *hclwrite.Body
 			// If the attribute we're looking at has further nesting, we'll
 			// recursively call nestBlocks.
+			if block == "status_code_ttl" {
+				fmt.Println("DEBUG")
+			}
 			if len(schemaBlock.NestedBlocks[block].Block.NestedBlocks) > 0 {
 				if s, ok := structData[block]; ok {
 					switch s.(type) {
 					case map[string]interface{}:
-						nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), parentID, indexedNestedBlocks)
-						indexedNestedBlocks[parentID] = append(indexedNestedBlocks[parentID], nestedBlockOutput)
-
+						currentNode = parent.AppendNewBlock(block, []string{}).Body()
+						nestBlocks(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), currentNode)
 					case []interface{}:
-						var previousNextedBlockOutput string
 						for _, nestedItem := range s.([]interface{}) {
-							parentID, exists := nestedItem.(map[string]interface{})["id"]
-							if !exists {
-								// if we fail to find an ID, we tag the current element with a uuid
-								log.Debugf("id not found for nestedItem %#v using uuid terraform_internal_id", nestedItem)
-								parentID = uuid.New().String()
-								nestedItem.(map[string]interface{})["terraform_internal_id"] = parentID
-							}
-
-							nestedBlockOutput += nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), parentID.(string), indexedNestedBlocks)
-
-							if previousNextedBlockOutput != nestedBlockOutput {
-								previousNextedBlockOutput = nestedBlockOutput
-								// The indexedNestedBlocks maps helps us know which parent we're rendering the nested block for
-								// So we append the current child's output to it, for when we render it out later
-								indexedNestedBlocks[parentID.(string)] = append(indexedNestedBlocks[parentID.(string)], nestedBlockOutput)
-							}
+							child := parent.AppendNewBlock(block, []string{}).Body()
+							nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), child)
+							processAttributes(schemaBlock, block, sortedInnerAttributes, structData, child)
 						}
-
+						return
 					default:
 						log.Debugf("unable to generate recursively nested blocks for %T", s)
 					}
@@ -250,35 +236,20 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 			// which case we can directly add them to the config.
 			case map[string]interface{}:
 				if attrStruct != nil {
-					nestedBlockOutput += writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct)
-				}
+					if currentNode == nil {
+						currentNode = parent.AppendNewBlock(block, []string{}).Body()
+					}
 
-				if nestedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
-					output += block + " {\n"
-					output += nestedBlockOutput
-					output += "}\n"
+					writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct, currentNode)
 				}
 
 			// Case for if the inner block's attributes are a list of map interfaces,
 			// in which case this should be treated as a duplicating block.
 			case []map[string]interface{}:
 				for _, v := range attrStruct {
-					repeatedBlockOutput := ""
-
 					if attrStruct != nil {
-						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v)
-					}
 
-					// Write the block if we had data for it, or if it is a required block.
-					if repeatedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
-						output += block + " {\n"
-						output += repeatedBlockOutput
-
-						if nestedBlockOutput != "" {
-							output += nestedBlockOutput
-						}
-
-						output += "}\n"
+						writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v, parent.AppendNewBlock(block, []string{}).Body())
 					}
 				}
 
@@ -286,44 +257,8 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 			// the API level.
 			case []interface{}:
 				for _, v := range attrStruct {
-					repeatedBlockOutput := ""
 					if attrStruct != nil {
-						repeatedBlockOutput = writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}))
-					}
-
-					// Write the block if we had data for it, or if it is a required block.
-					if repeatedBlockOutput != "" || schemaBlock.NestedBlocks[block].MinItems > 0 {
-						output += block + " {\n"
-						output += repeatedBlockOutput
-						if nestedBlockOutput != "" {
-							// We're processing the nested child blocks for currentId
-							currentID, exists := v.(map[string]interface{})["id"].(string)
-							if !exists {
-								currentID = v.(map[string]interface{})["terraform_internal_id"].(string)
-							}
-
-							if len(indexedNestedBlocks[currentID]) > 0 {
-								currentNestIdx := len(indexedNestedBlocks[currentID]) - 1
-								// Pull out the last nestedblock that we built for this parent
-								// We only need to render the last one because it holds every other all other nested blocks for this parent
-								currentNest := indexedNestedBlocks[currentID][currentNestIdx]
-
-								for ID, nest := range indexedNestedBlocks {
-									if ID != currentID && len(nest) > 0 {
-										// Itereate over all other indexed nested blocks and remove anything from the current block
-										// that belongs to a different parent
-										currentNest = strings.Replace(currentNest, nest[len(nest)-1], "", 1)
-									}
-								}
-								// currentNest is all that needs to be rendered for this parent
-								// re-index to make sure we capture the removal of the nested blocks that dont
-								// belong to this parent
-								indexedNestedBlocks[currentID][currentNestIdx] = currentNest
-								output += currentNest
-							}
-						}
-
-						output += "}\n"
+						writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}), parent.AppendNewBlock(block, []string{}).Body())
 					}
 				}
 
@@ -334,28 +269,71 @@ func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface
 			log.Debugf("nested mode %q for %s not recognised", schemaBlock.NestedBlocks[block].NestingMode, block)
 		}
 	}
-
-	return output
 }
 
-func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attrStruct map[string]interface{}) string {
+func processAttributes(schemaBlock *tfjson.SchemaBlock, block string, sortedInnerAttributes []string, structData map[string]interface{}, body *hclwrite.Body) {
+	switch attrStruct := structData[block].(type) {
+	// Case for if the inner block's attributes are a map of interfaces, in
+	// which case we can directly add them to the config.
+	case map[string]interface{}:
+		if attrStruct != nil {
+			writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct, body)
+		}
+
+	// Case for if the inner block's attributes are a list of map interfaces,
+	// in which case this should be treated as a duplicating block.
+	case []map[string]interface{}:
+		for _, v := range attrStruct {
+			if attrStruct != nil {
+				writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v, body)
+			}
+		}
+
+	// Case for duplicated blocks that commonly end up as an array or list at
+	// the API level.
+	case []interface{}:
+		for _, v := range attrStruct {
+			if attrStruct != nil {
+				bodyBlocks := body.Blocks()
+				for _, b := range bodyBlocks {
+					name := b.Type()
+					attrMap := make(map[string]interface{}, 0)
+					for k, val := range b.Body().Attributes() {
+						token := val.Expr().BuildTokens(nil)
+						value := string(token.Bytes())
+						attrMap[k] = value
+					}
+					if fmt.Sprint(v.(map[string]interface{})[name]) == fmt.Sprint(attrMap) {
+						writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}), body)
+					}
+				}
+			}
+		}
+
+	default:
+		log.Debugf("unexpected attribute struct type %T for block %s", attrStruct, block)
+	}
+}
+
+func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attrStruct map[string]interface{}, body *hclwrite.Body) string {
 	nestedBlockOutput := ""
 
 	for _, attrName := range attributes {
+
 		ty := schemaBlock.Attributes[attrName].AttributeType
 
 		switch {
 		case ty.IsPrimitiveType():
 			switch ty {
 			case cty.String, cty.Bool, cty.Number:
-				nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false)
+				nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false, body)
 			default:
 				log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 			}
 		case ty.IsListType(), ty.IsSetType():
-			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], true)
+			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], true, body)
 		case ty.IsMapType():
-			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false)
+			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false, body)
 		default:
 			log.Debugf("unexpected nested type %T for %s", ty, attrName)
 		}
@@ -366,7 +344,7 @@ func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attr
 
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
-func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
+func writeAttrLine(key string, value interface{}, usedInBlock bool, body *hclwrite.Body) string {
 	switch values := value.(type) {
 	case map[string]interface{}:
 		sortedKeys := make([]string, 0, len(values))
@@ -379,18 +357,20 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 		for _, v := range sortedKeys {
 			// check if our key has an integer in the string. If it does we need to wrap it with quotes.
 			if hasNumber(v) {
-				s += writeAttrLine(fmt.Sprintf("\"%s\"", v), values[v], false)
+				s += writeAttrLine(fmt.Sprintf("\"%s\"", v), values[v], false, body)
 			} else {
-				s += writeAttrLine(v, values[v], false)
+				s += writeAttrLine(v, values[v], false, body)
 			}
 		}
 
 		if usedInBlock {
 			if s != "" {
+				body.AppendNewBlock(key, []string{}).Body().SetAttributeValue(s, cty.NilVal)
 				return fmt.Sprintf("%s {\n%s}\n", key, s)
 			}
 		} else {
 			if s != "" {
+				body.SetAttributeValue(key, cty.StringVal(s))
 				return fmt.Sprintf("%s = {\n%s}\n", key, s)
 			}
 		}
@@ -410,15 +390,15 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 			}
 		}
 		if len(stringItems) > 0 {
-			return writeAttrLine(key, stringItems, false)
+			return writeAttrLine(key, stringItems, false, body)
 		}
 
 		if len(intItems) > 0 {
-			return writeAttrLine(key, intItems, false)
+			return writeAttrLine(key, intItems, false, body)
 		}
 
 		if len(interfaceItems) > 0 {
-			return writeAttrLine(key, interfaceItems, false)
+			return writeAttrLine(key, interfaceItems, false, body)
 		}
 
 	case []map[string]interface{}:
@@ -427,13 +407,14 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 		var mapLen = len(value.([]map[string]interface{}))
 		for i, item := range value.([]map[string]interface{}) {
 			// Use an empty key to prevent rendering the key
-			op = writeAttrLine("", item, true)
+			op = writeAttrLine("", item, true, body)
 			// if condition handles adding new line for just the last element
 			if i != mapLen-1 {
 				op = strings.TrimRight(op, "\n")
 			}
 			stringyInterfaces = append(stringyInterfaces, op)
 		}
+		body.SetAttributeValue(key, cty.StringVal(fmt.Sprintf("[%s]", strings.Join(stringyInterfaces, ",\n"))))
 		return fmt.Sprintf("%s = [ \n%s ]\n", key, strings.Join(stringyInterfaces, ",\n"))
 
 	case []int:
@@ -441,6 +422,7 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 		for _, int := range value.([]int) {
 			stringyInts = append(stringyInts, fmt.Sprintf("%d", int))
 		}
+		body.SetAttributeValue(key, cty.StringVal(fmt.Sprintf("[%s]", strings.Join(stringyInts, ", "))))
 		return fmt.Sprintf("%s = [ %s ]\n", key, strings.Join(stringyInts, ", "))
 	case []string:
 		var items []string
@@ -448,17 +430,22 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool) string {
 			items = append(items, fmt.Sprintf("%q", item))
 		}
 		if len(items) > 0 {
+			body.SetAttributeValue(key, cty.StringVal(fmt.Sprintf("[%s]", strings.Join(items, ", "))))
 			return fmt.Sprintf("%s = [ %s ]\n", key, strings.Join(items, ", "))
 		}
 	case string:
 		if value != "" {
+			body.SetAttributeValue(key, cty.StringVal(value.(string)))
 			return fmt.Sprintf("%s = %q\n", key, value)
 		}
 	case int:
+		body.SetAttributeValue(key, cty.NumberIntVal(int64(value.(int))))
 		return fmt.Sprintf("%s = %d\n", key, value)
 	case float64:
+		body.SetAttributeValue(key, cty.NumberFloatVal(value.(float64)))
 		return fmt.Sprintf("%s = %0.f\n", key, value)
 	case bool:
+		body.SetAttributeValue(key, cty.BoolVal(value.(bool)))
 		return fmt.Sprintf("%s = %t\n", key, value)
 	default:
 		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)

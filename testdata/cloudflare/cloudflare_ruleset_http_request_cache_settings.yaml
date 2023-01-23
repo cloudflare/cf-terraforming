@@ -72,6 +72,20 @@ interactions:
                       {
                         "status_code": 100,
                         "value": 30
+                      },
+                      {
+                        "status_code_range": {
+                          "from": 100,
+                          "to": 106
+                        },
+                        "value": 5
+                      },
+                      {
+                        "status_code_range": {
+                          "from": 130,
+                          "to": 162
+                        },
+                        "value": 31536000
                       }
                     ]
                   },

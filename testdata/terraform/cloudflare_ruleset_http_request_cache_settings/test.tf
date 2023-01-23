@@ -30,6 +30,20 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
           status_code = 100
           value       = 30
         }
+        status_code_ttl {
+          status_code_range {
+            from = 100
+            to   = 106
+          }
+          value = 5
+        }
+        status_code_ttl {
+          status_code_range {
+            from = 130
+            to   = 162
+          }
+          value = 315360005
+        }
         default = 30
         mode    = "override_origin"
       }

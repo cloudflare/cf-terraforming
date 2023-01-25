@@ -14,7 +14,7 @@ interactions:
       {
         "result": {
           "id": "smart_routing",
-          "value": "off",
+          "value": "on",
           "modified_on": "2021-08-29T22:07:38.044691Z",
           "editable": true
         },

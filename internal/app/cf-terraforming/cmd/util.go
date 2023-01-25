@@ -177,59 +177,43 @@ func buildBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interfac
 // flattening the API response into a queryable map, that follows the nesting layers of our TF resource schema
 // i.e. the following entry: attributes["rules.2.action_parameters.edge_ttl.status_code_ttl.0.status_code_range"]
 // contains map[from:100 to:200].
-func flatten(keyPrefix string, structData interface{}, attributes map[string]interface{}) {
-	switch structData.(type) {
+func flatten(keyPrefix string, data interface{}, attributes map[string]interface{}) {
+	putAttribute(attributes, keyPrefix, "", data)
+	switch data.(type) {
 	case map[string]interface{}:
-		for k1, e1 := range structData.(map[string]interface{}) {
-			switch e1.(type) {
-			case map[string]interface{}:
-				putAttribute(attributes, keyPrefix, k1, e1)
-				if keyPrefix != "" {
-					flatten(fmt.Sprintf("%v.%v", keyPrefix, k1), e1, attributes)
-				} else {
-					flatten(fmt.Sprintf("%v", k1), e1, attributes)
-				}
-			case []interface{}:
-				putAttribute(attributes, keyPrefix, k1, e1)
-				for k2, e2 := range e1.([]interface{}) {
-					putAttribute(attributes, keyPrefix, fmt.Sprintf("%v.%v", k1, k2), e2)
-					if keyPrefix != "" {
-						flatten(fmt.Sprintf("%v.%v", keyPrefix, fmt.Sprintf("%v.%v", k1, k2)), e2, attributes)
-					} else {
-						flatten(fmt.Sprintf("%v.%v", k1, k2), e2, attributes)
-					}
-				}
-			case []map[string]interface{}:
-				putAttribute(attributes, keyPrefix, k1, e1)
-				for k2, e2 := range e1.([]map[string]interface{}) {
-					putAttribute(attributes, keyPrefix, fmt.Sprintf("%v.%v", k1, k2), e2)
-					if keyPrefix != "" {
-						flatten(fmt.Sprintf("%v.%v", keyPrefix, fmt.Sprintf("%v.%v", k1, k2)), e2, attributes)
-					} else {
-						flatten(fmt.Sprintf("%v.%v", k1, k2), e2, attributes)
-					}
-				}
-			default:
-				putAttribute(attributes, keyPrefix, k1, e1)
+		for k1, d := range data.(map[string]interface{}) {
+			if keyPrefix != "" {
+				flatten(fmt.Sprintf("%v.%v", keyPrefix, k1), d, attributes)
+			} else {
+				flatten(fmt.Sprintf("%v", k1), d, attributes)
 			}
 		}
 	case []interface{}:
-		for index, value := range structData.([]interface{}) {
-			flatten(fmt.Sprintf("%v.%v", keyPrefix, index), value, attributes)
+		for k1, value := range data.([]interface{}) {
 			if keyPrefix != "" {
-				flatten(fmt.Sprintf("%v.%v", keyPrefix, index), value, attributes)
+				flatten(fmt.Sprintf("%v.%v", keyPrefix, k1), value, attributes)
 			} else {
-				flatten(fmt.Sprintf("%v", index), value, attributes)
+				flatten(fmt.Sprintf("%v", k1), value, attributes)
+			}
+		}
+	case []map[string]interface{}:
+		for k1, e2 := range data.([]map[string]interface{}) {
+			if keyPrefix != "" {
+				flatten(fmt.Sprintf("%v.%v", keyPrefix, k1), e2, attributes)
+			} else {
+				flatten(fmt.Sprintf("%v", k1), e2, attributes)
 			}
 		}
 	}
 }
 
 func putAttribute(attributes map[string]interface{}, keyPrefix, key string, element interface{}) {
-	if keyPrefix != "" {
+	if keyPrefix != "" && key != "" {
 		attributes[fmt.Sprintf("%v.%v", keyPrefix, key)] = element
-	} else {
+	} else if key != "" {
 		attributes[fmt.Sprintf("%v", key)] = element
+	} else if keyPrefix != "" {
+		attributes[fmt.Sprintf("%v", keyPrefix)] = element
 	}
 }
 

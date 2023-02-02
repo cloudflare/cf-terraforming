@@ -1227,22 +1227,21 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), resource)
+			// nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), resource)
+			nestBlocksV2(r.Block, jsonStructData[i].(map[string]interface{}), resource)
 			f.Body().AppendNewline()
 		}
 
-		output = string(f.Bytes())
 		// Any output string field can have a %{ or ${, we escape these characters by
 		// doubling up on the $ or %. See https://developer.hashicorp.com/terraform/language/expressions/strings#quoted-strings
-		output = strings.ReplaceAll(output, "${", "$${")
-		output = strings.ReplaceAll(output, "%{", "%%{")
-		// output = strings.ReplaceAll(output, "\\\"", "\"")
 
-		tfOutput, err := tf.FormatString(context.Background(), output)
-		// tfOutput = string(hclwrite.Format(f.Bytes()))
+		// tfOutput, err := tf.FormatString(context.Background(), output)
+		tfOutput := string(hclwrite.Format(f.Bytes()))
 		if err != nil {
 			log.Fatalf("failed to format output: %s", err)
 		}
+		tfOutput = strings.ReplaceAll(tfOutput, "${", "$${")
+		tfOutput = strings.ReplaceAll(tfOutput, "%{", "%%{")
 		fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 	}
 }

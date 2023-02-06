@@ -57,17 +57,5 @@ resource "cloudflare_zone_settings_override" "terraform_managed_resource" {
     webp                        = "off"
     websockets                  = "on"
     zero_rtt                    = "off"
-    minify {
-      css  = "on"
-      html = "off"
-      js   = "off"
-    }
-    security_header {
-      enabled            = true
-      include_subdomains = true
-      max_age            = 86400
-      nosniff            = true
-      preload            = true
-    }
   }
 }

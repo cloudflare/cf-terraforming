@@ -1111,14 +1111,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			zoneSettingsStruct := make(map[string]interface{})
 			for _, data := range jsonStructData {
 				keyName := data.(map[string]interface{})["id"].(string)
-				value := data.(map[string]interface{})["value"].(interface{})
+				value := data.(map[string]interface{})["value"]
 				zoneSettingsStruct[keyName] = value
 			}
 
 			// Remap all settings under "settings" block as well as some of the
 			// attributes that are not 1:1 with the API.
 			for i := 0; i < resourceCount; i++ {
-				jsonStructData[i].(map[string]interface{})["id"] = "" // remove id in favor of zone_id key
+				jsonStructData[i].(map[string]interface{})["id"] = zoneID
 				jsonStructData[i].(map[string]interface{})["settings"] = zoneSettingsStruct
 
 				// zero RTT

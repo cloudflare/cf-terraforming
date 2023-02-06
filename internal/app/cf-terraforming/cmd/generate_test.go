@@ -53,8 +53,8 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 		"value is int":              {key: "a", value: 1, want: "a = 1\n"},
 		"value is float":            {key: "a", value: 1.0, want: "a = 1\n"},
 		"value is bool":             {key: "a", value: true, want: "a = true\n"},
-		"value is list of strings":  {key: "a", value: listOfString, want: "a = [\"b\", \"c\", \"d\"]\n"},
-		"value is block of strings": {key: "a", value: configBlockOfStrings, want: "a = {\n  c = \"d\"\n  e = \"f\"\n}\n"},
+		"value is list of strings":  {key: "a", value: listOfString, want: `a = ["b", "c", "d"]\n`},
+		"value is block of strings": {key: "a", value: configBlockOfStrings, want: `a = {\n  c = "d"\n  e = "f"\n}\n`},
 		"value is nil":              {key: "a", value: nil, want: ""},
 	}
 

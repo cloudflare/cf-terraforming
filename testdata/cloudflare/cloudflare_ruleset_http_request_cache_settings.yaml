@@ -71,18 +71,22 @@ interactions:
                     "default": 30,
                     "status_code_ttl": [
                       {
-                        "status_code_range": {
-                          "from": 101,
-                          "to": 103
-                        },
-                        "value": 1
+                        "status_code": 100,
+                        "value": 30
                       },
                       {
                         "status_code_range": {
-                          "from": 106,
-                          "to": 110
+                          "from": 100,
+                          "to": 106
                         },
-                        "value": 1
+                        "value": 5
+                      },
+                      {
+                        "status_code_range": {
+                          "from": 130,
+                          "to": 162
+                        },
+                        "value": 31536000
                       }
                     ]
                   },
@@ -110,75 +114,19 @@ interactions:
                 }
               },
               {
-                "id": "cd89ae000de64730bd61651c1b1f7f8c",
-                "version": "1",
+                "id": "e5f1bd1386b4464aa8d726ba1e0d51ad",
+                "version": "2",
                 "action": "set_cache_settings",
                 "expression": "(http.host eq \"example.com\")",
-                "description": "test cache rule 2",
-                "last_updated": "2023-01-12T15:11:57.591876Z",
-                "ref": "cd89ae000de64730bd61651c1b1f7f8c",
+                "description": "/status/202",
+                "last_updated": "2022-09-21T16:36:00.999083Z",
+                "ref": "e5f1bd1386b4464aa8d726ba1e0d51ad",
                 "enabled": true,
                 "action_parameters": {
-                  "cache": true,
-                  "edge_ttl": {
-                    "mode": "respect_origin",
-                    "status_code_ttl": [
-                      {
-                        "status_code_range": {
-                          "from": 1,
-                          "to": 2
-                        },
-                        "value": 10
-                      },
-                      {
-                        "status_code_range": {
-                          "from": 3,
-                          "to": 4
-                        },
-                        "value": 1
-                      }
-                    ]
-                  }
-                }
-              },
-              {
-                "id": "794367d03d42438ba24649adff739c9c",
-                "version": "5",
-                "action": "set_cache_settings",
-                "expression": "(http.host eq \"example.com\")",
-                "description": "test cache rule",
-                "last_updated": "2023-01-20T12:13:32.833868Z",
-                "ref": "794367d03d42438ba24649adff739c9c",
-                "enabled": false,
-                "action_parameters": {
-                  "cache": true,
+                  "cache": false,
                   "edge_ttl": {
                     "mode": "override_origin",
-                    "default": 1,
-                    "status_code_ttl": [
-                      {
-                        "status_code": 100,
-                        "value": 5
-                      }
-                    ]
-                  },
-                  "browser_ttl": {
-                    "mode": "respect_origin"
-                  },
-                  "serve_stale": {
-                    "disable_stale_while_updating": true
-                  },
-                  "respect_strong_etags": true,
-                  "cache_key": {
-                    "cache_by_device_type": true,
-                    "custom_key": {
-                      "query_string": {
-                        "include": "*"
-                      },
-                      "host": {
-                        "resolved": false
-                      }
-                    }
+                    "default": 60
                   }
                 }
               }

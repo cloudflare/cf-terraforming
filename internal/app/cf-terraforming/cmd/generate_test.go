@@ -7,9 +7,11 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/MakeNowJust/heredoc/v2"
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
+	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/spf13/viper"
 
 	"github.com/stretchr/testify/assert"
@@ -43,6 +45,15 @@ var (
 )
 
 func TestGenerate_writeAttrLine(t *testing.T) {
+	multilineListOfStrings := heredoc.Doc(`
+		a = ["b", "c", "d"]
+	`)
+	multilineBlock := heredoc.Doc(`
+		a = {
+		  c = "d"
+		  e = "f"
+		}
+	`)
 	tests := map[string]struct {
 		key   string
 		value interface{}
@@ -52,15 +63,16 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 		"value is int":              {key: "a", value: 1, want: "a = 1\n"},
 		"value is float":            {key: "a", value: 1.0, want: "a = 1\n"},
 		"value is bool":             {key: "a", value: true, want: "a = true\n"},
-		"value is list of strings":  {key: "a", value: listOfString, want: "a = [ \"b\", \"c\", \"d\" ]\n"},
-		"value is block of strings": {key: "a", value: configBlockOfStrings, want: "a = {\nc = \"d\"\ne = \"f\"\n}\n"},
+		"value is list of strings":  {key: "a", value: listOfString, want: multilineListOfStrings},
+		"value is block of strings": {key: "a", value: configBlockOfStrings, want: multilineBlock},
 		"value is nil":              {key: "a", value: nil, want: ""},
 	}
 
 	for name, tc := range tests {
+		f := hclwrite.NewEmptyFile()
 		t.Run(name, func(t *testing.T) {
-			got := writeAttrLine(tc.key, tc.value, false)
-			assert.Equal(t, tc.want, got)
+			writeAttrLine(tc.key, tc.value, f.Body())
+			assert.Equal(t, tc.want, string(f.Bytes()))
 		})
 	}
 }

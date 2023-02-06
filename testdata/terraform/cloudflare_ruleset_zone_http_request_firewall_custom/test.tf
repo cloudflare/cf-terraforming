@@ -4,15 +4,15 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
   phase   = "http_request_firewall_custom"
   zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
-    action      = "skip"
-    description = "test.example.com"
-    enabled     = true
-    expression  = "(http.host eq \"test.example.com\")"
+    action = "skip"
     action_parameters {
       phases   = ["http_ratelimit", "http_request_firewall_managed"]
       products = ["zoneLockdown", "uaBlock", "bic", "hot", "securityLevel", "rateLimit", "waf"]
       ruleset  = "current"
     }
+    description = "test.example.com"
+    enabled     = true
+    expression  = "(http.host eq \"test.example.com\")"
     logging {
       status = "enabled"
     }

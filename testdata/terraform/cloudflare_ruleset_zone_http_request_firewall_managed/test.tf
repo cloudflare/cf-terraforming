@@ -4,13 +4,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
   phase   = "http_request_firewall_managed"
   zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
-    action      = "execute"
-    description = "zone"
-    enabled     = false
-    expression  = "(http.cookie eq \"jb_testing=true\")"
+    action = "execute"
     action_parameters {
-      id      = "efb7b8c949ac4650a09736fc376e9aee"
-      version = "latest"
+      id = "efb7b8c949ac4650a09736fc376e9aee"
       overrides {
         rules {
           action = "block"
@@ -73,6 +69,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
           id     = "34158d546873469a8f8ccee19139627b"
         }
       }
+      version = "latest"
     }
+    description = "zone"
+    enabled     = false
+    expression  = "(http.cookie eq \"jb_testing=true\")"
   }
 }

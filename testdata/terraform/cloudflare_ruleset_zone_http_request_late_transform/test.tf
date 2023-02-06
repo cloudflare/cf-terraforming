@@ -4,10 +4,7 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
   phase   = "http_request_late_transform"
   zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   rules {
-    action      = "rewrite"
-    description = "test transform"
-    enabled     = true
-    expression  = "(http.request.uri.path eq \"example.com\")"
+    action = "rewrite"
     action_parameters {
       headers {
         name      = "example-http-header-1"
@@ -29,12 +26,12 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         }
       }
     }
-  }
-  rules {
-    action      = "rewrite"
-    description = "test transform set"
+    description = "test transform"
     enabled     = true
     expression  = "(http.request.uri.path eq \"example.com\")"
+  }
+  rules {
+    action = "rewrite"
     action_parameters {
       headers {
         expression = "(ip.geoip.continent eq \"T1\")"
@@ -43,12 +40,12 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         value      = "my-http-header-1"
       }
     }
+    description = "test transform set"
+    enabled     = true
+    expression  = "(http.request.uri.path eq \"example.com\")"
   }
   rules {
-    action      = "rewrite"
-    description = "test uri rewrite set"
-    enabled     = false
-    expression  = "(http.request.uri.path eq \"pumpkin.com\")"
+    action = "rewrite"
     action_parameters {
       uri {
         path {
@@ -56,5 +53,8 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         }
       }
     }
+    description = "test uri rewrite set"
+    enabled     = false
+    expression  = "(http.request.uri.path eq \"pumpkin.com\")"
   }
 }

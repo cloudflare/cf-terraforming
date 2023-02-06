@@ -33,6 +33,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_page_rule":             ":zone_id/:id",
 	"cloudflare_rate_limit":            ":zone_id/:id",
 	"cloudflare_record":                ":zone_id/:id",
+	"cloudflare_ruleset":               ":identifier_type/:identifier_value/:id",
 	"cloudflare_spectrum_application":  ":zone_id/:id",
 	"cloudflare_waf_override":          ":zone_id/:id",
 	"cloudflare_waiting_room":          ":zone_id/:id",
@@ -274,6 +275,32 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case "cloudflare_ruleset":
+			var err error
+			var jsonPayload []cloudflare.Ruleset
+			if accountID != "" {
+				jsonPayload, err = api.ListAccountRulesets(context.Background(), accountID)
+			} else {
+				jsonPayload, err = api.ListZoneRulesets(context.Background(), zoneID)
+			}
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			// Customers can read-only Managed Rulesets, so we don't want to
+			// have them try to import something they can't manage with terraform
+			var nonManagedRules []cloudflare.Ruleset
+			for _, r := range jsonPayload {
+				if r.Kind != string(cloudflare.RulesetKindManaged) {
+					nonManagedRules = append(nonManagedRules, r)
+				}
+			}
+
+			m, _ := json.Marshal(nonManagedRules)
 			err = json.Unmarshal(m, &jsonStructData)
 			if err != nil {
 				log.Fatal(err)

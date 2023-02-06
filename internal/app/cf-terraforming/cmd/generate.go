@@ -289,9 +289,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 
-			for _, b := range jsonStructData {
+			for i, b := range jsonStructData {
 				key := b.(map[string]interface{})["id"].(string)
-				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[0].(map[string]interface{})["value"]
+				jsonStructData[0].(map[string]interface{})[key] = jsonStructData[i].(map[string]interface{})["value"]
 			}
 		case "cloudflare_api_shield":
 			jsonPayload := []cloudflare.APIShield{}

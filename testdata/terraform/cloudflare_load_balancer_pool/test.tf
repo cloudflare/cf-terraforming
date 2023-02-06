@@ -10,11 +10,11 @@ resource "cloudflare_load_balancer_pool" "terraform_managed_resource" {
   origins {
     address = "0.0.0.0"
     enabled = true
-    name    = "app-server-1"
-    weight  = 1
     header {
       header = "Host"
       values = ["example.com"]
     }
+    name   = "app-server-1"
+    weight = 0.56
   }
 }

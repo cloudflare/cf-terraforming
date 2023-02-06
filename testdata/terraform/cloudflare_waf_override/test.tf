@@ -1,7 +1,7 @@
 resource "cloudflare_waf_override" "terraform_managed_resource" {
   description = "Enable Cloudflare Magento ruleset for shop.example.com"
   groups = {
-    "ea8687e59929c1fd05ba97574ad43f77" = "default"
+    ea8687e59929c1fd05ba97574ad43f77 = "default"
   }
   paused   = false
   priority = 1

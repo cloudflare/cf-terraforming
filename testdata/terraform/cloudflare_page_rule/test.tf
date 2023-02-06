@@ -4,6 +4,7 @@ resource "cloudflare_page_rule" "terraform_managed_resource" {
   target   = "*example.com/images/*"
   zone_id  = "0da42c8d2132a9ddaf714f9e7c920711"
   actions {
+    browser_cache_ttl = 1800
     cache_key_fields {
       cookie {
         check_presence = ["x-some-header"]
@@ -37,7 +38,6 @@ resource "cloudflare_page_rule" "terraform_managed_resource" {
       codes = "300-399"
       ttl   = 0
     }
-    browser_cache_ttl    = 1800
     disable_apps         = true
     host_header_override = "not-example.com"
   }

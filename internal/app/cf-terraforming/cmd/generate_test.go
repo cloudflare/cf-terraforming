@@ -10,6 +10,7 @@ import (
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
+	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/spf13/viper"
 
 	"github.com/stretchr/testify/assert"
@@ -52,15 +53,16 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 		"value is int":              {key: "a", value: 1, want: "a = 1\n"},
 		"value is float":            {key: "a", value: 1.0, want: "a = 1\n"},
 		"value is bool":             {key: "a", value: true, want: "a = true\n"},
-		"value is list of strings":  {key: "a", value: listOfString, want: "a = [ \"b\", \"c\", \"d\" ]\n"},
-		"value is block of strings": {key: "a", value: configBlockOfStrings, want: "a = {\nc = \"d\"\ne = \"f\"\n}\n"},
+		"value is list of strings":  {key: "a", value: listOfString, want: "a = [\"b\", \"c\", \"d\"]\n"},
+		"value is block of strings": {key: "a", value: configBlockOfStrings, want: "a = {\n  c = \"d\"\n  e = \"f\"\n}\n"},
 		"value is nil":              {key: "a", value: nil, want: ""},
 	}
 
 	for name, tc := range tests {
+		f := hclwrite.NewEmptyFile()
 		t.Run(name, func(t *testing.T) {
-			got := writeAttrLine(tc.key, tc.value, false)
-			assert.Equal(t, tc.want, got)
+			writeAttrLine(tc.key, tc.value, false, f.Body())
+			assert.Equal(t, tc.want, string(f.Bytes()))
 		})
 	}
 }
@@ -217,6 +219,7 @@ func TestResourceGeneration(t *testing.T) {
 			}
 
 			expected := testDataFile(tc.testdataFilename)
+			// fmt.Println(expected, output)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}

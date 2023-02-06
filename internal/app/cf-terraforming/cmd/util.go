@@ -178,23 +178,35 @@ func flattenAttrMap(l []interface{}) map[string]interface{} {
 	return result
 }
 
-func nestBlocksV2(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, parent *hclwrite.Body) {
-	for block, s := range structData {
+func processBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, parent *hclwrite.Body, parentBlock string) {
+	keys := make([]string, 0, len(structData))
+	for k := range structData {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, block := range keys {
 		if _, ok := schemaBlock.NestedBlocks[block]; ok {
 			if schemaBlock.NestedBlocks[block].NestingMode == "list" || schemaBlock.NestedBlocks[block].NestingMode == "set" {
 				child := hclwrite.NewBlock(block, []string{})
-				switch s.(type) {
-				case map[string]interface{}:
-					nestBlocksV2(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), child.Body())
-				case []interface{}:
-					for _, nestedItem := range s.([]interface{}) {
+				switch s := structData[block].(type) {
+				case []map[string]interface{}:
+					for _, nestedItem := range s {
 						stepChild := hclwrite.NewBlock(block, []string{})
-						nestBlocksV2(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), stepChild.Body())
+						processBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem, stepChild.Body(), block)
 						if len(stepChild.Body().Attributes()) != 0 || len(stepChild.Body().Blocks()) != 0 {
 							parent.AppendBlock(stepChild)
 						}
 					}
-					return
+				case map[string]interface{}:
+					processBlocks(schemaBlock.NestedBlocks[block].Block, s, child.Body(), block)
+				case []interface{}:
+					for _, nestedItem := range s {
+						stepChild := hclwrite.NewBlock(block, []string{})
+						processBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), stepChild.Body(), block)
+						if len(stepChild.Body().Attributes()) != 0 || len(stepChild.Body().Blocks()) != 0 {
+							parent.AppendBlock(stepChild)
+						}
+					}
 				default:
 					log.Debugf("unable to generate recursively nested blocks for %T", s)
 				}
@@ -203,183 +215,52 @@ func nestBlocksV2(schemaBlock *tfjson.SchemaBlock, structData map[string]interfa
 				}
 			}
 		} else {
-			sortedInnerAttributes := make([]string, 0)
-			if schemaBlock.NestedBlocks[block] != nil {
-				for k := range schemaBlock.NestedBlocks[block].Block.Attributes {
-					sortedInnerAttributes = append(sortedInnerAttributes, k)
-				}
-				sort.Strings(sortedInnerAttributes)
-				switch s := s.(type) {
-				case map[string]interface{}:
-					writeNestedBlock(sortedInnerAttributes, schemaBlock, s, parent)
-				case []interface{}:
-					fmt.Println(s)
-					for _, attr := range s {
-						writeNestedBlock(sortedInnerAttributes, schemaBlock, attr.(map[string]interface{}), parent)
-					}
-				default:
-					fmt.Println(block, s)
-				}
-			} else {
-				// fmt.Println(block, schemaBlock.Attributes[block])
-				if _, ok := schemaBlock.Attributes[block]; ok {
-					writeAttrLine(block, s, false, parent)
-				}
+			if parentBlock == "" && block == "id" {
+				continue
+			}
+			if _, ok := schemaBlock.Attributes[block]; ok && (schemaBlock.Attributes[block].Optional || schemaBlock.Attributes[block].Required) {
+				writeAttrLine(block, structData[block], false, parent)
 			}
 		}
 	}
-}
-
-// nestBlocks takes a schema and generates all of the appropriate nesting of any
-// top-level blocks as well as nested lists or sets.
-func nestBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interface{}, parent *hclwrite.Body) {
-
-	// Nested blocks are used for configuration options where assignment
-	// isn't required.
-	sortedNestedBlocks := make([]string, 0, len(schemaBlock.NestedBlocks))
-	for k := range schemaBlock.NestedBlocks {
-		sortedNestedBlocks = append(sortedNestedBlocks, k)
-	}
-	sort.Strings(sortedNestedBlocks)
-
-	for _, block := range sortedNestedBlocks {
-		child := hclwrite.NewBlock(block, []string{})
-		if schemaBlock.NestedBlocks[block].NestingMode == "list" || schemaBlock.NestedBlocks[block].NestingMode == "set" {
-			sortedInnerAttributes := make([]string, 0, len(schemaBlock.NestedBlocks[block].Block.Attributes))
-
-			for k := range schemaBlock.NestedBlocks[block].Block.Attributes {
-				sortedInnerAttributes = append(sortedInnerAttributes, k)
-			}
-
-			sort.Strings(sortedInnerAttributes)
-
-			for attrName, attrConfig := range schemaBlock.NestedBlocks[block].Block.Attributes {
-				if attrConfig.Computed && !attrConfig.Optional {
-					schemaBlock.NestedBlocks[block].Block.Attributes[attrName].AttributeType = cty.NilType
-				}
-			}
-			if block == "status_code_ttl" {
-				fmt.Println("DEBUG")
-			}
-
-			switch attrStruct := structData[block].(type) {
-			// Case for if the inner block's attributes are a map of interfaces, in
-			// which case we can directly add them to the config.
-			case map[string]interface{}:
-				if attrStruct != nil {
-
-					writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, attrStruct, child.Body())
-				}
-
-			// Case for if the inner block's attributes are a list of map interfaces,
-			// in which case this should be treated as a duplicating block.
-			case []map[string]interface{}:
-				for _, v := range attrStruct {
-					if attrStruct != nil {
-						writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v, child.Body())
-					}
-				}
-
-			// Case for duplicated blocks that commonly end up as an array or list at
-			// the API level.
-			case []interface{}:
-				for _, v := range attrStruct {
-					if attrStruct != nil {
-						writeNestedBlock(sortedInnerAttributes, schemaBlock.NestedBlocks[block].Block, v.(map[string]interface{}), child.Body())
-					}
-				}
-
-			default:
-				log.Debugf("unexpected attribute struct type %T for block %s", attrStruct, block)
-			}
-
-			// If the attribute we're looking at has further nesting, we'll
-			// recursively call nestBlocks.
-			if len(schemaBlock.NestedBlocks[block].Block.NestedBlocks) > 0 {
-				if s, ok := structData[block]; ok {
-					switch s.(type) {
-					case map[string]interface{}:
-						nestBlocks(schemaBlock.NestedBlocks[block].Block, s.(map[string]interface{}), child.Body())
-					case []interface{}:
-						for i, nestedItem := range s.([]interface{}) {
-							if i == 0 {
-								nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), child.Body())
-							} else {
-								newChild := parent.AppendNewBlock(block, []string{})
-								nestBlocks(schemaBlock.NestedBlocks[block].Block, nestedItem.(map[string]interface{}), newChild.Body())
-							}
-						}
-					default:
-						log.Debugf("unable to generate recursively nested blocks for %T", s)
-					}
-				}
-			}
-		} else {
-			log.Debugf("nested mode %q for %s not recognised", schemaBlock.NestedBlocks[block].NestingMode, block)
-		}
-		if len(child.Body().Attributes()) != 0 || len(child.Body().Blocks()) != 0 {
-			parent.AppendBlock(child)
-		}
-	}
-}
-
-func writeNestedBlock(attributes []string, schemaBlock *tfjson.SchemaBlock, attrStruct map[string]interface{}, body *hclwrite.Body) string {
-	nestedBlockOutput := ""
-
-	for _, attrName := range attributes {
-
-		ty := schemaBlock.Attributes[attrName].AttributeType
-
-		switch {
-		case ty.IsPrimitiveType():
-			switch ty {
-			case cty.String, cty.Bool, cty.Number:
-				nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false, body)
-			default:
-				log.Debugf("unexpected primitive type %q", ty.FriendlyName())
-			}
-		case ty.IsListType(), ty.IsSetType():
-			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], true, body)
-		case ty.IsMapType():
-			nestedBlockOutput += writeAttrLine(attrName, attrStruct[attrName], false, body)
-		default:
-			log.Debugf("unexpected nested type %T for %s", ty, attrName)
-		}
-	}
-
-	return nestedBlockOutput
 }
 
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
-func writeAttrLine(key string, value interface{}, usedInBlock bool, body *hclwrite.Body) string {
+func writeAttrLine(key string, value interface{}, usedInBlock bool, body *hclwrite.Body) {
 	switch values := value.(type) {
+	case []map[string]interface{}:
+		var childCty []cty.Value
+		for _, item := range value.([]map[string]interface{}) {
+			mapCty := make(map[string]cty.Value)
+			for k, v := range item {
+				mapCty[k] = cty.StringVal(v.(string))
+			}
+			childCty = append(childCty, cty.MapVal(mapCty))
+		}
+		body.SetAttributeValue(key, cty.ListVal(childCty))
 	case map[string]interface{}:
+
 		sortedKeys := make([]string, 0, len(values))
 		for k := range values {
 			sortedKeys = append(sortedKeys, k)
 		}
 		sort.Strings(sortedKeys)
 
-		s := ""
+		ctyMap := make(map[string]cty.Value)
 		for _, v := range sortedKeys {
-			// check if our key has an integer in the string. If it does we need to wrap it with quotes.
 			if hasNumber(v) {
-				s += writeAttrLine(fmt.Sprintf("\"%s\"", v), values[v], false, body)
+				ctyMap[fmt.Sprintf("%s", v)] = cty.StringVal(values[v].(string))
 			} else {
-				s += writeAttrLine(v, values[v], false, body)
+				switch val := values[v].(type) {
+				case string:
+					ctyMap[v] = cty.StringVal(val)
+				case float64:
+					ctyMap[v] = cty.NumberFloatVal(val)
+				}
 			}
 		}
-
-		if usedInBlock {
-			if s != "" {
-				body.AppendNewBlock(key, []string{}).Body().SetAttributeValue(s, cty.NilVal)
-			}
-		} else {
-			if s != "" {
-				body.SetAttributeValue(key, cty.StringVal(s))
-			}
-		}
+		body.SetAttributeValue(key, cty.ObjectVal(ctyMap))
 	case []interface{}:
 		var stringItems []string
 		var intItems []int
@@ -396,66 +277,43 @@ func writeAttrLine(key string, value interface{}, usedInBlock bool, body *hclwri
 			}
 		}
 		if len(stringItems) > 0 {
-			return writeAttrLine(key, stringItems, false, body)
+			writeAttrLine(key, stringItems, false, body)
 		}
 
 		if len(intItems) > 0 {
-			return writeAttrLine(key, intItems, false, body)
+			writeAttrLine(key, intItems, false, body)
 		}
 
 		if len(interfaceItems) > 0 {
-			return writeAttrLine(key, interfaceItems, false, body)
+			writeAttrLine(key, interfaceItems, false, body)
 		}
-
-	case []map[string]interface{}:
-		var stringyInterfaces []string
-		var op string
-		var mapLen = len(value.([]map[string]interface{}))
-		for i, item := range value.([]map[string]interface{}) {
-			// Use an empty key to prevent rendering the key
-			op = writeAttrLine("", item, true, body)
-			// if condition handles adding new line for just the last element
-			if i != mapLen-1 {
-				op = strings.TrimRight(op, "\n")
-			}
-			stringyInterfaces = append(stringyInterfaces, op)
-		}
-		body.SetAttributeValue(key, cty.StringVal(fmt.Sprintf("[%s]", strings.Join(stringyInterfaces, ",\n"))))
-		return fmt.Sprintf("%s = [ \n%s ]\n", key, strings.Join(stringyInterfaces, ",\n"))
-
 	case []int:
-		stringyInts := []string{}
-		for _, int := range value.([]int) {
-			stringyInts = append(stringyInts, fmt.Sprintf("%d", int))
+		var vals []cty.Value
+		for _, i := range value.([]int) {
+			vals = append(vals, cty.NumberIntVal(int64(i)))
 		}
-		body.SetAttributeValue(key, cty.StringVal(fmt.Sprintf("[%s]", strings.Join(stringyInts, ", "))))
-		return fmt.Sprintf("%s = [ %s ]\n", key, strings.Join(stringyInts, ", "))
+		body.SetAttributeValue(key, cty.ListVal(vals))
 	case []string:
 		var items []string
-		for _, item := range value.([]string) {
-			items = append(items, fmt.Sprintf("%q", item))
-		}
+		items = append(items, value.([]string)...)
 		if len(items) > 0 {
-			body.SetAttributeValue(key, cty.StringVal(fmt.Sprintf("[%s]", strings.Join(items, ", "))))
-			return fmt.Sprintf("%s = [ %s ]\n", key, strings.Join(items, ", "))
+			var vals []cty.Value
+			for _, item := range items {
+				vals = append(vals, cty.StringVal(item))
+			}
+			body.SetAttributeValue(key, cty.ListVal(vals))
 		}
 	case string:
 		if value != "" {
 			body.SetAttributeValue(key, cty.StringVal(value.(string)))
-			return fmt.Sprintf("%s = %q\n", key, value)
 		}
 	case int:
 		body.SetAttributeValue(key, cty.NumberIntVal(int64(value.(int))))
-		return fmt.Sprintf("%s = %d\n", key, value)
 	case float64:
 		body.SetAttributeValue(key, cty.NumberFloatVal(value.(float64)))
-		return fmt.Sprintf("%s = %0.f\n", key, value)
 	case bool:
 		body.SetAttributeValue(key, cty.BoolVal(value.(bool)))
-		return fmt.Sprintf("%s = %t\n", key, value)
 	default:
 		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
-		return ""
 	}
-	return ""
 }

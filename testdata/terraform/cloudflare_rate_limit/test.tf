@@ -5,11 +5,11 @@ resource "cloudflare_rate_limit" "terraform_managed_resource" {
   threshold           = 10
   zone_id             = "0da42c8d2132a9ddaf714f9e7c920711"
   action {
+    mode = "ban"
     response {
       body         = "{\"response\":\"your request has been rate limited\"}"
       content_type = "application/json"
     }
-    mode    = "ban"
     timeout = 3600
   }
   match {
@@ -19,18 +19,15 @@ resource "cloudflare_rate_limit" "terraform_managed_resource" {
       url_pattern = "example.com"
     }
     response {
-      headers = [
-        {
-          name  = "My_origin_field"
-          op    = "eq"
-          value = "block_request"
-        },
-        {
-          name  = "Other"
-          op    = "eq"
-          value = "block_request"
-        }
-      ]
+      headers = [{
+        name  = "My_origin_field"
+        op    = "eq"
+        value = "block_request"
+        }, {
+        name  = "Other"
+        op    = "eq"
+        value = "block_request"
+      }]
       origin_traffic = false
       statuses       = [401, 403]
     }

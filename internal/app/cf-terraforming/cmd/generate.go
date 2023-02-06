@@ -1118,7 +1118,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			// Remap all settings under "settings" block as well as some of the
 			// attributes that are not 1:1 with the API.
 			for i := 0; i < resourceCount; i++ {
-				jsonStructData[i].(map[string]interface{})["id"] = zoneID
+				jsonStructData[i].(map[string]interface{})["id"] = "" // remove id in favor of zone_id key
 				jsonStructData[i].(map[string]interface{})["settings"] = zoneSettingsStruct
 
 				// zero RTT
@@ -1149,8 +1149,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			return
 		}
 
-		output := ""
-
 		f := hclwrite.NewEmptyFile()
 		rootBody := f.Body()
 		for i := 0; i < resourceCount; i++ {
@@ -1172,7 +1170,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 			resource := rootBody.AppendNewBlock("resource", []string{resourceType, resourceID}).Body()
 
-			output += fmt.Sprintf(`resource "%s" "%s" {`+"\n", resourceType, resourceID)
 			sortedBlockAttributes := make([]string, 0, len(r.Block.Attributes))
 			for k := range r.Block.Attributes {
 				sortedBlockAttributes = append(sortedBlockAttributes, k)
@@ -1193,12 +1190,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 				if attrName == "account_id" && accountID != "" {
-					output += writeAttrLine(attrName, accountID, false, resource)
+					writeAttrLine(attrName, accountID, false, resource)
 					continue
 				}
 
 				if attrName == "zone_id" && zoneID != "" && accountID == "" {
-					output += writeAttrLine(attrName, zoneID, false, resource)
+					writeAttrLine(attrName, zoneID, false, resource)
 					continue
 				}
 
@@ -1207,14 +1204,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				case ty.IsPrimitiveType():
 					switch ty {
 					case cty.String, cty.Bool, cty.Number:
-						output += writeAttrLine(attrName, structData[attrName], false, resource)
+						writeAttrLine(attrName, structData[attrName], false, resource)
+						delete(structData, attrName)
 					default:
 						log.Debugf("unexpected primitive type %q", ty.FriendlyName())
 					}
 				case ty.IsCollectionType():
 					switch {
 					case ty.IsListType(), ty.IsSetType(), ty.IsMapType():
-						output += writeAttrLine(attrName, structData[attrName], false, resource)
+						writeAttrLine(attrName, structData[attrName], false, resource)
+						delete(structData, attrName)
 					default:
 						log.Debugf("unexpected collection type %q", ty.FriendlyName())
 					}
@@ -1227,21 +1226,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			// nestBlocks(r.Block, jsonStructData[i].(map[string]interface{}), resource)
-			nestBlocksV2(r.Block, jsonStructData[i].(map[string]interface{}), resource)
+			processBlocks(r.Block, jsonStructData[i].(map[string]interface{}), resource, "")
 			f.Body().AppendNewline()
 		}
 
+		tfOutput := string(hclwrite.Format(f.Bytes()))
 		// Any output string field can have a %{ or ${, we escape these characters by
 		// doubling up on the $ or %. See https://developer.hashicorp.com/terraform/language/expressions/strings#quoted-strings
-
-		// tfOutput, err := tf.FormatString(context.Background(), output)
-		tfOutput := string(hclwrite.Format(f.Bytes()))
-		if err != nil {
-			log.Fatalf("failed to format output: %s", err)
-		}
-		tfOutput = strings.ReplaceAll(tfOutput, "${", "$${")
-		tfOutput = strings.ReplaceAll(tfOutput, "%{", "%%{")
+		// tfOutput = strings.ReplaceAll(tfOutput, "${", "$${")
+		// tfOutput = strings.ReplaceAll(tfOutput, "%{", "%%{")
 		fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 	}
 }

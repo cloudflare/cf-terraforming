@@ -1231,10 +1231,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		tfOutput := string(hclwrite.Format(f.Bytes()))
-		// Any output string field can have a %{ or ${, we escape these characters by
-		// doubling up on the $ or %. See https://developer.hashicorp.com/terraform/language/expressions/strings#quoted-strings
-		// tfOutput = strings.ReplaceAll(tfOutput, "${", "$${")
-		// tfOutput = strings.ReplaceAll(tfOutput, "%{", "%%{")
 		fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 	}
 }

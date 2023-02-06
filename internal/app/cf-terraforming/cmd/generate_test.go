@@ -219,7 +219,6 @@ func TestResourceGeneration(t *testing.T) {
 			}
 
 			expected := testDataFile(tc.testdataFilename)
-			// fmt.Println(expected, output)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}

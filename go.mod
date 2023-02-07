@@ -3,11 +3,12 @@ module github.com/cloudflare/cf-terraforming
 go 1.17
 
 require (
+	github.com/MakeNowJust/heredoc/v2 v2.0.1
 	github.com/cloudflare/cloudflare-go v0.60.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/hashicorp/go-version v1.6.0
 	github.com/hashicorp/hc-install v0.5.0
-	github.com/hashicorp/hcl/v2 v2.15.0
+	github.com/hashicorp/hcl/v2 v2.16.0
 	github.com/hashicorp/terraform-exec v0.17.3
 	github.com/hashicorp/terraform-json v0.14.0
 	github.com/mitchellh/go-homedir v1.1.0
@@ -19,7 +20,6 @@ require (
 )
 
 require (
-	github.com/MakeNowJust/heredoc/v2 v2.0.1 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect

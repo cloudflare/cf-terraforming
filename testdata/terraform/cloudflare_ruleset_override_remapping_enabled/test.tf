@@ -21,8 +21,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       }
       version = "latest"
     }
-    description = "zone"
-    enabled     = false
-    expression  = "(http.cookie eq \"jb_testing=true\")"
+    description  = "zone"
+    enabled      = false
+    expression   = "(http.cookie eq \"jb_testing=true\")"
+    last_updated = "2021-09-03T06:42:41.341405Z"
   }
 }

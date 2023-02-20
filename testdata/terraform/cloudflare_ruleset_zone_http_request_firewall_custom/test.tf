@@ -10,23 +10,26 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       products = ["zoneLockdown", "uaBlock", "bic", "hot", "securityLevel", "rateLimit", "waf"]
       ruleset  = "current"
     }
-    description = "test.example.com"
-    enabled     = true
-    expression  = "(http.host eq \"test.example.com\")"
+    description  = "test.example.com"
+    enabled      = true
+    expression   = "(http.host eq \"test.example.com\")"
+    last_updated = "2022-11-24T14:24:14.756247Z"
     logging {
       status = "enabled"
     }
   }
   rules {
-    action      = "challenge"
-    description = "customRule-test"
-    enabled     = true
-    expression  = "(cf.bot_management.score eq 50 and cf.bot_management.static_resource)"
+    action       = "challenge"
+    description  = "customRule-test"
+    enabled      = true
+    expression   = "(cf.bot_management.score eq 50 and cf.bot_management.static_resource)"
+    last_updated = "2022-11-07T19:03:05.198191Z"
   }
   rules {
-    action      = "log"
-    description = "AWAF ML"
-    enabled     = false
-    expression  = "(cf.waf.score le 20)"
+    action       = "log"
+    description  = "AWAF ML"
+    enabled      = false
+    expression   = "(cf.waf.score le 20)"
+    last_updated = "2022-12-09T16:53:19.003821Z"
   }
 }

@@ -26,9 +26,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         }
       }
     }
-    description = "test transform"
-    enabled     = true
-    expression  = "(http.request.uri.path eq \"example.com\")"
+    description  = "test transform"
+    enabled      = true
+    expression   = "(http.request.uri.path eq \"example.com\")"
+    last_updated = "2022-02-07T16:58:54.317608Z"
   }
   rules {
     action = "rewrite"
@@ -40,9 +41,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         value      = "my-http-header-1"
       }
     }
-    description = "test transform set"
-    enabled     = true
-    expression  = "(http.request.uri.path eq \"example.com\")"
+    description  = "test transform set"
+    enabled      = true
+    expression   = "(http.request.uri.path eq \"example.com\")"
+    last_updated = "2022-02-07T16:58:54.317608Z"
   }
   rules {
     action = "rewrite"
@@ -53,8 +55,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         }
       }
     }
-    description = "test uri rewrite set"
-    enabled     = false
-    expression  = "(http.request.uri.path eq \"pumpkin.com\")"
+    description  = "test uri rewrite set"
+    enabled      = false
+    expression   = "(http.request.uri.path eq \"pumpkin.com\")"
+    last_updated = "2022-05-07T16:58:54.317608Z"
   }
 }

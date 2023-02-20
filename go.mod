@@ -1,6 +1,6 @@
 module github.com/cloudflare/cf-terraforming
 
-go 1.17
+go 1.20
 
 require (
 	github.com/MakeNowJust/heredoc/v2 v2.0.1

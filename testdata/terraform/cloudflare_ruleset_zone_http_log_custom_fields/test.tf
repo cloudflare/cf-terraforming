@@ -10,8 +10,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       request_fields  = ["request", "fields"]
       response_fields = ["response", "fields"]
     }
-    description = "zone"
-    enabled     = true
-    expression  = "true"
+    description  = "zone"
+    enabled      = true
+    expression   = "true"
+    last_updated = "2022-07-22T12:34:45.479429Z"
   }
 }

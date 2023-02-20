@@ -12,8 +12,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       }
       version = "latest"
     }
-    description = "zone"
-    enabled     = true
-    expression  = "true"
+    description  = "zone"
+    enabled      = true
+    expression   = "true"
+    last_updated = "2021-08-30T02:38:50.39057Z"
   }
 }

@@ -15,7 +15,8 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       }
       version = "latest"
     }
-    enabled    = true
-    expression = "true"
+    enabled      = true
+    expression   = "true"
+    last_updated = "2021-08-19T23:41:34.985519Z"
   }
 }

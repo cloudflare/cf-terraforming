@@ -990,30 +990,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			// this is only every a 1:1 so we can just verify if the 0th element has they key we expect
 			jsonStructData[0].(map[string]interface{})["id"] = zoneID
-		case "cloudflare_waf_override":
-			jsonPayload, err := api.ListWAFOverrides(context.Background(), zoneID)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			resourceCount = len(jsonPayload)
-			m, _ := json.Marshal(jsonPayload)
-			err = json.Unmarshal(m, &jsonStructData)
-			if err != nil {
-				log.Fatal(err)
-			}
-		case "cloudflare_waf_package":
-			jsonPayload, err := api.ListWAFPackages(context.Background(), zoneID)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			resourceCount = len(jsonPayload)
-			m, _ := json.Marshal(jsonPayload)
-			err = json.Unmarshal(m, &jsonStructData)
-			if err != nil {
-				log.Fatal(err)
-			}
 		case "cloudflare_waiting_room":
 			jsonPayload, err := api.ListWaitingRooms(context.Background(), zoneID)
 			if err != nil {

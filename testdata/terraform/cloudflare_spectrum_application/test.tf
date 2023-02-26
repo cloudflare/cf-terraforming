@@ -1,6 +1,5 @@
 resource "cloudflare_spectrum_application" "terraform_managed_resource" {
   argo_smart_routing = true
-  edge_ips           = ["198.51.100.1"]
   ip_firewall        = true
   origin_direct      = ["tcp://192.0.2.1:22"]
   protocol           = "tcp/22"
@@ -11,5 +10,9 @@ resource "cloudflare_spectrum_application" "terraform_managed_resource" {
   dns {
     name = "ssh.example.com"
     type = "CNAME"
+  }
+  edge_ips {
+    ips  = ["198.51.100.1"]
+    type = "static"
   }
 }

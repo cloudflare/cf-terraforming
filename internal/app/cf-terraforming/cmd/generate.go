@@ -944,12 +944,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-
-			for i := 0; i < resourceCount; i++ {
-				if jsonStructData[i].(map[string]interface{})["edge_ips"] != nil {
-					jsonStructData[i].(map[string]interface{})["edge_ips"] = jsonStructData[i].(map[string]interface{})["edge_ips"].(map[string]interface{})["ips"]
-				}
-			}
 		case "cloudflare_tunnel":
 			jsonPayload, err := api.Tunnels(
 				context.Background(),

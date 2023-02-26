@@ -316,37 +316,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// force a no resources return by setting resourceCount to 0
 				resourceCount = 0
 			}
-
-		case "cloudflare_argo_tunnel":
-			jsonPayload, err := api.Tunnels(
-				context.Background(),
-				cloudflare.AccountIdentifier(accountID),
-				cloudflare.TunnelListParams{
-					IsDeleted: cloudflare.BoolPtr(false),
-				})
-
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			resourceCount = len(jsonPayload)
-			m, _ := json.Marshal(jsonPayload)
-			err = json.Unmarshal(m, &jsonStructData)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			for i := 0; i < resourceCount; i++ {
-				secret, err := api.TunnelToken(
-					context.Background(),
-					cloudflare.AccountIdentifier(accountID),
-					jsonStructData[i].(map[string]interface{})["id"].(string),
-				)
-				if err != nil {
-					log.Fatal(err)
-				}
-				jsonStructData[i].(map[string]interface{})["secret"] = secret
-			}
 		case "cloudflare_user_agent_blocking_rule":
 			page := 1
 			var jsonPayload []cloudflare.UserAgentRule
@@ -980,6 +949,36 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if jsonStructData[i].(map[string]interface{})["edge_ips"] != nil {
 					jsonStructData[i].(map[string]interface{})["edge_ips"] = jsonStructData[i].(map[string]interface{})["edge_ips"].(map[string]interface{})["ips"]
 				}
+			}
+		case "cloudflare_tunnel":
+			jsonPayload, err := api.Tunnels(
+				context.Background(),
+				cloudflare.AccountIdentifier(accountID),
+				cloudflare.TunnelListParams{
+					IsDeleted: cloudflare.BoolPtr(false),
+				})
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			for i := 0; i < resourceCount; i++ {
+				secret, err := api.TunnelToken(
+					context.Background(),
+					cloudflare.AccountIdentifier(accountID),
+					jsonStructData[i].(map[string]interface{})["id"].(string),
+				)
+				if err != nil {
+					log.Fatal(err)
+				}
+				jsonStructData[i].(map[string]interface{})["secret"] = secret
 			}
 		case "cloudflare_url_normalization_settings":
 			jsonPayload, err := api.URLNormalizationSettings(context.Background(), &cloudflare.ResourceContainer{Identifier: zoneID, Level: cloudflare.ZoneRouteLevel})

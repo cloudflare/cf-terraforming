@@ -1044,12 +1044,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			// - remap "zone" to the "name" value
 			// - remap "plan" to "legacy_id" value
 			// - drop meta and name_servers
+			// - pull in the account_id field
 			for i := 0; i < resourceCount; i++ {
 				jsonStructData[i].(map[string]interface{})["zone"] = jsonStructData[i].(map[string]interface{})["name"]
 				jsonStructData[i].(map[string]interface{})["plan"] = jsonStructData[i].(map[string]interface{})["plan"].(map[string]interface{})["legacy_id"].(string)
 				jsonStructData[i].(map[string]interface{})["meta"] = nil
 				jsonStructData[i].(map[string]interface{})["name_servers"] = nil
 				jsonStructData[i].(map[string]interface{})["status"] = nil
+				jsonStructData[i].(map[string]interface{})["account_id"] = jsonStructData[i].(map[string]interface{})["account"].(map[string]interface{})["id"].(string)
 			}
 		case "cloudflare_zone_lockdown":
 			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})

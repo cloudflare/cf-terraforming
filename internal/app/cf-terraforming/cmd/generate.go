@@ -973,6 +973,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					log.Fatal(err)
 				}
 				jsonStructData[i].(map[string]interface{})["secret"] = secret
+				jsonStructData[i].(map[string]interface{})["account_id"] = accountID
+
+				jsonStructData[i].(map[string]interface{})["connections"] = nil
 			}
 		case "cloudflare_url_normalization_settings":
 			jsonPayload, err := api.URLNormalizationSettings(context.Background(), &cloudflare.ResourceContainer{Identifier: zoneID, Level: cloudflare.ZoneRouteLevel})

@@ -30,6 +30,7 @@ interactions:
             "ip_firewall": true,
             "tls": "full",
             "edge_ips": {
+              "type": "static",
               "ips": ["198.51.100.1"]
             },
             "traffic_type": "direct",

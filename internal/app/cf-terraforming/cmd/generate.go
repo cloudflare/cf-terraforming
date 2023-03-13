@@ -945,7 +945,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_tunnel":
-			jsonPayload, err := api.Tunnels(
+			jsonPayload, _, err := api.Tunnels(
 				context.Background(),
 				cloudflare.AccountIdentifier(accountID),
 				cloudflare.TunnelListParams{

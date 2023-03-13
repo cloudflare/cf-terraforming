@@ -154,8 +154,6 @@ $ cf-terraforming import \
 
 Any resources not listed are currently not supported.
 
-Last updated Apr 13, 2021
-
 | Resource                                                                                                                                         | Resource Scope  | Generate Supported | Import Supported |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- | ------------------ | ---------------- |
 | [cloudflare_access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application)                                         | Account         | ✅                 | ❌               |

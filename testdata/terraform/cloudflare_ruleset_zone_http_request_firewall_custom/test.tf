@@ -15,7 +15,7 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     expression   = "(http.host eq \"test.example.com\")"
     last_updated = "2022-11-24T14:24:14.756247Z"
     logging {
-      status = "enabled"
+      enabled = false
     }
   }
   rules {

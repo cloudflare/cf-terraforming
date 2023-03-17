@@ -13,11 +13,11 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
           category = "paranoia-level-2"
           enabled  = false
         }
-        rules {
-          id      = "6179ae15870a4bb7b2d480d4843b323c"
-          enabled = false
-        }
         enabled = false
+        rules {
+          enabled = false
+          id      = "6179ae15870a4bb7b2d480d4843b323c"
+        }
       }
       version = "latest"
     }

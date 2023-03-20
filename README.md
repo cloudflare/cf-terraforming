@@ -167,7 +167,6 @@ Any resources not listed are currently not supported.
 | [cloudflare_api_shield](https://www.terraform.io/docs/providers/cloudflare/r/api_shield)                                                         | Zone            | ✅                 | ❌               |
 | [cloudflare_api_token](https://www.terraform.io/docs/providers/cloudflare/r/api_token)                                                           | User            | ❌                 | ❌               |
 | [cloudflare_argo](https://www.terraform.io/docs/providers/cloudflare/r/argo)                                                                     | Zone            | ✅                 | ✅               |
-| [cloudflare_argo_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/argo_tunnel)                                                       | Account         | ✅                 | ✅               |
 | [cloudflare_authenticated_origin_pulls](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls)                         | Zone            | ❌                 | ❌               |
 | [cloudflare_authenticated_origin_pulls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls_certificate) | Zone            | ❌                 | ❌               |
 | [cloudflare_byo_ip_prefix](https://www.terraform.io/docs/providers/cloudflare/r/byo_ip_prefix)                                                   | Account         | ✅                 | ✅               |
@@ -193,6 +192,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record)                                                                 | Zone            | ✅                 | ✅               |
 | [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset)                                                               | Account or Zone | ✅                 | ✅               |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application)                                     | Zone            | ✅                 | ✅               |
+| [cloudflare_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/tunnel)                                                                 | Account         | ✅                 | ✅               |
 | [cloudflare_url_normalization_settings](https://www.terraform.io/docs/providers/cloudflare/r/url_normalization_settings)                         | Zone            | ✅                 | ❌               |
 | [cloudflare_waf_group](https://www.terraform.io/docs/providers/cloudflare/r/waf_group)                                                           | Zone            | ❌                 | ❌               |
 | [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override)                                                     | Zone            | ✅                 | ✅               |

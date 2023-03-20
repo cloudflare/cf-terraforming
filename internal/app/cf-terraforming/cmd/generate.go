@@ -833,37 +833,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					for ruleCounter := range rules.([]interface{}) {
 						actionParams := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"]
 						if actionParams != nil {
-							overrides := actionParams.(map[string]interface{})["overrides"]
-							if overrides != nil {
-								if overrides.(map[string]interface{})["enabled"] == true {
-									overrides.(map[string]interface{})["status"] = "enabled"
-								}
-
-								if overrides.(map[string]interface{})["enabled"] == false {
-									overrides.(map[string]interface{})["status"] = "disabled"
-								}
-
-								overrides.(map[string]interface{})["enabled"] = nil
-
-								for key := range overrides.(map[string]interface{}) {
-									overrideRules, ok := overrides.(map[string]interface{})[key].([]interface{})
-									if !ok || overrideRules == nil {
-										continue
-									}
-
-									for j := range overrideRules {
-										if overrideRules[j].(map[string]interface{})["enabled"] == true {
-											overrideRules[j].(map[string]interface{})["status"] = "enabled"
-										}
-
-										if overrideRules[j].(map[string]interface{})["enabled"] == false {
-											overrideRules[j].(map[string]interface{})["status"] = "disabled"
-										}
-
-										overrideRules[j].(map[string]interface{})["enabled"] = nil
-									}
-								}
-							}
 							// check for log custom fields that need to be transformed
 							for _, logCustomFields := range logCustomFieldsTransform {
 								// check if the field exists and make sure it has at least one element
@@ -877,6 +846,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 									actionParams.(map[string]interface{})[logCustomFields] = newLogCustomFields
 								}
 							}
+
 							// check if our ruleset is of action 'skip'
 							if rules.([]interface{})[ruleCounter].(map[string]interface{})["action"] == "skip" {
 								for rule := range actionParams.(map[string]interface{}) {
@@ -891,28 +861,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 										}
 									}
 								}
-								// do we have a logging parameter in our rule?
-								if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"] != nil {
-									// make sure it has data
-									if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] != nil {
-										/*
-											enabled = true -> status = 'enabled'
-											enabled = flase -> status = 'disabled'
-											Also lets only add 'status' if it doesn't already exist
-										*/
-										if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] == true &&
-											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] == nil {
-											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] = "enabled"
-											delete(rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{}), "enabled")
-										}
-										if rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["enabled"] == false &&
-											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] == nil {
-											rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{})["status"] = "disabled"
-											delete(rules.([]interface{})[ruleCounter].(map[string]interface{})["logging"].(map[string]interface{}), "enabled")
-										}
-									}
-								}
 							}
+
 							// Cache Rules transformation
 							if jsonStructData[i].(map[string]interface{})["phase"] == "http_request_cache_settings" {
 								if ck, ok := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"]; ok {

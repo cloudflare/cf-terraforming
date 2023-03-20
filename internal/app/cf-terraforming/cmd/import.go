@@ -102,16 +102,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
-		case "cloudflare_argo_tunnel":
-			jsonPayload, err := api.ArgoTunnels(context.Background(), accountID)
-			if err != nil {
-				log.Fatal(err)
-			}
-			m, _ := json.Marshal(jsonPayload)
-			err = json.Unmarshal(m, &jsonStructData)
-			if err != nil {
-				log.Fatal(err)
-			}
 		case "cloudflare_byo_ip_prefix":
 			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {
@@ -307,6 +297,28 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 		case "cloudflare_spectrum_application":
 			jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case "cloudflare_tunnel":
+			log.Debug("only requesting the first 1000 active Cloudflare Tunnels due to the service not providing correct pagination responses")
+			jsonPayload, _, err := api.ListTunnels(
+				context.Background(),
+				cloudflare.AccountIdentifier(accountID),
+				cloudflare.TunnelListParams{
+					IsDeleted: cloudflare.BoolPtr(false),
+					ResultInfo: cloudflare.ResultInfo{
+						PerPage: 1000,
+						Page:    1,
+					},
+				})
+
 			if err != nil {
 				log.Fatal(err)
 			}

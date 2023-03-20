@@ -896,7 +896,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 		case "cloudflare_tunnel":
 			log.Debug("only requesting the first 1000 active Cloudflare Tunnels due to the service not providing correct pagination responses")
-			jsonPayload, _, err := api.Tunnels(
+			jsonPayload, _, err := api.ListTunnels(
 				context.Background(),
 				cloudflare.AccountIdentifier(accountID),
 				cloudflare.TunnelListParams{
@@ -919,7 +919,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 
 			for i := 0; i < resourceCount; i++ {
-				secret, err := api.TunnelToken(
+				secret, err := api.GetTunnelToken(
 					context.Background(),
 					cloudflare.AccountIdentifier(accountID),
 					jsonStructData[i].(map[string]interface{})["id"].(string),

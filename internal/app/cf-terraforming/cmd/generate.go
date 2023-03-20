@@ -895,11 +895,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_tunnel":
-			jsonPayload, err := api.Tunnels(
+			log.Debug("only requesting the first 1000 active Cloudflare Tunnels due to the service not providing correct pagination responses")
+			jsonPayload, _, err := api.Tunnels(
 				context.Background(),
 				cloudflare.AccountIdentifier(accountID),
 				cloudflare.TunnelListParams{
 					IsDeleted: cloudflare.BoolPtr(false),
+					ResultInfo: cloudflare.ResultInfo{
+						PerPage: 1000,
+						Page:    1,
+					},
 				})
 
 			if err != nil {

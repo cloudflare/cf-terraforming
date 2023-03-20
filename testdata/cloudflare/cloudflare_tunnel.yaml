@@ -7,7 +7,7 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/cfd_tunnel?is_deleted=false
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/cfd_tunnel?is_deleted=false&page=1&per_page=1000
     method: GET
   response:
     body: |

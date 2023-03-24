@@ -18,7 +18,6 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         expression = "(ip.geoip.continent eq \"pluto\")"
         name       = "example-http-header-3"
         operation  = "set"
-        value      = "space-header"
       }
       uri {
         path {
@@ -38,10 +37,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     action = "rewrite"
     action_parameters {
       headers {
-        expression = "(ip.geoip.continent eq \"T1\")"
-        name       = "example-http-static-header-1"
-        operation  = "set"
-        value      = "my-http-header-1"
+        name      = "example-http-static-header-1"
+        operation = "set"
+        value     = "my-http-header-1"
       }
     }
     description  = "test transform set"

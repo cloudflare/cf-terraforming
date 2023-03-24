@@ -67,7 +67,6 @@ interactions:
                   },
                   "example-http-header-3": {
                     "operation": "set",
-                    "value": "space-header",
                     "expression": "(ip.geoip.continent eq \"pluto\")"
                   }
                 },
@@ -91,8 +90,7 @@ interactions:
                 "headers": {
                   "example-http-static-header-1": {
                     "operation": "set",
-                    "value": "my-http-header-1",
-                    "expression": "(ip.geoip.continent eq \"T1\")"
+                    "value": "my-http-header-1"
                   }
                 }
               },

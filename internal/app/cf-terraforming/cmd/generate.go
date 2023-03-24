@@ -1119,12 +1119,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					continue
 				}
 				if attrName == "account_id" && accountID != "" {
-					writeAttrLine(attrName, accountID, resource)
+					writeAttrLine(attrName, accountID, "", resource)
 					continue
 				}
 
 				if attrName == "zone_id" && zoneID != "" && accountID == "" {
-					writeAttrLine(attrName, zoneID, resource)
+					writeAttrLine(attrName, zoneID, "", resource)
 					continue
 				}
 
@@ -1133,7 +1133,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				case ty.IsPrimitiveType():
 					switch ty {
 					case cty.String, cty.Bool, cty.Number:
-						writeAttrLine(attrName, structData[attrName], resource)
+						writeAttrLine(attrName, structData[attrName], "", resource)
 						delete(structData, attrName)
 					default:
 						log.Debugf("unexpected primitive type %q", ty.FriendlyName())
@@ -1141,7 +1141,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				case ty.IsCollectionType():
 					switch {
 					case ty.IsListType(), ty.IsSetType(), ty.IsMapType():
-						writeAttrLine(attrName, structData[attrName], resource)
+						writeAttrLine(attrName, structData[attrName], "", resource)
 						delete(structData, attrName)
 					default:
 						log.Debugf("unexpected collection type %q", ty.FriendlyName())

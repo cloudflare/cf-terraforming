@@ -210,7 +210,7 @@ func processBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interf
 				continue
 			}
 			if _, ok := schemaBlock.Attributes[block]; ok && (schemaBlock.Attributes[block].Optional || schemaBlock.Attributes[block].Required) {
-				writeAttrLine(block, structData[block], parent)
+				writeAttrLine(block, structData[block], parentBlock, parent)
 			}
 		}
 	}
@@ -218,7 +218,7 @@ func processBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interf
 
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
-func writeAttrLine(key string, value interface{}, body *hclwrite.Body) {
+func writeAttrLine(key string, value interface{}, parentName string, body *hclwrite.Body) {
 	switch values := value.(type) {
 	case []map[string]interface{}:
 		var childCty []cty.Value
@@ -268,15 +268,15 @@ func writeAttrLine(key string, value interface{}, body *hclwrite.Body) {
 			}
 		}
 		if len(stringItems) > 0 {
-			writeAttrLine(key, stringItems, body)
+			writeAttrLine(key, stringItems, parentName, body)
 		}
 
 		if len(intItems) > 0 {
-			writeAttrLine(key, intItems, body)
+			writeAttrLine(key, intItems, parentName, body)
 		}
 
 		if len(interfaceItems) > 0 {
-			writeAttrLine(key, interfaceItems, body)
+			writeAttrLine(key, interfaceItems, parentName, body)
 		}
 	case []int:
 		var vals []cty.Value
@@ -295,6 +295,10 @@ func writeAttrLine(key string, value interface{}, body *hclwrite.Body) {
 			body.SetAttributeValue(key, cty.ListVal(vals))
 		}
 	case string:
+		if parentName == "query" && key == "value" && value == "" {
+			body.SetAttributeValue(key, cty.StringVal(""))
+		}
+
 		if value != "" {
 			body.SetAttributeValue(key, cty.StringVal(value.(string)))
 		}

@@ -295,6 +295,10 @@ func writeAttrLine(key string, value interface{}, parentName string, body *hclwr
 			body.SetAttributeValue(key, cty.ListVal(vals))
 		}
 	case string:
+		if parentName == "query" && key == "value" && value == "" {
+			body.SetAttributeValue(key, cty.StringVal(""))
+		}
+
 		if value != "" {
 			body.SetAttributeValue(key, cty.StringVal(value.(string)))
 		}

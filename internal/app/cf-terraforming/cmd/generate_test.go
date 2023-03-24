@@ -71,7 +71,7 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 	for name, tc := range tests {
 		f := hclwrite.NewEmptyFile()
 		t.Run(name, func(t *testing.T) {
-			writeAttrLine(tc.key, tc.value, f.Body())
+			writeAttrLine(tc.key, tc.value, "", f.Body())
 			assert.Equal(t, tc.want, string(f.Bytes()))
 		})
 	}

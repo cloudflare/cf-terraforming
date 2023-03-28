@@ -240,15 +240,15 @@ func writeAttrLine(key string, value interface{}, parentName string, body *hclwr
 
 		ctyMap := make(map[string]cty.Value)
 		for _, v := range sortedKeys {
+			_v := v
 			if hasNumber(v) {
-				ctyMap[fmt.Sprintf("%s", v)] = cty.StringVal(values[v].(string))
-			} else {
-				switch val := values[v].(type) {
-				case string:
-					ctyMap[v] = cty.StringVal(val)
-				case float64:
-					ctyMap[v] = cty.NumberFloatVal(val)
-				}
+				_v = fmt.Sprintf("%s", v)
+			}
+			switch val := values[v].(type) {
+			case string:
+				ctyMap[_v] = cty.StringVal(val)
+			case float64:
+				ctyMap[_v] = cty.NumberFloatVal(val)
 			}
 		}
 		body.SetAttributeValue(key, cty.ObjectVal(ctyMap))

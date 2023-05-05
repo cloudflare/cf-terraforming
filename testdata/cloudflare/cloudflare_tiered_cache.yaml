@@ -1,0 +1,61 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/argo/tiered_caching
+    method: GET
+  response:
+    body: |
+      {
+        "result":{
+          "id":"tiered_caching",
+          "value":"on",
+          "modified_on":"2023-05-04T22:40:43.188743Z",
+          "editable":false
+        },
+        "success":true,
+        "errors":[],
+        "messages":[]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/cache/tiered_cache_smart_topology_enable
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "editable": true,
+          "id": "tiered_cache_smart_topology_enable",
+          "modified_on": "2023-05-04T22:43:20.834177Z",
+          "value": "on"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

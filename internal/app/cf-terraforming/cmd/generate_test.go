@@ -140,6 +140,7 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare ruleset":                                 {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone"},
 		"cloudflare spectrum application":                    {identiferType: "zone", resourceType: "cloudflare_spectrum_application", testdataFilename: "cloudflare_spectrum_application"},
 		"cloudflare tunnel":                                  {identiferType: "account", resourceType: "cloudflare_tunnel", testdataFilename: "cloudflare_tunnel"},
+		"cloudflare turnstile_widget":                        {identiferType: "account", resourceType: "cloudflare_turnstile_widget", testdataFilename: "cloudflare_turnstile_widget"},
 		"cloudflare url normalization settings":              {identiferType: "zone", resourceType: "cloudflare_url_normalization_settings", testdataFilename: "cloudflare_url_normalization_settings"},
 		"cloudflare user agent blocking rule":                {identiferType: "zone", resourceType: "cloudflare_user_agent_blocking_rule", testdataFilename: "cloudflare_user_agent_blocking_rule"},
 		"cloudflare waiting room":                            {identiferType: "zone", resourceType: "cloudflare_waiting_room", testdataFilename: "cloudflare_waiting_room"},

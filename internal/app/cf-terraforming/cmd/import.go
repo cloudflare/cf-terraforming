@@ -4,13 +4,12 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go"
 	"github.com/spf13/cobra"
-
-	"fmt"
 )
 
 // resourceImportStringFormats contains a mapping of the resource type to the
@@ -38,6 +37,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_ruleset":               ":identifier_type/:identifier_value/:id",
 	"cloudflare_spectrum_application":  ":zone_id/:id",
 	"cloudflare_tunnel":                ":account_id/:id",
+	"cloudflare_turnstile_widget":      ":account_id/:id",
 	"cloudflare_waf_override":          ":zone_id/:id",
 	"cloudflare_waiting_room":          ":zone_id/:id",
 	"cloudflare_worker_route":          ":zone_id/:id",
@@ -360,6 +360,20 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			err = json.Unmarshal(m, &jsonStructData)
 			if err != nil {
 				log.Fatal(err)
+			}
+		case "cloudflare_turnstile_widget":
+			jsonPayload, _, err := api.ListTurnstileWidgets(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListTurnstileWidgetParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i := 0; i < len(jsonStructData); i++ {
+				jsonStructData[i].(map[string]interface{})["id"] = jsonStructData[i].(map[string]interface{})["sitekey"]
 			}
 		case "cloudflare_waf_override":
 			jsonPayload, err := api.ListWAFOverrides(context.Background(), zoneID)

@@ -932,6 +932,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				jsonStructData[i].(map[string]interface{})["connections"] = nil
 			}
+		case "cloudflare_turnstile_widget":
+			jsonPayload, _, err := api.ListTurnstileWidgets(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListTurnstileWidgetParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["id"] = jsonStructData[i].(map[string]interface{})["sitekey"]
+			}
 		case "cloudflare_url_normalization_settings":
 			jsonPayload, err := api.URLNormalizationSettings(context.Background(), &cloudflare.ResourceContainer{Identifier: zoneID, Level: cloudflare.ZoneRouteLevel})
 			if err != nil {

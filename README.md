@@ -193,6 +193,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset)                                                               | Account or Zone | ✅                 | ✅               |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application)                                     | Zone            | ✅                 | ✅               |
 | [cloudflare_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/tunnel)                                                                 | Account         | ✅                 | ✅               |
+| [cloudflare_turnstile_widget](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/turnstile_widget)              | Account         | ✅                 | ✅               |
 | [cloudflare_url_normalization_settings](https://www.terraform.io/docs/providers/cloudflare/r/url_normalization_settings)                         | Zone            | ✅                 | ❌               |
 | [cloudflare_waf_group](https://www.terraform.io/docs/providers/cloudflare/r/waf_group)                                                           | Zone            | ❌                 | ❌               |
 | [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override)                                                     | Zone            | ✅                 | ✅               |

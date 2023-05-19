@@ -179,9 +179,9 @@ Any resources not listed are currently not supported.
 | [cloudflare_firewall_rule](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule)                                                   | Zone            | ✅                 | ✅               |
 | [cloudflare_healthcheck](https://www.terraform.io/docs/providers/cloudflare/r/healthcheck)                                                       | Zone            | ✅                 | ✅               |
 | [cloudflare_ip_list](https://www.terraform.io/docs/providers/cloudflare/r/ip_list)                                                               | Account         | ❌                 | ✅               |
-| [cloudflare_load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer)                                                   | Zone            | ✅                 | ❌               |
-| [cloudflare_load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor)                                   | Account         | ✅                 | ❌               |
-| [cloudflare_load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool)                                         | Account         | ✅                 | ❌               |
+| [cloudflare_load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer)                                                   | Zone            | ✅                 | ✅               |
+| [cloudflare_load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor)                                   | Account         | ✅                 | ✅               |
+| [cloudflare_load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool)                                         | Account         | ✅                 | ✅               |
 | [cloudflare_logpull_retention](https://www.terraform.io/docs/providers/cloudflare/r/logpull_retention)                                           | Zone            | ❌                 | ❌               |
 | [cloudflare_logpush_job](https://www.terraform.io/docs/providers/cloudflare/r/logpush_job)                                                       | Zone            | ✅                 | ❌               |
 | [cloudflare_logpush_ownership_challenge](https://www.terraform.io/docs/providers/cloudflare/r/logpush_ownership_challenge)                       | Zone            | ❌                 | ❌               |

@@ -857,7 +857,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 											for _, val := range value.([]interface{}) {
 												rulesList = append(rulesList, val.(string))
 											}
-											actionParams.(map[string]interface{})[rule].(map[string]interface{})[key] = strings.Join(rulesList, ", ")
+											actionParams.(map[string]interface{})[rule].(map[string]interface{})[key] = strings.Join(rulesList, ",")
 										}
 									}
 								}

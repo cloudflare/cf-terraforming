@@ -28,6 +28,9 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_firewall_rule":         ":zone_id/:id",
 	"cloudflare_healthcheck":           ":zone_id/:id",
 	"cloudflare_ip_list":               ":account_id/:id",
+	"cloudflare_load_balancer":         ":zone_id/:id",
+	"cloudflare_load_balancer_pool":    ":account_id/:id",
+	"cloudflare_load_balancer_monitor": ":account_id/:id",
 	"cloudflare_origin_ca_certificate": ":id",
 	"cloudflare_page_rule":             ":zone_id/:id",
 	"cloudflare_rate_limit":            ":zone_id/:id",
@@ -208,6 +211,36 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 		case "cloudflare_ip_list":
 			jsonPayload, err := api.ListIPLists(context.Background(), accountID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case "cloudflare_load_balancer":
+			jsonPayload, err := api.ListLoadBalancers(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListLoadBalancerParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case "cloudflare_load_balancer_pool":
+			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerPoolParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case "cloudflare_load_balancer_monitor":
+			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerMonitorParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

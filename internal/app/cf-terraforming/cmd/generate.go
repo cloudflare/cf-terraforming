@@ -1068,6 +1068,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// tls_1_2_only is deprecated in favour of min_tls
 				jsonStructData[i].(map[string]interface{})["settings"].(map[string]interface{})["tls_1_2_only"] = nil
 			}
+		case "cloudflare_tiered_cache":
+			tieredCache, err := api.GetTieredCache(context.Background(), &cloudflare.ResourceContainer{Identifier: zoneID})
+			if err != nil {
+				log.Fatal(err)
+			}
+			var jsonPayload []cloudflare.TieredCache
+			jsonPayload = append(jsonPayload, tieredCache)
+
+			resourceCount = 1
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			jsonStructData[0].(map[string]interface{})["cache_type"] = tieredCache.Type.String()
 		default:
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)
 			return

@@ -51,13 +51,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         disable_stale_while_updating = true
       }
     }
-    description  = "test cache rule"
-    enabled      = false
-    expression   = "(http.host eq \"example.com\")"
-    id           = "0f24aab3002347a9a4ac01520e6893d0"
-    last_updated = "2022-09-28T17:21:21.510301Z"
-    ref          = "0f24aab3002347a9a4ac01520e6893d0"
-    version      = "3"
+    description = "test cache rule"
+    enabled     = false
+    expression  = "(http.host eq \"example.com\")"
+    ref         = "0f24aab3002347a9a4ac01520e6893d0"
   }
   rules {
     action = "set_cache_settings"
@@ -68,12 +65,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         mode    = "override_origin"
       }
     }
-    description  = "/status/202"
-    enabled      = true
-    expression   = "(http.host eq \"example.com\")"
-    id           = "e5f1bd1386b4464aa8d726ba1e0d51ad"
-    last_updated = "2022-09-21T16:36:00.999083Z"
-    ref          = "e5f1bd1386b4464aa8d726ba1e0d51ad"
-    version      = "2"
+    description = "/status/202"
+    enabled     = true
+    expression  = "(http.host eq \"example.com\")"
+    ref         = "e5f1bd1386b4464aa8d726ba1e0d51ad"
   }
 }

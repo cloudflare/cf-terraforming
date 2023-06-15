@@ -25,13 +25,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         }
       }
     }
-    description  = "test transform"
-    enabled      = true
-    expression   = "(http.request.uri.path eq \"example.com\")"
-    id           = "e5b61605d6cf4ce08f729c17d42d76ef"
-    last_updated = "2022-02-07T16:58:54.317608Z"
-    ref          = "e5b61605d6cf4ce08f729c17d42d76ef"
-    version      = "1"
+    description = "test transform"
+    enabled     = true
+    expression  = "(http.request.uri.path eq \"example.com\")"
+    ref         = "e5b61605d6cf4ce08f729c17d42d76ef"
   }
   rules {
     action = "rewrite"
@@ -42,13 +39,10 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         value     = "my-http-header-1"
       }
     }
-    description  = "test transform set"
-    enabled      = true
-    expression   = "(http.request.uri.path eq \"example.com\")"
-    id           = "8ec764cf386940c89dd83dbab7bb4c16"
-    last_updated = "2022-02-07T16:58:54.317608Z"
-    ref          = "8ec764cf386940c89dd83dbab7bb4c16"
-    version      = "1"
+    description = "test transform set"
+    enabled     = true
+    expression  = "(http.request.uri.path eq \"example.com\")"
+    ref         = "8ec764cf386940c89dd83dbab7bb4c16"
   }
   rules {
     action = "rewrite"
@@ -59,12 +53,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         }
       }
     }
-    description  = "test uri rewrite set"
-    enabled      = false
-    expression   = "(http.request.uri.path eq \"pumpkin.com\")"
-    id           = "d0f1b4fdb4234adf9c6de9b614424836"
-    last_updated = "2022-05-07T16:58:54.317608Z"
-    ref          = "d0f1b4fdb4234adf9c6de9b614424836"
-    version      = "1"
+    description = "test uri rewrite set"
+    enabled     = false
+    expression  = "(http.request.uri.path eq \"pumpkin.com\")"
+    ref         = "d0f1b4fdb4234adf9c6de9b614424836"
   }
 }

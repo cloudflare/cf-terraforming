@@ -18,7 +18,7 @@ resource "cloudflare_page_rule" "terraform_managed_resource" {
         resolved = true
       }
       query_string {
-        exclude = ["*"]
+        ignore = true
       }
       user {
         device_type = true

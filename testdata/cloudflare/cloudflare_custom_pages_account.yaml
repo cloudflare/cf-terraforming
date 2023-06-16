@@ -27,6 +27,18 @@ interactions:
             ],
             "preview_target": "preview:target",
             "description": "example"
+          },
+          {
+            "id": "basic_challenge",
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "url": null,
+            "state": "customized",
+            "required_tokens": [
+              "::CAPTCHA_BOX::"
+            ],
+            "preview_target": "preview:target",
+            "description": "example"
           }
         ]
       }

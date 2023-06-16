@@ -1099,6 +1099,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 
+			jsonStructData[0].(map[string]interface{})["id"] = zoneID
 			jsonStructData[0].(map[string]interface{})["cache_type"] = tieredCache.Type.String()
 		default:
 			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for automatic generation", resourceType)

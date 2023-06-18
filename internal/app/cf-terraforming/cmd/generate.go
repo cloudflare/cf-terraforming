@@ -412,10 +412,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
+			var newJsonStructData []interface{}
 			// remap ID to the "type" field
 			for i := 0; i < resourceCount; i++ {
 				jsonStructData[i].(map[string]interface{})["type"] = jsonStructData[i].(map[string]interface{})["id"]
+				// we only want repsonses that have 'url'
+				if jsonStructData[i].(map[string]interface{})["url"] != nil {
+					newJsonStructData = append(newJsonStructData, jsonStructData[i])
+				}
 			}
+			jsonStructData = newJsonStructData
+			resourceCount = len(jsonStructData)
+
 		case "cloudflare_custom_hostname_fallback_origin":
 			var jsonPayload []cloudflare.CustomHostnameFallbackOrigin
 			apiCall, err := api.CustomHostnameFallbackOrigin(context.Background(), zoneID)

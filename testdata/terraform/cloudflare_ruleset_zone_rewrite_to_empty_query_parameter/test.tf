@@ -12,12 +12,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
         }
       }
     }
-    description  = "rewrite with no query string"
-    enabled      = true
-    expression   = "true"
-    id           = "1fb6a3117e864d46bcda192d14a1e1dc"
-    last_updated = "2023-02-16T00:26:08.978517Z"
-    ref          = "1fb6a3117e864d46bcda192d14a1e1dc"
-    version      = "5"
+    description = "rewrite with no query string"
+    enabled     = true
+    expression  = "true"
+    ref         = "1fb6a3117e864d46bcda192d14a1e1dc"
   }
 }

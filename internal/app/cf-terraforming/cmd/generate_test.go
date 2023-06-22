@@ -216,7 +216,7 @@ func TestResourceGeneration(t *testing.T) {
 					&http.Client{
 						Transport: r,
 					},
-				), cloudflare.UsingAccount(cloudflareTestAccountID))
+				))
 
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
 			} else {

@@ -46,9 +46,7 @@ interactions:
                   },
                   "query_string": {
                     "include": [],
-                    "exclude": [
-                      "*"
-                    ]
+                    "exclude": "*"
                   },
                   "host": {
                     "resolved": true

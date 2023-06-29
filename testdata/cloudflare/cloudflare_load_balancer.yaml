@@ -32,12 +32,12 @@ interactions:
               "00920f38ce07c2e2f4df50b1f61d4194"
             ],
             "region_pools": {
+              "ENAM": [
+                "00920f38ce07c2e2f4df50b1f61d4194"
+              ],
               "WNAM": [
                 "de90f38ced07c2e2f4df50b1f61d4194",
                 "9290f38c5d07c2e2f4df57b1f61d4196"
-              ],
-              "ENAM": [
-                "00920f38ce07c2e2f4df50b1f61d4194"
               ]
             },
             "pop_pools": {
@@ -51,6 +51,19 @@ interactions:
               ],
               "SJC": [
                 "00920f38ce07c2e2f4df50b1f61d4194"
+              ]
+            },
+            "country_pools": {
+              "AU": [
+                "de90f38ced07c2e2f4df50b1f61d4194",
+                "9290f38c5d07c2e2f4df57b1f61d4196"
+              ],
+              "ME": [
+                "00920f38ce07c2e2f4df50b1f61d4194"
+              ],
+              "US": [
+                "abd90f38ced07c2e2f4df50b1f61d4194",
+                "f9138c5d07c2e2f4df57b1f61d4196"
               ]
             },
             "steering_policy": "dynamic_latency",

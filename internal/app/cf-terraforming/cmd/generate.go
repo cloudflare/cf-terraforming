@@ -531,7 +531,35 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			for i := 0; i < resourceCount; i++ {
 				jsonStructData[i].(map[string]interface{})["default_pool_ids"] = jsonStructData[i].(map[string]interface{})["default_pools"]
 				jsonStructData[i].(map[string]interface{})["fallback_pool_id"] = jsonStructData[i].(map[string]interface{})["fallback_pool"]
+
+				if jsonStructData[i].(map[string]interface{})["country_pools"] != nil {
+					original := jsonStructData[i].(map[string]interface{})["country_pools"]
+					jsonStructData[i].(map[string]interface{})["country_pools"] = []interface{}{}
+
+					for country, popIDs := range original.(map[string]interface{}) {
+						jsonStructData[i].(map[string]interface{})["country_pools"] = append(jsonStructData[i].(map[string]interface{})["country_pools"].([]interface{}), map[string]interface{}{"country": country, "pool_ids": popIDs})
+					}
+				}
+
+				if jsonStructData[i].(map[string]interface{})["region_pools"] != nil {
+					original := jsonStructData[i].(map[string]interface{})["region_pools"]
+					jsonStructData[i].(map[string]interface{})["region_pools"] = []interface{}{}
+
+					for region, popIDs := range original.(map[string]interface{}) {
+						jsonStructData[i].(map[string]interface{})["region_pools"] = append(jsonStructData[i].(map[string]interface{})["region_pools"].([]interface{}), map[string]interface{}{"region": region, "pool_ids": popIDs})
+					}
+				}
+
+				if jsonStructData[i].(map[string]interface{})["pop_pools"] != nil {
+					original := jsonStructData[i].(map[string]interface{})["pop_pools"]
+					jsonStructData[i].(map[string]interface{})["pop_pools"] = []interface{}{}
+
+					for pop, popIDs := range original.(map[string]interface{}) {
+						jsonStructData[i].(map[string]interface{})["pop_pools"] = append(jsonStructData[i].(map[string]interface{})["pop_pools"].([]interface{}), map[string]interface{}{"pop": pop, "pool_ids": popIDs})
+					}
+				}
 			}
+
 		case "cloudflare_load_balancer_pool":
 			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerPoolParams{})
 			if err != nil {

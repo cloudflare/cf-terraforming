@@ -60,6 +60,14 @@ var importCommand = &cobra.Command{
 func runImport() func(cmd *cobra.Command, args []string) {
 	return func(cmd *cobra.Command, args []string) {
 		var jsonStructData []interface{}
+
+		var identifier *cloudflare.ResourceContainer
+		if accountID != "" {
+			identifier = cloudflare.AccountIdentifier(accountID)
+		} else {
+			identifier = cloudflare.ZoneIdentifier(zoneID)
+		}
+
 		switch resourceType {
 		case "cloudflare_access_rule":
 			if accountID != "" {
@@ -159,7 +167,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 			}
 		case "cloudflare_filter":
-			jsonPayload, _, err := api.Filters(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FilterListParams{})
+			jsonPayload, _, err := api.Filters(context.Background(), identifier, cloudflare.FilterListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -169,7 +177,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_firewall_rule":
-			jsonPayload, _, err := api.FirewallRules(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FirewallRuleListParams{})
+			jsonPayload, _, err := api.FirewallRules(context.Background(), identifier, cloudflare.FirewallRuleListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -220,7 +228,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_load_balancer":
-			jsonPayload, err := api.ListLoadBalancers(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListLoadBalancerParams{})
+			jsonPayload, err := api.ListLoadBalancers(context.Background(), identifier, cloudflare.ListLoadBalancerParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -230,7 +238,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_load_balancer_pool":
-			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerPoolParams{})
+			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), identifier, cloudflare.ListLoadBalancerPoolParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -240,7 +248,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_load_balancer_monitor":
-			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerMonitorParams{})
+			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background(), identifier, cloudflare.ListLoadBalancerMonitorParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -250,7 +258,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_logpush_job":
-			jsonPayload, err := api.LogpushJobs(context.Background(), zoneID)
+			jsonPayload, err := api.ListLogpushJobs(context.Background(), identifier, cloudflare.ListLogpushJobsParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -293,7 +301,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_record":
-			jsonPayload, _, err := api.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListDNSRecordsParams{})
+			jsonPayload, _, err := api.ListDNSRecords(context.Background(), identifier, cloudflare.ListDNSRecordsParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -362,7 +370,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_turnstile_widget":
-			jsonPayload, _, err := api.ListTurnstileWidgets(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListTurnstileWidgetParams{})
+			jsonPayload, _, err := api.ListTurnstileWidgets(context.Background(), identifier, cloudflare.ListTurnstileWidgetParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -407,7 +415,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_workers_kv_namespace":
-			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWorkersKVNamespacesParams{})
+			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), identifier, cloudflare.ListWorkersKVNamespacesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -418,7 +426,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_worker_route":
-			jsonPayload, err := api.ListWorkerRoutes(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListWorkerRoutesParams{})
+			jsonPayload, err := api.ListWorkerRoutes(context.Background(), identifier, cloudflare.ListWorkerRoutesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -439,7 +447,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_zone_lockdown":
-			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})
+			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), identifier, cloudflare.LockdownListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

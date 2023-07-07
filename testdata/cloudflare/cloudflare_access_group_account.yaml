@@ -7,7 +7,7 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/groups
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/groups?page=1&per_page=25
     method: GET
   response:
     body: |

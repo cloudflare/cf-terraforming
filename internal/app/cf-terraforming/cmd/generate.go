@@ -101,113 +101,64 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		// restrictions and the need to explicitly map out the structs.
 		var jsonStructData []interface{}
 
+		var identifier *cloudflare.ResourceContainer
+		if accountID != "" {
+			identifier = cloudflare.AccountIdentifier(accountID)
+		} else {
+			identifier = cloudflare.ZoneIdentifier(zoneID)
+		}
+
 		switch resourceType {
 		case "cloudflare_access_application":
-			if accountID != "" {
-				jsonPayload, _, err := api.AccessApplications(context.Background(), accountID, cloudflare.PaginationOptions{})
-				if err != nil {
-					log.Fatal(err)
-				}
+			jsonPayload, _, err := api.ListAccessApplications(context.Background(), identifier, cloudflare.ListAccessApplicationsParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
 
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				jsonPayload, _, err := api.ZoneLevelAccessApplications(context.Background(), zoneID, cloudflare.PaginationOptions{})
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
 			}
 		case "cloudflare_access_group":
-			if accountID != "" {
-				jsonPayload, _, err := api.AccessGroups(context.Background(), accountID, cloudflare.PaginationOptions{})
-				if err != nil {
-					log.Fatal(err)
-				}
+			jsonPayload, _, err := api.ListAccessGroups(context.Background(), identifier, cloudflare.ListAccessGroupsParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
 
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				jsonPayload, _, err := api.ZoneLevelAccessGroups(context.Background(), zoneID, cloudflare.PaginationOptions{})
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
 			}
 		case "cloudflare_access_identity_provider":
-			if accountID != "" {
-				jsonPayload, err := api.AccessIdentityProviders(context.Background(), accountID)
-				if err != nil {
-					log.Fatal(err)
-				}
+			jsonPayload, _, err := api.ListAccessIdentityProviders(context.Background(), identifier, cloudflare.ListAccessIdentityProvidersParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
 
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				jsonPayload, err := api.ZoneLevelAccessIdentityProviders(context.Background(), zoneID)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
 			}
 		case "cloudflare_access_service_token":
-			if accountID != "" {
-				jsonPayload, _, err := api.AccessServiceTokens(context.Background(), accountID)
-				if err != nil {
-					log.Fatal(err)
-				}
+			jsonPayload, _, err := api.ListAccessServiceTokens(context.Background(), identifier, cloudflare.ListAccessServiceTokensParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
 
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				jsonPayload, _, err := api.ZoneLevelAccessServiceTokens(context.Background(), zoneID)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
 			}
 		case "cloudflare_access_mutual_tls_certificate":
-			jsonPayload, err := api.AccessMutualTLSCertificates(context.Background(), accountID)
+			jsonPayload, _, err := api.ListAccessMutualTLSCertificates(context.Background(), identifier, cloudflare.ListAccessMutualTLSCertificatesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -295,7 +246,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 		case "cloudflare_api_shield":
 			jsonPayload := []cloudflare.APIShield{}
-			apiShieldConfig, _, err := api.GetAPIShieldConfiguration(context.Background(), cloudflare.ZoneIdentifier(zoneID))
+			apiShieldConfig, _, err := api.GetAPIShieldConfiguration(context.Background(), identifier)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -447,7 +398,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["status"] = nil
 			}
 		case "cloudflare_filter":
-			jsonPayload, _, err := api.Filters(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FilterListParams{})
+			jsonPayload, _, err := api.Filters(context.Background(), identifier, cloudflare.FilterListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -459,7 +410,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_firewall_rule":
-			jsonPayload, _, err := api.FirewallRules(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.FirewallRuleListParams{})
+			jsonPayload, _, err := api.FirewallRules(context.Background(), identifier, cloudflare.FirewallRuleListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -516,7 +467,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_load_balancer":
-			jsonPayload, err := api.ListLoadBalancers(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListLoadBalancerParams{})
+			jsonPayload, err := api.ListLoadBalancers(context.Background(), identifier, cloudflare.ListLoadBalancerParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -561,7 +512,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 
 		case "cloudflare_load_balancer_pool":
-			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerPoolParams{})
+			jsonPayload, err := api.ListLoadBalancerPools(context.Background(), identifier, cloudflare.ListLoadBalancerPoolParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -582,7 +533,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 		case "cloudflare_load_balancer_monitor":
-			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListLoadBalancerMonitorParams{})
+			jsonPayload, err := api.ListLoadBalancerMonitors(context.Background(), identifier, cloudflare.ListLoadBalancerMonitorParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -594,7 +545,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_logpush_job":
-			jsonPayload, err := api.LogpushJobs(context.Background(), zoneID)
+			jsonPayload, err := api.ListLogpushJobs(context.Background(), identifier, cloudflare.ListLogpushJobsParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -732,7 +683,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		case "cloudflare_record":
 			simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS", "PTR"}
-			jsonPayload, _, err := api.ListDNSRecords(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListDNSRecordsParams{})
+			jsonPayload, _, err := api.ListDNSRecords(context.Background(), identifier, cloudflare.ListDNSRecordsParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -969,7 +920,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["connections"] = nil
 			}
 		case "cloudflare_turnstile_widget":
-			jsonPayload, _, err := api.ListTurnstileWidgets(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListTurnstileWidgetParams{})
+			jsonPayload, _, err := api.ListTurnstileWidgets(context.Background(), identifier, cloudflare.ListTurnstileWidgetParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -1012,7 +963,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_workers_kv_namespace":
-			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWorkersKVNamespacesParams{})
+			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), identifier, cloudflare.ListWorkersKVNamespacesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -1023,7 +974,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_worker_route":
-			jsonPayload, err := api.ListWorkerRoutes(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListWorkerRoutesParams{})
+			jsonPayload, err := api.ListWorkerRoutes(context.Background(), identifier, cloudflare.ListWorkerRoutesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -1064,7 +1015,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				jsonStructData[i].(map[string]interface{})["account_id"] = jsonStructData[i].(map[string]interface{})["account"].(map[string]interface{})["id"].(string)
 			}
 		case "cloudflare_zone_lockdown":
-			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.LockdownListParams{})
+			jsonPayload, _, err := api.ListZoneLockdowns(context.Background(), identifier, cloudflare.LockdownListParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

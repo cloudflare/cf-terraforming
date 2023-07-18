@@ -788,6 +788,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 				}
 
+				sort.Slice(jsonPayload, func(i, j int) bool {
+					return jsonPayload[i].Phase < jsonPayload[j].Phase
+				})
+
 				resourceCount = len(jsonPayload)
 				m, _ := json.Marshal(jsonPayload)
 				err = json.Unmarshal(m, &jsonStructData)

@@ -710,105 +710,74 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 		case "cloudflare_ruleset":
-			if accountID != "" {
-				jsonPayload, err := api.ListAccountRulesets(context.Background(), accountID)
-				if err != nil {
-					log.Fatal(err)
+			jsonPayload, err := api.ListRulesets(context.Background(), identifier, cloudflare.ListRulesetsParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			var nonManagedRules []cloudflare.Ruleset
+
+			// A little annoying but makes more sense doing it this way. Only append
+			// the non-managed rules to the usable nonManagedRules variable instead
+			// of attempting to delete from an existing slice and just reassign.
+			for _, r := range jsonPayload {
+				if r.Kind != string(cloudflare.RulesetKindManaged) {
+					nonManagedRules = append(nonManagedRules, r)
 				}
+			}
+			jsonPayload = nonManagedRules
+			ruleHeaders := map[string][]map[string]interface{}{}
+			for i, rule := range nonManagedRules {
+				ruleset, _ := api.GetRuleset(context.Background(), identifier, rule.ID)
+				jsonPayload[i].Rules = ruleset.Rules
 
-				var nonManagedRules []cloudflare.Ruleset
+				if ruleset.Rules != nil {
+					for _, rule := range ruleset.Rules {
+						if rule.ActionParameters != nil && rule.ActionParameters.Headers != nil {
+							// Sort the headers to have deterministic config output
+							keys := make([]string, 0, len(rule.ActionParameters.Headers))
+							for k := range rule.ActionParameters.Headers {
+								keys = append(keys, k)
+							}
+							sort.Strings(keys)
 
-				// A little annoying but makes more sense doing it this way. Only append
-				// the non-managed rules to the usable nonManagedRules variable instead
-				// of attempting to delete from an existing slice and just reassign.
-				for _, r := range jsonPayload {
-					if r.Kind != string(cloudflare.RulesetKindManaged) {
-						nonManagedRules = append(nonManagedRules, r)
-					}
-				}
-				jsonPayload = nonManagedRules
-
-				for i, rule := range nonManagedRules {
-					ruleset, _ := api.GetAccountRuleset(context.Background(), accountID, rule.ID)
-					jsonPayload[i].Rules = ruleset.Rules
-				}
-
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
-			} else {
-				jsonPayload, err := api.ListZoneRulesets(context.Background(), zoneID)
-				if err != nil {
-					log.Fatal(err)
-				}
-
-				var nonManagedRules []cloudflare.Ruleset
-
-				// A little annoying but makes more sense doing it this way. Only append
-				// the non-managed rules to the usable nonManagedRules variable instead
-				// of attempting to delete from an existing slice and just reassign.
-				for _, r := range jsonPayload {
-					if r.Kind != string(cloudflare.RulesetKindManaged) {
-						nonManagedRules = append(nonManagedRules, r)
-					}
-				}
-				jsonPayload = nonManagedRules
-				ruleHeaders := map[string][]map[string]interface{}{}
-				for i, rule := range nonManagedRules {
-					ruleset, _ := api.GetZoneRuleset(context.Background(), zoneID, rule.ID)
-					jsonPayload[i].Rules = ruleset.Rules
-
-					if ruleset.Rules != nil {
-						for _, rule := range ruleset.Rules {
-							if rule.ActionParameters != nil && rule.ActionParameters.Headers != nil {
-								// Sort the headers to have deterministic config output
-								keys := make([]string, 0, len(rule.ActionParameters.Headers))
-								for k := range rule.ActionParameters.Headers {
-									keys = append(keys, k)
+							// The structure of the API response for headers differs from the
+							// structure terraform requires. So we collect all the headers
+							// indexed by rule.ID to massage the jsonStructData later
+							for _, headerName := range keys {
+								header := map[string]interface{}{
+									"name":       headerName,
+									"operation":  rule.ActionParameters.Headers[headerName].Operation,
+									"expression": rule.ActionParameters.Headers[headerName].Expression,
+									"value":      rule.ActionParameters.Headers[headerName].Value,
 								}
-								sort.Strings(keys)
-
-								// The structure of the API response for headers differs from the
-								// structure terraform requires. So we collect all the headers
-								// indexed by rule.ID to massage the jsonStructData later
-								for _, headerName := range keys {
-									header := map[string]interface{}{
-										"name":       headerName,
-										"operation":  rule.ActionParameters.Headers[headerName].Operation,
-										"expression": rule.ActionParameters.Headers[headerName].Expression,
-										"value":      rule.ActionParameters.Headers[headerName].Value,
-									}
-									ruleHeaders[rule.ID] = append(ruleHeaders[rule.ID], header)
-								}
+								ruleHeaders[rule.ID] = append(ruleHeaders[rule.ID], header)
 							}
 						}
 					}
 				}
+			}
 
-				sort.Slice(jsonPayload, func(i, j int) bool {
-					return jsonPayload[i].Phase < jsonPayload[j].Phase
-				})
+			sort.Slice(jsonPayload, func(i, j int) bool {
+				return jsonPayload[i].Phase < jsonPayload[j].Phase
+			})
 
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonStructData)
-				if err != nil {
-					log.Fatal(err)
-				}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 
-				// Make the rules have the correct header structure
-				for i, ruleset := range jsonStructData {
-					if ruleset.(map[string]interface{})["rules"] != nil {
-						for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
-							ID := rule.(map[string]interface{})["id"]
-							if ID != nil {
-								headers, exists := ruleHeaders[ID.(string)]
-								if exists {
-									jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
-								}
+			// Make the rules have the correct header structure
+			for i, ruleset := range jsonStructData {
+				if ruleset.(map[string]interface{})["rules"] != nil {
+					for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
+						ID := rule.(map[string]interface{})["id"]
+						if ID != nil {
+							headers, exists := ruleHeaders[ID.(string)]
+							if exists {
+								jsonStructData[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
 							}
 						}
 					}

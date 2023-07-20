@@ -311,13 +311,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		case "cloudflare_ruleset":
-			var err error
-			var jsonPayload []cloudflare.Ruleset
-			if accountID != "" {
-				jsonPayload, err = api.ListAccountRulesets(context.Background(), accountID)
-			} else {
-				jsonPayload, err = api.ListZoneRulesets(context.Background(), zoneID)
-			}
+			jsonPayload, err := api.ListRulesets(context.Background(), identifier, cloudflare.ListRulesetsParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

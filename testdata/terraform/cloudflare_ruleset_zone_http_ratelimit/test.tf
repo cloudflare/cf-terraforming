@@ -14,6 +14,5 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       period              = 60
       requests_per_period = 100
     }
-    ref = "549e64153ff14d2cb5a5ef88c1f5bdbc"
   }
 }

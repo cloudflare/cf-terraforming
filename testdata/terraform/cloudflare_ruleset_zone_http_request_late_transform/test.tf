@@ -28,7 +28,6 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     description = "test transform"
     enabled     = true
     expression  = "(http.request.uri.path eq \"example.com\")"
-    ref         = "e5b61605d6cf4ce08f729c17d42d76ef"
   }
   rules {
     action = "rewrite"
@@ -42,7 +41,6 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     description = "test transform set"
     enabled     = true
     expression  = "(http.request.uri.path eq \"example.com\")"
-    ref         = "8ec764cf386940c89dd83dbab7bb4c16"
   }
   rules {
     action = "rewrite"
@@ -56,6 +54,5 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     description = "test uri rewrite set"
     enabled     = false
     expression  = "(http.request.uri.path eq \"pumpkin.com\")"
-    ref         = "d0f1b4fdb4234adf9c6de9b614424836"
   }
 }

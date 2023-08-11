@@ -54,7 +54,6 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     description = "test cache rule"
     enabled     = false
     expression  = "(http.host eq \"example.com\")"
-    ref         = "0f24aab3002347a9a4ac01520e6893d0"
   }
   rules {
     action = "set_cache_settings"
@@ -68,6 +67,5 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     description = "/status/202"
     enabled     = true
     expression  = "(http.host eq \"example.com\")"
-    ref         = "e5f1bd1386b4464aa8d726ba1e0d51ad"
   }
 }

@@ -17,6 +17,5 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     }
     enabled    = true
     expression = "true"
-    ref        = "0789dc4343054d1e981f8c44bedc6fbd"
   }
 }

@@ -791,6 +791,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				rules := jsonStructData[i].(map[string]interface{})["rules"]
 				if rules != nil {
 					for ruleCounter := range rules.([]interface{}) {
+						// should the `ref` be the default `id`, don't output it
+						// as we don't need to track a computed default.
+						id := rules.([]interface{})[ruleCounter].(map[string]interface{})["id"]
+						ref := rules.([]interface{})[ruleCounter].(map[string]interface{})["ref"]
+						if id == ref {
+							rules.([]interface{})[ruleCounter].(map[string]interface{})["ref"] = nil
+						}
+
 						actionParams := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"]
 						if actionParams != nil {
 							// check for log custom fields that need to be transformed

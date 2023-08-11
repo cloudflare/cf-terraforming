@@ -15,6 +15,5 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     description = "zone"
     enabled     = true
     expression  = "true"
-    ref         = "c6893ad10fb344e9b8be3c0c3575adc9"
   }
 }

@@ -88,6 +88,5 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     logging {
       enabled = true
     }
-    ref = "d189267a8dc943769d0000c3dcb400eb"
   }
 }

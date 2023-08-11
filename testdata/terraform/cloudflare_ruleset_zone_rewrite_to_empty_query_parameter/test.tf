@@ -15,6 +15,5 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     description = "rewrite with no query string"
     enabled     = true
     expression  = "true"
-    ref         = "1fb6a3117e864d46bcda192d14a1e1dc"
   }
 }

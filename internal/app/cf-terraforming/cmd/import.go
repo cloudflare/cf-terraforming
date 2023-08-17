@@ -18,6 +18,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_access_rule":           ":identifier_type/:identifier_value/:id",
 	"cloudflare_account_member":        ":account_id/:id",
 	"cloudflare_argo":                  ":zone_id/argo",
+	"cloudflare_bot_management":        ":zone_id",
 	"cloudflare_byo_ip_prefix":         ":id",
 	"cloudflare_certificate_pack":      ":zone_id/:id",
 	"cloudflare_custom_hostname":       ":zone_id/:id",
@@ -113,6 +114,21 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
+		case "cloudflare_bot_management":
+			botManagement, err := api.GetBotManagement(context.Background(), identifier)
+			if err != nil {
+				log.Fatal(err)
+			}
+			var jsonPayload []cloudflare.BotManagement
+			jsonPayload = append(jsonPayload, botManagement)
+
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			jsonStructData[0].(map[string]interface{})["id"] = zoneID
 		case "cloudflare_byo_ip_prefix":
 			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {
@@ -353,7 +369,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 						Page:    1,
 					},
 				})
-
 			if err != nil {
 				log.Fatal(err)
 			}

@@ -169,6 +169,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_argo](https://www.terraform.io/docs/providers/cloudflare/r/argo)                                                                     | Zone            | ✅                 | ✅               |
 | [cloudflare_authenticated_origin_pulls](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls)                         | Zone            | ❌                 | ❌               |
 | [cloudflare_authenticated_origin_pulls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/authenticated_origin_pulls_certificate) | Zone            | ❌                 | ❌               |
+| [cloudflare_bot_management](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/bot_management)                  | Zone            | ✅                 | ✅               |
 | [cloudflare_byo_ip_prefix](https://www.terraform.io/docs/providers/cloudflare/r/byo_ip_prefix)                                                   | Account         | ✅                 | ✅               |
 | [cloudflare_certificate_pack](https://www.terraform.io/docs/providers/cloudflare/r/certificate_pack)                                             | Zone            | ✅                 | ✅               |
 | [cloudflare_custom_hostname](https://www.terraform.io/docs/providers/cloudflare/r/custom_hostname)                                               | Zone            | ✅                 | ✅               |

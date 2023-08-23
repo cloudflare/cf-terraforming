@@ -3,9 +3,11 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"sort"
+	"strings"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/hashicorp/go-version"
@@ -16,9 +18,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/zclconf/go-cty/cty"
-
-	"fmt"
-	"strings"
 )
 
 var resourceType string
@@ -47,7 +46,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		workingDir = viper.GetString("terraform-install-path")
 		execPath = viper.GetString("terraform-binary-path")
 
-		//Download terraform if no existing binary was provided
+		// Download terraform if no existing binary was provided
 		if execPath == "" {
 			tmpDir, err := ioutil.TempDir("", "tfinstall")
 			if err != nil {
@@ -291,6 +290,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
+		case "cloudflare_bot_management":
+			botManagement, err := api.GetBotManagement(context.Background(), identifier)
+			if err != nil {
+				log.Fatal(err)
+			}
+			var jsonPayload []cloudflare.BotManagement
+			jsonPayload = append(jsonPayload, botManagement)
+
+			resourceCount = 1
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			jsonStructData[0].(map[string]interface{})["id"] = zoneID
 		case "cloudflare_byo_ip_prefix":
 			jsonPayload, err := api.ListPrefixes(context.Background(), accountID)
 			if err != nil {
@@ -874,7 +889,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						Page:    1,
 					},
 				})
-
 			if err != nil {
 				log.Fatal(err)
 			}

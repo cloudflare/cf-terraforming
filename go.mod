@@ -16,7 +16,7 @@ require (
 	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/zclconf/go-cty v1.13.3
+	github.com/zclconf/go-cty v1.14.0
 )
 
 require (

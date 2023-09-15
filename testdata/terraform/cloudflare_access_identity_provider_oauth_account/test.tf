@@ -3,7 +3,6 @@ resource "cloudflare_access_identity_provider" "terraform_managed_resource" {
   name       = "GitHub OAuth"
   type       = "github"
   config {
-    client_id    = "example-id"
-    redirect_url = "https://example.cloudflareaccess.com/cdn-cgi/access/callback"
+    client_id = "example-id"
   }
 }

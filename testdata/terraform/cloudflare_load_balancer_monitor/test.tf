@@ -1,6 +1,8 @@
 resource "cloudflare_load_balancer_monitor" "terraform_managed_resource" {
   account_id       = "f037e56e89293a057740de681ac9abbe"
   allow_insecure   = true
+  consecutive_down = 2
+  consecutive_up   = 3
   description      = "Login page monitor"
   expected_body    = "alive"
   expected_codes   = "2xx"

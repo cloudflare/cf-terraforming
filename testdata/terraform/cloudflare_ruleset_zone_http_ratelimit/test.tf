@@ -13,6 +13,7 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       mitigation_timeout  = 30
       period              = 60
       requests_per_period = 100
+      requests_to_origin  = false
     }
   }
 }

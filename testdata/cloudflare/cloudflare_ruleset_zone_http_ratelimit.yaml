@@ -67,7 +67,8 @@ interactions:
                 "period": 60,
                 "requests_per_period": 100,
                 "mitigation_timeout": 30,
-                "mitigation_expression": ""
+                "mitigation_expression": "",
+                "requests_to_origin": false
               },
               "expression": "(http.cookie eq \"namwe=value\")",
               "description": "fwewe",

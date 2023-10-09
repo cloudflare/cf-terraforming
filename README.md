@@ -157,7 +157,7 @@ Any resources not listed are currently not supported.
 | Resource                                                                                                                                         | Resource Scope  | Generate Supported | Import Supported |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- | ------------------ | ---------------- |
 | [cloudflare_access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application)                                         | Account         | ✅                 | ❌               |
-| [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group)                                                     | Account         | ✅                 | ❌               |
+| [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group)                                                     | Account         | ✅                 | ✅                |
 | [cloudflare_access_identity_provider](https://www.terraform.io/docs/providers/cloudflare/r/access_identity_provider)                             | Account         | ✅                 | ❌               |
 | [cloudflare_access_mutual_tls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/access_mutual_tls_certificate)                   | Account         | ✅                 | ❌               |
 | [cloudflare_access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy)                                                   | Account         | ❌                 | ❌               |

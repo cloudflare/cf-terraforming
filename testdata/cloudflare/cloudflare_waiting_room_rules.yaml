@@ -1,0 +1,93 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/waiting_rooms
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "699d98642c564d2e855e9661899b7252",
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "name": "production_webinar",
+            "description": "Production - DO NOT MODIFY",
+            "suspended": false,
+            "host": "shop.example.com",
+            "path": "/shop/checkout",
+            "queue_all": true,
+            "new_users_per_minute": 1000,
+            "total_active_users": 1000,
+            "session_duration": 10,
+            "disable_session_renewal": false,
+            "json_response_enabled": false,
+            "queueing_method": "fifo",
+            "cookie_attributes": {
+              "samesite": "auto",
+              "secure": "auto"
+            },
+            "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/waiting_rooms/699d98642c564d2e855e9661899b7252/rules
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "action": "bypass_waiting_room",
+            "description": "allow all traffic from 10.20.30.40",
+            "enabled": true,
+            "expression": "ip.src in {10.20.30.40}",
+            "id": "25756b2dfe6e378a06b033b670413757",
+            "last_updated": "2014-01-01T05:20:00.12345Z",
+            "version": "1"
+          },
+          {
+            "action": "bypass_waiting_room",
+            "description": "allow all traffic from 50.60.70.80",
+            "enabled": true,
+            "expression": "ip.src in {50.60.70.80}",
+            "id": "25756b2dfe6e378a06b033b67041375a",
+            "last_updated": "2014-01-01T05:20:00.12345Z",
+            "version": "1"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

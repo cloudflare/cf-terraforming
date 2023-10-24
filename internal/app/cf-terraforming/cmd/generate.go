@@ -963,6 +963,77 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					jsonStructData[i].(map[string]interface{})["queueing_status_code"] = nil
 				}
 			}
+		case "cloudflare_waiting_room_event":
+			waitingRooms, err := api.ListWaitingRooms(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			for i := 0; i < len(waitingRooms); i++ {
+				roomEvents, err := api.ListWaitingRoomEvents(context.Background(), zoneID, waitingRooms[i].ID)
+				if err != nil {
+					log.Fatal(err)
+				}
+				m, err := json.Marshal(roomEvents)
+				if err != nil {
+					log.Fatal(err)
+				}
+				jsonRoomEvents := []interface{}{}
+				err = json.Unmarshal(m, &jsonRoomEvents)
+				if err != nil {
+					log.Fatal(err)
+				}
+				for i := 0; i < len(jsonRoomEvents); i++ {
+					jsonRoomEvents[i].(map[string]interface{})["waiting_room_id"] = waitingRooms[i].ID
+				}
+				jsonStructData = append(jsonStructData, jsonRoomEvents...)
+			}
+			resourceCount = len(jsonStructData)
+		case "cloudflare_waiting_room_rules":
+			waitingRooms, err := api.ListWaitingRooms(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			roomRules := []struct {
+				WaitingRoomID string                       `json:"waiting_room_id"`
+				Rules         []cloudflare.WaitingRoomRule `json:"rules"`
+			}{}
+			for i := 0; i < len(waitingRooms); i++ {
+				rules, err := api.ListWaitingRoomRules(context.Background(), cloudflare.ZoneIdentifier(zoneID), cloudflare.ListWaitingRoomRuleParams{
+					WaitingRoomID: waitingRooms[i].ID,
+				})
+				if err != nil {
+					log.Fatal(err)
+				}
+				roomRules = append(roomRules, struct {
+					WaitingRoomID string                       `json:"waiting_room_id"`
+					Rules         []cloudflare.WaitingRoomRule `json:"rules"`
+				}{
+					WaitingRoomID: waitingRooms[i].ID,
+					Rules:         rules,
+				})
+			}
+			resourceCount = len(roomRules)
+			m, err := json.Marshal(roomRules)
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case "cloudflare_waiting_room_settings":
+			jsonPayload, err := api.GetWaitingRoomSettings(context.Background(), cloudflare.ZoneIdentifier(zoneID))
+			if err != nil {
+				log.Fatal(err)
+			}
+			resourceCount = 1
+			var jsonPayloadInterface interface{}
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonPayloadInterface)
+			if err != nil {
+				log.Fatal(err)
+			}
+			jsonStructData = []interface{}{jsonPayloadInterface}
 		case "cloudflare_workers_kv_namespace":
 			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), identifier, cloudflare.ListWorkersKVNamespacesParams{})
 			if err != nil {

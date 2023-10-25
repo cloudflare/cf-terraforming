@@ -1,11 +1,5 @@
 on:
-  pull_request_target:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
-      - review_requested 
+  pull_request:
     paths-ignore:
       - 'README.md'
       - 'CHANGELOG.md'

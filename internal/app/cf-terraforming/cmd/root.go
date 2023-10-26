@@ -10,7 +10,7 @@ import (
 
 var log = logrus.New()
 var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath string
-var verbose bool
+var verbose, useModernImportBlock bool
 var api *cloudflare.API
 var terraformImportCmdPrefix = "terraform import"
 var terraformResourceNamePrefix = "terraform_managed_resource"
@@ -118,6 +118,8 @@ func init() {
 	if err = viper.BindEnv("terraform-install-path", "CLOUDFLARE_TERRAFORM_INSTALL_PATH"); err != nil {
 		log.Fatal(err)
 	}
+
+	rootCmd.PersistentFlags().BoolVarP(&useModernImportBlock, "modern-import-block", "", false, "Whether to generate HCL import blocks for generated resources instead of `terraform import` compatible CLI commands. This is only compatible with Terraform 1.5+")
 }
 
 // initConfig reads in config file and ENV variables if set.

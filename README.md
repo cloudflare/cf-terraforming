@@ -135,16 +135,30 @@ If you use another OS, you will need to download the release directly from
 
 ## Importing with Terraform state
 
-`cf-terraforming` will output the `terraform import` compatible commands for you
-when you invoke the `import` command. This command assumes you have already ran
-`cf-terraforming generate ...` to output your resources.
+`cf-terraforming` has the ability to generate the configuration for you to import
+existing resources.
 
-In the future we aim to automate this however for now, it is a manual step to
-allow flexibility in directory structure.
+Depending on your version of Terraform, you can generate the `import` block
+(Terraform 1.5+) using the `--modern-import-block` flag or the `terraform import`
+compatible CLI output (all versions).
+
+This command assumes you have already ran `cf-terraforming generate ...` to
+output your resources.
 
 ```
+# All versions of Terraform
 $ cf-terraforming import \
   --resource-type "cloudflare_record" \
+  --email $CLOUDFLARE_EMAIL \
+  --key $CLOUDFLARE_API_KEY \
+  --zone $CLOUDFLARE_ZONE_ID
+```
+
+```
+# Terraform 1.5+ only
+$ cf-terraforming import \
+  --resource-type "cloudflare_record" \
+  --modern-import-block \
   --email $CLOUDFLARE_EMAIL \
   --key $CLOUDFLARE_API_KEY \
   --zone $CLOUDFLARE_ZONE_ID
@@ -157,7 +171,7 @@ Any resources not listed are currently not supported.
 | Resource                                                                                                                                         | Resource Scope  | Generate Supported | Import Supported |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- | ------------------ | ---------------- |
 | [cloudflare_access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application)                                         | Account         | ✅                 | ❌               |
-| [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group)                                                     | Account         | ✅                 | ✅                |
+| [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group)                                                     | Account         | ✅                 | ✅               |
 | [cloudflare_access_identity_provider](https://www.terraform.io/docs/providers/cloudflare/r/access_identity_provider)                             | Account         | ✅                 | ❌               |
 | [cloudflare_access_mutual_tls_certificate](https://www.terraform.io/docs/providers/cloudflare/r/access_mutual_tls_certificate)                   | Account         | ✅                 | ❌               |
 | [cloudflare_access_policy](https://www.terraform.io/docs/providers/cloudflare/r/access_policy)                                                   | Account         | ❌                 | ❌               |

@@ -30,7 +30,7 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2
       - name: write Terraform configuration
         run: |
             cat > main.tf <<EOF

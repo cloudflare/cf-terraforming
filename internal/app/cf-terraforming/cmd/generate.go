@@ -83,7 +83,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		if err != nil {
 			log.Fatal("failed to read provider schema", err)
 		}
-		s := ps.Schemas["registry.terraform.io/cloudflare/cloudflare"]
+		s := ps.Schemas[providerRegistryHostname+"/cloudflare/cloudflare"]
 		if s == nil {
 			log.Fatal("failed to detect provider installation")
 		}

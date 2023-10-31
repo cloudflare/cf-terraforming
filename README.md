@@ -24,23 +24,27 @@ Usage:
   cf-terraforming [command]
 
 Available Commands:
+  completion  Generate the autocompletion script for the specified shell
   generate    Fetch resources from the Cloudflare API and generate the respective Terraform stanzas
   help        Help about any command
   import      Output `terraform import` compatible commands in order to import resources into state
   version     Print the version number of cf-terraforming
 
 Flags:
-  -a, --account string                  Use specific account ID for commands
-  -c, --config string                   Path to configuration file (default is $HOME/.cf-terraforming.yaml)
-  -e, --email string                    API Email address associated with your account
-  -h, --help                            Help for cf-terraforming
-  -k, --key string                      API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
-      --resource-type string            Which resource you wish to generate
-      --terraform-binary-path string    Path to an existing Terraform binary (otherwise, one will be downloaded)
-      --terraform-install-path string   Path to an initialized Terraform working directory (default ".")
-  -t, --token string                    API Token
-  -v, --verbose                         Specify verbose output (same as setting log level to debug)
-  -z, --zone string                     Limit the export to a single zone ID
+  -a, --account string                         Use specific account ID for commands
+  -c, --config string                          Path to config file (default "/Users/jacob/.cf-terraforming.yaml")
+  -e, --email string                           API Email address associated with your account
+  -h, --help                                   help for cf-terraforming
+      --hostname string                        Hostname to use to query the API
+  -k, --key string                             API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
+      --modern-import-block terraform import   Whether to generate HCL import blocks for generated resources instead of terraform import compatible CLI commands. This is only compatible with Terraform 1.5+
+      --provider-registry-hostname string      Hostname to use for provider registry lookups (default "registry.terraform.io")
+      --resource-type string                   Which resource you wish to generate
+      --terraform-binary-path string           Path to an existing Terraform binary (otherwise, one will be downloaded)
+      --terraform-install-path string          Path to an initialized Terraform working directory (default ".")
+  -t, --token string                           API Token
+  -v, --verbose                                Specify verbose output (same as setting log level to debug)
+  -z, --zone string                            Limit the export to a single zone ID
 
 Use "cf-terraforming [command] --help" for more information about a command.
 ```
@@ -163,6 +167,27 @@ $ cf-terraforming import \
   --key $CLOUDFLARE_API_KEY \
   --zone $CLOUDFLARE_ZONE_ID
 ```
+
+## Using non-standard registries
+
+By default, we use the Hashicorp registry (registry.terraform.io) for looking up
+the provider to introspect the schema. If you are attempting to use another
+registry, you will need to provide the `--provider-registry-hostname` flag or
+`CLOUDFLARE_PROVIDER_REGISTRY_HOSTNAME` environment variable to query the correct
+registry.
+
+## Using non-standard Terraform binaries
+
+Internally, we use [`terraform-exec`](https://github.com/hashicorp/terraform-exec)
+library to run Terraform operations in the same way that the CLI tooling would.
+If a `terraform` binary is not available on your system path, we will attempt
+to download the latest to use it.
+
+Should you have the binary stored in a non-standard location, want to use an
+existing binary, or you wish to provide a Terraform compatible binary (such as
+`tofu`), you need to provide the `--terraform-binary-path` flag or
+`CLOUDFLARE_TERRAFORM_BINARY_PATH` environment variable to instruct
+`cf-terraforming` which you expect to use.
 
 ## Supported Resources
 

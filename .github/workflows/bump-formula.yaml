@@ -1,0 +1,33 @@
+on:
+  release:
+    types: [ released ]
+  workflow_dispatch:
+    inputs:
+      tag-name:
+        description: 'The git tag name to bump the formula to (including the "v" prefix)'
+        required: true
+
+jobs:
+  homebrew:
+    name: Bump Homebrew formula
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version
+        id: extract-version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "tag-name=${{ inputs.tag-name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag-name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+      - uses: mislav/bump-homebrew-formula-action@v3
+        with:
+          formula-name: cf-terraforming
+          formula-path: cf-terraforming.rb
+          homebrew-tap: cloudflare/homebrew-cloudflare
+          tag-name: ${{ steps.extract-version.outputs.tag-name }}
+          download-url: https://github.com/cloudflare/cf-terraforming/archive/refs/tags/${{ steps.extract-version.outputs.tag-name }}.tar.gz
+          commit-message: |
+            Updates {{formulaName}} to {{version}}
+        env:
+          COMMITTER_TOKEN: ${{ secrets.BUMP_CASK_TOKEN }}

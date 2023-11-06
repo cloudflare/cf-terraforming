@@ -14,7 +14,8 @@ write the Terraform configuration to describe them.
 
 Read the [announcement blog](https://blog.cloudflare.com/cloudflares-partnership-with-hashicorp-and-bootstrapping-terraform-with-cf-terraforming/) for further details on using `cf-terraforming` in your workflow.
 
-> **Note** If you would like to export resources compatible with Terraform < 0.12.x,
+> **Note**
+> If you would like to export resources compatible with Terraform < 0.12.x,
 > you will need to download an older release as this tool no longer supports it.
 
 ## Usage
@@ -127,15 +128,28 @@ resource "cloudflare_record" "terraform_managed_resource" {
 
 ## Installation
 
-If you use Homebrew on MacOS, you can run the following:
+### Homebrew
 
 ```bash
 $ brew tap cloudflare/cloudflare
-$ brew install --cask cloudflare/cloudflare/cf-terraforming
+$ brew install cloudflare/cloudflare/cf-terraforming
+```
+
+> **Note**
+> If you have installed an older version of `cf-terraforming` via Homebrew,
+> you may need to first uninstall `cf-terraforming` and then install it to
+> pick up the updated install process and address the signing/notarisation
+> issues.
+
+### Go
+
+```bash
+$ go install github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming@latest
 ```
 
 If you use another OS, you will need to download the release directly from
-[GitHub Releases](https://github.com/cloudflare/cf-terraforming/releases).
+[GitHub Releases](https://github.com/cloudflare/cf-terraforming/releases) or
+build the Go source.
 
 ## Importing with Terraform state
 

@@ -27,11 +27,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
-      - name: Bump cf-terraforming cask in cloudflare/homebrew-cloudflare
-        uses: macauley/action-homebrew-bump-cask@v1
-        with:
-          token: ${{ secrets.BUMP_CASK_TOKEN }}
-          tap: cloudflare/homebrew-cloudflare
-          cask: cf-terraforming
-          livecheck: true
-          dryrun: false

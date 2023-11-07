@@ -44,6 +44,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_turnstile_widget":      ":account_id/:id",
 	"cloudflare_waf_override":          ":zone_id/:id",
 	"cloudflare_waiting_room":          ":zone_id/:id",
+	"cloudflare_web_analytics_site":    ":account_id/:id",
 	"cloudflare_worker_route":          ":zone_id/:id",
 	"cloudflare_workers_kv_namespace":  ":id",
 	"cloudflare_zone_lockdown":         ":zone_id/:id",
@@ -429,6 +430,16 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 		case "cloudflare_waiting_room":
 			jsonPayload, err := api.ListWaitingRooms(context.Background(), zoneID)
+			if err != nil {
+				log.Fatal(err)
+			}
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
+		case "cloudflare_web_analytics_site":
+			jsonPayload, _, err := api.ListWebAnalyticsSites(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWebAnalyticsSitesParams{})
 			if err != nil {
 				log.Fatal(err)
 			}

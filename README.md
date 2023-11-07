@@ -208,7 +208,7 @@ existing binary, or you wish to provide a Terraform compatible binary (such as
 Any resources not listed are currently not supported.
 
 | Resource                                                                                                                                         | Resource Scope  | Generate Supported | Import Supported |
-| ------------------------------------------------------------------------------------------------------------------------------------------------ | --------------- | ------------------ | ---------------- |
+|--------------------------------------------------------------------------------------------------------------------------------------------------|-----------------| ------------------ | ---------------- |
 | [cloudflare_access_application](https://www.terraform.io/docs/providers/cloudflare/r/access_application)                                         | Account         | ✅                 | ❌               |
 | [cloudflare_access_group](https://www.terraform.io/docs/providers/cloudflare/r/access_group)                                                     | Account         | ✅                 | ✅               |
 | [cloudflare_access_identity_provider](https://www.terraform.io/docs/providers/cloudflare/r/access_identity_provider)                             | Account         | ✅                 | ❌               |
@@ -255,6 +255,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_waf_package](https://www.terraform.io/docs/providers/cloudflare/r/waf_package)                                                       | Zone            | ✅                 | ❌               |
 | [cloudflare_waf_rule](https://www.terraform.io/docs/providers/cloudflare/r/waf_rule)                                                             | Zone            | ❌                 | ❌               |
 | [cloudflare_waiting_room](https://www.terraform.io/docs/providers/cloudflare/r/waiting_room)                                                     | Zone            | ✅                 | ✅               |
+| [cloudflare_web_analytics_site](https://www.terraform.io/docs/providers/cloudflare/r/web_analytics_site)                                         | Account         | ✅                 | ✅               |
 | [cloudflare_worker_cron_trigger](https://www.terraform.io/docs/providers/cloudflare/r/worker_cron_trigger)                                       | Account         | ❌                 | ❌               |
 | [cloudflare_worker_route](https://www.terraform.io/docs/providers/cloudflare/r/worker_route)                                                     | Zone            | ✅                 | ✅               |
 | [cloudflare_worker_script](https://www.terraform.io/docs/providers/cloudflare/r/worker_script)                                                   | Account         | ❌                 | ❌               |

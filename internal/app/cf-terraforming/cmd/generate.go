@@ -1034,6 +1034,17 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 			jsonStructData = []interface{}{jsonPayloadInterface}
+		case "cloudflare_web_analytics_site":
+			jsonPayload, _, err := api.ListWebAnalyticsSites(context.Background(), cloudflare.AccountIdentifier(accountID), cloudflare.ListWebAnalyticsSitesParams{})
+			if err != nil {
+				log.Fatal(err)
+			}
+			resourceCount = len(jsonPayload)
+			m, _ := json.Marshal(jsonPayload)
+			err = json.Unmarshal(m, &jsonStructData)
+			if err != nil {
+				log.Fatal(err)
+			}
 		case "cloudflare_workers_kv_namespace":
 			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), identifier, cloudflare.ListWorkersKVNamespacesParams{})
 			if err != nil {

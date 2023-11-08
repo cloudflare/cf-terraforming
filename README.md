@@ -144,7 +144,7 @@ $ brew install cloudflare/cloudflare/cf-terraforming
 ### Go
 
 ```bash
-$ go install github.com/cloudflare/cf-terraforming/internal/app/cf-terraforming@latest
+$ go install github.com/cloudflare/cf-terraforming/cmd/cf-terraforming@latest
 ```
 
 If you use another OS, you will need to download the release directly from

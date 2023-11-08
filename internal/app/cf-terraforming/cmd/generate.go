@@ -1045,6 +1045,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			if err != nil {
 				log.Fatal(err)
 			}
+
+			for i := 0; i < resourceCount; i++ {
+				jsonStructData[i].(map[string]interface{})["zone_tag"] = jsonStructData[i].(map[string]interface{})["ruleset"].(map[string]interface{})["zone_tag"]
+			}
+
 		case "cloudflare_workers_kv_namespace":
 			jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), identifier, cloudflare.ListWorkersKVNamespacesParams{})
 			if err != nil {

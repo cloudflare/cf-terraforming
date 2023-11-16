@@ -1176,7 +1176,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			structData := jsonStructData[i].(map[string]interface{})
 
 			resourceID := ""
-			if os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
+			if structData["id"] == nil || os.Getenv("USE_STATIC_RESOURCE_IDS") == "true" {
 				resourceID = "terraform_managed_resource"
 			} else {
 				id := ""

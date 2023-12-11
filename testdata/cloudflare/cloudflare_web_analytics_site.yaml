@@ -1,0 +1,48 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rum/site_info/list?page=1&per_page=10
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result_info": {
+          "page": 1,
+          "per_page": 10,
+          "count": 1,
+          "total_count": 1,
+          "total_pages": 1
+        },
+        "result": [
+          {
+            "site_tag": "1a091d3b85d76e2384d0e153747c7a84",
+            "site_token": "b40e25e5fc304ed31ee72bf5370dbcc7",
+            "created": "2023-08-28T20:08:56.719351Z",
+            "snippet": "\u003c!-- Cloudflare Web Analytics --\u003e\u003cscript defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"b40e25e5fc304ed31ee72bf5370dbcc7\"}'\u003e\u003c/script\u003e\u003c!-- End Cloudflare Web Analytics --\u003e",
+            "auto_install": true,
+            "ruleset": {
+              "zone_tag": "0da42c8d2132a9ddaf714f9e7c920711",
+              "zone_name": "example.com",
+              "enabled": true,
+              "id": "81568f25-8f05-4368-98c3-bbd40846d217"
+            }
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

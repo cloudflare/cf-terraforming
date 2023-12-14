@@ -79,10 +79,8 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 
 func TestGenerate_ResourceNotSupported(t *testing.T) {
 	output, err := executeCommandC(rootCmd, "generate", "--resource-type", "notreal")
-
-	if assert.Nil(t, err) {
-		assert.Contains(t, output, "\"notreal\" is not yet supported for automatic generation")
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, output, `"notreal" is not yet supported for automatic generation`)
 }
 
 func TestResourceGeneration(t *testing.T) {

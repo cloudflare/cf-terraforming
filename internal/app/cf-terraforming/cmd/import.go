@@ -481,7 +481,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				log.Fatal(err)
 			}
 		default:
-			fmt.Fprintf(cmd.OutOrStdout(), "%q is not yet supported for state import", resourceType)
+			fmt.Fprintf(cmd.OutOrStderr(), "%q is not yet supported for state import", resourceType)
 			return
 		}
 

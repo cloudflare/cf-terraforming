@@ -89,7 +89,7 @@ Alternatively, if using a config file, then specify the inputs using the same
 names the `flag` names. Example:
 
 ```
-$ cat ~/.cf-terraforming.yaml
+cat ~/.cf-terraforming.yaml
 email: "email@domain.com"
 key: "<key>"
 #or
@@ -99,7 +99,7 @@ token: "<token>"
 ## Example usage
 
 ```bash
-$ cf-terraforming generate \
+cf-terraforming generate \
   --zone $CLOUDFLARE_ZONE_ID \
   --resource-type "cloudflare_record"
 ```
@@ -144,7 +144,7 @@ $ brew install cloudflare/cloudflare/cf-terraforming
 ### Go
 
 ```bash
-$ go install github.com/cloudflare/cf-terraforming/cmd/cf-terraforming@latest
+go install github.com/cloudflare/cf-terraforming/cmd/cf-terraforming@latest
 ```
 
 If you use another OS, you will need to download the release directly from
@@ -165,7 +165,7 @@ output your resources.
 
 ```
 # All versions of Terraform
-$ cf-terraforming import \
+cf-terraforming import \
   --resource-type "cloudflare_record" \
   --email $CLOUDFLARE_EMAIL \
   --key $CLOUDFLARE_API_KEY \
@@ -174,7 +174,7 @@ $ cf-terraforming import \
 
 ```
 # Terraform 1.5+ only
-$ cf-terraforming import \
+cf-terraforming import \
   --resource-type "cloudflare_record" \
   --modern-import-block \
   --email $CLOUDFLARE_EMAIL \
@@ -290,7 +290,7 @@ will need to:
   you want to update.
   Example of updating the DNS CAA record test with a zone I own:
   ```bash
-  $ OVERWRITE_VCR_CASSETTES=true \
+  OVERWRITE_VCR_CASSETTES=true \
     CLOUDFLARE_DOMAIN="terraform.cfapi.net" \
     CLOUDFLARE_EMAIL="jb@example.com" \
     CLOUDFLARE_API_KEY="..." \

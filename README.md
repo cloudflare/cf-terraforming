@@ -131,8 +131,8 @@ resource "cloudflare_record" "terraform_managed_resource" {
 ### Homebrew
 
 ```bash
-$ brew tap cloudflare/cloudflare
-$ brew install cloudflare/cloudflare/cf-terraforming
+brew tap cloudflare/cloudflare
+brew install cloudflare/cloudflare/cf-terraforming
 ```
 
 > **Note**

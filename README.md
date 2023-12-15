@@ -32,20 +32,20 @@ Available Commands:
   version     Print the version number of cf-terraforming
 
 Flags:
-  -a, --account string                      Use specific account ID for commands
-  -c, --config string                       Path to config file (default "/Users/jacob/.cf-terraforming.yaml")
+  -a, --account string                      Target the provided account ID for the command
+  -c, --config string                       Path to config file (default "~/.cf-terraforming.yaml")
   -e, --email string                        API Email address associated with your account
   -h, --help                                help for cf-terraforming
       --hostname string                     Hostname to use to query the API
   -k, --key string                          API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
       --modern-import-block                 Whether to generate HCL import blocks for generated resources instead of terraform import compatible CLI commands. This is only compatible with Terraform 1.5+
       --provider-registry-hostname string   Hostname to use for provider registry lookups (default "registry.terraform.io")
-      --resource-type string                Which resource you wish to generate
+      --resource-type string                Comma delimitered string of which resource(s) you wish to generate
       --terraform-binary-path string        Path to an existing Terraform binary (otherwise, one will be downloaded)
       --terraform-install-path string       Path to an initialized Terraform working directory (default ".")
   -t, --token string                        API Token
   -v, --verbose                             Specify verbose output (same as setting log level to debug)
-  -z, --zone string                         Limit the export to a single zone ID
+  -z, --zone string                         Target the provided zone ID for the command
 
 Use "cf-terraforming [command] --help" for more information about a command.
 ```

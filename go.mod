@@ -9,8 +9,8 @@ require (
 	github.com/hashicorp/go-version v1.6.0
 	github.com/hashicorp/hc-install v0.6.2
 	github.com/hashicorp/hcl/v2 v2.19.1
-	github.com/hashicorp/terraform-exec v0.19.0
-	github.com/hashicorp/terraform-json v0.18.0
+	github.com/hashicorp/terraform-exec v0.20.0
+	github.com/hashicorp/terraform-json v0.19.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0

@@ -931,6 +931,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				for i := 0; i < resourceCount; i++ {
 					jsonStructData[i].(map[string]interface{})["id"] = jsonStructData[i].(map[string]interface{})["sitekey"]
+
+					// We always want to emit a list of domains, even if it is empty.
+					// The empty list is used to enable the "Allow on any hostname" feature, it is *not* a default value.
+					if jsonStructData[i].(map[string]interface{})["domains"] == nil {
+						jsonStructData[i].(map[string]interface{})["domains"] = []string{}
+					}
 				}
 			case "cloudflare_url_normalization_settings":
 				jsonPayload, err := api.URLNormalizationSettings(context.Background(), &cloudflare.ResourceContainer{Identifier: zoneID, Level: cloudflare.ZoneRouteLevel})

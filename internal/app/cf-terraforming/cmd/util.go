@@ -293,6 +293,8 @@ func writeAttrLine(key string, value interface{}, parentName string, body *hclwr
 				vals = append(vals, cty.StringVal(item))
 			}
 			body.SetAttributeValue(key, cty.ListVal(vals))
+		} else {
+			body.SetAttributeValue(key, cty.ListValEmpty(cty.String))
 		}
 	case string:
 		if parentName == "query" && key == "value" && value == "" {

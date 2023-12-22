@@ -11,7 +11,7 @@ interactions:
     method: GET
   response:
     body: |
-      {"result":[{"sitekey":"0x4AAAAAAAEg5sP3rwf91fe8","modified_on":"2023-05-08T11:49:41.862676Z","created_on":"2023-05-08T11:49:41.862676Z","mode":"managed","domains":["example.com"],"name":"test site","bot_fight_mode":false,"region":"world","offlabel":false}],"success":true,"errors":[],"messages":[],"result_info":{"page":1,"per_page":25,"count":3,"total_count":3,"total_pages":1}}
+      {"result":[{"sitekey":"0xAAAAAAAAAAAAAAAAAAAAABC","modified_on":"2023-12-20T13:39:04.94052Z","created_on":"2022-05-18T14:21:50.966586Z","mode":"non-interactive","domains":["example.com","example.net"],"name":"example sitekey","bot_fight_mode":false,"region":"world","offlabel":false,"clearance_level":"no_clearance"}],"success":true,"errors":[],"messages":[],"result_info":{"page":1,"per_page":25,"count":1,"total_count":1,"total_pages":1}}
     headers:
       Content-Type:
       - application/json

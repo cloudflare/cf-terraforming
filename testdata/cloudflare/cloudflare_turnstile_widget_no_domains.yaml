@@ -1,0 +1,22 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/challenges/widgets?page=1&per_page=25
+    method: GET
+  response:
+    body: |
+      {"result":[{"sitekey":"0xAAAAAAAAAAAAAAAAAAAAABC","modified_on":"2023-12-20T13:39:04.94052Z","created_on":"2022-05-18T14:21:50.966586Z","mode":"non-interactive","domains":[],"name":"example sitekey with no domains","bot_fight_mode":false,"region":"world","offlabel":false,"clearance_level":"no_clearance"}],"success":true,"errors":[],"messages":[],"result_info":{"page":1,"per_page":25,"count":1,"total_count":1,"total_pages":1}}
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

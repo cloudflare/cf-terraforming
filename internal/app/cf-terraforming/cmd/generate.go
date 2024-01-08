@@ -1030,18 +1030,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					log.Fatal(err)
 				}
 			case "cloudflare_waiting_room_settings":
-				jsonPayload, err := api.GetWaitingRoomSettings(context.Background(), cloudflare.ZoneIdentifier(zoneID))
+				waitingRoomSettings, err := api.GetWaitingRoomSettings(context.Background(), cloudflare.ZoneIdentifier(zoneID))
 				if err != nil {
 					log.Fatal(err)
 				}
+				var jsonPayload []cloudflare.WaitingRoomSettings
+				jsonPayload = append(jsonPayload, waitingRoomSettings)
+
 				resourceCount = 1
-				var jsonPayloadInterface interface{}
 				m, _ := json.Marshal(jsonPayload)
-				err = json.Unmarshal(m, &jsonPayloadInterface)
+				err = json.Unmarshal(m, &jsonStructData)
 				if err != nil {
 					log.Fatal(err)
 				}
-				jsonStructData = []interface{}{jsonPayloadInterface}
+
+				jsonStructData[0].(map[string]interface{})["id"] = zoneID
+				jsonStructData[0].(map[string]interface{})["search_engine_crawler_bypass"] = waitingRoomSettings.SearchEngineCrawlerBypass
 			case "cloudflare_workers_kv_namespace":
 				jsonPayload, _, err := api.ListWorkersKVNamespaces(context.Background(), identifier, cloudflare.ListWorkersKVNamespacesParams{})
 				if err != nil {

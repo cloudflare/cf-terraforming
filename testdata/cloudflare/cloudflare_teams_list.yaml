@@ -7,7 +7,7 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/zones/f037e56e89293a057740de681ac9abbe/gateway/lists
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/lists
     method: GET
   response:
     body: |
@@ -47,7 +47,7 @@ interactions:
     headers:
       Content-Type:
       - application/json
-    url: https://api.cloudflare.com/client/v4/zones/f037e56e89293a057740de681ac9abbe/gateway/lists/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/items
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/lists/f174e90a-fafe-4643-bbbc-4a0ed4fc8415/items
     method: GET
   response:
     body: |

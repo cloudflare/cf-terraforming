@@ -61,8 +61,8 @@ interactions:
               "insecure_disable_dnssec_validation": false,
               "ip_categories": true,
               "l4override": {
-                "ip": "1.1.1.1",
-                "port": 0
+                "ip": "1.1.1.1", 
+                "port": 53
               },
               "override_host": "example.com",
               "override_ips": [

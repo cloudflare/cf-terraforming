@@ -890,6 +890,22 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
+				// add items field for each list
+				for i := 0; i < resourceCount; i++ {
+					items_struct, _, err := api.ListTeamsListItems(
+						context.Background(), 
+					    &cloudflare.ResourceContainer{Identifier: accountID}, 
+						cloudflare.ListTeamsListItemsParams{ListID: jsonStructData[i].(map[string]interface{})["id"].(string)})
+					if err != nil {
+						log.Fatal(err)
+					}
+					// convert to slice of strings
+					var items []string
+					for _, item_struct := range items_struct {
+						items = append(items, item_struct.Value)
+					}
+					jsonStructData[i].(map[string]interface{})["items"] = items
+				}
 			case "cloudflare_teams_location":
 				jsonPayload, _, err := api.TeamsLocations(context.Background(), accountID)
 				if err != nil {
@@ -923,6 +939,13 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
+				// check for empty descriptions
+				for i := 0; i < resourceCount; i++ {
+					if jsonStructData[i].(map[string]interface{})["description"] == "" {
+						jsonStructData[i].(map[string]interface{})["description"] = "default"
+					}
+					
+				} 
 			case "cloudflare_tunnel":
 				log.Debug("only requesting the first 1000 active Cloudflare Tunnels due to the service not providing correct pagination responses")
 				jsonPayload, _, err := api.ListTunnels(

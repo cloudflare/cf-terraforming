@@ -279,6 +279,41 @@ test. The Terraform files then allow us to build what the resource structure is
 expected to look like and once the tool parses the API response, we can compare
 that to the static file.
 
+Suggested local testing steps:
+
+1. Create a main file (do not commit this up)
+
+      ```bash
+      cat > main.tf <<EOF
+                  terraform {
+                    required_providers {
+                      cloudflare = {
+                        source = "cloudflare/cloudflare"
+                        version = "~> 4"
+                      }
+                    }
+                  }
+                  EOF
+      ```
+
+2. Initialize terraform
+
+      ```bash
+      terraform init
+      ```  
+
+3. Run tests (Cloudflare Install path should be path to repository)
+
+    ```bash
+    CLOUDFLARE_TERRAFORM_INSTALL_PATH=~/gh/cf-terraforming make test
+    ```
+
+If you want to run a specific test case you can do so with the TESTARGS variable and -run flag
+
+```bash
+CLOUDFLARE_TERRAFORM_INSTALL_PATH=~/gh/cf-terraforming TESTARGS="-run '^TestResourceGeneration/cloudflare_teams_list'" make test
+```
+
 ## Updating VCR cassettes
 
 Periodically, it is a good idea to recreate the VCR cassettes used in our

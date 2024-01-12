@@ -8,6 +8,7 @@ import (
 	"os"
 	"sort"
 	"strings"
+	"time"
 
 	cloudflare "github.com/cloudflare/cloudflare-go"
 	"github.com/hashicorp/go-version"
@@ -884,28 +885,61 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				resourceCount = len(jsonPayload)
-				m, _ := json.Marshal(jsonPayload)
+				// creating our own listItems struct because Items nees to be list of string to match 
+				// terraform resource defenition for TeamsList
+				var tfTeamsList []struct{
+					ID          string          `json:"id,omitempty"`
+					Name        string          `json:"name"`
+					Type        string          `json:"type"`
+					Description string          `json:"description,omitempty"`
+					Items       []string        `json:"items,omitempty"`
+					Count       uint64          `json:"count,omitempty"`
+					CreatedAt   *time.Time      `json:"created_at,omitempty"`
+					UpdatedAt   *time.Time      `json:"updated_at,omitempty"`
+				}
+				// get items and set them to the object in the struct
+				for _, cfList := range jsonPayload {
+					items_struct, _, err := api.ListTeamsListItems(
+						context.Background(), 
+					    cloudflare.AccountIdentifier(accountID), 
+						cloudflare.ListTeamsListItemsParams{ListID: cfList.ID })
+					if err != nil {
+						log.Fatal(err)
+					}
+					// turn items into slice of strings
+					var strItems []string
+					for _, item := range items_struct {
+						strItems = append(strItems, item.Value)
+					}
+					tfTeamsList = append(tfTeamsList, struct {
+						ID          string     "json:\"id,omitempty\""
+						Name        string     "json:\"name\""
+						Type        string     "json:\"type\""
+						Description string     "json:\"description,omitempty\""
+						Items       []string   "json:\"items,omitempty\""
+						Count       uint64     "json:\"count,omitempty\""
+						CreatedAt   *time.Time "json:\"created_at,omitempty\""
+						UpdatedAt   *time.Time "json:\"updated_at,omitempty\""
+					}{
+						ID:          cfList.ID,
+						Name:        cfList.Name,
+						Type:        cfList.Type,
+						Description: cfList.Description,
+						Items:       strItems,
+						Count:       cfList.Count,
+						CreatedAt:   cfList.CreatedAt,
+						UpdatedAt:   cfList.UpdatedAt,
+					})
+				}
+				m, err := json.Marshal(tfTeamsList)
+				if err != nil {
+					log.Fatal(err)
+				}
 				err = json.Unmarshal(m, &jsonStructData)
 				if err != nil {
 					log.Fatal(err)
 				}
-				// add items field for each list
-				for i := 0; i < resourceCount; i++ {
-					items_struct, _, err := api.ListTeamsListItems(
-						context.Background(), 
-					    &cloudflare.ResourceContainer{Identifier: accountID}, 
-						cloudflare.ListTeamsListItemsParams{ListID: jsonStructData[i].(map[string]interface{})["id"].(string)})
-					if err != nil {
-						log.Fatal(err)
-					}
-					// convert to slice of strings
-					var items []string
-					for _, item_struct := range items_struct {
-						items = append(items, item_struct.Value)
-					}
-					jsonStructData[i].(map[string]interface{})["items"] = items
-				}
+				resourceCount = len(tfTeamsList)	
 			case "cloudflare_teams_location":
 				jsonPayload, _, err := api.TeamsLocations(context.Background(), accountID)
 				if err != nil {

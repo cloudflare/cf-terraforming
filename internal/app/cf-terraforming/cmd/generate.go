@@ -901,7 +901,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				for _, cfList := range jsonPayload {
 					items_struct, _, err := api.ListTeamsListItems(
 						context.Background(), 
-					    cloudflare.AccountIdentifier(accountID), 
+					    identifier, 
 						cloudflare.ListTeamsListItemsParams{ListID: cfList.ID })
 					if err != nil {
 						log.Fatal(err)

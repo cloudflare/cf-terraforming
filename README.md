@@ -305,13 +305,13 @@ terraform init
 3. Run tests (Cloudflare Install path should be path to repository)
 
 ```bash
-CLOUDFLARE_TERRAFORM_INSTALL_PATH=~/gh/cf-terraforming make test
+make test
 ```
 
 If you want to run a specific test case you can do so with the TESTARGS variable and -run flag
 
 ```bash
-CLOUDFLARE_TERRAFORM_INSTALL_PATH=~/gh/cf-terraforming TESTARGS="-run '^TestResourceGeneration/cloudflare_teams_list'" make test
+TESTARGS="-run '^TestResourceGeneration/cloudflare_teams_list'" make test
 ```
 
 ## Updating VCR cassettes

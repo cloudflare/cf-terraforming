@@ -281,7 +281,7 @@ that to the static file.
 
 Suggested local testing steps:
 
-1. Create a main file (do not commit this up)
+1. Create a file with the basic provider configuration (do not commit this file)
 
       ```bash
       cat > main.tf <<EOF

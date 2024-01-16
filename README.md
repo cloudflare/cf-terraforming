@@ -283,30 +283,30 @@ Suggested local testing steps:
 
 1. Create a file with the basic provider configuration (do not commit this file)
 
-      ```bash
-      cat > main.tf <<EOF
-                  terraform {
-                    required_providers {
-                      cloudflare = {
-                        source = "cloudflare/cloudflare"
-                        version = "~> 4"
-                      }
-                    }
-                  }
-                  EOF
-      ```
+```bash
+cat > main.tf <<EOF
+terraform {
+  required_providers {
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      version = "~> 4"
+    }
+  }
+}
+EOF
+```
 
 2. Initialize terraform
 
-      ```bash
-      terraform init
-      ```  
+```bash
+terraform init
+```  
 
 3. Run tests (Cloudflare Install path should be path to repository)
 
-    ```bash
-    CLOUDFLARE_TERRAFORM_INSTALL_PATH=~/gh/cf-terraforming make test
-    ```
+```bash
+CLOUDFLARE_TERRAFORM_INSTALL_PATH=~/gh/cf-terraforming make test
+```
 
 If you want to run a specific test case you can do so with the TESTARGS variable and -run flag
 
@@ -328,12 +328,12 @@ will need to:
   (`CLOUDFLARE_EMAIL`, `CLOUDFLARE_KEY`, `CLOUDFLARE_API_TOKEN`) and the test
   you want to update.
   Example of updating the DNS CAA record test with a zone I own:
-  ```bash
+```bash
   OVERWRITE_VCR_CASSETTES=true \
     CLOUDFLARE_DOMAIN="terraform.cfapi.net" \
     CLOUDFLARE_EMAIL="jb@example.com" \
     CLOUDFLARE_API_KEY="..." \
     TESTARGS="-run '^TestResourceGeneration/cloudflare_record_caa'"  \
     make test
-  ```
+```
 - Commit your changes and push them via a Pull Request.

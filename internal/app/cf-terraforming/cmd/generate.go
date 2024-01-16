@@ -881,7 +881,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					log.Fatal(err)
 				}
 			case "cloudflare_teams_list":
-				jsonPayload, _, err := api.ListTeamsLists(context.Background(), &cloudflare.ResourceContainer{Identifier: accountID}, cloudflare.ListTeamListsParams{})
+				jsonPayload, _, err := api.ListTeamsLists(context.Background(), identifier, cloudflare.ListTeamListsParams{})
 				if err != nil {
 					log.Fatal(err)
 				}

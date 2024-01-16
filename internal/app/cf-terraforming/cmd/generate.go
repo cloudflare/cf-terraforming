@@ -885,24 +885,24 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				// creating our own listItems struct because Items nees to be list of string to match 
+				// creating our own listItems struct because Items nees to be list of string to match
 				// terraform resource defenition for TeamsList
-				var tfTeamsList []struct{
-					ID          string          `json:"id,omitempty"`
-					Name        string          `json:"name"`
-					Type        string          `json:"type"`
-					Description string          `json:"description,omitempty"`
-					Items       []string        `json:"items,omitempty"`
-					Count       uint64          `json:"count,omitempty"`
-					CreatedAt   *time.Time      `json:"created_at,omitempty"`
-					UpdatedAt   *time.Time      `json:"updated_at,omitempty"`
+				var tfTeamsList []struct {
+					ID          string     `json:"id,omitempty"`
+					Name        string     `json:"name"`
+					Type        string     `json:"type"`
+					Description string     `json:"description,omitempty"`
+					Items       []string   `json:"items,omitempty"`
+					Count       uint64     `json:"count,omitempty"`
+					CreatedAt   *time.Time `json:"created_at,omitempty"`
+					UpdatedAt   *time.Time `json:"updated_at,omitempty"`
 				}
 				// get items and set them to the object in the struct
 				for _, cfList := range jsonPayload {
 					items_struct, _, err := api.ListTeamsListItems(
-						context.Background(), 
-					    identifier, 
-						cloudflare.ListTeamsListItemsParams{ListID: cfList.ID })
+						context.Background(),
+						identifier,
+						cloudflare.ListTeamsListItemsParams{ListID: cfList.ID})
 					if err != nil {
 						log.Fatal(err)
 					}
@@ -939,7 +939,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				resourceCount = len(tfTeamsList)	
+				resourceCount = len(tfTeamsList)
 			case "cloudflare_teams_location":
 				jsonPayload, _, err := api.TeamsLocations(context.Background(), accountID)
 				if err != nil {
@@ -978,8 +978,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if jsonStructData[i].(map[string]interface{})["description"] == "" {
 						jsonStructData[i].(map[string]interface{})["description"] = "default"
 					}
-					
-				} 
+
+				}
 			case "cloudflare_tunnel":
 				log.Debug("only requesting the first 1000 active Cloudflare Tunnels due to the service not providing correct pagination responses")
 				jsonPayload, _, err := api.ListTunnels(

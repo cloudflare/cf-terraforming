@@ -382,7 +382,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				
+
 				m, _ := json.Marshal(jsonPayload)
 				err = json.Unmarshal(m, &jsonStructData)
 				if err != nil {
@@ -393,7 +393,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				
+
 				m, _ := json.Marshal(jsonPayload)
 				err = json.Unmarshal(m, &jsonStructData)
 				if err != nil {
@@ -404,7 +404,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-				
+
 				m, _ := json.Marshal(jsonPayload)
 				err = json.Unmarshal(m, &jsonStructData)
 				if err != nil {

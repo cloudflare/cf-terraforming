@@ -1,0 +1,98 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/rules
+    method: GET
+  response:
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "action": "block",
+            "created_at": "2014-01-01T05:20:00.12345Z",
+            "deleted_at": "2019-08-24T14:15:22Z",
+            "description": "Block bad websites based on their host name.",
+            "device_posture": "any(device_posture.checks.passed[*] in {\"1308749e-fcfb-4ebc-b051-fe022b632644\"})",
+            "enabled": true,
+            "filters": [
+              "http"
+            ],
+            "id": "f174e90a-fafe-4643-bbbc-4a0ed4fc8415",
+            "identity": "any(identity.groups.name[*] in {\"finance\"})",
+            "name": "block bad websites",
+            "precedence": 0,
+            "rule_settings": {
+              "add_headers": {
+                "X-Custom-Header-Name": [
+                  "somecustomvalue"
+                ]
+              },
+              "allow_child_bypass": false,
+              "audit_ssh": {
+                "command_logging": false
+              },
+              "biso_admin_controls": {
+                "dcp": false,
+                "dd": false,
+                "dk": false,
+                "dp": false,
+                "du": false
+              },
+              "block_page_enabled": true,
+              "block_reason": "This website is a security risk",
+              "bypass_parent_rule": false,
+              "check_session": {
+                "duration": "300s",
+                "enforce": true
+              },
+              "egress": {
+                "ipv4": "192.0.2.2",
+                "ipv4_fallback": "192.0.2.3",
+                "ipv6": "2001:DB8::/64"
+              },
+              "insecure_disable_dnssec_validation": false,
+              "ip_categories": true,
+              "l4override": {
+                "ip": "1.1.1.1", 
+                "port": 53
+              },
+              "override_host": "example.com",
+              "override_ips": [
+                "1.1.1.1",
+                "2.2.2.2"
+              ],
+              "payload_log": {
+                "enabled": true
+              },
+              "untrusted_cert": {
+                "action": "error"
+              }
+            },
+            "traffic": "http.request.uri matches \".*a/partial/uri.*\" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10",
+            "updated_at": "2014-01-01T05:20:00.12345Z"
+          }
+        ],
+        "success": true,
+        "result_info": {
+          "count": 1,
+          "page": 1,
+          "per_page": 20,
+          "total_count": 2000
+        }
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

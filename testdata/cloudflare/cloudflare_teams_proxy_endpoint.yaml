@@ -1,0 +1,44 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/proxy_endpoints
+    method: GET
+  response:
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "created_at": "2014-01-01T05:20:00.12345Z",
+            "id": "ed35569b41ce4d1facfe683550f54086",
+            "ips": [
+              "192.0.2.1/32"
+            ],
+            "name": "Devops team",
+            "subdomain": "oli3n9zkz5.proxy.cloudflare-gateway.com",
+            "updated_at": "2014-01-01T05:20:00.12345Z"
+          }
+        ],
+        "success": true,
+        "result_info": {
+          "count": 1,
+          "page": 1,
+          "per_page": 20,
+          "total_count": 2000
+        }
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

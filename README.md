@@ -247,6 +247,10 @@ Any resources not listed are currently not supported.
 | [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset)                                                               | Account or Zone | ✅                 | ✅               |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application)                                     | Zone            | ✅                 | ✅               |
 | [cloudflare_tiered_cache](https://www.terraform.io/docs/providers/cloudflare/r/tiered_cache)                                                     | Zone            | ✅                 | ❌               |
+| [cloudflare_teams_list](https://www.terraform.io/docs/providers/cloudflare/r/teams_list)                                                         | Account         | ✅                 | ✅               |
+| [cloudflare_teams_location](https://www.terraform.io/docs/providers/cloudflare/r/teams_location)                                                 | Account         | ✅                 | ✅               |
+| [cloudflare_teams_proxy_endpoint](https://www.terraform.io/docs/providers/cloudflare/r/teams_proxy_endpoint)                                     | Account         | ✅                 | ✅               |
+| [cloudflare_teams_rule](https://www.terraform.io/docs/providers/cloudflare/r/teams_rule)                                                         | Account         | ✅                 | ✅               |
 | [cloudflare_tunnel](https://www.terraform.io/docs/providers/cloudflare/r/tunnel)                                                                 | Account         | ✅                 | ✅               |
 | [cloudflare_turnstile_widget](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/turnstile_widget)              | Account         | ✅                 | ✅               |
 | [cloudflare_url_normalization_settings](https://www.terraform.io/docs/providers/cloudflare/r/url_normalization_settings)                         | Zone            | ✅                 | ❌               |
@@ -275,6 +279,41 @@ test. The Terraform files then allow us to build what the resource structure is
 expected to look like and once the tool parses the API response, we can compare
 that to the static file.
 
+Suggested local testing steps:
+
+1. Create a file with the basic provider configuration (do not commit this file)
+
+```bash
+cat > main.tf <<EOF
+terraform {
+  required_providers {
+    cloudflare = {
+      source = "cloudflare/cloudflare"
+      version = "~> 4"
+    }
+  }
+}
+EOF
+```
+
+2. Initialize terraform
+
+```bash
+terraform init
+```  
+
+3. Run tests (Cloudflare Install path should be path to repository)
+
+```bash
+make test
+```
+
+If you want to run a specific test case you can do so with the TESTARGS variable and -run flag
+
+```bash
+TESTARGS="-run '^TestResourceGeneration/cloudflare_teams_list'" make test
+```
+
 ## Updating VCR cassettes
 
 Periodically, it is a good idea to recreate the VCR cassettes used in our
@@ -289,12 +328,12 @@ will need to:
   (`CLOUDFLARE_EMAIL`, `CLOUDFLARE_KEY`, `CLOUDFLARE_API_TOKEN`) and the test
   you want to update.
   Example of updating the DNS CAA record test with a zone I own:
-  ```bash
+```bash
   OVERWRITE_VCR_CASSETTES=true \
     CLOUDFLARE_DOMAIN="terraform.cfapi.net" \
     CLOUDFLARE_EMAIL="jb@example.com" \
     CLOUDFLARE_API_KEY="..." \
     TESTARGS="-run '^TestResourceGeneration/cloudflare_record_caa'"  \
     make test
-  ```
+```
 - Commit your changes and push them via a Pull Request.

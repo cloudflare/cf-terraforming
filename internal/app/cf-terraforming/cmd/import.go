@@ -40,6 +40,10 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_record":                ":zone_id/:id",
 	"cloudflare_ruleset":               ":identifier_type/:identifier_value/:id",
 	"cloudflare_spectrum_application":  ":zone_id/:id",
+	"cloudflare_teams_list":            ":account_id/:id",
+	"cloudflare_teams_location":        ":account_id/:id",
+	"cloudflare_teams_proxy_endpoint":  ":account_id/:id",
+	"cloudflare_teams_rule":            ":account_id/:id",
 	"cloudflare_tunnel":                ":account_id/:id",
 	"cloudflare_turnstile_widget":      ":account_id/:id",
 	"cloudflare_waf_override":          ":zone_id/:id",
@@ -364,6 +368,50 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 			case "cloudflare_spectrum_application":
 				jsonPayload, err := api.SpectrumApplications(context.Background(), zoneID)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				m, _ := json.Marshal(jsonPayload)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
+			case "cloudflare_teams_list":
+				jsonPayload, _, err := api.ListTeamsLists(context.Background(), identifier, cloudflare.ListTeamListsParams{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				m, _ := json.Marshal(jsonPayload)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
+			case "cloudflare_teams_location":
+				jsonPayload, _, err := api.TeamsLocations(context.Background(), accountID)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				m, _ := json.Marshal(jsonPayload)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
+			case "cloudflare_teams_proxy_endpoint":
+				jsonPayload, _, err := api.TeamsProxyEndpoints(context.Background(), accountID)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				m, _ := json.Marshal(jsonPayload)
+				err = json.Unmarshal(m, &jsonStructData)
+				if err != nil {
+					log.Fatal(err)
+				}
+			case "cloudflare_teams_rule":
+				jsonPayload, err := api.TeamsRules(context.Background(), accountID)
 				if err != nil {
 					log.Fatal(err)
 				}

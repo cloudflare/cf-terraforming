@@ -955,7 +955,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if jsonStructData[i].(map[string]interface{})["description"] == "" {
 						jsonStructData[i].(map[string]interface{})["description"] = "default"
 					}
-
 				}
 			case "cloudflare_tunnel":
 				log.Debug("only requesting the first 1000 active Cloudflare Tunnels due to the service not providing correct pagination responses")

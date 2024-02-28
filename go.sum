@@ -10,8 +10,8 @@ github.com/apparentlymart/go-textseg/v15 v15.0.0 h1:uYvfpb3DyLSCGWnctWKGj857c6ew
 github.com/apparentlymart/go-textseg/v15 v15.0.0/go.mod h1:K8XmNZdhEBkdlyDdvbmmsvpAG721bKi0joRfFdHIWJ4=
 github.com/cloudflare/circl v1.3.7 h1:qlCDlTPz2n9fu58M0Nh1J/JzcFpfgkFHHX3O35r5vcU=
 github.com/cloudflare/circl v1.3.7/go.mod h1:sRTcRWXGLrKw6yIGJ+l7amYJFfAXbZG0kBSc8r4zxgA=
-github.com/cloudflare/cloudflare-go v0.88.0 h1:9CEnvaDMs8ydEBUSPChXmHDe2uJJKZoPpBO2QEr41gY=
-github.com/cloudflare/cloudflare-go v0.88.0/go.mod h1:eyuehb1i6BNRc+ZwaTZAiRHeE+4jbKvHAns19oGeakg=
+github.com/cloudflare/cloudflare-go v0.89.0 h1:3zoVntC8xmUR/weFEcNE1RizdW4LRZdQnJ/AN8DDa1U=
+github.com/cloudflare/cloudflare-go v0.89.0/go.mod h1:eyuehb1i6BNRc+ZwaTZAiRHeE+4jbKvHAns19oGeakg=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/cyphar/filepath-securejoin v0.2.4 h1:Ugdm7cg7i6ZK6x3xDF1oEu1nfkyfH53EtKeQYTC3kyg=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

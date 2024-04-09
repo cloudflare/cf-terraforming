@@ -1255,7 +1255,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			}
 			// If we don't have any resources to generate, just bail out early.
 			if resourceCount == 0 {
-				fmt.Fprint(cmd.OutOrStderr(), "no resources found to generate")
+				fmt.Fprintf(cmd.OutOrStderr(), "no resources of type %q found to generate", resourceType)
 				return
 			}
 

@@ -112,7 +112,7 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare health check":                           {identiferType: "zone", resourceType: "cloudflare_healthcheck", testdataFilename: "cloudflare_healthcheck"},
 		"cloudflare load balancer monitor":                  {identiferType: "account", resourceType: "cloudflare_load_balancer_monitor", testdataFilename: "cloudflare_load_balancer_monitor"},
 		"cloudflare load balancer pool":                     {identiferType: "account", resourceType: "cloudflare_load_balancer_pool", testdataFilename: "cloudflare_load_balancer_pool"},
-		// "cloudflare load balancer":                           {identiferType: "zone", resourceType: "cloudflare_load_balancer", testdataFilename: "cloudflare_load_balancer"},
+		"cloudflare load balancer":                           {identiferType: "zone", resourceType: "cloudflare_load_balancer", testdataFilename: "cloudflare_load_balancer"},
 		"cloudflare logpush jobs with filter":                {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job_with_filter"},
 		"cloudflare logpush jobs":                            {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job"},
 		"cloudflare managed headers":                         {identiferType: "zone", resourceType: "cloudflare_managed_headers", testdataFilename: "cloudflare_managed_headers"},

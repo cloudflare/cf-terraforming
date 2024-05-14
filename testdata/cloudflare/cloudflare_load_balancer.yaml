@@ -1,87 +1,74 @@
 ---
 version: 1
 interactions:
-- request:
-    body: ""
-    form: {}
-    headers:
-      Content-Type:
-      - application/json
-    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/load_balancers
-    method: GET
-  response:
-    body: |
-      {
-        "success": true,
-        "errors": [],
-        "messages": [],
-        "result": [
-          {
-            "id": "699d98642c564d2e855e9661899b7252",
-            "created_on": "2014-01-01T05:20:00.12345Z",
-            "modified_on": "2014-01-01T05:20:00.12345Z",
-            "description": "Load Balancer for www.example.com",
-            "name": "www.example.com",
-            "enabled": true,
-            "ttl": 30,
-            "proxied": false,
-            "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
-            "default_pools": [
-              "17b5962d775c646f3f9725cbc7a53df4",
-              "9290f38c5d07c2e2f4df57b1f61d4196",
-              "00920f38ce07c2e2f4df50b1f61d4194"
-            ],
-            "region_pools": {
-              "ENAM": [
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/load_balancers
+      method: GET
+    response:
+      body: |
+        {
+          "success": true,
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "id": "699d98642c564d2e855e9661899b7252",
+              "created_on": "2014-01-01T05:20:00.12345Z",
+              "modified_on": "2014-01-01T05:20:00.12345Z",
+              "description": "Load Balancer for www.example.com",
+              "name": "www.example.com",
+              "enabled": true,
+              "ttl": 30,
+              "proxied": false,
+              "fallback_pool": "17b5962d775c646f3f9725cbc7a53df4",
+              "default_pools": [
+                "17b5962d775c646f3f9725cbc7a53df4",
+                "9290f38c5d07c2e2f4df57b1f61d4196",
                 "00920f38ce07c2e2f4df50b1f61d4194"
               ],
-              "WNAM": [
-                "de90f38ced07c2e2f4df50b1f61d4194",
-                "9290f38c5d07c2e2f4df57b1f61d4196"
-              ]
-            },
-            "pop_pools": {
-              "LAX": [
-                "de90f38ced07c2e2f4df50b1f61d4194",
-                "9290f38c5d07c2e2f4df57b1f61d4196"
-              ],
-              "LHR": [
-                "abd90f38ced07c2e2f4df50b1f61d4194",
-                "f9138c5d07c2e2f4df57b1f61d4196"
-              ],
-              "SJC": [
-                "00920f38ce07c2e2f4df50b1f61d4194"
-              ]
-            },
-            "country_pools": {
-              "AU": [
-                "de90f38ced07c2e2f4df50b1f61d4194",
-                "9290f38c5d07c2e2f4df57b1f61d4196"
-              ],
-              "ME": [
-                "00920f38ce07c2e2f4df50b1f61d4194"
-              ],
-              "US": [
-                "abd90f38ced07c2e2f4df50b1f61d4194",
-                "f9138c5d07c2e2f4df57b1f61d4196"
-              ]
-            },
-            "steering_policy": "dynamic_latency",
-            "session_affinity": "cookie",
-            "session_affinity_attributes": {
-              "samesite": "Auto",
-              "secure": "Auto",
-              "drain_duration": 100
-            },
-            "session_affinity_ttl": 5000
-          }
-        ]
-      }
-    headers:
-      Content-Type:
-      - application/json
-      Vary:
-      - Accept-Encoding
-    status: 200 OK
-    code: 200
-    duration: ""
+              "region_pools": {
+                "ENAM": [
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ]
+              },
+              "pop_pools": {
+                "SJC": [
+                  "00920f38ce07c2e2f4df50b1f61d4194"
+                ]
+              },
+              "country_pools": {
+                "AU": [
+                  "de90f38ced07c2e2f4df50b1f61d4194",
+                  "9290f38c5d07c2e2f4df57b1f61d4196"
+                ]
+              },
+              "steering_policy": "dynamic_latency",
+              "session_affinity": "cookie",
+              "session_affinity_attributes": {
+                "samesite": "Auto",
+                "secure": "Auto",
+                "drain_duration": 100
+              },
+              "session_affinity_ttl": 5000,
+              "random_steering": {
+                "default_weight": 1,
+                "pool_weights": {
+                  "2c3f886957b4112bfaca8b12d87ce8c1": 0
+                }
+              }
+            }
+          ]
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

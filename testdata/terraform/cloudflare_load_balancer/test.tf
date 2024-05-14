@@ -14,33 +14,19 @@ resource "cloudflare_load_balancer" "terraform_managed_resource" {
     country  = "AU"
     pool_ids = ["de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"]
   }
-  country_pools {
-    country  = "ME"
-    pool_ids = ["00920f38ce07c2e2f4df50b1f61d4194"]
-  }
-  country_pools {
-    country  = "US"
-    pool_ids = ["abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"]
-  }
-  pop_pools {
-    pool_ids = ["de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"]
-    pop      = "LAX"
-  }
-  pop_pools {
-    pool_ids = ["abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"]
-    pop      = "LHR"
-  }
   pop_pools {
     pool_ids = ["00920f38ce07c2e2f4df50b1f61d4194"]
     pop      = "SJC"
   }
+  random_steering {
+    default_weight = 1
+    pool_weights = {
+      "2c3f886957b4112bfaca8b12d87ce8c1" = 0
+    }
+  }
   region_pools {
     pool_ids = ["00920f38ce07c2e2f4df50b1f61d4194"]
     region   = "ENAM"
-  }
-  region_pools {
-    pool_ids = ["de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"]
-    region   = "WNAM"
   }
   session_affinity_attributes {
     drain_duration = 100

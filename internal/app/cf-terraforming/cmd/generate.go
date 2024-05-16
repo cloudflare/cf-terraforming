@@ -1079,6 +1079,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					log.Fatal(err)
 				}
 				roomRules := []struct {
+					ID            string                       `json:"id"`
 					WaitingRoomID string                       `json:"waiting_room_id"`
 					Rules         []cloudflare.WaitingRoomRule `json:"rules"`
 				}{}
@@ -1090,9 +1091,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						log.Fatal(err)
 					}
 					roomRules = append(roomRules, struct {
+						ID            string                       `json:"id"`
 						WaitingRoomID string                       `json:"waiting_room_id"`
 						Rules         []cloudflare.WaitingRoomRule `json:"rules"`
 					}{
+						ID:            waitingRooms[i].ID,
 						WaitingRoomID: waitingRooms[i].ID,
 						Rules:         rules,
 					})

@@ -18,6 +18,7 @@ import (
 // composite ID that is compatible with performing an import.
 var resourceImportStringFormats = map[string]string{
 	"cloudflare_access_application":    ":account_id/:id",
+	"cloudflare_access_policy":         ":identifier_type/:identifier_value/:app_id/:id",
 	"cloudflare_access_group":          ":account_id/:id",
 	"cloudflare_access_rule":           ":identifier_type/:identifier_value/:id",
 	"cloudflare_account_member":        ":account_id/:id",
@@ -91,6 +92,59 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
+			case "cloudflare_access_policy":
+				// Get applications
+				var applications []cloudflare.AccessApplication
+				var applicationIDs []string
+				params := cloudflare.ListAccessApplicationsParams{
+					ResultInfo: cloudflare.ResultInfo{
+						PerPage: 500,
+					},
+				}
+				jsonPayload, _, err := api.ListAccessApplications(context.Background(), identifier, params)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				m, _ := json.Marshal(jsonPayload)
+				err = json.Unmarshal(m, &applications)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				// Generate list of application ids
+				for _, application := range applications {
+					applicationIDs = append(applicationIDs, application.ID)
+				}
+
+				var accessPolicies []interface{}
+				for _, applicationID := range applicationIDs {
+					// Get policies for each application
+					var tempAccessPolicies []interface{}
+					params := cloudflare.ListAccessPoliciesParams{
+						ApplicationID: applicationID,
+						ResultInfo: cloudflare.ResultInfo{
+							PerPage: 500,
+						},
+					}
+					jsonPayload, _, err := api.ListAccessPolicies(context.Background(), identifier, params)
+					if err != nil {
+						log.Fatal(err)
+					}
+					m, _ := json.Marshal(jsonPayload)
+					err = json.Unmarshal(m, &tempAccessPolicies)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					// Add application id field
+					for i := 0; i < len(tempAccessPolicies); i++ {
+						tempAccessPolicies[i].(map[string]interface{})["application_id"] = applicationID
+					}
+
+					accessPolicies = append(accessPolicies, tempAccessPolicies...)
+				}
+				jsonStructData = accessPolicies
 			case "cloudflare_access_group":
 				jsonPayload, _, err := api.ListAccessGroups(context.Background(), identifier, cloudflare.ListAccessGroupsParams{})
 				if err != nil {
@@ -551,16 +605,19 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			importBody := importFile.Body()
 
 			for _, data := range jsonStructData {
-				id := data.(map[string]interface{})["id"].(string)
+				resourceInfo := map[string]string{
+					":id":     data.(map[string]interface{})["id"].(string),
+					":app_id": data.(map[string]interface{})["application_id"].(string),
+				}
 
 				if useModernImportBlock {
-					idvalue := buildRawImportAddress(resourceType, id)
+					idvalue := buildRawImportAddress(resourceType, resourceInfo)
 					imp := importBody.AppendNewBlock("import", []string{}).Body()
-					imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%s", terraformResourceNamePrefix, id))))
+					imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%s", terraformResourceNamePrefix, resourceInfo[":id"]))))
 					imp.SetAttributeValue("id", cty.StringVal(idvalue))
 					importFile.Body().AppendNewline()
 				} else {
-					fmt.Fprint(cmd.OutOrStdout(), buildTerraformImportCommand(resourceType, id))
+					fmt.Fprint(cmd.OutOrStdout(), buildTerraformImportCommand(resourceType, resourceInfo))
 				}
 			}
 
@@ -577,14 +634,14 @@ func runImport() func(cmd *cobra.Command, args []string) {
 // buildTerraformImportCommand takes the resourceType and resourceID in order to
 // lookup the resource type import string and then return a suitable composite
 // value that is compatible with `terraform import`.
-func buildTerraformImportCommand(resourceType, resourceID string) string {
-	resourceImportAddress := buildRawImportAddress(resourceType, resourceID)
-	return fmt.Sprintf("%s %s.%s_%s %s\n", terraformImportCmdPrefix, resourceType, terraformResourceNamePrefix, resourceID, resourceImportAddress)
+func buildTerraformImportCommand(resourceType string, resourceInfo map[string]string) string {
+	resourceImportAddress := buildRawImportAddress(resourceType, resourceInfo)
+	return fmt.Sprintf("%s %s.%s_%s %s\n", terraformImportCmdPrefix, resourceType, terraformResourceNamePrefix, resourceInfo[":id"], resourceImportAddress)
 }
 
 // buildRawImportAddress takes the resourceType and resourceID in order to lookup
 // the resource type import string and then return a suitable address.
-func buildRawImportAddress(resourceType, resourceID string) string {
+func buildRawImportAddress(resourceType string, resourceInfo map[string]string) string {
 	if _, ok := resourceImportStringFormats[resourceType]; !ok {
 		log.Fatalf("%s does not have an import format defined", resourceType)
 	}
@@ -600,13 +657,16 @@ func buildRawImportAddress(resourceType, resourceID string) string {
 		identiferValue = zoneID
 	}
 
+	resources := []string{
+		":identifier_type", identiferType, ":identifier_value", identiferValue, ":zone_id", zoneID, ":account_id", accountID,
+	}
+	for k, v := range resourceInfo {
+		resources = append(resources, k, v)
+	}
+
 	s := resourceImportStringFormats[resourceType]
 	replacer := strings.NewReplacer(
-		":identifier_type", identiferType,
-		":identifier_value", identiferValue,
-		":zone_id", zoneID,
-		":account_id", accountID,
-		":id", resourceID,
+		resources...,
 	)
 
 	return replacer.Replace(s)

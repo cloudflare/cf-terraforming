@@ -125,6 +125,19 @@ resource "cloudflare_record" "terraform_managed_resource" {
 - A valid Cloudflare API key and sufficient permissions to access the resources
   you are requesting via the API
 - An initialised Terraform directory (`terraform init` has run and providers installed). See the [provider documentation](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs) if you have not yet setup the Terraform directory.
+  
+  Example:
+  
+  ```tf
+  # provider.tf
+  terraform {
+      required_providers {
+          cloudflare = {
+              source = "cloudflare/cloudflare"
+          }
+      }
+  }
+  ```
 
 ## Installation
 

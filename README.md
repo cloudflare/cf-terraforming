@@ -14,7 +14,7 @@ write the Terraform configuration to describe them.
 
 Read the [announcement blog](https://blog.cloudflare.com/cloudflares-partnership-with-hashicorp-and-bootstrapping-terraform-with-cf-terraforming/) for further details on using `cf-terraforming` in your workflow.
 
-> **Note**
+> [!NOTE]
 > If you would like to export resources compatible with Terraform < 0.12.x,
 > you will need to download an older release as this tool no longer supports it.
 
@@ -59,9 +59,9 @@ Cloudflare supports two authentication methods to the API:
 
 Both can be retrieved on the [user profile page](https://dash.cloudflare.com/profile/api-tokens).
 
-**A note on storing your credentials securely:** We recommend that you store
-your Cloudflare credentials (API key, email, token) as environment variables as
-demonstrated below.
+> [!TIP]
+> We recommend that you store your Cloudflare credentials (API key, email, token) as environment
+> variables as demonstrated below.
 
 ```bash
 # if using API Token
@@ -135,7 +135,7 @@ brew tap cloudflare/cloudflare
 brew install cloudflare/cloudflare/cf-terraforming
 ```
 
-> **Note**
+> [!NOTE]
 > If you have installed an older version of `cf-terraforming` via Homebrew,
 > you may need to first uninstall `cf-terraforming` and then install it to
 > pick up the updated install process and address the signing/notarisation

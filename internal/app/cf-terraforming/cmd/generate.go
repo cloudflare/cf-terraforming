@@ -41,10 +41,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		zoneID = viper.GetString("zone")
 		accountID = viper.GetString("account")
-
-		var execPath, workingDir string
-		workingDir = viper.GetString("terraform-install-path")
-		execPath = viper.GetString("terraform-binary-path")
+		workingDir := viper.GetString("terraform-install-path")
+		execPath := viper.GetString("terraform-binary-path")
+		providerRegistryHostname := viper.GetString("provider-registry-hostname")
 
 		// Download terraform if no existing binary was provided
 		if execPath == "" {
@@ -83,6 +82,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		if err != nil {
 			log.Fatal("failed to read provider schema", err)
 		}
+
 		s := ps.Schemas[providerRegistryHostname+"/cloudflare/cloudflare"]
 		if s == nil {
 			log.Fatal("failed to detect provider installation")

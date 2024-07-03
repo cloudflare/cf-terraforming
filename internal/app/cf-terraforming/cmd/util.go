@@ -310,3 +310,11 @@ func writeAttrLine(key string, value interface{}, parentName string, body *hclwr
 		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
 	}
 }
+
+// boolToEnabledOrDisabled outputs a string representation of a boolean in the form of `enabled` or `disabled`.
+func boolToEnabledOrDisabled(value bool) string {
+	if value {
+		return "enabled"
+	}
+	return "disabled"
+}

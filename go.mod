@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
-	github.com/cloudflare/cloudflare-go v0.98.0
+	github.com/cloudflare/cloudflare-go v0.99.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/hashicorp/go-version v1.7.0
 	github.com/hashicorp/hc-install v0.7.0

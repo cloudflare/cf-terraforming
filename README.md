@@ -233,6 +233,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_firewall_rule](https://www.terraform.io/docs/providers/cloudflare/r/firewall_rule)                                                   | Zone            | ✅                 | ✅               |
 | [cloudflare_healthcheck](https://www.terraform.io/docs/providers/cloudflare/r/healthcheck)                                                       | Zone            | ✅                 | ✅               |
 | [cloudflare_ip_list](https://www.terraform.io/docs/providers/cloudflare/r/ip_list)                                                               | Account         | ❌                 | ✅               |
+| [cloudflare_list](https://www.terraform.io/docs/providers/cloudflare/r/list)                                                                     | Account         | ✅                 | ❌               |
 | [cloudflare_load_balancer](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer)                                                   | Zone            | ✅                 | ✅               |
 | [cloudflare_load_balancer_monitor](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_monitor)                                   | Account         | ✅                 | ✅               |
 | [cloudflare_load_balancer_pool](https://www.terraform.io/docs/providers/cloudflare/r/load_balancer_pool)                                         | Account         | ✅                 | ✅               |
@@ -300,7 +301,7 @@ EOF
 
 ```bash
 terraform init
-```  
+```
 
 3. Run tests (Cloudflare Install path should be path to repository)
 
@@ -328,6 +329,7 @@ will need to:
   (`CLOUDFLARE_EMAIL`, `CLOUDFLARE_KEY`, `CLOUDFLARE_API_TOKEN`) and the test
   you want to update.
   Example of updating the DNS CAA record test with a zone I own:
+
 ```bash
   OVERWRITE_VCR_CASSETTES=true \
     CLOUDFLARE_DOMAIN="terraform.cfapi.net" \
@@ -336,4 +338,5 @@ will need to:
     TESTARGS="-run '^TestResourceGeneration/cloudflare_record_caa'"  \
     make test
 ```
+
 - Commit your changes and push them via a Pull Request.

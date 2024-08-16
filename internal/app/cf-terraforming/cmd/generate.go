@@ -122,6 +122,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
+
+				// Remap list of policy objects to list of policy IDs
+				for i := 0; i < resourceCount; i++ {
+					var policyIds []string
+					for _, policy := range jsonStructData[i].(map[string]interface{})["policies"].([]interface{}) {
+						policyIds = append(policyIds, policy.(map[string]interface{})["id"].(string))
+					}
+					jsonStructData[i].(map[string]interface{})["policies"] = policyIds
+				}
 			case "cloudflare_access_group":
 				jsonPayload, _, err := api.ListAccessGroups(context.Background(), identifier, cloudflare.ListAccessGroupsParams{})
 				if err != nil {

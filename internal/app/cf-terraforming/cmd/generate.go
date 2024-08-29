@@ -699,7 +699,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 			case "cloudflare_record":
-				simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS", "PTR"}
 				jsonPayload, _, err := api.ListDNSRecords(context.Background(), identifier, cloudflare.ListDNSRecordsParams{})
 				if err != nil {
 					log.Fatal(err)
@@ -718,12 +717,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 					if jsonStructData[i].(map[string]interface{})["name"].(string) != jsonStructData[i].(map[string]interface{})["zone_name"].(string) {
 						jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+jsonStructData[i].(map[string]interface{})["zone_name"].(string), "")
-					}
-
-					// We only want to remap the "value" to the "content" value for simple
-					// DNS types as the aggregate types use `data` for the structure.
-					if contains(simpleDNSTypes, jsonStructData[i].(map[string]interface{})["type"].(string)) {
-						jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
 					}
 				}
 			case "cloudflare_ruleset":

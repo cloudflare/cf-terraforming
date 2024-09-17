@@ -5,5 +5,6 @@ resource "cloudflare_bot_management" "terraform_managed_resource" {
   sbfm_likely_automated           = "managed_challenge"
   sbfm_static_resource_protection = false
   sbfm_verified_bots              = "allow"
+  ai_bots_protection              = "block"
   zone_id                         = "0da42c8d2132a9ddaf714f9e7c920711"
 }

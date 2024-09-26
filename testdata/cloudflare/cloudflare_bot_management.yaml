@@ -19,6 +19,7 @@ interactions:
         "messages": [],
         "result": {
           "enable_js": true,
+          "ai_bots_protection": "block",
           "sbfm_definitely_automated": "block",
           "sbfm_likely_automated": "managed_challenge",
           "sbfm_verified_bots": "allow",

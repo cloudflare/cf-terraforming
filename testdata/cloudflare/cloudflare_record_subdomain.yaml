@@ -7,6 +7,62 @@ interactions:
     headers:
       Content-Type:
       - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "0da42c8d2132a9ddaf714f9e7c920711",
+          "name": "example.com",
+          "status": "active",
+          "paused": false,
+          "type": "full",
+          "development_mode": 0,
+          "name_servers": [
+            "amy.ns.cloudflare.com",
+            "mark.ns.cloudflare.com"
+          ],
+          "original_name_servers": [
+            "abby.ns.cloudflare.com",
+            "noel.ns.cloudflare.com"
+          ],
+          "original_registrar": "namecheap, inc. (id: 1068)",
+          "original_dnshost": null,
+          "modified_on": "2024-06-06T07:48:29.003893Z",
+          "created_on": "2021-07-21T03:44:16.375808Z",
+          "activated_on": "2021-07-21T03:58:43.615595Z",
+          "plan": {
+            "id": "0feeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "name": "Free Website",
+            "price": 0,
+            "currency": "USD",
+            "frequency": "",
+            "is_subscribed": false,
+            "can_subscribe": false,
+            "legacy_id": "free",
+            "legacy_discount": false,
+            "externally_managed": false
+          }
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
     url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records?page=1&per_page=100
     method: GET
   response:
@@ -15,8 +71,6 @@ interactions:
         "result": [
           {
             "id": "372e67954025e0ba6aaa6d586b9e0b59",
-            "zone_id": "0da42c8d2132a9ddaf714f9e7c920711",
-            "zone_name": "example.com",
             "name": "subdomain",
             "type": "A",
             "content": "198.51.100.4",

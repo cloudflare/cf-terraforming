@@ -711,12 +711,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					log.Fatal(err)
 				}
 
+				zone, _ := api.ZoneDetails(context.Background(), identifier.Identifier)
+
 				for i := 0; i < resourceCount; i++ {
 					// Drop the proxiable values as they are not usable
 					jsonStructData[i].(map[string]interface{})["proxiable"] = nil
+					jsonStructData[i].(map[string]interface{})["value"] = nil
 
-					if jsonStructData[i].(map[string]interface{})["name"].(string) != jsonStructData[i].(map[string]interface{})["zone_name"].(string) {
-						jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+jsonStructData[i].(map[string]interface{})["zone_name"].(string), "")
+					if jsonStructData[i].(map[string]interface{})["name"].(string) != zone.Name {
+						jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+zone.Name, "")
 					}
 				}
 			case "cloudflare_ruleset":

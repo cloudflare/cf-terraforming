@@ -22,7 +22,7 @@ interactions:
               "id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
               "kind": "redirect",
               "modified_on": "2020-01-10T14:00:00Z",
-              "name": "redirect-list",
+              "name": "redirect_list",
               "num_items": 1,
               "num_referencing_filters": 2
             }

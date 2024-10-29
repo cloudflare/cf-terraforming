@@ -492,6 +492,88 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
+			case "cloudflare_list":
+				jsonPayload, err := api.ListLists(context.Background(), identifier, cloudflare.ListListsParams{})
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				m, err := json.Marshal(jsonPayload)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				if err = json.Unmarshal(m, &jsonStructData); err != nil {
+					log.Fatal(err)
+				}
+				resourceCount = len(jsonPayload)
+
+				for i := 0; i < resourceCount; i++ {
+					listID := jsonPayload[i].ID
+					kind := jsonPayload[i].Kind
+
+					listItems, err := api.ListListItems(context.Background(), identifier, cloudflare.ListListItemsParams{ID: listID})
+					if err != nil {
+						log.Fatal(err)
+					}
+					items := make([]interface{}, 0)
+
+					for _, listItem := range listItems {
+						if kind == "" {
+							continue
+						}
+
+						value := map[string]interface{}{}
+						switch kind {
+						case "ip":
+							if listItem.IP == nil {
+								continue
+							}
+							value["ip"] = *listItem.IP
+						case "asn":
+							if listItem.ASN == nil {
+								continue
+							}
+							value["asn"] = int(*listItem.ASN)
+						case "hostname":
+							if listItem.Hostname == nil {
+								continue
+							}
+							value["hostname"] = map[string]interface{}{
+								"url_hostname": listItem.Hostname.UrlHostname,
+							}
+						case "redirect":
+							if listItem.Redirect == nil {
+								continue
+							}
+							redirect := map[string]interface{}{
+								"source_url": listItem.Redirect.SourceUrl,
+								"target_url": listItem.Redirect.TargetUrl,
+							}
+							if listItem.Redirect.IncludeSubdomains != nil {
+								redirect["include_subdomains"] = boolToEnabledOrDisabled(*listItem.Redirect.IncludeSubdomains)
+							}
+							if listItem.Redirect.SubpathMatching != nil {
+								redirect["subpath_matching"] = boolToEnabledOrDisabled(*listItem.Redirect.SubpathMatching)
+							}
+							if listItem.Redirect.StatusCode != nil {
+								redirect["status_code"] = *listItem.Redirect.StatusCode
+							}
+							if listItem.Redirect.PreserveQueryString != nil {
+								redirect["preserve_query_string"] = boolToEnabledOrDisabled(*listItem.Redirect.PreserveQueryString)
+							}
+							if listItem.Redirect.PreservePathSuffix != nil {
+								redirect["preserve_path_suffix"] = boolToEnabledOrDisabled(*listItem.Redirect.PreservePathSuffix)
+							}
+							value["redirect"] = redirect
+						}
+						items = append(items, map[string]interface{}{
+							"comment": listItem.Comment,
+							"value":   value,
+						})
+					}
+					jsonStructData[i].(map[string]interface{})["item"] = items
+				}
 			case "cloudflare_load_balancer":
 				jsonPayload, err := api.ListLoadBalancers(context.Background(), identifier, cloudflare.ListLoadBalancerParams{})
 				if err != nil {
@@ -708,7 +790,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 			case "cloudflare_record":
-				simpleDNSTypes := []string{"A", "AAAA", "CNAME", "TXT", "MX", "NS", "PTR"}
 				jsonPayload, _, err := api.ListDNSRecords(context.Background(), identifier, cloudflare.ListDNSRecordsParams{})
 				if err != nil {
 					log.Fatal(err)
@@ -721,18 +802,15 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					log.Fatal(err)
 				}
 
+				zone, _ := api.ZoneDetails(context.Background(), identifier.Identifier)
+
 				for i := 0; i < resourceCount; i++ {
 					// Drop the proxiable values as they are not usable
 					jsonStructData[i].(map[string]interface{})["proxiable"] = nil
+					jsonStructData[i].(map[string]interface{})["value"] = nil
 
-					if jsonStructData[i].(map[string]interface{})["name"].(string) != jsonStructData[i].(map[string]interface{})["zone_name"].(string) {
-						jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+jsonStructData[i].(map[string]interface{})["zone_name"].(string), "")
-					}
-
-					// We only want to remap the "value" to the "content" value for simple
-					// DNS types as the aggregate types use `data` for the structure.
-					if contains(simpleDNSTypes, jsonStructData[i].(map[string]interface{})["type"].(string)) {
-						jsonStructData[i].(map[string]interface{})["value"] = jsonStructData[i].(map[string]interface{})["content"]
+					if jsonStructData[i].(map[string]interface{})["name"].(string) != zone.Name {
+						jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+zone.Name, "")
 					}
 				}
 			case "cloudflare_ruleset":

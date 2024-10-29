@@ -1,4 +1,5 @@
 resource "cloudflare_bot_management" "terraform_managed_resource" {
+  ai_bots_protection              = "block"
   enable_js                       = true
   optimize_wordpress              = true
   sbfm_definitely_automated       = "block"

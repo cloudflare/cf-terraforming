@@ -10,7 +10,6 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
       overrides {
         sensitivity_level = "medium"
       }
-      version = "latest"
     }
     description = "zone"
     enabled     = true

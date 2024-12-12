@@ -69,7 +69,6 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
           id     = "34158d546873469a8f8ccee19139627b"
         }
       }
-      version = "latest"
     }
     description = "zone"
     enabled     = false

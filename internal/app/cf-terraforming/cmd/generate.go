@@ -108,7 +108,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			var (
 				jsonStructData []interface{}
-				params         map[string]interface{}
 				result         *http.Response
 			)
 
@@ -130,7 +129,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			client := cloudflare.NewClient()
 
-			err := client.Get(context.Background(), endpoint, params, &result)
+			err := client.Get(context.Background(), endpoint, nil, &result)
 			if err != nil {
 				log.Fatalf("failed to fetch API endpoint: %s", err)
 			}

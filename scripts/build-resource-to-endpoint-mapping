@@ -21,9 +21,7 @@ end
 
 def list_endpoint(v)
   operation = v.dig("methods", "list")
-  if operation.nil?
-    return nil
-  end
+  return nil if operation.nil?
 
   # if we have a hash it means the endpoint has a
   # nested structure and we need the `endpoint` value

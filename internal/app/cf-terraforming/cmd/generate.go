@@ -112,8 +112,21 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				result         *http.Response
 			)
 
+			endpoint := resourceToEndpoint[resourceType]
+
+			// if we encounter a combined endpoint, we need to rewrite to use the correct
+			// endpoint depending on what parameters are being provided.
+			if strings.Contains(endpoint, "{account_or_zone}") {
+				if accountID != "" {
+					endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
+				} else {
+					endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
+				}
+			}
+
+			// replace the URL placeholders with the actual values we have.
 			placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
-			endpoint := placeholderReplacer.Replace(resourceToEndpoint[resourceType])
+			endpoint = placeholderReplacer.Replace(endpoint)
 
 			client := cloudflare.NewClient()
 

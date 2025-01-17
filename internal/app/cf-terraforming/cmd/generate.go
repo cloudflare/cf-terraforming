@@ -100,11 +100,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			r := s.ResourceSchemas[resourceType]
 			log.Debugf("beginning to read and build %q resources", resourceType)
 
-			if resourceToEndpoint[resourceType] == "" {
-				log.Debugf("did not find API endpoint for %q. skipping...", resourceType)
-				continue
-			}
-
 			// Initialise `resourceCount` outside of the switch for supported resources
 			// to allow it to be referenced further down in the loop that outputs the
 			// newly generated resources.
@@ -112,6 +107,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			var jsonStructData []interface{}
 
 			if strings.HasPrefix(providerVersionString, "5") {
+				if resourceToEndpoint[resourceType] == "" {
+					log.Debugf("did not find API endpoint for %q. skipping...", resourceType)
+					continue
+				}
+
 				var result *http.Response
 
 				endpoint := resourceToEndpoint[resourceType]

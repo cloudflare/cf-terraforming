@@ -4,6 +4,8 @@ run:
   tests: true
   skip-dirs-use-default: true
   modules-download-mode: readonly
+  skip-files:
+    - internal/app/cf-terraforming/cmd/resource_to_endpoint_mapping.go
 
 linters:
   disable-all: true

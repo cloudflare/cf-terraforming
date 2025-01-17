@@ -205,6 +205,13 @@ existing binary, or you wish to provide a Terraform compatible binary (such as
 
 ## Supported Resources
 
+### v5
+
+Any resource that is released within the Terraform Provider is automatically
+supported for generation. Import support is not yet implemented.
+
+### v4
+
 Any resources not listed are currently not supported.
 
 | Resource                                                                                                                                         | Resource Scope  | Generate Supported | Import Supported |

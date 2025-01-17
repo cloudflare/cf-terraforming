@@ -3,7 +3,8 @@ resource "cloudflare_teams_location" "terraform_managed_resource" {
   client_default = false
   ecs_support    = false
   name           = "Austin Office Location"
-  networks {
+  networks = [{
+    id      = ""
     network = "192.0.2.1/32"
-  }
+  }]
 }

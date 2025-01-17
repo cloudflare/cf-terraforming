@@ -143,7 +143,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 				value := gjson.Get(string(body), "result")
-				json.Unmarshal([]byte(value.String()), &jsonStructData)
+				err = json.Unmarshal([]byte(value.String()), &jsonStructData)
+				if err != nil {
+					log.Fatalf("failed to unmarshal result: %s", err)
+				}
 
 				resourceCount = len(jsonStructData)
 			} else {

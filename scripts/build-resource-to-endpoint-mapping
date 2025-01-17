@@ -12,44 +12,85 @@ mappingPath = "internal/app/cf-terraforming/cmd/resource_to_endpoint_mapping.go"
 output = ""
 
 def terraform_name(v)
-  return v.dig("terraform", "name") || ""
+  if v.is_a?(Hash)
+    # don't generate if we've explicitly disabled the resource
+    return nil if v.dig("terraform") == false
+    return nil if v.dig("terraform", "resource") == false
+
+    return v.dig("terraform", "name")
+  elsif v.is_a?(String)
+    return v
+  end
+
+  return nil
 end
 
 def has_subresources(v)
-  return !v["subresources"].nil?
+  return false unless v.is_a?(Hash)
+  return v.has_key?("subresources")
 end
 
 def list_endpoint(v)
-  operation = v.dig("methods", "list")
-  return nil if operation.nil?
+  return nil unless v.is_a?(Hash)
+  list_operation = v.dig("methods", "list")
+  get_operation = v.dig("methods", "get")
+
+  return nil if list_operation.nil? && get_operation.nil?
+
+  if list_operation.is_a?(String)
+    return nil if !list_operation.start_with?("get")
+    return list_operation.delete_prefix("get ")
+  end
+
+  if list_operation.is_a?(String)
+    return nil if !list_operation.start_with?("get")
+  end
+
+  if get_operation.is_a?(String)
+    return nil if !get_operation.start_with?("get")
+    return get_operation.delete_prefix("get ")
+  end
+
+  if get_operation.is_a?(String)
+    return nil if !get_operation.start_with?("get")
+  end
 
   # if we have a hash it means the endpoint has a
   # nested structure and we need the `endpoint` value
   # instead of just the `list` operation value.
-  if operation.is_a?(Hash)
-    return nil if !operation.dig("endpoint").start_with?("get")
-
-    return operation.dig("endpoint").delete_prefix("get ")
+  if list_operation.is_a?(Hash) && !list_operation.nil?
+    return nil if !list_operation.dig("endpoint").start_with?("get")
+    return list_operation.dig("endpoint").delete_prefix("get ")
   end
 
-  return nil if !operation.start_with?("get")
-  return operation.delete_prefix("get ")
+  # if we have a hash it means the endpoint has a
+  # nested structure and we need the `endpoint` value
+  # instead of just the `list` operation value.
+  if get_operation.is_a?(Hash) && !get_operation.nil?
+    return nil if !get_operation.dig("endpoint").start_with?("get")
+    return get_operation.dig("endpoint").delete_prefix("get ")
+  end
+
+  return nil
 end
 
-def has_terraform_configured(output, hash)
-  hash.each do |k, v|
-    next if terraform_name(v) == ""
-    next if list_endpoint(v).nil?
+def build_output(output, config)
+  terraform_name = terraform_name(config)
+  endpoint = list_endpoint(config)
 
-    output << "\"cloudflare_#{terraform_name(v)}\": \"#{list_endpoint(v)}\",\n"
-    has_terraform_configured(output, v["subresources"]) if has_subresources(v)
+  if !terraform_name.nil? && !endpoint.nil?
+    output << "\"cloudflare_#{terraform_name}\": \"#{endpoint}\",\n"
+  end
+
+  return if config["subresources"].nil?
+  config["subresources"].each do |k, v|
+    build_output(output, v)
   end
 end
 
 config["resources"].keys.each do |k, v|
-  c = config["resources"][k].dig("subresources")
-  next if c.nil?
-  has_terraform_configured(output, c)
+  c = config["resources"][k]
+  build_output(output, c)
 end
 
 

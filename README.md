@@ -203,6 +203,18 @@ existing binary, or you wish to provide a Terraform compatible binary (such as
 `CLOUDFLARE_TERRAFORM_BINARY_PATH` environment variable to instruct
 `cf-terraforming` which you expect to use.
 
+## CDKTF
+
+If you'd like to use [cdktf](https://developer.hashicorp.com/terraform/cdktf)
+for your project resources, you can pipe the output from `cf-terraforming` into 
+`cdktf convert` in order to correctly generate CDKTF output automatically.
+
+Example:
+
+```
+$ cf-terraforming generate --resource-type "cloudflare_record" --zone "0da42c8d2132a9ddaf714f9e7c920711" | cdktf convert --language "typescript" --provider "cloudflare/cloudflare"
+```
+
 ## Supported Resources
 
 ### v5

@@ -212,7 +212,10 @@ for your project resources, you can pipe the output from `cf-terraforming` into
 Example:
 
 ```
-$ cf-terraforming generate --resource-type "cloudflare_record" --zone "0da42c8d2132a9ddaf714f9e7c920711" | cdktf convert --language "typescript" --provider "cloudflare/cloudflare"
+cf-terraforming generate \
+  --resource-type "cloudflare_record" \
+  --zone "0da42c8d2132a9ddaf714f9e7c920711" \
+| cdktf convert --language "typescript" --provider "cloudflare/cloudflare"
 ```
 
 ## Supported Resources

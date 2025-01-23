@@ -108,14 +108,20 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			var jsonStructData []interface{}
 
 			if strings.HasPrefix(providerVersionString, "5") {
-				if resourceToEndpoint[resourceType] == "" {
-					log.Debugf("did not find API endpoint for %q. skipping...", resourceType)
+				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
+					log.Debugf("did not find API endpoint for %q. does it exist in the mapping?", resourceType)
 					continue
 				}
 
 				var result *http.Response
 
-				endpoint := resourceToEndpoint[resourceType]
+				// by default, we want to use the `list` operation however, there are times
+				// when resources exist only as `get` operations but contain multiple
+				// resources.
+				endpoint := resourceToEndpoint[resourceType]["list"]
+				if endpoint == "" {
+					endpoint = resourceToEndpoint[resourceType]["get"]
+				}
 
 				// if we encounter a combined endpoint, we need to rewrite to use the correct
 				// endpoint depending on what parameters are being provided.

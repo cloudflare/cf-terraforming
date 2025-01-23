@@ -151,6 +151,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 				value := gjson.Get(string(body), "result")
+				if value.Type == gjson.Null {
+					log.Debugf("no result found at %s. skipping...", endpoint)
+					continue
+				}
 				err = json.Unmarshal([]byte(value.String()), &jsonStructData)
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)

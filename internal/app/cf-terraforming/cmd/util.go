@@ -16,6 +16,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/tidwall/gjson"
 	"github.com/zclconf/go-cty/cty"
 )
 
@@ -317,4 +318,11 @@ func boolToEnabledOrDisabled(value bool) string {
 		return "enabled"
 	}
 	return "disabled"
+}
+
+// modifyResponsePayload takes the current resource and the `gjson.Result`
+// to run arbitary modifications to the JSON before passing it to be overlayed
+// the provider schema.
+func modifyResponsePayload(resourceName string, value gjson.Result) string {
+	return value.String()
 }

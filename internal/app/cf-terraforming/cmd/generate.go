@@ -174,7 +174,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}).Debug("no result found")
 					continue
 				}
-				err = json.Unmarshal([]byte(value.String()), &jsonStructData)
+
+				modifiedJSON := modifyResponsePayload(resourceType, value)
+				err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)
 				}
@@ -1418,7 +1420,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			log.WithFields(logrus.Fields{
 				"count":    resourceCount,
 				"resource": resourceType,
-			}).Debug("found resources to generate output for")
+			}).Debug("generating resource output")
 
 			// If we don't have any resources to generate, just bail out early.
 			if resourceCount == 0 {

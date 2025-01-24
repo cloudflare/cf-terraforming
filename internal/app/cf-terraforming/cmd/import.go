@@ -20,6 +20,7 @@ import (
 	"github.com/hashicorp/hc-install/releases"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/hashicorp/terraform-exec/tfexec"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tidwall/gjson"
@@ -121,7 +122,9 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 		_, providerVersion, err := tf.Version(context.Background(), true)
 		providerVersionString = providerVersion[providerRegistryHostname+"/cloudflare/cloudflare"].String()
-		log.Debugf("detected provider version: %s", providerVersionString)
+		log.WithFields(logrus.Fields{
+			"version": providerVersionString,
+		}).Debug("detected provider")
 
 		var jsonStructData []interface{}
 
@@ -152,6 +155,15 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
 				endpoint = placeholderReplacer.Replace(endpoint)
 
+				if strings.Contains(endpoint, "{") {
+					log.WithFields(logrus.Fields{
+						"resource": resourceType,
+						"endpoint": endpoint,
+					}).Debug("failed to substitute all path placeholders due to unknown parameters")
+
+					continue
+				}
+
 				client := cloudflare.NewClient()
 
 				err := client.Get(context.Background(), endpoint, nil, &result)
@@ -159,7 +171,11 @@ func runImport() func(cmd *cobra.Command, args []string) {
 					var apierr *cloudflare.Error
 					if errors.As(err, &apierr) {
 						if apierr.StatusCode == http.StatusNotFound {
-							log.Debugf("no resources found at %s. skipping...", endpoint)
+							log.WithFields(logrus.Fields{
+								"resource": resourceType,
+								"endpoint": endpoint,
+							}).Debug("no resources found")
+
 							continue
 						}
 					}
@@ -173,7 +189,11 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 				value := gjson.Get(string(body), "result")
 				if value.Type == gjson.Null {
-					log.Debugf("no result found at %s. skipping...", endpoint)
+					log.WithFields(logrus.Fields{
+						"resource": resourceType,
+						"endpoint": endpoint,
+					}).Debug("no result found")
+
 					continue
 				}
 				err = json.Unmarshal([]byte(value.String()), &jsonStructData)

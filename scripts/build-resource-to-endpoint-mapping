@@ -11,6 +11,20 @@ config = YAML.load_file(ARGV[0])
 mappingPath = "internal/app/cf-terraforming/cmd/resource_to_endpoint_mapping.go"
 output = ""
 
+def skipped_resource?(terraform_name)
+  [
+    # deprecated and backend service support automatic migrations
+    "firewall_rule",
+    "firewall_filter",
+
+    # doesn't work with outer wrap parameters
+    "cloud_connector_rules",
+
+    # terraform can't get the content (may be bundled, etc)
+    "workers_script"
+  ].include?(terraform_name)
+end
+
 def terraform_name(v)
   if v.is_a?(Hash)
     # don't generate if we've explicitly disabled the resource
@@ -80,13 +94,12 @@ def build_output(output, config)
   terraform_name = terraform_name(config)
   endpoint = list_endpoint(config)
 
-  if !terraform_name.nil? && !endpoint.nil?
+  if !terraform_name.nil? && !endpoint.nil? && !skipped_resource?(terraform_name)
     output << "
     \"cloudflare_#{terraform_name}\": map[string]string{
       \"list\":\"#{endpoint[:list]}\",
       \"get\":\"#{endpoint[:get]}\",
     },"
-    # output << ": \"\",\n"
   end
 
   return if config["subresources"].nil?

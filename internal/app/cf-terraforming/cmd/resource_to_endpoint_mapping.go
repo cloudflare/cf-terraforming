@@ -175,10 +175,6 @@ var resourceToEndpoint = map[string]map[string]string{
 		"list": "/zones/{zone_id}/firewall/lockdowns",
 		"get":  "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}",
 	},
-	"cloudflare_firewall_rule": {
-		"list": "/zones/{zone_id}/firewall/rules",
-		"get":  "/zones/{zone_id}/firewall/rules/{rule_id}",
-	},
 	"cloudflare_access_rule": {
 		"list": "/{account_or_zone}/{account_or_zone_id}/firewall/access_rules/rules",
 		"get":  "/{account_or_zone}/{account_or_zone_id}/firewall/access_rules/rules/{rule_id}",
@@ -242,10 +238,6 @@ var resourceToEndpoint = map[string]map[string]string{
 	"cloudflare_web3_hostname": {
 		"list": "/zones/{zone_id}/web3/hostnames",
 		"get":  "/zones/{zone_id}/web3/hostnames/{identifier}",
-	},
-	"cloudflare_workers_script": {
-		"list": "/accounts/{account_id}/workers/scripts",
-		"get":  "/accounts/{account_id}/workers/scripts/{script_name}",
 	},
 	"cloudflare_workers_script_subdomain": {
 		"list": "",
@@ -690,10 +682,6 @@ var resourceToEndpoint = map[string]map[string]string{
 	"cloudflare_cloudforce_one_request_asset": {
 		"list": "",
 		"get":  "/accounts/{account_identifier}/cloudforce-one/requests/{request_identifier}/asset/{asset_identifer}",
-	},
-	"cloudflare_cloud_connector_rules": {
-		"list": "/zones/{zone_id}/cloud_connector/rules",
-		"get":  "",
 	},
 	"cloudflare_leaked_credential_check": {
 		"list": "",

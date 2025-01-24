@@ -18,6 +18,7 @@ import (
 	"github.com/hashicorp/hc-install/releases"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/hashicorp/terraform-exec/tfexec"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tidwall/gjson"
@@ -83,7 +84,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		_, providerVersion, err := tf.Version(context.Background(), true)
 		providerVersionString := providerVersion[providerRegistryHostname+"/cloudflare/cloudflare"].String()
-		log.Debugf("detected provider version: %s", providerVersionString)
+		log.WithFields(logrus.Fields{
+			"version": providerVersionString,
+		}).Debug("detected provider")
 
 		log.Debug("reading Terraform schema for Cloudflare provider")
 		ps, err := tf.ProvidersSchema(context.Background())
@@ -99,7 +102,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		resources := strings.Split(resourceType, ",")
 		for _, resourceType := range resources {
 			r := s.ResourceSchemas[resourceType]
-			log.Debugf("beginning to read and build %q resources", resourceType)
+			log.WithFields(logrus.Fields{
+				"resource": resourceType,
+			}).Debug("reading and building resource")
 
 			// Initialise `resourceCount` outside of the switch for supported resources
 			// to allow it to be referenced further down in the loop that outputs the
@@ -109,7 +114,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			if strings.HasPrefix(providerVersionString, "5") {
 				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
-					log.Debugf("did not find API endpoint for %q. does it exist in the mapping?", resourceType)
+					log.WithFields(logrus.Fields{
+						"resource": resourceType,
+					}).Debug("did not find API endpoint. does it exist in the mapping?")
 					continue
 				}
 
@@ -144,7 +151,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					var apierr *cloudflare.Error
 					if errors.As(err, &apierr) {
 						if apierr.StatusCode == http.StatusNotFound {
-							log.Debugf("no resources found at %s. skipping...", endpoint)
+							log.WithFields(logrus.Fields{
+								"resource": resourceType,
+								"endpoint": endpoint,
+							}).Debug("no resources found")
 							continue
 						}
 					}
@@ -158,7 +168,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				value := gjson.Get(string(body), "result")
 				if value.Type == gjson.Null {
-					log.Debugf("no result found at %s. skipping...", endpoint)
+					log.WithFields(logrus.Fields{
+						"resource": resourceType,
+						"endpoint": endpoint,
+					}).Debug("no result found")
 					continue
 				}
 				err = json.Unmarshal([]byte(value.String()), &jsonStructData)
@@ -1402,7 +1415,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 			}
 
-			log.Debugf("found %d resources to write out for %q", resourceCount, resourceType)
+			log.WithFields(logrus.Fields{
+				"count":    resourceCount,
+				"resource": resourceType,
+			}).Debug("found resources to generate output for")
 
 			// If we don't have any resources to generate, just bail out early.
 			if resourceCount == 0 {

@@ -83,6 +83,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		_, providerVersion, err := tf.Version(context.Background(), true)
+		if err != nil {
+			log.Fatalf("failed to retrieve terraform and provider version information: %s", err)
+		}
+
 		providerVersionString := providerVersion[providerRegistryHostname+"/cloudflare/cloudflare"].String()
 		log.WithFields(logrus.Fields{
 			"version": providerVersionString,

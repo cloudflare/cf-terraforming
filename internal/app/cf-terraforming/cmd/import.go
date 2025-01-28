@@ -200,7 +200,9 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 					continue
 				}
-				err = json.Unmarshal([]byte(value.String()), &jsonStructData)
+
+				modifiedJSON := modifyResponsePayload(resourceType, value)
+				err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)
 				}
@@ -753,10 +755,18 @@ func buildRawImportAddress(resourceType, resourceID, endpoint string) string {
 		r, _ := regexp.Compile("({[a-z0-9_]*})")
 		matches := r.FindAllString(endpoint, -1)
 
-		if len(matches) == 1 {
-			matches[0] = resourceID
-		} else {
-			matches[1] = resourceID
+		if len(matches) > 0 {
+			// Naive assumptions below but if we only have a single placeholder (`{}`)
+			// we can replace that with the `resourceID` however, if we have more than
+			// a single one, we assume it is the second match since that is our URL
+			// conventions.
+			//
+			// Note: this will likely break on un-RESTful routes.
+			if len(matches) == 1 {
+				matches[0] = resourceID
+			} else {
+				matches[1] = resourceID
+			}
 		}
 
 		output := strings.Join(matches, "/")

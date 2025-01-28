@@ -320,9 +320,23 @@ func boolToEnabledOrDisabled(value bool) string {
 	return "disabled"
 }
 
+// transformToCollection takes a JSON payload that is a singlular resource but
+// operates as a `list` endpoint and transforms it into a JSON to correctly
+// handle the output.
+func transformToCollection(value string) string {
+	return fmt.Sprintf("[%s]", value)
+}
+
 // modifyResponsePayload takes the current resource and the `gjson.Result`
 // to run arbitary modifications to the JSON before passing it to be overlayed
 // the provider schema.
 func modifyResponsePayload(resourceName string, value gjson.Result) string {
-	return value.String()
+	output := value.String()
+
+	switch resourceName {
+	case "cloudflare_zero_trust_organization":
+		output = transformToCollection(output)
+	}
+
+	return output
 }

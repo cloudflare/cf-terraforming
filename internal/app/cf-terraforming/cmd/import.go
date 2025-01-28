@@ -689,7 +689,19 @@ func runImport() func(cmd *cobra.Command, args []string) {
 		importBody := importFile.Body()
 
 		for _, data := range jsonStructData {
-			id := data.(map[string]interface{})["id"].(string)
+			var id string
+
+			if data.(map[string]interface{})["id"] == nil {
+				if accountID != "" {
+					id = accountID
+				}
+
+				if zoneID != "" {
+					id = zoneID
+				}
+			} else {
+				id = data.(map[string]interface{})["id"].(string)
+			}
 
 			if useModernImportBlock {
 				idvalue := buildRawImportAddress(resourceType, id, resourceToEndpoint[resourceType]["get"])

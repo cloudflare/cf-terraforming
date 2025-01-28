@@ -1446,7 +1446,17 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					case float64:
 						id = fmt.Sprintf("%f", structData["id"].(float64))
 					default:
-						id = structData["id"].(string)
+						if structData["id"] == nil {
+							if accountID != "" {
+								id = accountID
+							}
+
+							if zoneID != "" {
+								id = zoneID
+							}
+						} else {
+							id = structData["id"].(string)
+						}
 					}
 
 					resourceID = fmt.Sprintf("terraform_managed_resource_%s", id)

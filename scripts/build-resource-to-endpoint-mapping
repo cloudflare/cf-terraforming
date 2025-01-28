@@ -58,17 +58,9 @@ def list_endpoint(v)
     output[:list] = list_operation.delete_prefix("get ")
   end
 
-  if list_operation.is_a?(String)
-    return { list: nil, get: nil } if !list_operation.start_with?("get")
-  end
-
   if get_operation.is_a?(String)
     return { list: nil, get: nil } if !get_operation.start_with?("get")
     output[:get] = get_operation.delete_prefix("get ")
-  end
-
-  if get_operation.is_a?(String)
-    return { list: nil, get: nil } if !get_operation.start_with?("get")
   end
 
   # if we have a hash it means the endpoint has a
@@ -98,7 +90,7 @@ def build_output(output, config)
     output << "
     \"cloudflare_#{terraform_name}\": map[string]string{
       \"list\":\"#{endpoint[:list]}\",
-      \"get\":\"#{endpoint[:get]}\",
+      \"get\":\"#{!endpoint[:get].nil? ? endpoint[:get] : endpoint[:list]}\",
     },"
   end
 

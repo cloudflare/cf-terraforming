@@ -277,7 +277,7 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_api_shield_discovery_operation": {
 		"list": "/zones/{zone_id}/api_gateway/discovery/operations",
-		"get":  "",
+		"get":  "/zones/{zone_id}/api_gateway/discovery/operations",
 	},
 	"cloudflare_api_shield_operation": {
 		"list": "/zones/{zone_id}/api_gateway/operations",
@@ -297,7 +297,7 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_managed_transforms": {
 		"list": "/zones/{zone_id}/managed_headers",
-		"get":  "",
+		"get":  "/zones/{zone_id}/managed_headers",
 	},
 	"cloudflare_page_shield_policy": {
 		"list": "/zones/{zone_id}/page_shield/policies",
@@ -453,7 +453,7 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_r2_managed_domain": {
 		"list": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed",
-		"get":  "",
+		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed",
 	},
 	"cloudflare_workers_for_platforms_dispatch_namespace": {
 		"list": "/accounts/{account_id}/workers/dispatch/namespaces",
@@ -505,7 +505,7 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_zero_trust_organization": {
 		"list": "/{account_or_zone}/{account_or_zone_id}/access/organizations",
-		"get":  "",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/organizations",
 	},
 	"cloudflare_zero_trust_access_infrastructure_target": {
 		"list": "/accounts/{account_id}/infrastructure/targets",
@@ -577,11 +577,11 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_zero_trust_gateway_categories": {
 		"list": "/accounts/{account_id}/gateway/categories",
-		"get":  "",
+		"get":  "/accounts/{account_id}/gateway/categories",
 	},
 	"cloudflare_zero_trust_gateway_app_types": {
 		"list": "/accounts/{account_id}/gateway/app_types",
-		"get":  "",
+		"get":  "/accounts/{account_id}/gateway/app_types",
 	},
 	"cloudflare_zero_trust_gateway_settings": {
 		"list": "",
@@ -637,7 +637,7 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_web_analytics_rule": {
 		"list": "/accounts/{account_id}/rum/v2/{ruleset_id}/rules",
-		"get":  "",
+		"get":  "/accounts/{account_id}/rum/v2/{ruleset_id}/rules",
 	},
 	"cloudflare_bot_management": {
 		"list": "",
@@ -657,7 +657,7 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_snippet_rules": {
 		"list": "/zones/{zone_id}/snippets/snippet_rules",
-		"get":  "",
+		"get":  "/zones/{zone_id}/snippets/snippet_rules",
 	},
 	"cloudflare_calls_sfu_app": {
 		"list": "/accounts/{account_id}/calls/apps",
@@ -689,7 +689,7 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_leaked_credential_check_rule": {
 		"list": "/zones/{zone_id}/leaked-credential-checks/detections",
-		"get":  "",
+		"get":  "/zones/{zone_id}/leaked-credential-checks/detections",
 	},
 	"cloudflare_content_scanning": {
 		"list": "",
@@ -697,6 +697,6 @@ var resourceToEndpoint = map[string]map[string]string{
 	},
 	"cloudflare_content_scanning_expression": {
 		"list": "/zones/{zone_id}/content-upload-scan/payloads",
-		"get":  "",
+		"get":  "/zones/{zone_id}/content-upload-scan/payloads",
 	},
 }

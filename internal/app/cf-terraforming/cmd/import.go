@@ -15,6 +15,7 @@ import (
 
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
@@ -169,6 +170,11 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				}
 
 				client := cloudflare.NewClient()
+				if apiToken != "" {
+					client.Options = append(client.Options, option.WithAPIToken(apiToken))
+				} else {
+					client.Options = append(client.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
+				}
 
 				err := client.Get(context.Background(), endpoint, nil, &result)
 				if err != nil {

@@ -223,7 +223,7 @@ cf-terraforming generate \
 ### v5
 
 Any resource that is released within the Terraform Provider is automatically
-supported for generation. Import support is not yet implemented.
+supported for generation and import.
 
 ### v4
 

@@ -76,7 +76,7 @@ export CLOUDFLARE_ZONE_ID='81b06ss3228f488fh84e5e993c2dc17'
 
 # now call cf-terraforming, e.g.
 cf-terraforming generate \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --zone $CLOUDFLARE_ZONE_ID
 ```
 
@@ -101,14 +101,14 @@ token: "<token>"
 ```bash
 cf-terraforming generate \
   --zone $CLOUDFLARE_ZONE_ID \
-  --resource-type "cloudflare_record"
+  --resource-type "cloudflare_dns_record"
 ```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform
 configuration representing the **resource** you requested:
 
 ```hcl
-resource "cloudflare_record" "terraform_managed_resource" {
+resource "cloudflare_dns_record" "terraform_managed_resource" {
   name = "example.com"
   proxied = false
   ttl = 120
@@ -166,7 +166,7 @@ output your resources.
 ```
 # All versions of Terraform
 cf-terraforming import \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --email $CLOUDFLARE_EMAIL \
   --key $CLOUDFLARE_API_KEY \
   --zone $CLOUDFLARE_ZONE_ID
@@ -175,7 +175,7 @@ cf-terraforming import \
 ```
 # Terraform 1.5+ only
 cf-terraforming import \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --modern-import-block \
   --email $CLOUDFLARE_EMAIL \
   --key $CLOUDFLARE_API_KEY \
@@ -213,7 +213,7 @@ Example:
 
 ```
 cf-terraforming generate \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --zone "0da42c8d2132a9ddaf714f9e7c920711" \
 | cdktf convert --language "typescript" --provider "cloudflare/cloudflare"
 ```
@@ -266,7 +266,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_origin_ca_certificate](https://www.terraform.io/docs/providers/cloudflare/r/origin_ca_certificate)                                   | Zone            | ✅                 | ✅               |
 | [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule)                                                           | Zone            | ✅                 | ✅               |
 | [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit)                                                         | Zone            | ✅                 | ✅               |
-| [cloudflare_record](https://www.terraform.io/docs/providers/cloudflare/r/record)                                                                 | Zone            | ✅                 | ✅               |
+| [cloudflare_dns_record](https://www.terraform.io/docs/providers/cloudflare/r/record)                                                                 | Zone            | ✅                 | ✅               |
 | [cloudflare_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/ruleset)                                                               | Account or Zone | ✅                 | ✅               |
 | [cloudflare_spectrum_application](https://www.terraform.io/docs/providers/cloudflare/r/spectrum_application)                                     | Zone            | ✅                 | ✅               |
 | [cloudflare_tiered_cache](https://www.terraform.io/docs/providers/cloudflare/r/tiered_cache)                                                     | Zone            | ✅                 | ❌               |
@@ -357,7 +357,7 @@ will need to:
     CLOUDFLARE_DOMAIN="terraform.cfapi.net" \
     CLOUDFLARE_EMAIL="jb@example.com" \
     CLOUDFLARE_API_KEY="..." \
-    TESTARGS="-run '^TestResourceGeneration/cloudflare_record_caa'"  \
+    TESTARGS="-run '^TestResourceGeneration/cloudflare_dns_record_caa'"  \
     make test
 ```
 

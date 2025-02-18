@@ -1,0 +1,51 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/ssl/certificate_packs
+    method: GET
+  response:
+    body: '{"result":[],"result_info":{"page":1,"per_page":20,"total_pages":0,"count":0,"total_count":0},"success":true,"errors":[],"messages":[]}'
+    headers:
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+      Cf-Auditlog-Id:
+      - 019506af-df4f-72bf-bda3-167607e825ea
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Expires:
+      - Sun, 25 Jan 1981 05:00:00 GMT
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000
+      Vary:
+      - accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+    status: 200 OK
+    code: 200
+    duration: ""

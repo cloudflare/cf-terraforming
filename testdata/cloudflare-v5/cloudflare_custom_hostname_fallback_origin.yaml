@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/custom_hostnames/fallback_origin
+    method: GET
+  response:
+    body: '{"success":false,"errors":[{"code":1551,"message":"Resource not found."}],"messages":[]}'
+    headers:
+      Cf-Auditlog-Id:
+      - 019506ad-90d7-7664-aa9b-7d65afda7a70
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 404 Not Found
+    code: 404
+    duration: ""

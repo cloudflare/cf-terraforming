@@ -1,0 +1,52 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/custom_hostnames
+    method: GET
+  response:
+    body: |
+      {
+        "result": [],
+        "result_info": {
+          "page": 1,
+          "per_page": 20,
+          "count": 0,
+          "total_count": 0,
+          "total_pages": 0
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Cf-Auditlog-Id:
+      - 019506ad-ab67-758b-af91-22f5eefbf6df
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

@@ -1,7 +1,8 @@
 package cmd
 
 import (
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cfv0 "github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/v4"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -11,7 +12,8 @@ import (
 var log = logrus.New()
 var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath, providerRegistryHostname string
 var verbose, useModernImportBlock bool
-var api *cloudflare.API
+var apiV0 *cfv0.API
+var api *cloudflare.Client
 var terraformImportCmdPrefix = "terraform import"
 var terraformResourceNamePrefix = "terraform_managed_resource"
 

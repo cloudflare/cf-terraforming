@@ -116,9 +116,9 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		var useToken = apiToken != ""
 
 		if useToken {
-			api, err = cloudflare.NewWithAPIToken(apiToken, options...)
+			apiV0, err = cloudflare.NewWithAPIToken(apiToken, options...)
 		} else {
-			api, err = cloudflare.New(apiKey, apiEmail, options...)
+			apiV0, err = cloudflare.New(apiKey, apiEmail, options...)
 		}
 
 		if err != nil {

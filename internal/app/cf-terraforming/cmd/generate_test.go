@@ -8,7 +8,9 @@ import (
 	"testing"
 
 	"github.com/MakeNowJust/heredoc/v2"
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cfv0 "github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
 	"github.com/hashicorp/hcl/v2/hclwrite"
@@ -223,7 +225,7 @@ func TestResourceGeneration(t *testing.T) {
 
 			if tc.identiferType == "account" {
 				viper.Set("account", cloudflareTestAccountID)
-				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
+				apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
 					&http.Client{
 						Transport: r,
 					},
@@ -232,7 +234,7 @@ func TestResourceGeneration(t *testing.T) {
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
-				api, _ = cloudflare.New(viper.GetString("key"), viper.GetString("email"), cloudflare.HTTPClient(
+				apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
 					&http.Client{
 						Transport: r,
 					},

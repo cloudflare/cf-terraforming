@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_access_infrastructure_target" "example_zero_trust_access_infrastructure_target" {
+resource "cloudflare_zero_trust_access_infrastructure_target" "terraform_managed_resource" {
   account_id = "023e105f4ecef8ad9ca31a8372d0c353"
   hostname = "infra-access-target"
   ip = {

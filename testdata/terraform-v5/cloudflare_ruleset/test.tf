@@ -1,4 +1,4 @@
-resource "cloudflare_ruleset" "example_ruleset" {
+resource "cloudflare_ruleset" "terraform_managed_resource" {
   kind = "managed"
   name = "My ruleset"
   phase = "ddos_l4"

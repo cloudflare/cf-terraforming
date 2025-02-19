@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_access_mtls_certificate" "example_zero_trust_access_mtls_certificate" {
+resource "cloudflare_zero_trust_access_mtls_certificate" "terraform_managed_resource" {
   certificate = <<EOT
   -----BEGIN CERTIFICATE-----
   MIIGAjCCA+qgAwIBAgIJAI7kymlF7CWT...N4RI7KKB7nikiuUf8vhULKy5IX10

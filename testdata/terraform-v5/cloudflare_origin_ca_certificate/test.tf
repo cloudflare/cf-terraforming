@@ -1,4 +1,4 @@
-resource "cloudflare_origin_ca_certificate" "example_origin_ca_certificate" {
+resource "cloudflare_origin_ca_certificate" "terraform_managed_resource" {
   csr = <<EOT
   -----BEGIN CERTIFICATE REQUEST-----
   MIICxzCCAa8CAQAwSDELMAkGA1UEBhMCVVMxFjAUBgNVBAgTDVNhbiBGcmFuY2lz

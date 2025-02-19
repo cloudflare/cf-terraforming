@@ -1,4 +1,4 @@
-resource "cloudflare_account_token" "example_account_token" {
+resource "cloudflare_account_token" "terraform_managed_resource" {
   account_id = "eb78d65290b24279ba6f44721b3ea3c4"
   name = "readonly token"
   policies = [{

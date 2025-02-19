@@ -1,4 +1,4 @@
-resource "cloudflare_zone_lockdown" "example_zone_lockdown" {
+resource "cloudflare_zone_lockdown" "terraform_managed_resource" {
   zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
   configurations = [{
     target = "ip"

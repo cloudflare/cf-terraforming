@@ -1,4 +1,4 @@
-resource "cloudflare_dns_record" "example_dns_record" {
+resource "cloudflare_dns_record" "terraform_managed_resource" {
   zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
   comment = "Domain verification record"
   content = "198.51.100.4"

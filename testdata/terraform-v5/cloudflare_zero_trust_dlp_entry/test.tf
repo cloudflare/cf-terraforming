@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_dlp_entry" "example_zero_trust_dlp_entry" {
+resource "cloudflare_zero_trust_dlp_entry" "terraform_managed_resource" {
   account_id = "account_id"
   enabled = true
   name = "name"

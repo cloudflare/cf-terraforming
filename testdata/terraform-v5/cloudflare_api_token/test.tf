@@ -1,4 +1,4 @@
-resource "cloudflare_api_token" "example_api_token" {
+resource "cloudflare_api_token" "terraform_managed_resource" {
   name = "readonly token"
   policies = [{
     effect = "allow"

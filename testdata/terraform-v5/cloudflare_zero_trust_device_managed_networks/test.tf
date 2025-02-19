@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_device_managed_networks" "example_zero_trust_device_managed_networks" {
+resource "cloudflare_zero_trust_device_managed_networks" "terraform_managed_resource" {
   account_id = "699d98642c564d2e855e9661899b7252"
   config = {
     tls_sockaddr = "foobar:1234"

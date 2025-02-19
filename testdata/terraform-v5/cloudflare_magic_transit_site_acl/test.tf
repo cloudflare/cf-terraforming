@@ -1,4 +1,4 @@
-resource "cloudflare_magic_transit_site_acl" "example_magic_transit_site_acl" {
+resource "cloudflare_magic_transit_site_acl" "terraform_managed_resource" {
   account_id = "023e105f4ecef8ad9ca31a8372d0c353"
   site_id = "023e105f4ecef8ad9ca31a8372d0c353"
   lan_1 = {

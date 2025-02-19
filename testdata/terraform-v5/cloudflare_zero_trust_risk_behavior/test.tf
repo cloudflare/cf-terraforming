@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_risk_behavior" "example_zero_trust_risk_behavior" {
+resource "cloudflare_zero_trust_risk_behavior" "terraform_managed_resource" {
   account_id = "account_id"
   behaviors = {
     foo = {

@@ -1,4 +1,4 @@
-resource "cloudflare_dns_zone_transfers_incoming" "example_dns_zone_transfers_incoming" {
+resource "cloudflare_dns_zone_transfers_incoming" "terraform_managed_resource" {
   zone_id = "269d8f4853475ca241c4e730be286b20"
   auto_refresh_seconds = 86400
   name = "www.example.com."

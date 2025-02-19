@@ -1,4 +1,4 @@
-resource "cloudflare_address_map" "example_address_map" {
+resource "cloudflare_address_map" "terraform_managed_resource" {
   account_id = "258def64c72dae45f3e4c8516e2111f2"
   description = "My Ecommerce zones"
   enabled = true

@@ -1,4 +1,4 @@
-resource "cloudflare_page_shield_policy" "example_page_shield_policy" {
+resource "cloudflare_page_shield_policy" "terraform_managed_resource" {
   zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
   action = "allow"
   description = "Checkout page CSP policy"

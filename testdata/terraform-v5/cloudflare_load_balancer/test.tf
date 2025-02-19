@@ -1,4 +1,4 @@
-resource "cloudflare_load_balancer" "example_load_balancer" {
+resource "cloudflare_load_balancer" "terraform_managed_resource" {
   zone_id = "699d98642c564d2e855e9661899b7252"
   default_pools = ["17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"]
   fallback_pool = "fallback_pool"

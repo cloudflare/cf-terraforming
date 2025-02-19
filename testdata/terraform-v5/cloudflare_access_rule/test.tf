@@ -1,4 +1,4 @@
-resource "cloudflare_access_rule" "example_access_rule" {
+resource "cloudflare_access_rule" "terraform_managed_resource" {
   configuration = {
     target = "ip"
     value = "198.51.100.4"

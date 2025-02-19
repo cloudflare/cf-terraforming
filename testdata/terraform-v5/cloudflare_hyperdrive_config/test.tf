@@ -1,4 +1,4 @@
-resource "cloudflare_hyperdrive_config" "example_hyperdrive_config" {
+resource "cloudflare_hyperdrive_config" "terraform_managed_resource" {
   account_id = "023e105f4ecef8ad9ca31a8372d0c353"
   name = "example-hyperdrive"
   origin = {

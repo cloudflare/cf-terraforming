@@ -1,4 +1,4 @@
-resource "cloudflare_firewall_rule" "example_firewall_rule" {
+resource "cloudflare_firewall_rule" "terraform_managed_resource" {
   zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
   action = {
     mode = "simulate"

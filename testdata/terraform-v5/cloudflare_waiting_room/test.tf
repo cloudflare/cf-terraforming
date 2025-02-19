@@ -1,4 +1,4 @@
-resource "cloudflare_waiting_room" "example_waiting_room" {
+resource "cloudflare_waiting_room" "terraform_managed_resource" {
   zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
   host = "shop.example.com"
   name = "production_webinar"

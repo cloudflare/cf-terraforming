@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_access_group" "example_zero_trust_access_group" {
+resource "cloudflare_zero_trust_access_group" "terraform_managed_resource" {
   include = [{
     group = {
       id = "aa0a4aab-672b-4bdb-bc33-a59f1130a11f"

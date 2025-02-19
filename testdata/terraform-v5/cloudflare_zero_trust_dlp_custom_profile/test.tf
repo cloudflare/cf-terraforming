@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_dlp_custom_profile" "example_zero_trust_dlp_custom_profile" {
+resource "cloudflare_zero_trust_dlp_custom_profile" "terraform_managed_resource" {
   account_id = "account_id"
   profiles = [{
     entries = [{

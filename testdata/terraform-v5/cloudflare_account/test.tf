@@ -1,4 +1,4 @@
-resource "cloudflare_account" "example_account" {
+resource "cloudflare_account" "terraform_managed_resource" {
   name = "name"
   type = "standard"
   unit = {

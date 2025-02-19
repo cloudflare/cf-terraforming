@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_device_custom_profile" "example_zero_trust_device_custom_profile" {
+resource "cloudflare_zero_trust_device_custom_profile" "terraform_managed_resource" {
   account_id = "699d98642c564d2e855e9661899b7252"
   match = "user.identity == \"test@cloudflare.com\""
   name = "Allow Developers"

@@ -1,4 +1,4 @@
-resource "cloudflare_load_balancer_pool" "example_load_balancer_pool" {
+resource "cloudflare_load_balancer_pool" "terraform_managed_resource" {
   account_id = "023e105f4ecef8ad9ca31a8372d0c353"
   name = "primary-dc-1"
   origins = [{

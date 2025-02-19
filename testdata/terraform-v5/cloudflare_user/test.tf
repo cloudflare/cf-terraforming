@@ -1,4 +1,4 @@
-resource "cloudflare_user" "example_user" {
+resource "cloudflare_user" "terraform_managed_resource" {
   country = "US"
   first_name = "John"
   last_name = "Appleseed"

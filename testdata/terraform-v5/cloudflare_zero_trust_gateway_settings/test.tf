@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_gateway_settings" "example_zero_trust_gateway_settings" {
+resource "cloudflare_zero_trust_gateway_settings" "terraform_managed_resource" {
   account_id = "699d98642c564d2e855e9661899b7252"
   settings = {
     activity_log = {

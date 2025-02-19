@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_device_default_profile" "example_zero_trust_device_default_profile" {
+resource "cloudflare_zero_trust_device_default_profile" "terraform_managed_resource" {
   account_id = "699d98642c564d2e855e9661899b7252"
   allow_mode_switch = true
   allow_updates = true

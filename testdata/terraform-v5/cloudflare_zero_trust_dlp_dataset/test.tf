@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_dlp_dataset" "example_zero_trust_dlp_dataset" {
+resource "cloudflare_zero_trust_dlp_dataset" "terraform_managed_resource" {
   account_id = "account_id"
   name = "name"
   description = "description"

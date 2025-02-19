@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_access_application" "example_zero_trust_access_application" {
+resource "cloudflare_zero_trust_access_application" "terraform_managed_resource" {
   domain = "test.example.com/admin"
   type = "self_hosted"
   zone_id = "zone_id"

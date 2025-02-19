@@ -1,4 +1,4 @@
-resource "cloudflare_workers_custom_domain" "example_workers_custom_domain" {
+resource "cloudflare_workers_custom_domain" "terraform_managed_resource" {
   account_id = "9a7806061c88ada191ed06f989cc3dac"
   environment = "production"
   hostname = "foo.example.com"

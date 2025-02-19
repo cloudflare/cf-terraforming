@@ -1,4 +1,4 @@
-resource "cloudflare_byo_ip_prefix" "example_byo_ip_prefix" {
+resource "cloudflare_byo_ip_prefix" "terraform_managed_resource" {
   account_id = "258def64c72dae45f3e4c8516e2111f2"
   asn = 209242
   cidr = "192.0.2.0/24"

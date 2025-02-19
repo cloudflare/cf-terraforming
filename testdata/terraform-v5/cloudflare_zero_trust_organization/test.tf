@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_organization" "example_zero_trust_organization" {
+resource "cloudflare_zero_trust_organization" "terraform_managed_resource" {
   zone_id = "zone_id"
   allow_authenticate_via_warp = true
   auth_domain = "test.cloudflareaccess.com"

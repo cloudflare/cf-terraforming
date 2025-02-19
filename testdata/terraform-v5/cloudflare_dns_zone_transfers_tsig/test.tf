@@ -1,4 +1,4 @@
-resource "cloudflare_dns_zone_transfers_tsig" "example_dns_zone_transfers_tsig" {
+resource "cloudflare_dns_zone_transfers_tsig" "terraform_managed_resource" {
   account_id = "01a7362d577a6c3019a474fd6f485823"
   algo = "hmac-sha512."
   name = "tsig.customer.cf."

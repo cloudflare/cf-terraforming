@@ -1,4 +1,4 @@
-resource "cloudflare_logpush_job" "example_logpush_job" {
+resource "cloudflare_logpush_job" "terraform_managed_resource" {
   destination_conf = "s3://mybucket/logs?region=us-west-2"
   zone_id = "zone_id"
   dataset = "http_requests"

@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_device_posture_rule" "example_zero_trust_device_posture_rule" {
+resource "cloudflare_zero_trust_device_posture_rule" "terraform_managed_resource" {
   account_id = "699d98642c564d2e855e9661899b7252"
   name = "Admin Serial Numbers"
   type = "file"

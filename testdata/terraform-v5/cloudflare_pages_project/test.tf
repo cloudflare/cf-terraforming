@@ -1,4 +1,4 @@
-resource "cloudflare_pages_project" "example_pages_project" {
+resource "cloudflare_pages_project" "terraform_managed_resource" {
   account_id = "023e105f4ecef8ad9ca31a8372d0c353"
   build_config = {
     build_caching = true

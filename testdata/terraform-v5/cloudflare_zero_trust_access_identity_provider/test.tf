@@ -1,4 +1,4 @@
-resource "cloudflare_zero_trust_access_identity_provider" "example_zero_trust_access_identity_provider" {
+resource "cloudflare_zero_trust_access_identity_provider" "terraform_managed_resource" {
   config = {
     claims = ["email_verified", "preferred_username", "custom_claim_name"]
     client_id = "<your client id>"

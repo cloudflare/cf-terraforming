@@ -1,4 +1,4 @@
-resource "cloudflare_healthcheck" "example_healthcheck" {
+resource "cloudflare_healthcheck" "terraform_managed_resource" {
   zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
   address = "www.example.com"
   name = "server-1"

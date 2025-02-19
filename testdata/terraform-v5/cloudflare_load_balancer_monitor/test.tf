@@ -1,4 +1,4 @@
-resource "cloudflare_load_balancer_monitor" "example_load_balancer_monitor" {
+resource "cloudflare_load_balancer_monitor" "terraform_managed_resource" {
   account_id = "023e105f4ecef8ad9ca31a8372d0c353"
   allow_insecure = true
   consecutive_down = 0

@@ -1453,7 +1453,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if resourceCount == 1 {
 						resourceID = "terraform_managed_resource"
 					} else {
-						resourceID = "terraform_managed_resource_" + string(i)
+						resourceID = fmt.Sprintf("terraform_managed_resource_%d", i)
 					}
 				} else {
 					id := ""

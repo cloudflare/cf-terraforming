@@ -151,14 +151,13 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
 				endpoint = placeholderReplacer.Replace(endpoint)
 
-				client := api
 				if apiToken != "" {
-					client.Options = append(client.Options, option.WithAPIToken(apiToken))
+					api.Options = append(api.Options, option.WithAPIToken(apiToken))
 				} else {
-					client.Options = append(client.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
+					api.Options = append(api.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
 				}
 
-				err := client.Get(context.Background(), endpoint, nil, &result)
+				err := api.Get(context.Background(), endpoint, nil, &result)
 				if err != nil {
 					var apierr *cloudflare.Error
 					if errors.As(err, &apierr) {

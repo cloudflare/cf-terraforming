@@ -53,7 +53,7 @@ func testDataFile(filename string) string {
 		panic(err)
 	}
 
-	dir, err := os.Open(filepath.Join(dirname, "../../../../testdata/terraform"))
+	dir, err := os.Open(filepath.Join(dirname, "../../../../testdata/terraform/v4"))
 	if err != nil {
 		panic(err)
 	}

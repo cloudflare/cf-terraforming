@@ -1,0 +1,42 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/ssl/certificate_packs
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "3822ff90-ea29-44df-9e55-21300bb9419b",
+            "type": "advanced",
+            "hosts": [
+              "example.com",
+              "*.example.com",
+              "www.example.com"
+            ],
+            "status": "initializing",
+            "validation_method": "txt",
+            "validity_days": 365,
+            "certificate_authority": "google",
+            "cloudflare_branding": false
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

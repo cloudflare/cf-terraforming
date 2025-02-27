@@ -1,0 +1,91 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/email/routing/rules
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "379ef34688104bd0a461494a2e53fc3d",
+            "tag": "379ef34688104bd0a461494a2e53fc3d",
+            "name": "Rule created at 2025-02-21T21: 29: 30.992Z",
+            "matchers": [
+              {
+                "type": "literal",
+                "field": "to",
+                "value": "abcd@example.com"
+              }
+            ],
+            "actions": [
+              {
+                "type": "drop"
+              }
+            ],
+            "enabled": true,
+            "priority": 0
+          },
+          {
+            "id": "98082a00905545319bdc5fbce8c95774",
+            "tag": "98082a00905545319bdc5fbce8c95774",
+            "name": "terraform rule catch all",
+            "matchers": [
+              {
+                "type": "all"
+              }
+            ],
+            "actions": [
+              {
+                "type": "forward",
+                "value": [
+                    "destinationaddress@example.net"
+                ]
+              }
+            ],
+            "enabled": false,
+            "priority": 2147483647
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result_info": {
+          "page": 1,
+          "per_page": 20,
+          "count": 2,
+          "total_count": 2
+        }
+      }
+    headers:
+      Cf-Auditlog-Id:
+      - 01952a6f-b8d0-7d86-a5e0-e59e4f6de28b
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

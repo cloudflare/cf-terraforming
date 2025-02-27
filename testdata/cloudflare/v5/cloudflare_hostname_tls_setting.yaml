@@ -1,0 +1,38 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/hostnames/settings/ciphers
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "created_at": "2023-11-13T23:23:27.367363Z",
+            "hostname": "terraform.cfapi.net",
+            "status": "active",
+            "updated_at": "2025-02-20T04:15:31.906851Z",
+            "value": [
+              "ECDHE-RSA-AES128-GCM-SHA256",
+              "AES128-GCM-SHA256"
+            ]
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

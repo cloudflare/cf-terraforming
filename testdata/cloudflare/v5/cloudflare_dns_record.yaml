@@ -1,0 +1,121 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dns_records
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+              "id": "b0f691dc77d6f468f758f26eb7a81cd2",
+              "zone_id": "0da42c8d2132a9ddaf714f9e7c920711",
+              "zone_name": "example.com",
+              "name": "foo.example.com",
+              "type": "A",
+              "content": "1.1.1.1",
+              "proxiable": false,
+              "proxied": false,
+              "ttl": 1,
+              "settings": {},
+              "meta": {
+                  "auto_added": false,
+                  "managed_by_apps": false,
+                  "managed_by_argo_tunnel": false
+              },
+              "comment": null,
+              "tags": [],
+              "created_on": "2025-02-05T03:15:14.780671Z",
+              "modified_on": "2025-02-05T03:15:14.780671Z"
+          },
+          {
+              "id": "d5260832bc7cf02d778aaec399f5e3b4",
+              "zone_id": "0da42c8d2132a9ddaf714f9e7c920711",
+              "zone_name": "example.com",
+              "name": "atmdfzvyns.origin.example.com",
+              "type": "CNAME",
+              "content": "example.com",
+              "proxiable": true,
+              "proxied": false,
+              "ttl": 3600,
+              "settings": {
+                  "flatten_cname": false
+              },
+              "meta": {
+                  "auto_added": false,
+                  "managed_by_apps": false,
+                  "managed_by_argo_tunnel": false
+              },
+              "comment": null,
+              "tags": [],
+              "created_on": "2025-02-06T23:37:26.594097Z",
+              "modified_on": "2025-02-06T23:37:26.594097Z"
+          },
+          {
+              "id": "4b6ddf8887b2cbd9c200c630386ead70",
+              "zone_id": "0da42c8d2132a9ddaf714f9e7c920711",
+              "zone_name": "example.com",
+              "name": "hwflxxxmoc.example.com",
+              "type": "MX",
+              "content": "mx.record.example.com",
+              "priority": 71,
+              "proxiable": false,
+              "proxied": false,
+              "ttl": 1,
+              "settings": {},
+              "meta": {
+                  "auto_added": false,
+                  "email_routing": true,
+                  "managed_by_apps": false,
+                  "managed_by_argo_tunnel": false,
+                  "read_only": true
+              },
+              "comment": null,
+              "tags": [],
+              "created_on": "2024-11-12T22:00:34.677492Z",
+              "modified_on": "2024-11-12T22:00:34.677492Z"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result_info": {
+            "page": 1,
+            "per_page": 100,
+            "count": 100,
+            "total_count": 193,
+            "total_pages": 2
+        }
+      }
+    headers:
+      Cf-Auditlog-Id:
+      - 01952a27-9b97-7290-9dde-22beca17ccc8
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

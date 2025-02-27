@@ -4,8 +4,8 @@ set -e
 export TF_IN_AUTOMATION=1
 
 rootdir=$(pwd)
-for dir in testdata/terraform/*; do
-    if [ $dir == "testdata/terraform/cloudflare_load_balancer" ]; then
+for dir in testdata/terraform/v4/*; do
+    if [ $dir == "testdata/terraform/v4/cloudflare_load_balancer" ]; then
         continue
     fi
 

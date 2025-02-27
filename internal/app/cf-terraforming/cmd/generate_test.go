@@ -182,9 +182,9 @@ func TestResourceGeneration(t *testing.T) {
 			var r *recorder.Recorder
 			var err error
 			if os.Getenv("OVERWRITE_VCR_CASSETTES") == "true" {
-				r, err = recorder.NewAsMode("../../../../testdata/cloudflare/"+tc.testdataFilename, recorder.ModeRecording, http.DefaultTransport)
+				r, err = recorder.NewAsMode("../../../../testdata/cloudflare/v4/"+tc.testdataFilename, recorder.ModeRecording, http.DefaultTransport)
 			} else {
-				r, err = recorder.New("../../../../testdata/cloudflare/" + tc.testdataFilename)
+				r, err = recorder.New("../../../../testdata/cloudflare/v4/" + tc.testdataFilename)
 			}
 
 			if err != nil {
@@ -361,9 +361,9 @@ func TestResourceGenerationV5(t *testing.T) {
 			var r *recorder.Recorder
 			var err error
 			if os.Getenv("OVERWRITE_VCR_CASSETTES") == "true" {
-				r, err = recorder.NewAsMode("../../../../testdata/cloudflare-v5/"+tc.testdataFilename, recorder.ModeRecording, http.DefaultTransport)
+				r, err = recorder.NewAsMode("../../../../testdata/cloudflare/v5/"+tc.testdataFilename, recorder.ModeRecording, http.DefaultTransport)
 			} else {
-				r, err = recorder.New("../../../../testdata/cloudflare-v5/" + tc.testdataFilename)
+				r, err = recorder.New("../../../../testdata/cloudflare/v5/" + tc.testdataFilename)
 			}
 
 			if err != nil {

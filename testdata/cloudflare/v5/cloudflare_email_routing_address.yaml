@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/email/routing/addresses
+    method: GET
+  response:
+    body: '{"result":[{"id":"7e4b0985262e4697b86db266d705693d","tag":"7e4b0985262e4697b86db266d705693d","email":"abcd@example.com","verified":null,"created":"2025-02-21T21:25:22.526874Z","modified":"2025-02-21T21:25:22.526874Z"}],"success":true,"errors":[],"messages":[],"result_info":{"page":1,"per_page":20,"count":1,"total_count":1}}'
+    headers:
+      Cf-Auditlog-Id:
+      - 01952a6f-a1b8-7d4d-b810-862ba51384a9
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

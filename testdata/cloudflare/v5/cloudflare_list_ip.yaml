@@ -1,0 +1,274 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rules/lists
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "36b7f6d95e7a4e09be9dc97900a44b46",
+            "name": "cdpxtbboal",
+            "description": "list named cdpxtbboal",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T02:22:32Z",
+            "modified_on": "2024-10-10T02:22:32Z"
+          },
+          {
+            "id": "2691254765e049eb95bb3826cc4a526c",
+            "name": "eplfravddj",
+            "description": "eplfravddj",
+            "kind": "ip",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-24T03:59:28Z",
+            "modified_on": "2024-10-24T03:59:28Z"
+          },
+          {
+            "id": "a2d365108e1840e99afc6cf4cc800869",
+            "name": "eqjbckozbq",
+            "description": "list named eqjbckozbq",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-08T01:16:08Z",
+            "modified_on": "2024-10-17T17:48:06Z"
+          },
+          {
+            "id": "5cba4effcf7b4a2b8eb5c2e3604ff3ab",
+            "name": "evzrfoluuk",
+            "description": "list named evzrfoluuk",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T02:21:52Z",
+            "modified_on": "2024-10-10T02:21:55Z"
+          },
+          {
+            "id": "ed8e0e24326c4dba91cd9837376fca18",
+            "name": "exggkqkryi",
+            "description": "list named exggkqkryi",
+            "kind": "redirect",
+            "num_items": 1,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-24T04:23:38Z",
+            "modified_on": "2024-10-24T04:23:38Z"
+          },
+          {
+            "id": "c65f698f533b4ce5ab16e47792da8167",
+            "name": "fazzlgukid",
+            "description": "list named fazzlgukid",
+            "kind": "redirect",
+            "num_items": 1,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-24T04:21:24Z",
+            "modified_on": "2024-10-24T04:21:24Z"
+          },
+          {
+            "id": "81039c331294448dbb6d7247b7959843",
+            "name": "foo",
+            "kind": "ip",
+            "num_items": 1,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-14T04:37:53Z",
+            "modified_on": "2024-10-14T04:37:58Z"
+          },
+          {
+            "id": "d6be21998bf74a1bb778b110a7b2864e",
+            "name": "grwrgwer",
+            "kind": "hostname",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-09T04:59:25Z",
+            "modified_on": "2024-10-17T17:47:58Z"
+          },
+          {
+            "id": "83a2b39872224df18c4829a5c434e1f4",
+            "name": "gsapkxfuka",
+            "description": "list named gsapkxfuka",
+            "kind": "hostname",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T03:03:29Z",
+            "modified_on": "2024-10-10T03:03:31Z"
+          },
+          {
+            "id": "e55bbdbf802e4a6eb3f1c7759d6fee78",
+            "name": "gtlcyzwnzj",
+            "description": "list named gtlcyzwnzj",
+            "kind": "hostname",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T03:03:45Z",
+            "modified_on": "2024-10-10T03:03:47Z"
+          },
+          {
+            "id": "3a0018467f024bdc806090a04e1620bf",
+            "name": "gugvgfpgrk",
+            "description": "list named gugvgfpgrk",
+            "kind": "hostname",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T02:32:04Z",
+            "modified_on": "2024-10-10T02:32:05Z"
+          },
+          {
+            "id": "383a2afe7165491ba63733412af6c20e",
+            "name": "gxgugerfnf",
+            "description": "gxgugerfnf",
+            "kind": "ip",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T01:13:26Z",
+            "modified_on": "2024-10-17T17:48:09Z"
+          },
+          {
+            "id": "b426c228055341ec995d49d3aecb2e94",
+            "name": "kadmqsqwmz",
+            "description": "list named kadmqsqwmz",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-09T01:50:51Z",
+            "modified_on": "2024-10-09T01:50:51Z"
+          },
+          {
+            "id": "bbe24e461b9549c98e4d0631589e19a6",
+            "name": "milkxcrgrt",
+            "description": "list named milkxcrgrt",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-09T01:58:20Z",
+            "modified_on": "2024-10-09T01:58:20Z"
+          },
+          {
+            "id": "2a4b8b2017aa4b3cb9e1151b52c81d22",
+            "name": "okhejrsmza",
+            "description": "list named okhejrsmza",
+            "kind": "redirect",
+            "num_items": 1,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-24T04:23:10Z",
+            "modified_on": "2024-10-24T04:23:10Z"
+          },
+          {
+            "id": "c914cfbebb294b15a9ad40113545f23b",
+            "name": "oldabwkngb",
+            "description": "list named oldabwkngb",
+            "kind": "asn",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T02:25:39Z",
+            "modified_on": "2024-10-17T17:47:56Z"
+          },
+          {
+            "id": "d1c00066950b47cb9f4ba83eee474dd5",
+            "name": "redirect_list_draxfugnrq",
+            "description": "draxfugnrq list description",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-08T01:18:16Z",
+            "modified_on": "2024-10-08T01:18:16Z"
+          },
+          {
+            "id": "84c8255239f6442b945d7a8fc7af3500",
+            "name": "redirect_list_mjelufarea",
+            "description": "mjelufarea list description",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T01:18:05Z",
+            "modified_on": "2024-10-10T01:18:05Z"
+          },
+          {
+            "id": "a0791519b9df46f99ab84b4e1b5164b5",
+            "name": "redirect_list_qdonxwhvoc",
+            "description": "qdonxwhvoc list description",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-08T02:56:35Z",
+            "modified_on": "2024-10-08T02:56:35Z"
+          },
+          {
+            "id": "27d8468652334824b16e024b8496805c",
+            "name": "tsaoqtuien",
+            "description": "list named tsaoqtuien",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T02:23:47Z",
+            "modified_on": "2024-10-10T02:23:47Z"
+          },
+          {
+            "id": "f203b33d9271444c85137fd4eb8dcb35",
+            "name": "uscnwftrcx",
+            "description": "uscnwftrcx",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2025-01-23T21:41:18Z",
+            "modified_on": "2025-01-23T21:41:18Z"
+          },
+          {
+            "id": "e1cb2de17eb746fab3b0b69cad648bd1",
+            "name": "yiditokrjn",
+            "description": "list named yiditokrjn",
+            "kind": "redirect",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-10T01:13:27Z",
+            "modified_on": "2024-10-10T01:13:27Z"
+          },
+          {
+            "id": "e3e59ff0d63e4100860bdce3afdaa34e",
+            "name": "zallvxjidh",
+            "description": "zallvxjidh",
+            "kind": "ip",
+            "num_items": 0,
+            "num_referencing_filters": 0,
+            "created_on": "2024-10-24T03:59:26Z",
+            "modified_on": "2024-10-24T03:59:26Z"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Cf-Auditlog-Id:
+      - 01950651-be5f-7388-a014-aacd01897427
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

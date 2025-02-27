@@ -1,0 +1,78 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/dns_firewall
+    method: GET
+  response:
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "attack_mitigation": {
+              "enabled": false,
+              "only_when_upstream_unhealthy": true
+            },
+            "deprecate_any_requests": true,
+            "dns_firewall_ips": [
+              "2606:4700:52::ac40:34e7",
+              "2606:4700:5a::ac40:35a8",
+              "172.64.52.231",
+              "172.64.53.168"
+            ],
+            "ecs_fallback": false,
+            "id": "5dea3a56f81391d115d495db623ba8e1",
+            "maximum_cache_ttl": 900,
+            "minimum_cache_ttl": 60,
+            "modified_on": "2025-02-21T22:54:15.747695Z",
+            "name": "ygpvauebcd",
+            "negative_cache_ttl": null,
+            "ratelimit": 1000,
+            "retries": 2,
+            "upstream_ips": [
+              "1.2.3.4"
+            ]
+          }
+        ],
+        "result_info": {
+          "count": 1,
+          "page": 1,
+          "per_page": 50,
+          "total_count": 1,
+          "total_pages": 1
+        },
+        "success": true
+      }
+    headers:
+      Cf-Auditlog-Id:
+      - 01952a89-e526-74a4-a9b4-f7792a855544
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 Ok
+    code: 200
+    duration: ""

@@ -53,7 +53,7 @@ func testDataFile(filename string) string {
 		panic(err)
 	}
 
-	dir, err := os.Open(filepath.Join(dirname, "../../../../testdata/terraform"))
+	dir, err := os.Open(filepath.Join(dirname, "../../../../testdata/terraform/v4"))
 	if err != nil {
 		panic(err)
 	}
@@ -116,9 +116,9 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		var useToken = apiToken != ""
 
 		if useToken {
-			api, err = cloudflare.NewWithAPIToken(apiToken, options...)
+			apiV0, err = cloudflare.NewWithAPIToken(apiToken, options...)
 		} else {
-			api, err = cloudflare.New(apiKey, apiEmail, options...)
+			apiV0, err = cloudflare.New(apiKey, apiEmail, options...)
 		}
 
 		if err != nil {
@@ -226,7 +226,7 @@ func writeAttrLine(key string, value interface{}, parentName string, body *hclwr
 		for _, item := range value.([]map[string]interface{}) {
 			mapCty := make(map[string]cty.Value)
 			for k, v := range item {
-				mapCty[k] = cty.StringVal(v.(string))
+				mapCty[k] = cty.StringVal(fmt.Sprintf("%v", v))
 			}
 			childCty = append(childCty, cty.MapVal(mapCty))
 		}
@@ -328,7 +328,7 @@ func transformToCollection(value string) string {
 }
 
 // modifyResponsePayload takes the current resource and the `gjson.Result`
-// to run arbitary modifications to the JSON before passing it to be overlayed
+// to run arbitrary modifications to the JSON before passing it to be overlayed
 // the provider schema.
 func modifyResponsePayload(resourceName string, value gjson.Result) string {
 	output := value.String()

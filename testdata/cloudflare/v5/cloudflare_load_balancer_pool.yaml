@@ -1,0 +1,79 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/load_balancers/pools
+    method: GET
+  response:
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "check_regions": null,
+            "created_on": "2025-02-26T20:44:27.999349Z",
+            "description": "",
+            "enabled": true,
+            "id": "d999803efd63ea2ec38054109b36de15",
+            "minimum_origins": 1,
+            "modified_on": "2025-02-26T20:44:27.999349Z",
+            "name": "pool1",
+            "networks": [
+              "cloudflare"
+            ],
+            "notification_email": "",
+            "origins": [
+              {
+                "address": "example.com",
+                "enabled": true,
+                "name": "example-1",
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "check_regions": null,
+            "created_on": "2025-02-26T20:44:27.967706Z",
+            "description": "",
+            "enabled": true,
+            "id": "d6a3c9d8530aa835d9a3c4587b0e7e80",
+            "minimum_origins": 1,
+            "modified_on": "2025-02-26T20:44:27.967706Z",
+            "name": "pool2",
+            "networks": [
+              "cloudflare"
+            ],
+            "notification_email": "",
+            "origins": [
+              {
+                "address": "example.com",
+                "enabled": true,
+                "name": "example-2",
+                "weight": 1
+              }
+            ]
+          }
+        ],
+        "result_info": {
+          "count": 2,
+          "page": 1,
+          "per_page": 9223372036854775807,
+          "total_count": 2,
+          "total_pages": 1
+        },
+        "success": true
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

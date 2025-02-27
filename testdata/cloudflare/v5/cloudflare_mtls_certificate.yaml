@@ -1,0 +1,42 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/mtls_certificates
+    method: GET
+  response:
+    body: '{"success":true,"errors":[],"messages":[],"result":[{"id":"5d083f37-f9f9-4e75-9459-2682a07ab79e","name":"Gateway
+      CA - Cloudflare Managed G15 f037e56e89293a057740de681ac9abbe","issuer":"CN=Gateway
+      CA - Cloudflare Managed G15 f037e56e89293a057740de681ac9abbe,OU=www.cloudflare.com,O=Cloudflare\\,
+      Inc.,L=San Francisco,ST=California,C=US","signature":"ECDSAWithSHA256","serial_number":"550782740891791283297426961338459506019596523227","certificates":"-----BEGIN CERTIFICATE-----\nMIIDHzCCAsWgAwIBAgIUYHnzyR8tsSxGl+Yba/sB59jcVtswCgYIKoZIzj0EAwIw\ngcExCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1T\nYW4gRnJhbmNpc2NvMRkwFwYDVQQKExBDbG91ZGZsYXJlLCBJbmMuMRswGQYDVQQL\nExJ3d3cuY2xvdWRmbGFyZS5jb20xTTBLBgNVBAMTREdhdGV3YXkgQ0EgLSBDbG91\nZGZsYXJlIE1hbmFnZWQgRzE1IGYwMzdlNTZlODkyOTNhMDU3NzQwZGU2ODFhYzlh\nYmJlMB4XDTI0MDkwNDIzMDIwMFoXDTI5MDkwNDIzMDIwMFowgcExCzAJBgNVBAYT\nAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1TYW4gRnJhbmNpc2Nv\nMRkwFwYDVQQKExBDbG91ZGZsYXJlLCBJbmMuMRswGQYDVQQLExJ3d3cuY2xvdWRm\nbGFyZS5jb20xTTBLBgNVBAMTREdhdGV3YXkgQ0EgLSBDbG91ZGZsYXJlIE1hbmFn\nZWQgRzE1IGYwMzdlNTZlODkyOTNhMDU3NzQwZGU2ODFhYzlhYmJlMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAExCVOKhYwXsCVLhhRixK6A6bAqICFePChr+xP7VC8\nuKP7NfyRnqP6ax6Jk2Gusce1sVWQQk4d31wZ+uA8MX4lr6OBmDCBlTAOBgNVHQ8B\nAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUJT85wIjwZRu47HfW\n4as2lxyH1dAwUwYDVR0fBEwwSjBIoEagRIZCaHR0cDovL2NybC5jbG91ZGZsYXJl\nLmNvbS81ZDA4M2YzNy1mOWY5LTRlNzUtOTQ1OS0yNjgyYTA3YWI3OWUuY3JsMAoG\nCCqGSM49BAMCA0gAMEUCIQDF4a1LvJZv0RsWkx7vWwFKokaICyj9fE3G1eI8VZFx\nPgIgCOd9na/ijXOdaGZRGV0ktRjcH8KVwxz34QYHyvWxyZM=\n-----END CERTIFICATE-----\n","ca":true,"uploaded_on":"2024-09-04T23:07:14.46176Z","expires_on":"2029-09-04T23:02:00Z","type":"gateway_managed"}],"result_info":{"page":1,"per_page":50,"count":2,"total_count":2,"total_pages":1}}'
+    headers:
+      Cf-Auditlog-Id:
+      - 019521d0-23a5-7216-8cad-0140d586b6a7
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

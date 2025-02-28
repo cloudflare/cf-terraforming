@@ -243,7 +243,7 @@ func TestResourceGeneration(t *testing.T) {
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
 			}
 
-			expected := testDataFile(tc.testdataFilename)
+			expected := testDataFile("v4", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}
@@ -267,7 +267,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare account role": {identiferType: "account", resourceType: "cloudflare_account_role", testdataFilename: "cloudflare_account_role"},
 		// "cloudflare access rule (zone)":                      {identiferType: "zone", resourceType: "cloudflare_access_rule", testdataFilename: "cloudflare_access_rule_zone"},
 		// "cloudflare account member": {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},
-		// "cloudflare api shield":                              {identiferType: "zone", resourceType: "cloudflare_api_shield", testdataFilename: "cloudflare_api_shield"},
+		"cloudflare api shield operation": {identiferType: "zone", resourceType: "cloudflare_api_shield_operation", testdataFilename: "cloudflare_api_shield_operation"},
 		// "cloudflare argo":                                    {identiferType: "zone", resourceType: "cloudflare_argo", testdataFilename: "cloudflare_argo"},
 		// "cloudflare bot management":                          {identiferType: "zone", resourceType: "cloudflare_bot_management", testdataFilename: "cloudflare_bot_management"},
 		// "cloudflare BYO IP prefix":                           {identiferType: "account", resourceType: "cloudflare_byo_ip_prefix", testdataFilename: "cloudflare_byo_ip_prefix"},
@@ -422,7 +422,7 @@ func TestResourceGenerationV5(t *testing.T) {
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
 			}
 
-			expected := testDataFile(tc.testdataFilename)
+			expected := testDataFile("v5", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}

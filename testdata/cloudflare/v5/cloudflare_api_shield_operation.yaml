@@ -1,0 +1,65 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/api_gateway/operations
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "endpoint": "/example/path",
+              "host": "terraform.cfapi.net",
+              "last_updated": "2025-02-26T18:49:18.77319Z",
+              "method": "GET",
+              "operation_id": "ebf92a52-9ec6-4fc8-9da2-8d50b29ae0e4"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 20,
+            "total_count": 1
+          },
+          "success": true
+        }
+      headers:
+        Allow:
+          - GET, POST
+        Cache-Control:
+          - private,no-cache,no-store
+        Cf-Auditlog-Id:
+          - 01951b40-03ef-736b-b60f-86e9bf38f85c
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Pragma:
+          - no-cache
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

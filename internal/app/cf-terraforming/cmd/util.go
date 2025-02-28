@@ -45,7 +45,7 @@ func executeCommandC(root *cobra.Command, args ...string) (output string, err er
 
 // testDataFile slurps a local test case into memory and returns it while
 // encapsulating the logic for finding it.
-func testDataFile(filename string) string {
+func testDataFile(version, filename string) string {
 	filename = strings.TrimSuffix(filename, "/")
 
 	dirname, err := os.Getwd()
@@ -53,7 +53,7 @@ func testDataFile(filename string) string {
 		panic(err)
 	}
 
-	dir, err := os.Open(filepath.Join(dirname, "../../../../testdata/terraform/v4"))
+	dir, err := os.Open(filepath.Join(dirname, fmt.Sprintf("../../../../testdata/terraform/%s", version)))
 	if err != nil {
 		panic(err)
 	}

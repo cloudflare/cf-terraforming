@@ -10,7 +10,9 @@ resource "cloudflare_teams_rule" "terraform_managed_resource" {
   precedence     = 0
   traffic        = "http.request.uri matches \".*a/partial/uri.*\" and http.request.host in $01302951-49f9-47c9-a400-0297e60b6a10"
   rule_settings {
-    add_headers        = {}
+    add_headers = {
+      X-Custom-Header-Name = "somecustomvalue"
+    }
     allow_child_bypass = false
     audit_ssh {
       command_logging = false

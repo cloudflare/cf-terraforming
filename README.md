@@ -50,6 +50,16 @@ Flags:
 Use "cf-terraforming [command] --help" for more information about a command.
 ```
 
+## Requirements
+
+A directory that has Terraform pre-initialized within it.  
+
+```bash
+# Example usage:
+cd my-terraform-project
+terraform init 
+```
+
 ## Authentication
 
 Cloudflare supports two authentication methods to the API:

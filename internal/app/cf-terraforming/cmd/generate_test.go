@@ -411,7 +411,6 @@ func TestResourceGenerationV5(t *testing.T) {
 				))
 
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
-				fmt.Println(fmt.Sprintf("Acc Res %s: %+v", name, output))
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
 				api = cloudflare.NewClient(option.WithHTTPClient(
@@ -421,7 +420,6 @@ func TestResourceGenerationV5(t *testing.T) {
 				))
 
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
-				fmt.Println(fmt.Sprintf("Zone Res %s: %+v", name, output))
 			}
 
 			expected := testDataFile("v5", tc.testdataFilename)

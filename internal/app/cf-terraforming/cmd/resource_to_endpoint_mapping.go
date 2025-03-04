@@ -152,8 +152,8 @@ var resourceToEndpoint = map[string]map[string]string{
 		"get":  "/zones/{zone_id}/email/routing",
 	},
 	"cloudflare_email_routing_dns": {
-		"list": "",
-		"get":  "/zones/{zone_id}/email/routing/dns",
+		"list": "/zones/{zone_id}/email/routing/dns",
+		"get":  "",
 	},
 	"cloudflare_email_routing_rule": {
 		"list": "/zones/{zone_id}/email/routing/rules",

@@ -264,6 +264,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare access IdP OTP (account)":                {identiferType: "account", resourceType: "cloudflare_access_identity_provider", testdataFilename: "cloudflare_access_identity_provider_otp_account"},
 		// "cloudflare access IdP OTP (zone)":                   {identiferType: "zone", resourceType: "cloudflare_access_identity_provider", testdataFilename: "cloudflare_access_identity_provider_otp_zone"},
 		// "cloudflare access rule (account)":                   {identiferType: "account", resourceType: "cloudflare_access_rule", testdataFilename: "cloudflare_access_rule_account"},
+		"cloudflare account":      {identiferType: "account", resourceType: "cloudflare_account", testdataFilename: "cloudflare_account"},
 		"cloudflare account role": {identiferType: "account", resourceType: "cloudflare_account_role", testdataFilename: "cloudflare_account_role"},
 		// "cloudflare access rule (zone)":                      {identiferType: "zone", resourceType: "cloudflare_access_rule", testdataFilename: "cloudflare_access_rule_zone"},
 		// "cloudflare account member": {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},

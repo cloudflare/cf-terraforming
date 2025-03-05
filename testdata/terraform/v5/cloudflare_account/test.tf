@@ -1,7 +1,23 @@
-resource "cloudflare_account" "terraform_managed_resource" {
-  name = "name"
-  type = "standard"
-  unit = {
-    id = "f267e341f3dd4697bd3b9f71dd96247f"
+resource "cloudflare_account" "terraform_managed_resource_0" {
+  name = "Foo Production"
+  type = "enterprise"
+  settings = {
+    default_nameservers = "cloudflare.standard"
+  }
+}
+
+resource "cloudflare_account" "terraform_managed_resource_1" {
+  name = "Foo Staging"
+  type = "enterprise"
+  settings = {
+    default_nameservers = "cloudflare.standard"
+  }
+}
+
+resource "cloudflare_account" "terraform_managed_resource_2" {
+  name = "Foo Acceptance Testing"
+  type = "enterprise"
+  settings = {
+    default_nameservers = "cloudflare.standard"
   }
 }

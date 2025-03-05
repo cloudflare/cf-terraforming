@@ -1123,8 +1123,24 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if err != nil {
 						log.Fatal(err)
 					}
-					// check for empty descriptions
+
+					// flatten add_headers of rule setting to a string
 					for i := 0; i < resourceCount; i++ {
+						ruleSettings, ok := jsonStructData[i].(map[string]interface{})["rule_settings"].(map[string]interface{})
+						if ok {
+							addHeaders, ok := ruleSettings["add_headers"].(map[string]interface{})
+							if ok {
+								for k, v := range addHeaders {
+									headerValues := v.([]interface{})
+									headerString := ""
+									for _, headerValue := range headerValues {
+										headerString += strings.Join([]string{headerValue.(string)}, ",")
+									}
+									addHeaders[k] = headerString
+								}
+							}
+						}
+						// check for empty descriptions
 						if jsonStructData[i].(map[string]interface{})["description"] == "" {
 							jsonStructData[i].(map[string]interface{})["description"] = "default"
 						}

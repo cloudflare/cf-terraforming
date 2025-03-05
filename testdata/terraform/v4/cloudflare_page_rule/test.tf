@@ -12,13 +12,15 @@ resource "cloudflare_page_rule" "terraform_managed_resource" {
       }
       header {
         check_presence = ["x-forwarded-for"]
+        exclude        = []
         include        = ["authorization"]
       }
       host {
         resolved = true
       }
       query_string {
-        ignore = true
+        ignore  = true
+        include = []
       }
       user {
         device_type = true

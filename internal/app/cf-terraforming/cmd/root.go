@@ -7,6 +7,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"strings"
 )
 
 var log = logrus.New()
@@ -127,6 +128,9 @@ func init() {
 	if err = viper.BindEnv("cloudflare-resource-ids-file-path", "CLOUDFLARE_RESOURCE_ID_FILE_PATH"); err != nil {
 		log.Fatal(err)
 	}
+	if resourceIDFilePath == "" {
+
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -160,4 +164,18 @@ func initConfig() {
 	}
 
 	log.SetLevel(cfgLogLevel)
+}
+
+func requiresIDFile(resourceType string) bool {
+	resources := strings.Split(resourceType, ",")
+	for _, resource := range resources {
+		endpoints, ok := resourceToEndpoint[resource]
+		if !ok {
+			continue
+		}
+		if endpoints["list"] == "" {
+			return true
+		}
+	}
+	return false
 }

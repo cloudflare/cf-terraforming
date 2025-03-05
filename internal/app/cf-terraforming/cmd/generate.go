@@ -1266,11 +1266,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if err != nil {
 						log.Fatal(err)
 					}
-					roomRules := []struct {
+					var roomRules []struct {
 						ID            string                 `json:"id"`
 						WaitingRoomID string                 `json:"waiting_room_id"`
 						Rules         []cfv0.WaitingRoomRule `json:"rules"`
-					}{}
+					}
 					for i := 0; i < len(waitingRooms); i++ {
 						rules, err := apiV0.ListWaitingRoomRules(context.Background(), cfv0.ZoneIdentifier(zoneID), cfv0.ListWaitingRoomRuleParams{
 							WaitingRoomID: waitingRooms[i].ID,

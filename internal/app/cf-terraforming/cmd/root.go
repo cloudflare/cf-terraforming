@@ -10,7 +10,7 @@ import (
 )
 
 var log = logrus.New()
-var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath, providerRegistryHostname string
+var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath, providerRegistryHostname, resourceIDFilePath string
 var verbose, useModernImportBlock bool
 var apiV0 *cfv0.API
 var api *cloudflare.Client
@@ -118,6 +118,13 @@ func init() {
 		log.Fatal(err)
 	}
 	if err = viper.BindEnv("provider-registry-hostname", "CLOUDFLARE_PROVIDER_REGISTRY_HOSTNAME"); err != nil {
+		log.Fatal(err)
+	}
+	rootCmd.PersistentFlags().StringVar(&resourceIDFilePath, "cloudflare-resource-ids-file-path", ".", "Path to a json file containing resource IDs")
+	if err = viper.BindPFlag("cloudflare-resource-ids-file-path", rootCmd.PersistentFlags().Lookup("cloudflare-resource-ids-file-path")); err != nil {
+		log.Fatal(err)
+	}
+	if err = viper.BindEnv("cloudflare-resource-ids-file-path", "CLOUDFLARE_RESOURCE_ID_FILE_PATH"); err != nil {
 		log.Fatal(err)
 	}
 }

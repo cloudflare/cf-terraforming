@@ -31,9 +31,9 @@ interactions:
                  "id":"9ad9fa82d0ca4f4da16d8869b062892b",
                  "user":{
                     "id":"fffe8afdb4bd5b94c5b093a23a741135",
-                    "first_name":"Garrett",
-                    "last_name":"Galow",
-                    "email":"ggalow@cloudflare.com",
+                    "first_name":"John",
+                    "last_name":"doe",
+                    "email":"jdoe@cloudflare.com",
                     "two_factor_authentication_enabled":true
                  },
                  "status":"accepted",

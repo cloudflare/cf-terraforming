@@ -198,6 +198,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
 				}
+				fmt.Println(fmt.Sprintf("CUSTOM: %+v", jsonStructData))
 				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer
@@ -1567,8 +1568,19 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 }
 
 func processCustomCasesV5(response []interface{}, resourceType string) error {
+	resourceCount := len(response)
 	switch resourceType {
-
+	case "cloudflare_account_member":
+		// remap email and role_ids into the right structure and remove policies
+		for i := 0; i < resourceCount; i++ {
+			delete(response[i].(map[string]interface{}), "policies")
+			response[i].(map[string]interface{})["email"] = response[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
+			roleIDs := []string{}
+			for _, role := range response[i].(map[string]interface{})["roles"].([]interface{}) {
+				roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
+			}
+			response[i].(map[string]interface{})["roles"] = roleIDs
+		}
 	}
 	return nil
 }

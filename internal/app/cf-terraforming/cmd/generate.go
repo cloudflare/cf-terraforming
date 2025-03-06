@@ -194,7 +194,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)
 				}
-
+				err = processCustomCasesV5(jsonStructData, resourceType)
+				if err != nil {
+					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
+				}
 				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer
@@ -1561,4 +1564,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 		}
 	}
+}
+
+func processCustomCasesV5(response []interface{}, resourceType string) error {
+	switch resourceType {
+
+	}
+	return nil
 }

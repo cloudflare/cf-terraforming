@@ -198,7 +198,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
 				}
-				fmt.Println(fmt.Sprintf("CUSTOM: %+v", jsonStructData))
 				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer

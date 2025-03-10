@@ -134,7 +134,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				endpoint := resourceToEndpoint[resourceType]["list"]
 				if endpoint == "" {
 					endpoint = resourceToEndpoint[resourceType]["get"]
-					isList = false
+					//isList = false
 				}
 
 				// if we encounter a combined endpoint, we need to rewrite to use the correct

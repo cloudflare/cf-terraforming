@@ -1,13 +1,13 @@
 resource "cloudflare_account_subscription" "terraform_managed_resource" {
-  account_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  frequency = "weekly"
+  account_id = "f037e56e89293a057740de681ac9abbe"
+  frequency  = "monthly"
   rate_plan = {
-    id = "free"
-    currency = "USD"
+    currency           = "USD"
     externally_managed = false
-    is_contract = false
-    public_name = "Business Plan"
-    scope = "zone"
-    sets = ["string"]
+    id                 = "image_resizing_ent"
+    is_contract        = true
+    public_name        = "Image Resizing Ent"
+    scope              = "user"
+    sets               = ["usage", "is_cloudflare", "public"]
   }
 }

@@ -250,7 +250,7 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	t.Skip("skip until the v5 provider is fully supported")
+	//t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string
@@ -268,6 +268,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare account role": {identiferType: "account", resourceType: "cloudflare_account_role", testdataFilename: "cloudflare_account_role"},
 		// "cloudflare access rule (zone)":                      {identiferType: "zone", resourceType: "cloudflare_access_rule", testdataFilename: "cloudflare_access_rule_zone"},
 		// "cloudflare account member": {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},
+		"cloudflare account subscription": {identiferType: "account", resourceType: "cloudflare_account_subscription", testdataFilename: "cloudflare_account_subscription"},
 		"cloudflare api shield operation": {identiferType: "zone", resourceType: "cloudflare_api_shield_operation", testdataFilename: "cloudflare_api_shield_operation"},
 		// "cloudflare argo":                                    {identiferType: "zone", resourceType: "cloudflare_argo", testdataFilename: "cloudflare_argo"},
 		// "cloudflare bot management":                          {identiferType: "zone", resourceType: "cloudflare_bot_management", testdataFilename: "cloudflare_bot_management"},
@@ -419,6 +420,7 @@ func TestResourceGenerationV5(t *testing.T) {
 				))
 
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
+				fmt.Println(fmt.Sprintf("Output: %s", output))
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
 				api = cloudflare.NewClient(option.WithHTTPClient(

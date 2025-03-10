@@ -250,7 +250,7 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	t.Skip("skip until the v5 provider is fully supported")
+	//t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string
@@ -382,6 +382,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare waiting room":          {identiferType: "zone", resourceType: "cloudflare_waiting_room", testdataFilename: "cloudflare_waiting_room"},
 		"cloudflare waiting room settings": {identiferType: "zone", resourceType: "cloudflare_waiting_room_settings", testdataFilename: "cloudflare_waiting_room_settings"},
 		// "cloudflare worker cron trigger":    {identiferType: "zone", resourceType: "cloudflare_worker_cron_trigger", testdataFilename: "cloudflare_worker_cron_trigger"},
+		"cloudflare zone setting": {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting"},
 		"cloudflare workers custom domain":                    {identiferType: "account", resourceType: "cloudflare_workers_custom_domain", testdataFilename: "cloudflare_workers_custom_domain"},
 		"cloudflare workers kv namespace":                     {identiferType: "account", resourceType: "cloudflare_workers_kv_namespace", testdataFilename: "cloudflare_workers_kv_namespace"},
 		"cloudflare workers for platforms dispatch namespace": {identiferType: "account", resourceType: "cloudflare_workers_for_platforms_dispatch_namespace", testdataFilename: "cloudflare_workers_for_platforms_dispatch_namespace"},
@@ -458,6 +459,7 @@ func TestResourceGenerationV5(t *testing.T) {
 				))
 
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
+				fmt.Println(fmt.Sprintf("output: %s", output))
 			}
 
 			expected := testDataFile("v5", tc.testdataFilename)

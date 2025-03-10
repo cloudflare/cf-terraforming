@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"encoding/json"
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
 	"strings"
 )
 
@@ -36,6 +38,7 @@ func Execute() {
 	}
 }
 
+// TODO:: probably a cli command to add the ids too?
 func init() {
 	cobra.OnInitialize(initConfig)
 
@@ -128,8 +131,25 @@ func init() {
 	if err = viper.BindEnv("cloudflare-resource-ids-file-path", "CLOUDFLARE_RESOURCE_ID_FILE_PATH"); err != nil {
 		log.Fatal(err)
 	}
-	if resourceIDFilePath == "" {
+	//TODO:: not static path
+	idJsonFile, err := os.ReadFile("/Users/vaishak/cf-repos/github/cf-terraforming/ids.json")
+	if err != nil {
+		log.Fatal(err)
+	}
 
+	err = json.Unmarshal(idJsonFile, &resourceIDMap)
+	if err != nil {
+		log.Fatal(err)
+	}
+	resources := strings.Split(resourceType, ",")
+	for _, resource := range resources {
+		ids, ok := resourceIDMap[resource]
+		if !ok {
+			continue
+		}
+		if len(ids) == 0 {
+			log.Fatalf("Resource IDs are required to create the terraform state for the resource %s", resource)
+		}
 	}
 }
 

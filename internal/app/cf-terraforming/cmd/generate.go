@@ -27,7 +27,10 @@ import (
 	"github.com/zclconf/go-cty/cty"
 )
 
-var resourceType string
+var (
+	resourceType  string
+	resourceIDMap map[string][]string
+)
 
 func init() {
 	rootCmd.AddCommand(generateCmd)
@@ -155,46 +158,25 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				} else {
 					api.Options = append(api.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
 				}
-
-				err := api.Get(context.Background(), endpoint, nil, &result)
-				if err != nil {
-					var apierr *cloudflare.Error
-					if errors.As(err, &apierr) {
-						if apierr.StatusCode == http.StatusNotFound {
-							log.WithFields(logrus.Fields{
-								"resource": resourceType,
-								"endpoint": endpoint,
-							}).Debug("no resources found")
+				fmt.Println(fmt.Sprintf("resourceIDMap: %s", resourceIDMap))
+				ids, ok := resourceIDMap[resourceType]
+				if ok {
+					for _, id := range ids {
+						placeholderReplacer = strings.NewReplacer("{setting_id}", id)
+						endpoint = placeholderReplacer.Replace(endpoint)
+						jsonStructData, err = GetAPIResponse(endpoint, result, isList)
+						if err != nil {
 							continue
 						}
+						resourceCount = len(jsonStructData)
 					}
-					log.Fatalf("failed to fetch API endpoint: %s", err)
+				} else {
+					jsonStructData, err = GetAPIResponse(endpoint, result, isList)
+					if err != nil {
+						continue
+					}
+					resourceCount = len(jsonStructData)
 				}
-
-				body, err := io.ReadAll(result.Body)
-				if err != nil {
-					log.Fatalln(err)
-				}
-
-				value := gjson.Get(string(body), "result")
-				if value.Type == gjson.Null {
-					log.WithFields(logrus.Fields{
-						"resource": resourceType,
-						"endpoint": endpoint,
-					}).Debug("no result found")
-					continue
-				}
-
-				modifiedJSON := modifyResponsePayload(resourceType, value)
-				jsonStructData, err = unMarshallJSONStructData(modifiedJSON)
-				if err != nil {
-					log.Fatalf("failed to unmarshal result: %s", err)
-				}
-				err = processCustomCasesV5(jsonStructData, resourceType)
-				if err != nil {
-					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
-				}
-				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer
 				if accountID != "" {
@@ -1576,8 +1558,58 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 				delete(response[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
 			}
 		}
+	case "cloudflare_zone_setting":
+		for i := 0; i < resourceCount; i++ {
+			response[i].(map[string]interface{})["setting_id"] = response[i].(map[string]interface{})["id"]
+		}
 	}
 	return nil
+}
+
+func GetAPIResponse(endpoint string, result *http.Response, isList bool) ([]interface{}, error) {
+	var jsonStructData []interface{}
+	err := api.Get(context.Background(), endpoint, nil, &result)
+	if err != nil {
+		var apierr *cloudflare.Error
+		if errors.As(err, &apierr) {
+			if apierr.StatusCode == http.StatusNotFound {
+				log.WithFields(logrus.Fields{
+					"resource": resourceType,
+					"endpoint": endpoint,
+				}).Debug("no resources found")
+				return nil, err
+			}
+		}
+		log.Fatalf("failed to fetch API endpoint: %s", err)
+	}
+
+	body, err := io.ReadAll(result.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	value := gjson.Get(string(body), "result")
+	if value.Type == gjson.Null {
+		log.WithFields(logrus.Fields{
+			"resource": resourceType,
+			"endpoint": endpoint,
+		}).Debug("no result found")
+		return nil, errors.New("no result found")
+	}
+
+	modifiedJSON := modifyResponsePayload(resourceType, value)
+	if !isList {
+		modifiedJSON = "[" + modifiedJSON + "]"
+	}
+	err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
+	if err != nil {
+		log.Fatalf("failed to unmarshal result: %s", err)
+	}
+	err = processCustomCasesV5(jsonStructData, resourceType)
+	if err != nil {
+		log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
+	}
+	return jsonStructData, nil
 }
 
 func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) {

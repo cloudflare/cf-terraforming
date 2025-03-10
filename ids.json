@@ -1,3 +1,4 @@
 {
-  "cloudflare_zone_setting": ["always_online"]
+  "cloudflare_zone_setting": ["always_online"],
+  "cloudflare_hostname_tls_setting": []
 }

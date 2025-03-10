@@ -294,7 +294,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare list (hostname)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_hostname"},
 		// "cloudflare list (ip)":                               {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_ip"},
 		// "cloudflare list (redirect)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_redirect"},
-		// "cloudflare load balancer": {identiferType: "zone", resourceType: "cloudflare_load_balancer", testdataFilename: "cloudflare_load_balancer"},
+		"cloudflare load balancer": {identiferType: "zone", resourceType: "cloudflare_load_balancer", testdataFilename: "cloudflare_load_balancer"},
 		// "cloudflare load balancer monitor": {identiferType: "account", resourceType: "cloudflare_load_balancer_monitor", testdataFilename: "cloudflare_load_balancer_monitor"},
 		"cloudflare load balancer pool": {identiferType: "account", resourceType: "cloudflare_load_balancer_pool", testdataFilename: "cloudflare_load_balancer_pool"},
 		// "cloudflare logpush jobs with filter":                {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job_with_filter"},

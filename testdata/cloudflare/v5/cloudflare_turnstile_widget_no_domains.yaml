@@ -25,7 +25,33 @@ interactions:
     method: GET
   response:
     body: |
-      {"result":[{"sitekey":"0x4AAAAAABAWeQGPbpr0adsv","modified_on":"2025-03-11T22:11:51.184511Z","created_on":"2025-03-11T22:11:51.184511Z","mode":"managed","domains":[],"name":"zzshozwarx","bot_fight_mode":false,"region":"world","offlabel":false,"ephemeral_id":false,"clearance_level":"no_clearance"},{"sitekey":"0x4AAAAAABAWgCZ2G-_IRYWu","modified_on":"2025-03-11T22:19:09.76511Z","created_on":"2025-03-11T22:19:09.76511Z","mode":"managed","domains":[],"name":"xozqdqbwil","bot_fight_mode":false,"region":"world","offlabel":false,"ephemeral_id":false,"clearance_level":"no_clearance"}],"success":true,"errors":[],"messages":[],"result_info":{"page":1,"per_page":25,"count":2,"total_count":2,"total_pages":1}}
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "bot_fight_mode": false,
+            "clearance_level": "no_clearance",
+            "created_on": "2025-03-11T22:11:51.184511Z",
+            "domains": [],
+            "ephemeral_id": false,
+            "mode": "managed",
+            "modified_on": "2025-03-11T22:11:51.184511Z",
+            "name": "zzshozwarx",
+            "offlabel": false,
+            "region": "world",
+            "sitekey": "0x4AAAAAABAWeQGPbpr0adsv"
+          }
+        ],
+        "result_info": {
+          "count": 1,
+          "page": 1,
+          "per_page": 25,
+          "total_count": 1,
+          "total_pages": 1
+        },
+        "success": true
+      }
     headers:
       Cf-Auditlog-Id:
       - 0195874d-cf86-7ca5-8fc8-830b164f1d54

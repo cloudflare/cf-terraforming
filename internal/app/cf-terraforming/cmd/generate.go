@@ -187,7 +187,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 				modifiedJSON := modifyResponsePayload(resourceType, value)
-				if !isList {
+				if !isList && !isResponseArray(modifiedJSON) {
 					modifiedJSON = "[" + modifiedJSON + "]"
 				}
 				err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
@@ -1571,4 +1571,18 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 
 	}
 	return nil
+}
+
+func isResponseArray(modifiedJSONString string) bool {
+	var data interface{}
+
+	// Parse the JSON string
+	err := json.Unmarshal([]byte(modifiedJSONString), &data)
+	if err != nil {
+		return false
+	}
+
+	// Check if the parsed data is an array
+	_, isArray := data.([]interface{})
+	return isArray
 }

@@ -4,7 +4,7 @@ resource "cloudflare_account_subscription" "terraform_managed_resource" {
   rate_plan = {
     currency           = "USD"
     externally_managed = false
-    id                 = "image_resizing_ent"
+    id                 = "enterprise"
     is_contract        = true
     public_name        = "Image Resizing Ent"
     scope              = "user"

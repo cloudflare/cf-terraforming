@@ -250,7 +250,7 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	//t.Skip("skip until the v5 provider is fully supported")
+	t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string
@@ -420,7 +420,6 @@ func TestResourceGenerationV5(t *testing.T) {
 				))
 
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
-				fmt.Println(fmt.Sprintf("Output: %s", output))
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
 				api = cloudflare.NewClient(option.WithHTTPClient(

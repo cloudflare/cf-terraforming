@@ -24,8 +24,32 @@ interactions:
     url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/email/routing/rules/catch_all
     method: GET
   response:
-    body: '{"result":{"id":"98082a00905545319bdc5fbce8c95774","tag":"98082a00905545319bdc5fbce8c95774","name":"terraform
-      rule catch all","matchers":[{"type":"all"}],"actions":[{"type":"forward","value":["destinationaddress@example.net"]}],"enabled":false,"priority":2147483647},"success":true,"errors":[],"messages":[]}'
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": {
+          "actions": [
+            {
+              "type": "forward",
+              "value": [
+                "destinationaddress@example.net"
+              ]
+            }
+          ],
+          "enabled": false,
+          "id": "98082a00905545319bdc5fbce8c95774",
+          "matchers": [
+            {
+              "type": "all"
+            }
+          ],
+          "name": "terraform rule catch all",
+          "priority": 2147483647,
+          "tag": "98082a00905545319bdc5fbce8c95774"
+        },
+        "success": true
+      }
     headers:
       Cf-Auditlog-Id:
       - 01952a79-1d87-741e-99c0-79cbe49fa0d4

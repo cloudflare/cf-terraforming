@@ -115,14 +115,6 @@ var resourceToEndpoint = map[string]map[string]string{
 		"list": "/zones/{zone_id}/dns_records",
 		"get":  "/zones/{zone_id}/dns_records/{dns_record_id}",
 	},
-	"cloudflare_dns_settings": {
-		"list": "",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/dns_settings",
-	},
-	"cloudflare_dns_settings_internal_view": {
-		"list": "/accounts/{account_id}/dns_settings/views",
-		"get":  "/accounts/{account_id}/dns_settings/views/{view_id}",
-	},
 	"cloudflare_dns_zone_transfers_incoming": {
 		"list": "",
 		"get":  "/zones/{zone_id}/secondary_dns/incoming",
@@ -184,8 +176,8 @@ var resourceToEndpoint = map[string]map[string]string{
 		"get":  "/zones/{zone_id}/firewall/lockdowns/{lock_downs_id}",
 	},
 	"cloudflare_access_rule": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/firewall/access_rules/rules",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/firewall/access_rules/rules/{rule_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/firewall/access_rules/rules",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/firewall/access_rules/rules/{rule_id}",
 	},
 	"cloudflare_user_agent_blocking_rule": {
 		"list": "/zones/{zone_id}/firewall/ua_rules",
@@ -200,8 +192,8 @@ var resourceToEndpoint = map[string]map[string]string{
 		"get":  "/zones/{zone_id}/keyless_certificates/{keyless_certificate_id}",
 	},
 	"cloudflare_logpush_job": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/logpush/jobs",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/logpush/jobs/{job_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/logpush/jobs",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/logpush/jobs/{job_id}",
 	},
 	"cloudflare_logpush_ownership_challenge": {
 		"list": "",
@@ -218,10 +210,6 @@ var resourceToEndpoint = map[string]map[string]string{
 	"cloudflare_authenticated_origin_pulls": {
 		"list": "",
 		"get":  "/zones/{zone_id}/origin_tls_client_auth/hostnames/{hostname}",
-	},
-	"cloudflare_authenticated_origin_pulls_settings": {
-		"list": "",
-		"get":  "/zones/{zone_id}/origin_tls_client_auth/settings",
 	},
 	"cloudflare_page_rule": {
 		"list": "/zones/{zone_id}/pagerules",
@@ -250,10 +238,6 @@ var resourceToEndpoint = map[string]map[string]string{
 	"cloudflare_web3_hostname": {
 		"list": "/zones/{zone_id}/web3/hostnames",
 		"get":  "/zones/{zone_id}/web3/hostnames/{identifier}",
-	},
-	"cloudflare_workers_route": {
-		"list": "/zones/{zone_id}/workers/routes",
-		"get":  "/zones/{zone_id}/workers/routes/{route_id}",
 	},
 	"cloudflare_workers_script_subdomain": {
 		"list": "",
@@ -320,8 +304,8 @@ var resourceToEndpoint = map[string]map[string]string{
 		"get":  "/zones/{zone_id}/page_shield/policies/{policy_id}",
 	},
 	"cloudflare_ruleset": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/rulesets",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/rulesets/{ruleset_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/rulesets",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/rulesets/{ruleset_id}",
 	},
 	"cloudflare_url_normalization_settings": {
 		"list": "",
@@ -463,14 +447,6 @@ var resourceToEndpoint = map[string]map[string]string{
 		"list": "/accounts/{account_id}/r2/buckets",
 		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}",
 	},
-	"cloudflare_r2_bucket_lifecycle": {
-		"list": "",
-		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}/lifecycle",
-	},
-	"cloudflare_r2_bucket_cors": {
-		"list": "",
-		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}/cors",
-	},
 	"cloudflare_r2_custom_domain": {
 		"list": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom",
 		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/custom/{domain_name}",
@@ -478,18 +454,6 @@ var resourceToEndpoint = map[string]map[string]string{
 	"cloudflare_r2_managed_domain": {
 		"list": "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed",
 		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}/domains/managed",
-	},
-	"cloudflare_r2_bucket_event_notification": {
-		"list": "",
-		"get":  "/accounts/{account_id}/event_notifications/r2/{bucket_name}/configuration",
-	},
-	"cloudflare_r2_bucket_lock": {
-		"list": "",
-		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}/lock",
-	},
-	"cloudflare_r2_bucket_sippy": {
-		"list": "",
-		"get":  "/accounts/{account_id}/r2/buckets/{bucket_name}/sippy",
 	},
 	"cloudflare_workers_for_platforms_dispatch_namespace": {
 		"list": "/accounts/{account_id}/workers/dispatch/namespaces",
@@ -536,40 +500,40 @@ var resourceToEndpoint = map[string]map[string]string{
 		"get":  "/accounts/{account_id}/devices/posture/integration/{integration_id}",
 	},
 	"cloudflare_zero_trust_access_identity_provider": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/access/identity_providers",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/identity_providers/{identity_provider_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/access/identity_providers",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/identity_providers/{identity_provider_id}",
 	},
 	"cloudflare_zero_trust_organization": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/access/organizations",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/organizations",
+		"list": "/{account_or_zone}/{account_or_zone_id}/access/organizations",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/organizations",
 	},
 	"cloudflare_zero_trust_access_infrastructure_target": {
 		"list": "/accounts/{account_id}/infrastructure/targets",
 		"get":  "/accounts/{account_id}/infrastructure/targets/{target_id}",
 	},
 	"cloudflare_zero_trust_access_application": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/access/apps",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/apps/{app_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/access/apps",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/apps/{app_id}",
 	},
 	"cloudflare_zero_trust_access_short_lived_certificate": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/access/apps/ca",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/apps/{app_id}/ca",
+		"list": "/{account_or_zone}/{account_or_zone_id}/access/apps/ca",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/apps/{app_id}/ca",
 	},
 	"cloudflare_zero_trust_access_mtls_certificate": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/access/certificates",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/certificates/{certificate_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/access/certificates",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/certificates/{certificate_id}",
 	},
 	"cloudflare_zero_trust_access_mtls_hostname_settings": {
 		"list": "",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/certificates/settings",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/certificates/settings",
 	},
 	"cloudflare_zero_trust_access_group": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/access/groups",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/groups/{group_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/access/groups",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/groups/{group_id}",
 	},
 	"cloudflare_zero_trust_access_service_token": {
-		"list": "/{accounts_or_zones}/{account_or_zone_id}/access/service_tokens",
-		"get":  "/{accounts_or_zones}/{account_or_zone_id}/access/service_tokens/{service_token_id}",
+		"list": "/{account_or_zone}/{account_or_zone_id}/access/service_tokens",
+		"get":  "/{account_or_zone}/{account_or_zone_id}/access/service_tokens/{service_token_id}",
 	},
 	"cloudflare_zero_trust_access_key_configuration": {
 		"list": "",
@@ -630,10 +594,6 @@ var resourceToEndpoint = map[string]map[string]string{
 	"cloudflare_zero_trust_dns_location": {
 		"list": "/accounts/{account_id}/gateway/locations",
 		"get":  "/accounts/{account_id}/gateway/locations/{location_id}",
-	},
-	"cloudflare_zero_trust_gateway_logging": {
-		"list": "",
-		"get":  "/accounts/{account_id}/gateway/logging",
 	},
 	"cloudflare_zero_trust_gateway_proxy_endpoint": {
 		"list": "/accounts/{account_id}/gateway/proxy_endpoints",

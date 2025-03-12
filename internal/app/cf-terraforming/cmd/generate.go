@@ -1445,7 +1445,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					jsonStructData[0].(map[string]interface{})["id"] = zoneID
 					jsonStructData[0].(map[string]interface{})["cache_type"] = tieredCache.Type.String()
 				default:
-					fmt.Fprintf(cmd.OutOrStderr(), "%q is not yet supported for automatic generation", resourceType)
+					fmt.Fprintf(cmd.OutOrStderr(), "%q is not yet supported for automatic generation\n", resourceType)
 					return
 				}
 			}
@@ -1457,7 +1457,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			// If we don't have any resources to generate, just bail out early.
 			if resourceCount == 0 {
-				fmt.Fprintf(cmd.OutOrStderr(), "no resources of type %q found to generate", resourceType)
+				fmt.Fprintf(cmd.OutOrStderr(), "No resources of type %q found to generate\n", resourceType)
 				return
 			}
 

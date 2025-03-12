@@ -347,8 +347,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare waiting room event":                      {identiferType: "zone", resourceType: "cloudflare_waiting_room_event", testdataFilename: "cloudflare_waiting_room_event"},
 		// "cloudflare waiting room rules":                      {identiferType: "zone", resourceType: "cloudflare_waiting_room_rules", testdataFilename: "cloudflare_waiting_room_rules"},
 		// "cloudflare waiting room settings":                   {identiferType: "zone", resourceType: "cloudflare_waiting_room_settings", testdataFilename: "cloudflare_waiting_room_settings"},
-		"cloudflare web3 hostname" +
-			"": {identiferType: "zone", resourceType: "cloudflare_web3_hostname", testdataFilename: "cloudflare_web3_hostname"},
+		"cloudflare web3 hostname": {identiferType: "zone", resourceType: "cloudflare_web3_hostname", testdataFilename: "cloudflare_web3_hostname"},
 		// "cloudflare worker route":                            {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route"},
 		// "cloudflare workers kv namespace":                    {identiferType: "account", resourceType: "cloudflare_workers_kv_namespace", testdataFilename: "cloudflare_workers_kv_namespace"},
 		// "cloudflare zone lockdown":                           {identiferType: "zone", resourceType: "cloudflare_zone_lockdown", testdataFilename: "cloudflare_zone_lockdown"},

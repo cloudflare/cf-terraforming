@@ -1562,8 +1562,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 }
 
 func processCustomCasesV5(response []interface{}, resourceType string) error {
+	resourceCount := len(response)
 	switch resourceType {
-
+	case "cloudflare_managed_transforms":
+		// remap email and role_ids into the right structure and remove policies
+		for i := 0; i < resourceCount; i++ {
+			for j := range response[i].(map[string]interface{})["managed_request_headers"].([]interface{}) {
+				delete(response[i].(map[string]interface{})["managed_request_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			}
+			for j := range response[i].(map[string]interface{})["managed_response_headers"].([]interface{}) {
+				delete(response[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			}
+		}
 	}
 	return nil
 }

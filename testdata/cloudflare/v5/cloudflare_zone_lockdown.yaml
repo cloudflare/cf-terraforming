@@ -1,0 +1,68 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/firewall/lockdowns
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "configurations": [
+                {
+                  "target": "ip",
+                  "value": "198.51.100.4"
+                }
+              ],
+              "created_on": "2024-11-07T20:41:10.596531127Z",
+              "id": "a0c66b4917a14aa69761e7c22b8027f1",
+              "modified_on": "2024-11-07T20:41:10.596531127Z",
+              "paused": false,
+              "urls": [
+                "ephnewtbrw.terraform.cfapi.net/*"
+              ]
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 25,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 0195202f-11af-7d2f-983a-921c0a690945
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=utf-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

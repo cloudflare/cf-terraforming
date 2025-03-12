@@ -1,0 +1,78 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/healthchecks
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "address": "example.com",
+              "check_regions": [
+                "WNAM"
+              ],
+              "consecutive_fails": 1,
+              "consecutive_successes": 1,
+              "created_on": "2025-03-11T23:52:17.419474Z",
+              "description": "",
+              "failure_reason": "",
+              "http_config": null,
+              "id": "1e42483f944c38d94e0b96ced76feb11",
+              "interval": 60,
+              "modified_on": "2025-03-11T23:52:17.419474Z",
+              "name": "zngpvvwgvw",
+              "retries": 2,
+              "status": "unknown",
+              "suspended": false,
+              "tcp_config": {
+                "method": "connection_established",
+                "port": 80
+              },
+              "timeout": 5,
+              "type": "TCP"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 25,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 0195202f-11af-7d2f-983a-921c0a690945
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=utf-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

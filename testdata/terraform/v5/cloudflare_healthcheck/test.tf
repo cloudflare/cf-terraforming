@@ -1,31 +1,18 @@
 resource "cloudflare_healthcheck" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  address = "www.example.com"
-  name = "server-1"
-  check_regions = ["WNAM", "ENAM"]
-  consecutive_fails = 0
-  consecutive_successes = 0
-  description = "Health check for www.example.com"
-  http_config = {
-    allow_insecure = true
-    expected_body = "success"
-    expected_codes = ["2xx", "302"]
-    follow_redirects = true
-    header = {
-      Host = ["example.com"]
-      X-App-ID = ["abc123"]
-    }
-    method = "GET"
-    path = "/health"
-    port = 0
-  }
-  interval = 0
-  retries = 0
-  suspended = true
+  address               = "example.com"
+  check_regions         = ["WNAM"]
+  consecutive_fails     = 1
+  consecutive_successes = 1
+  interval              = 60
+  name                  = "zngpvvwgvw"
+  retries               = 2
+  suspended             = false
+  timeout               = 5
+  type                  = "TCP"
+  zone_id               = "0da42c8d2132a9ddaf714f9e7c920711"
   tcp_config = {
     method = "connection_established"
-    port = 0
+    port   = 80
   }
-  timeout = 0
-  type = "HTTPS"
 }
+

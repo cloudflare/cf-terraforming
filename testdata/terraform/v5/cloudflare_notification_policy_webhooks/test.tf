@@ -1,6 +1,6 @@
 resource "cloudflare_notification_policy_webhooks" "terraform_managed_resource" {
-  account_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  name = "Slack Webhook"
-  url = "https://hooks.slack.com/services/Ds3fdBFbV/456464Gdd"
-  secret = "secret"
+  account_id = "f037e56e89293a057740de681ac9abbe"
+  name       = "my webhooks destination for receiving Cloudflare notifications"
+  url        = "https://httpbin.org/post"
 }
+

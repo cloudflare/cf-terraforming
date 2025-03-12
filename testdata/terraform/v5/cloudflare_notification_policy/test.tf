@@ -1,63 +1,51 @@
-resource "cloudflare_notification_policy" "terraform_managed_resource" {
-  account_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  alert_type = "access_custom_certificate_expiration_type"
-  enabled = true
+resource "cloudflare_notification_policy" "terraform_managed_resource_0" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  alert_type  = "universal_ssl_event_type"
+  description = "test description update"
+  enabled     = true
+  name        = "foo2"
+  filters     = {}
   mechanisms = {
     email = [{
       id = "test@example.com"
     }]
-    pagerduty = [{
-
-    }]
-    webhooks = [{
-
-    }]
-  }
-  name = "SSL Notification Event Policy"
-  alert_interval = "30m"
-  description = "Something describing the policy."
-  filters = {
-    actions = ["string"]
-    affected_asns = ["string"]
-    affected_components = ["string"]
-    affected_locations = ["string"]
-    airport_code = ["string"]
-    alert_trigger_preferences = ["string"]
-    alert_trigger_preferences_value = ["string"]
-    enabled = ["string"]
-    environment = ["string"]
-    event = ["string"]
-    event_source = ["string"]
-    event_type = ["string"]
-    group_by = ["string"]
-    health_check_id = ["string"]
-    incident_impact = ["INCIDENT_IMPACT_NONE"]
-    input_id = ["string"]
-    insight_class = ["string"]
-    limit = ["string"]
-    logo_tag = ["string"]
-    megabits_per_second = ["string"]
-    new_health = ["string"]
-    new_status = ["string"]
-    packets_per_second = ["string"]
-    pool_id = ["string"]
-    pop_names = ["string"]
-    product = ["string"]
-    project_id = ["string"]
-    protocol = ["string"]
-    query_tag = ["string"]
-    requests_per_second = ["string"]
-    selectors = ["string"]
-    services = ["string"]
-    slo = ["99.9"]
-    status = ["string"]
-    target_hostname = ["string"]
-    target_ip = ["string"]
-    target_zone_name = ["string"]
-    traffic_exclusions = ["security_events"]
-    tunnel_id = ["string"]
-    tunnel_name = ["string"]
-    where = ["string"]
-    zones = ["string"]
   }
 }
+
+resource "cloudflare_notification_policy" "terraform_managed_resource_1" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  alert_type  = "zone_aop_custom_certificate_expiration_type"
+  description = "This notification is automatically set by Cloudflare"
+  enabled     = true
+  name        = "Default notification"
+  filters     = {}
+  mechanisms = {
+    email = [{
+      id = "test2@example.com"
+      }, {
+      id = "test3@example.com"
+      }, {
+      id = "test4@example.com"
+      }, {
+      id = "test5@example.com"
+    }]
+  }
+}
+
+resource "cloudflare_notification_policy" "terraform_managed_resource_2" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  alert_type  = "billing_usage_alert"
+  description = "test description"
+  enabled     = true
+  name        = "workers usage notification"
+  filters = {
+    limit   = ["100"]
+    product = ["worker_requests"]
+  }
+  mechanisms = {
+    email = [{
+      id = "test@example.com"
+    }]
+  }
+}
+

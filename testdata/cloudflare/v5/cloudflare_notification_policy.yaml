@@ -1,0 +1,135 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/alerting/v3/policies
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "alert_type": "universal_ssl_event_type",
+              "conditions": {},
+              "created": "2022-03-21T23:45:41.781264Z",
+              "description": "test description update",
+              "enabled": true,
+              "filters": {},
+              "id": "58a3e747dc764237bcc6fcecc236cb85",
+              "mechanisms": {
+                "email": [
+                  {
+                    "id": "test@example.com"
+                  }
+                ]
+              },
+              "modified": "2024-11-05T21:30:27.96569Z",
+              "name": "foo2"
+            },                                            
+            {
+              "alert_type": "zone_aop_custom_certificate_expiration_type",
+              "conditions": {},
+              "created": "2022-08-08T02:30:36.597653Z",
+              "description": "This notification is automatically set by Cloudflare",
+              "enabled": true,
+              "filters": {},
+              "id": "e1e9661596144e8db32722512a519daf",
+              "mechanisms": {
+                "email": [
+                  {
+                    "id": "test2@example.com"
+                  },
+                  {
+                    "id": "test3@example.com"
+                  },
+                  {
+                    "id": "test4@example.com"
+                  },
+                  {
+                    "id": "test5@example.com"
+                  }                  
+                ]
+              },
+              "modified": "2022-08-08T02:30:36.597653Z",
+              "name": "Default notification"
+            },
+            {
+              "alert_type": "billing_usage_alert",
+              "conditions": {
+                ">=": [
+                  {
+                    "var": "worker_requests"
+                  },
+                  100
+                ]
+              },
+              "created": "2022-08-17T04:02:30.929892Z",
+              "description": "test description",
+              "enabled": true,
+              "filters": {
+                "limit": [
+                  "100"
+                ],
+                "product": [
+                  "worker_requests"
+                ]
+              },
+              "id": "0b20eef144264cb7951921ec29361a0b",
+              "mechanisms": {
+                "email": [
+                  {
+                    "id": "test@example.com"
+                  }
+                ]
+              },
+              "modified": "2022-08-17T04:02:30.929892Z",
+              "name": "workers usage notification"
+            }                   
+          ],
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

@@ -1,0 +1,74 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/secondary_dns/peers
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "id": "eb30a001558e496b95fda94aedd1a583",
+              "ip": "1.2.3.4",
+              "ixfr_enable": false,
+              "name": "terraform-peer",
+              "port": 53
+            },                   
+            {
+              "id": "03fd2f81b6b54f32b2891e204eb14db7",
+              "ip": "",
+              "ixfr_enable": false,
+              "name": "terraform-peer",
+              "port": 0
+            },
+            {
+              "id": "0d79471b5a6144bbb7e05f3d7a64564d",
+              "ip": "",
+              "ixfr_enable": false,
+              "name": "terraform-peer",
+              "port": 0
+            },            
+            {
+              "id": "226c39f30555498082ba9c4a3204e1b8",
+              "ip": "",
+              "ixfr_enable": false,
+              "name": "fcusoidvut",
+              "port": 0
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a27-9b97-7290-9dde-22beca17ccc8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

@@ -1,30 +1,25 @@
 resource "cloudflare_waiting_room" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  host = "shop.example.com"
-  name = "production_webinar"
-  new_users_per_minute = 200
-  total_active_users = 200
-  additional_routes = [{
-    host = "shop2.example.com"
-    path = "/shop2/checkout"
-  }]
+  custom_page_html          = "foobar"
+  default_template_language = "en-US"
+  description               = "my desc"
+  disable_session_renewal   = true
+  host                      = "www.terraform.cfapi.net"
+  json_response_enabled     = true
+  name                      = "waiting_room_ucmxvksksg"
+  new_users_per_minute      = 400
+  path                      = "/foobar"
+  queue_all                 = false
+  queueing_method           = "fifo"
+  queueing_status_code      = 200
+  session_duration          = 10
+  suspended                 = true
+  total_active_users        = 405
+  turnstile_action          = "log"
+  turnstile_mode            = "invisible"
+  zone_id                   = "0da42c8d2132a9ddaf714f9e7c920711"
   cookie_attributes = {
     samesite = "auto"
-    secure = "auto"
+    secure   = "auto"
   }
-  cookie_suffix = "abcd"
-  custom_page_html = "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Queue all enabled {{/waitTimeKnown}}"
-  default_template_language = "en-US"
-  description = "Production - DO NOT MODIFY"
-  disable_session_renewal = false
-  enabled_origin_commands = ["revoke"]
-  json_response_enabled = false
-  path = "/shop/checkout"
-  queue_all = true
-  queueing_method = "fifo"
-  queueing_status_code = 200
-  session_duration = 1
-  suspended = true
-  turnstile_action = "log"
-  turnstile_mode = "off"
 }
+

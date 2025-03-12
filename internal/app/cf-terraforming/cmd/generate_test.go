@@ -347,6 +347,8 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare access group (zone)":    {identiferType: "zone", resourceType: "cloudflare_access_group", testdataFilename: "cloudflare_access_group_zone"},
 		// "cloudflare custom certificates":    {identiferType: "zone", resourceType: "cloudflare_custom_certificates", testdataFilename: "cloudflare_custom_certificates"},
 		// "cloudflare custom SSL": {identiferType: "zone", resourceType: "cloudflare_custom_ssl", testdataFilename: "cloudflare_custom_ssl"},
+		"cloudflare waiting room":          {identiferType: "zone", resourceType: "cloudflare_waiting_room", testdataFilename: "cloudflare_waiting_room"},
+		"cloudflare waiting room settings": {identiferType: "zone", resourceType: "cloudflare_waiting_room_settings", testdataFilename: "cloudflare_waiting_room_settings"},
 		// "cloudflare worker cron trigger":    {identiferType: "zone", resourceType: "cloudflare_worker_cron_trigger", testdataFilename: "cloudflare_worker_cron_trigger"},
 		"cloudflare zone":        {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 		"cloudflare zone dnssec": {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},

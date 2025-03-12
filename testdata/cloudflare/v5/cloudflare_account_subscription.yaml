@@ -1,0 +1,104 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/subscriptions
+      method: GET
+    response:
+      body: |
+        {
+           "result":[
+              {
+                "cancel_at_period_end": false,
+                "component_values": [
+                  {
+                    "name": "image_resizing_requests",
+                    "value": 0
+                  }
+                ],
+                "created_date": "2021-11-10T18:22:50Z",
+                "currency": "USD",
+                "frequency": "monthly",
+                "id": "6a7c6769e32f45bf974a5a8a520dc3b6",
+                "price": 0,
+                "product": {
+                  "billing": "",
+                  "duration": 0,
+                  "name": "prod_image_resizing",
+                  "period": "",
+                  "public_name": "Image Resizing"
+                },
+                "rate_plan": {
+                  "currency": "USD",
+                  "externally_managed": false,
+                  "id": "enterprise",
+                  "is_contract": true,
+                  "public_name": "Image Resizing Ent",
+                  "scope": "user",
+                  "sets": [
+                    "usage",
+                    "is_cloudflare",
+                    "public"
+                  ]
+                },
+                "trial": null
+            }
+           ],
+           "result_info":{
+              "page":1,
+              "per_page":20,
+              "total_pages":1,
+              "count":1,
+              "total_count":1
+           },
+           "success":true,
+           "errors":[
+        
+           ],
+           "messages":[
+        
+           ]
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

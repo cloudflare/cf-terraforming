@@ -130,11 +130,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// by default, we want to use the `list` operation however, there are times
 				// when resources exist only as `get` operations but contain multiple
 				// resources.
-				isList := true
 				endpoint := resourceToEndpoint[resourceType]["list"]
 				if endpoint == "" {
 					endpoint = resourceToEndpoint[resourceType]["get"]
-					isList = false
 				}
 
 				// if we encounter a combined endpoint, we need to rewrite to use the correct
@@ -187,10 +185,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				}
 
 				modifiedJSON := modifyResponsePayload(resourceType, value)
-				if !isList {
-					modifiedJSON = "[" + modifiedJSON + "]"
-				}
-				err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
+				jsonStructData, err = unMarshallJSONStructData(modifiedJSON)
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)
 				}
@@ -1571,4 +1566,16 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 
 	}
 	return nil
+}
+
+func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) {
+	var data interface{}
+	err := json.Unmarshal([]byte(modifiedJSONString), &data)
+	if err != nil {
+		return nil, err
+	}
+	if dataSlice, ok := data.([]interface{}); ok {
+		return dataSlice, nil
+	}
+	return []interface{}{data}, nil
 }

@@ -1,104 +1,114 @@
-resource "cloudflare_load_balancer" "terraform_managed_resource" {
-  zone_id = "699d98642c564d2e855e9661899b7252"
-  default_pools = ["17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"]
-  fallback_pool = "fallback_pool"
-  name = "www.example.com"
+resource "cloudflare_load_balancer" "terraform_managed_resource_0" {
+  default_pools    = ["c36b8a3066b335b2af7e940f2588805d"]
+  enabled          = true
+  fallback_pool    = "c36b8a3066b335b2af7e940f2588805d"
+  name             = "tf-testacc-lb-fwwjdnedoi.terraform.cfapi.net"
+  networks         = ["cloudflare"]
+  pop_pools        = {}
+  proxied          = false
+  region_pools     = {}
+  session_affinity = "none"
+  steering_policy  = "off"
+  ttl              = 30
+  zone_id          = "0da42c8d2132a9ddaf714f9e7c920711"
   adaptive_routing = {
-    failover_across_pools = true
+    failover_across_pools = false
   }
-  country_pools = {
-    GB = ["abd90f38ced07c2e2f4df50b1f61d4194"]
-    US = ["de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"]
-  }
-  description = "Load Balancer for www.example.com"
   location_strategy = {
-    mode = "pop"
-    prefer_ecs = "always"
+    mode       = "pop"
+    prefer_ecs = "proximity"
   }
-  networks = ["string"]
-  pop_pools = {
-    LAX = ["de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"]
-    LHR = ["abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"]
-    SJC = ["00920f38ce07c2e2f4df50b1f61d4194"]
-  }
-  proxied = true
   random_steering = {
-    default_weight = 0.2
-    pool_weights = {
-      "9290f38c5d07c2e2f4df57b1f61d4196" = 0.5
-      de90f38ced07c2e2f4df50b1f61d4194 = 0.3
-    }
+    default_weight = 1
   }
-  region_pools = {
-    ENAM = ["00920f38ce07c2e2f4df50b1f61d4194"]
-    WNAM = ["de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"]
+  session_affinity_attributes = {
+    drain_duration         = 0
+    samesite               = "Auto"
+    secure                 = "Auto"
+    zero_downtime_failover = "none"
+  }
+}
+
+resource "cloudflare_load_balancer" "terraform_managed_resource_1" {
+  default_pools    = ["0ce4832a7181e0c3e2936e2c34a4687f"]
+  description      = "rules lb"
+  enabled          = true
+  fallback_pool    = "0ce4832a7181e0c3e2936e2c34a4687f"
+  name             = "tf-testacc-lb-sidcrfxrak.terraform.cfapi.net"
+  networks         = ["cloudflare"]
+  pop_pools        = {}
+  proxied          = false
+  region_pools     = {}
+  session_affinity = "none"
+  steering_policy  = "off"
+  ttl              = 30
+  zone_id          = "0da42c8d2132a9ddaf714f9e7c920711"
+  adaptive_routing = {
+    failover_across_pools = false
+  }
+  location_strategy = {
+    mode       = "pop"
+    prefer_ecs = "proximity"
+  }
+  random_steering = {
+    default_weight = 1
   }
   rules = [{
-    condition = "http.request.uri.path contains \"/testing\""
-    disabled = true
-    fixed_response = {
-      content_type = "application/json"
-      location = "www.example.com"
-      message_body = "Testing Hello"
-      status_code = 0
-    }
-    name = "route the path /testing to testing datacenter."
+    condition = "dns.qry.type == 28"
+    disabled  = false
+    name      = "test rule 1"
     overrides = {
       adaptive_routing = {
         failover_across_pools = true
       }
-      country_pools = {
-        GB = ["abd90f38ced07c2e2f4df50b1f61d4194"]
-        US = ["de90f38ced07c2e2f4df50b1f61d4194", "00920f38ce07c2e2f4df50b1f61d4194"]
-      }
-      default_pools = ["17b5962d775c646f3f9725cbc7a53df4", "9290f38c5d07c2e2f4df57b1f61d4196", "00920f38ce07c2e2f4df50b1f61d4194"]
-      fallback_pool = "fallback_pool"
       location_strategy = {
-        mode = "pop"
+        mode       = "resolver_ip"
         prefer_ecs = "always"
-      }
-      pop_pools = {
-        LAX = ["de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"]
-        LHR = ["abd90f38ced07c2e2f4df50b1f61d4194", "f9138c5d07c2e2f4df57b1f61d4196"]
-        SJC = ["00920f38ce07c2e2f4df50b1f61d4194"]
       }
       random_steering = {
         default_weight = 0.2
         pool_weights = {
-          "9290f38c5d07c2e2f4df57b1f61d4196" = 0.5
-          de90f38ced07c2e2f4df50b1f61d4194 = 0.3
+          c29c1dc121903fbea9f0c92e83a1b1e2 = 0.4
         }
       }
-      region_pools = {
-        ENAM = ["00920f38ce07c2e2f4df50b1f61d4194"]
-        WNAM = ["de90f38ced07c2e2f4df50b1f61d4194", "9290f38c5d07c2e2f4df57b1f61d4196"]
-      }
-      session_affinity = "none"
       session_affinity_attributes = {
-        drain_duration = 100
-        headers = ["x"]
-        require_all_headers = true
-        samesite = "Auto"
-        secure = "Auto"
-        zero_downtime_failover = "none"
+        require_all_headers    = false
+        samesite               = "Auto"
+        secure                 = "Auto"
+        zero_downtime_failover = "sticky"
       }
-      session_affinity_ttl = 1800
-      steering_policy = "off"
-      ttl = 30
+      steering_policy = "geo"
     }
     priority = 0
+    }, {
+    condition = "dns.qry.type == 28"
+    disabled  = false
+    fixed_response = {
+      content_type = "html"
+      location     = "www.example.com"
+      message_body = "hello"
+      status_code  = 200
+    }
+    name       = "test rule 2"
+    overrides  = {}
+    priority   = 10
     terminates = true
+    }, {
+    condition = "dns.qry.type == 28"
+    disabled  = false
+    name      = "test rule 3"
+    overrides = {
+      region_pools = {
+        ENAM = ["0ce4832a7181e0c3e2936e2c34a4687f"]
+      }
+    }
+    priority = 20
   }]
-  session_affinity = "none"
   session_affinity_attributes = {
-    drain_duration = 100
-    headers = ["x"]
-    require_all_headers = true
-    samesite = "Auto"
-    secure = "Auto"
+    drain_duration         = 0
+    samesite               = "Auto"
+    secure                 = "Auto"
     zero_downtime_failover = "none"
   }
-  session_affinity_ttl = 1800
-  steering_policy = "off"
-  ttl = 30
 }
+

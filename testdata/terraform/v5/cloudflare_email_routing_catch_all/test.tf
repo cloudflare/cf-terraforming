@@ -1,12 +1,12 @@
 resource "cloudflare_email_routing_catch_all" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
+  enabled = false
+  name    = "terraform rule catch all"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   actions = [{
-    type = "drop"
+    type  = "forward"
     value = ["destinationaddress@example.net"]
   }]
   matchers = [{
     type = "all"
   }]
-  enabled = true
-  name = "Send to user@example.net rule."
 }

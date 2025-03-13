@@ -304,6 +304,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare origin ca certificate": {identiferType: "zone", resourceType: "cloudflare_origin_ca_certificate", testdataFilename: "cloudflare_origin_ca_certificate"},
 		// "cloudflare page rule":                               {identiferType: "zone", resourceType: "cloudflare_page_rule", testdataFilename: "cloudflare_page_rule"},
 		// "cloudflare rate limit":                              {identiferType: "zone", resourceType: "cloudflare_rate_limit", testdataFilename: "cloudflare_rate_limit"},
+		"cloudflare d1 database":  {identiferType: "account", resourceType: "cloudflare_d1_database", testdataFilename: "cloudflare_d1_database"},
 		"cloudflare dns firewall": {identiferType: "account", resourceType: "cloudflare_dns_firewall", testdataFilename: "cloudflare_dns_firewall"},
 		// "cloudflare dns record CAA":                          {identiferType: "zone", resourceType: "cloudflare_dns_record", testdataFilename: "cloudflare_dns_record_caa"},
 		// "cloudflare dns record PTR":                          {identiferType: "zone", resourceType: "cloudflare_dns_record", testdataFilename: "cloudflare_dns_record_ptr"},

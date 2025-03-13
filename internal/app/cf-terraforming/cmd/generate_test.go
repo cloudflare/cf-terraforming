@@ -331,7 +331,9 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare ruleset (override remapping = enabled)":  {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_override_remapping_enabled"},
 		// "cloudflare ruleset (rewrite to empty query string)": {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_rewrite_to_empty_query_parameter"},
 		// "cloudflare ruleset":                                 {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone"},
-		"cloudflare snippets": {identiferType: "zone", resourceType: "cloudflare_snippets", testdataFilename: "cloudflare_snippets"},
+		"cloudflare regional hostnames":    {identiferType: "zone", resourceType: "cloudflare_regional_hostname", testdataFilename: "cloudflare_regional_hostname"},
+		"cloudflare regional tiered cache": {identiferType: "zone", resourceType: "cloudflare_regional_tiered_cache", testdataFilename: "cloudflare_regional_tiered_cache"},
+		"cloudflare snippets":              {identiferType: "zone", resourceType: "cloudflare_snippets", testdataFilename: "cloudflare_snippets"},
 		// "cloudflare spectrum application":                    {identiferType: "zone", resourceType: "cloudflare_spectrum_application", testdataFilename: "cloudflare_spectrum_application"},
 		// "cloudflare teams list":                              {identiferType: "account", resourceType: "cloudflare_teams_list", testdataFilename: "cloudflare_teams_list"},
 		// "cloudflare teams location":                          {identiferType: "account", resourceType: "cloudflare_teams_location", testdataFilename: "cloudflare_teams_location"},
@@ -361,11 +363,15 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare access group (zone)":    {identiferType: "zone", resourceType: "cloudflare_access_group", testdataFilename: "cloudflare_access_group_zone"},
 		// "cloudflare custom certificates":    {identiferType: "zone", resourceType: "cloudflare_custom_certificates", testdataFilename: "cloudflare_custom_certificates"},
 		// "cloudflare custom SSL": {identiferType: "zone", resourceType: "cloudflare_custom_ssl", testdataFilename: "cloudflare_custom_ssl"},
+		"cloudflare queue":                 {identiferType: "account", resourceType: "cloudflare_queue", testdataFilename: "cloudflare_queue"},
 		"cloudflare waiting room":          {identiferType: "zone", resourceType: "cloudflare_waiting_room", testdataFilename: "cloudflare_waiting_room"},
 		"cloudflare waiting room settings": {identiferType: "zone", resourceType: "cloudflare_waiting_room_settings", testdataFilename: "cloudflare_waiting_room_settings"},
 		// "cloudflare worker cron trigger":    {identiferType: "zone", resourceType: "cloudflare_worker_cron_trigger", testdataFilename: "cloudflare_worker_cron_trigger"},
-		"cloudflare zone":        {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
-		"cloudflare zone dnssec": {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
+		"cloudflare workers custom domain":                    {identiferType: "account", resourceType: "cloudflare_workers_custom_domain", testdataFilename: "cloudflare_workers_custom_domain"},
+		"cloudflare workers kv namespace":                     {identiferType: "account", resourceType: "cloudflare_workers_kv_namespace", testdataFilename: "cloudflare_workers_kv_namespace"},
+		"cloudflare workers for platforms dispatch namespace": {identiferType: "account", resourceType: "cloudflare_workers_for_platforms_dispatch_namespace", testdataFilename: "cloudflare_workers_for_platforms_dispatch_namespace"},
+		"cloudflare zone":                                     {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
+		"cloudflare zone dnssec":                              {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
 	}
 
 	for name, tc := range tests {

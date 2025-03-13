@@ -1592,7 +1592,7 @@ func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) 
 	return []interface{}{data}, nil
 }
 
-// postProcess allows you to perform additional actions on the generated hcl
+// postProcess allows you to perform additional actions on the generated hcl.
 func postProcess(f *hclwrite.File, resourceType string) {
 	switch resourceType {
 	case "cloudflare_stream_live_input", "cloudflare_stream":
@@ -1600,6 +1600,7 @@ func postProcess(f *hclwrite.File, resourceType string) {
 	}
 }
 
+// addJSONEncode wraps a hcl block with the jsonencode function.
 func addJSONEncode(f *hclwrite.File, attributeName string) {
 	for _, block := range f.Body().Blocks() {
 		if block.Type() != "resource" {

@@ -1,4 +1,9 @@
 resource "cloudflare_queue" "terraform_managed_resource" {
-  account_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  queue_name = "example-queue"
+  account_id = "f037e56e89293a057740de681ac9abbe"
+  queue_name = "test-q"
+  settings = {
+    delivery_delay           = 0
+    message_retention_period = 345600
+  }
 }
+

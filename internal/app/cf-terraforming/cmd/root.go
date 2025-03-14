@@ -1,16 +1,19 @@
 package cmd
 
 import (
+	"encoding/json"
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
+	"strings"
 )
 
 var log = logrus.New()
-var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath, providerRegistryHostname string
+var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath, providerRegistryHostname, resourceIDFilePath string
 var verbose, useModernImportBlock bool
 var apiV0 *cfv0.API
 var api *cloudflare.Client
@@ -35,6 +38,7 @@ func Execute() {
 	}
 }
 
+// TODO:: probably a cli command to add the ids too?
 func init() {
 	cobra.OnInitialize(initConfig)
 
@@ -120,6 +124,33 @@ func init() {
 	if err = viper.BindEnv("provider-registry-hostname", "CLOUDFLARE_PROVIDER_REGISTRY_HOSTNAME"); err != nil {
 		log.Fatal(err)
 	}
+	rootCmd.PersistentFlags().StringVar(&resourceIDFilePath, "cloudflare-resource-ids-file-path", ".", "Path to a json file containing resource IDs")
+	if err = viper.BindPFlag("cloudflare-resource-ids-file-path", rootCmd.PersistentFlags().Lookup("cloudflare-resource-ids-file-path")); err != nil {
+		log.Fatal(err)
+	}
+	if err = viper.BindEnv("cloudflare-resource-ids-file-path", "CLOUDFLARE_RESOURCE_ID_FILE_PATH"); err != nil {
+		log.Fatal(err)
+	}
+	//TODO:: not static path
+	idJsonFile, err := os.ReadFile("/Users/vaishak/cf-repos/github/cf-terraforming/ids.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(idJsonFile, &resourceIDMap)
+	if err != nil {
+		log.Fatal(err)
+	}
+	resources := strings.Split(resourceType, ",")
+	for _, resource := range resources {
+		ids, ok := resourceIDMap[resource]
+		if !ok {
+			continue
+		}
+		if len(ids) == 0 {
+			log.Fatalf("Resource IDs are required to create the terraform state for the resource %s", resource)
+		}
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -153,4 +184,18 @@ func initConfig() {
 	}
 
 	log.SetLevel(cfgLogLevel)
+}
+
+func requiresIDFile(resourceType string) bool {
+	resources := strings.Split(resourceType, ",")
+	for _, resource := range resources {
+		endpoints, ok := resourceToEndpoint[resource]
+		if !ok {
+			continue
+		}
+		if endpoints["list"] == "" {
+			return true
+		}
+	}
+	return false
 }

@@ -250,7 +250,7 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	t.Skip("skip until the v5 provider is fully supported")
+	//t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string
@@ -340,13 +340,13 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare ruleset (override remapping = enabled)":  {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_override_remapping_enabled"},
 		// "cloudflare ruleset (rewrite to empty query string)": {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_rewrite_to_empty_query_parameter"},
 		// "cloudflare ruleset":                                 {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone"},
-		"cloudflare stream":            {identiferType: "account", resourceType: "cloudflare_stream", testdataFilename: "cloudflare_stream"},
-		"cloudflare stream keys":       {identiferType: "account", resourceType: "cloudflare_stream_key", testdataFilename: "cloudflare_stream_key"},
-		"cloudflare stream live input": {identiferType: "account", resourceType: "cloudflare_stream_live_input", testdataFilename: "cloudflare_stream_live_input"},
-		"cloudflare stream webhook":    {identiferType: "account", resourceType: "cloudflare_stream_webhook", testdataFilename: "cloudflare_stream_webhook"},
-		"cloudflare snippets":          {identiferType: "zone", resourceType: "cloudflare_snippets", testdataFilename: "cloudflare_snippets"},
-		"cloudflare snippet rules":     {identiferType: "zone", resourceType: "cloudflare_snippet_rules", testdataFilename: "cloudflare_snippet_rules"},
-		"cloudflare tiered cache":      {identiferType: "zone", resourceType: "cloudflare_tiered_cache", testdataFilename: "cloudflare_tiered_cache"},
+		"cloudflare stream":                {identiferType: "account", resourceType: "cloudflare_stream", testdataFilename: "cloudflare_stream"},
+		"cloudflare stream keys":           {identiferType: "account", resourceType: "cloudflare_stream_key", testdataFilename: "cloudflare_stream_key"},
+		"cloudflare stream live input":     {identiferType: "account", resourceType: "cloudflare_stream_live_input", testdataFilename: "cloudflare_stream_live_input"},
+		"cloudflare stream webhook":        {identiferType: "account", resourceType: "cloudflare_stream_webhook", testdataFilename: "cloudflare_stream_webhook"},
+		"cloudflare snippets":              {identiferType: "zone", resourceType: "cloudflare_snippets", testdataFilename: "cloudflare_snippets"},
+		"cloudflare snippet rules":         {identiferType: "zone", resourceType: "cloudflare_snippet_rules", testdataFilename: "cloudflare_snippet_rules"},
+		"cloudflare tiered cache":          {identiferType: "zone", resourceType: "cloudflare_tiered_cache", testdataFilename: "cloudflare_tiered_cache"},
 		"cloudflare regional hostnames":    {identiferType: "zone", resourceType: "cloudflare_regional_hostname", testdataFilename: "cloudflare_regional_hostname"},
 		"cloudflare regional tiered cache": {identiferType: "zone", resourceType: "cloudflare_regional_tiered_cache", testdataFilename: "cloudflare_regional_tiered_cache"},
 		// "cloudflare spectrum application":                    {identiferType: "zone", resourceType: "cloudflare_spectrum_application", testdataFilename: "cloudflare_spectrum_application"},
@@ -387,6 +387,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare workers for platforms dispatch namespace": {identiferType: "account", resourceType: "cloudflare_workers_for_platforms_dispatch_namespace", testdataFilename: "cloudflare_workers_for_platforms_dispatch_namespace"},
 		"cloudflare zone":                                     {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 		"cloudflare zone dnssec":                              {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
+		"cloudflare zone setting":                             {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting"},
 	}
 
 	for name, tc := range tests {
@@ -458,6 +459,7 @@ func TestResourceGenerationV5(t *testing.T) {
 				))
 
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
+				fmt.Println(fmt.Sprintf("output: %s", output))
 			}
 
 			expected := testDataFile("v5", tc.testdataFilename)

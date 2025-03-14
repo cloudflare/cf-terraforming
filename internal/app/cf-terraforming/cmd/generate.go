@@ -1576,6 +1576,14 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 				delete(response[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
 			}
 		}
+	case "cloudflare_content_scanning_expression":
+		// wrap the response in body for tf
+		for i := 0; i < resourceCount; i++ {
+			payload := response[i].(map[string]interface{})["payload"]
+			response[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
+				"payload": payload,
+			}}
+		}
 	}
 	return nil
 }

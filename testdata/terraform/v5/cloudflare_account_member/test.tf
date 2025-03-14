@@ -1,6 +1,6 @@
 resource "cloudflare_account_member" "terraform_managed_resource" {
-  account_id = "eb78d65290b24279ba6f44721b3ea3c4"
-  email = "user@example.com"
-  roles = ["3536bcfad5faccb999b47003c79917fb"]
-  status = "accepted"
+  account_id = "f037e56e89293a057740de681ac9abbe"
+  email      = "jdoe@cloudflare.com"
+  roles      = ["33666b9c79b9a5273fc7344ff42f953d"]
+  status     = "accepted"
 }

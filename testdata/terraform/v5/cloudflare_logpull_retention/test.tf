@@ -1,4 +1,5 @@
 resource "cloudflare_logpull_retention" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  flag = true
+  flag    = false
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
 }
+

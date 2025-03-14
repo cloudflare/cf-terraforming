@@ -1,8 +1,9 @@
 resource "cloudflare_page_shield_policy" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  action = "allow"
-  description = "Checkout page CSP policy"
-  enabled = true
-  expression = "ends_with(http.request.uri.path, \"/checkout\")"
-  value = "script-src \'none\';"
+  action      = "log"
+  description = "test-policy"
+  enabled     = true
+  expression  = "(ip.src.country eq \"CL\")"
+  value       = "default-src 'none'"
+  zone_id     = "0da42c8d2132a9ddaf714f9e7c920711"
 }
+

@@ -164,14 +164,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					for _, id := range ids {
 						placeholderReplacer = strings.NewReplacer("{setting_id}", id)
 						endpoint = placeholderReplacer.Replace(endpoint)
-						jsonStructData, err = GetAPIResponse(endpoint, result, isList)
+						jsonStructData, err = GetAPIResponse(endpoint, result)
 						if err != nil {
 							continue
 						}
 						resourceCount = len(jsonStructData)
 					}
 				} else {
-					jsonStructData, err = GetAPIResponse(endpoint, result, isList)
+					jsonStructData, err = GetAPIResponse(endpoint, result)
 					if err != nil {
 						continue
 					}
@@ -1566,7 +1566,7 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 	return nil
 }
 
-func GetAPIResponse(endpoint string, result *http.Response, isList bool) ([]interface{}, error) {
+func GetAPIResponse(endpoint string, result *http.Response) ([]interface{}, error) {
 	var jsonStructData []interface{}
 	err := api.Get(context.Background(), endpoint, nil, &result)
 	if err != nil {
@@ -1598,13 +1598,11 @@ func GetAPIResponse(endpoint string, result *http.Response, isList bool) ([]inte
 	}
 
 	modifiedJSON := modifyResponsePayload(resourceType, value)
-	if !isList {
-		modifiedJSON = "[" + modifiedJSON + "]"
-	}
-	err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
+	jsonStructData, err = unMarshallJSONStructData(modifiedJSON)
 	if err != nil {
 		log.Fatalf("failed to unmarshal result: %s", err)
 	}
+
 	err = processCustomCasesV5(jsonStructData, resourceType)
 	if err != nil {
 		log.Fatalf("failed to process custom case for %s: %s", resourceType, err)

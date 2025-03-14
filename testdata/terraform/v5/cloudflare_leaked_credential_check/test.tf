@@ -1,4 +1,5 @@
 resource "cloudflare_leaked_credential_check" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  enabled = true
+  enabled = false
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
 }
+

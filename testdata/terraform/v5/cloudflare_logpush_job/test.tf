@@ -1,28 +1,20 @@
-resource "cloudflare_logpush_job" "terraform_managed_resource" {
-  destination_conf = "s3://mybucket/logs?region=us-west-2"
-  zone_id = "zone_id"
-  dataset = "http_requests"
-  enabled = false
-  frequency = "high"
-  kind = "edge"
-  logpull_options = "fields=RayID,ClientIP,EdgeStartTimestamp&timestamps=rfc3339"
-  max_upload_bytes = 5000000
-  max_upload_interval_seconds = 30
-  max_upload_records = 1000
-  name = "example.com"
-  output_options = {
-    batch_prefix = "batch_prefix"
-    batch_suffix = "batch_suffix"
-    cve_2021_4428 = true
-    field_delimiter = "field_delimiter"
-    field_names = ["ClientIP", "EdgeStartTimestamp", "RayID"]
-    output_type = "ndjson"
-    record_delimiter = "record_delimiter"
-    record_prefix = "record_prefix"
-    record_suffix = "record_suffix"
-    record_template = "record_template"
-    sample_rate = 0
-    timestamp_format = "unixnano"
-  }
-  ownership_challenge = "00000000000000000000"
+resource "cloudflare_logpush_job" "terraform_managed_resource_0" {
+  account_id       = "f037e56e89293a057740de681ac9abbe"
+  dataset          = "workers_trace_events"
+  destination_conf = "r2://terraform-acctest/date={DATE}?account-id=f037e56e89293a057740de681ac9abbe&access-key-id=0c6710b6f5a77c3b4735f49616694cf2&secret-access-key=7bb918ea5bc7c68729c597a3444e1095b3bbbcaacdce8288f1f243bfd822f337"
+  enabled          = true
+  frequency        = "high"
+  logpull_options  = "fields=Event,EventTimestampMs,Outcome,Exceptions,Logs,ScriptName"
+  name             = "fmvpbbpnkb"
 }
+
+resource "cloudflare_logpush_job" "terraform_managed_resource_1" {
+  account_id       = "f037e56e89293a057740de681ac9abbe"
+  dataset          = "workers_trace_events"
+  destination_conf = "r2://terraform-acctest/date={DATE}?account-id=f037e56e89293a057740de681ac9abbe&access-key-id=0c6710b6f5a77c3b4735f49616694cf2&secret-access-key=7bb918ea5bc7c68729c597a3444e1095b3bbbcaacdce8288f1f243bfd822f337"
+  enabled          = true
+  frequency        = "high"
+  logpull_options  = "fields=Event,EventTimestampMs,Outcome,Exceptions,Logs,ScriptName"
+  name             = "httgotkhpj"
+}
+

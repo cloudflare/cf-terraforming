@@ -138,13 +138,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				// if we encounter a combined endpoint, we need to rewrite to use the correct
 				// endpoint depending on what parameters are being provided.
-				if strings.Contains(endpoint, "{account_or_zone}") {
-					if accountID != "" {
-						endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
-					} else {
-						endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
-					}
-				} else if strings.Contains(endpoint, "{accounts_or_zones}") {
+				if strings.Contains(endpoint, "{accounts_or_zones}") {
 					if accountID != "" {
 						endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
 					} else {

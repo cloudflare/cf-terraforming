@@ -1576,6 +1576,17 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 				delete(response[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
 			}
 		}
+	case "cloudflare_account_member":
+		// remap email and role_ids into the right structure and remove policies
+		for i := 0; i < resourceCount; i++ {
+			delete(response[i].(map[string]interface{}), "policies")
+			response[i].(map[string]interface{})["email"] = response[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
+			roleIDs := []string{}
+			for _, role := range response[i].(map[string]interface{})["roles"].([]interface{}) {
+				roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
+			}
+			response[i].(map[string]interface{})["roles"] = roleIDs
+		}	
 	case "cloudflare_content_scanning_expression":
 		// wrap the response in body for tf
 		for i := 0; i < resourceCount; i++ {

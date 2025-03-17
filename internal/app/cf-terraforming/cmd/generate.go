@@ -190,10 +190,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)
 				}
-				err = processCustomCasesV5(&jsonStructData, resourceType)
-				if err != nil {
-					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
-				}
+				processCustomCasesV5(&jsonStructData, resourceType)
 				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer
@@ -1563,7 +1560,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 	}
 }
 
-func processCustomCasesV5(response *[]interface{}, resourceType string) error {
+func processCustomCasesV5(response *[]interface{}, resourceType string) {
 	resourceCount := len(*response)
 	switch resourceType {
 	case "cloudflare_managed_transforms":
@@ -1581,8 +1578,6 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) error {
 		r := *response
 		for i := 0; i < resourceCount; i++ {
 			buckets := r[i].(map[string]interface{})["buckets"]
-			//fmt.Println(fmt.Sprintf("buckets %+v", buckets))
-			delete(r[i].(map[string]interface{}), "buckets")
 			bucketObjects := make([]interface{}, len(buckets.([]interface{})))
 			for j := range buckets.([]interface{}) {
 				b := buckets.([]interface{})[j]
@@ -1614,7 +1609,6 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) error {
 			}}
 		}
 	}
-	return nil
 }
 
 func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) {

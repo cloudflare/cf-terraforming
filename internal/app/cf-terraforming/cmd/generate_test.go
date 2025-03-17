@@ -327,6 +327,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare notification policy webhooks": {identiferType: "account", resourceType: "cloudflare_notification_policy_webhooks", testdataFilename: "cloudflare_notification_policy_webhooks"},
 		"cloudflare pages project":                {identiferType: "account", resourceType: "cloudflare_pages_project", testdataFilename: "cloudflare_pages_project"},
 		"cloudflare page shield policy":           {identiferType: "zone", resourceType: "cloudflare_page_shield_policy", testdataFilename: "cloudflare_page_shield_policy"},
+		"cloudflare_r2_bucket":                    {identiferType: "account", resourceType: "cloudflare_r2_bucket", testdataFilename: "cloudflare_r2_bucket"},
 		// "cloudflare ruleset (ddos_l7)":                       {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_ddos_l7"},
 		// "cloudflare ruleset (http_log_custom_fields)":        {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_http_log_custom_fields"},
 		// "cloudflare ruleset (http_ratelimit)":                {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_http_ratelimit"},

@@ -190,10 +190,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)
 				}
-				err = processCustomCasesV5(jsonStructData, resourceType)
-				if err != nil {
-					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
-				}
+				processCustomCasesV5(&jsonStructData, resourceType)
 				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer
@@ -1563,40 +1560,55 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 	}
 }
 
-func processCustomCasesV5(response []interface{}, resourceType string) error {
-	resourceCount := len(response)
+func processCustomCasesV5(response *[]interface{}, resourceType string) {
+	resourceCount := len(*response)
 	switch resourceType {
 	case "cloudflare_managed_transforms":
 		// remap email and role_ids into the right structure and remove policies
 		for i := 0; i < resourceCount; i++ {
-			for j := range response[i].(map[string]interface{})["managed_request_headers"].([]interface{}) {
-				delete(response[i].(map[string]interface{})["managed_request_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			for j := range (*response)[i].(map[string]interface{})["managed_request_headers"].([]interface{}) {
+				delete((*response)[i].(map[string]interface{})["managed_request_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
 			}
-			for j := range response[i].(map[string]interface{})["managed_response_headers"].([]interface{}) {
-				delete(response[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			for j := range (*response)[i].(map[string]interface{})["managed_response_headers"].([]interface{}) {
+				delete((*response)[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
 			}
+		}
+	case "cloudflare_r2_bucket":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			buckets := r[i].(map[string]interface{})["buckets"]
+			bucketObjects := make([]interface{}, len(buckets.([]interface{})))
+			for j := range buckets.([]interface{}) {
+				b := buckets.([]interface{})[j]
+				bucketObjects[j] = b
+			}
+			finalResponse = append(finalResponse, bucketObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
 		}
 	case "cloudflare_account_member":
 		// remap email and role_ids into the right structure and remove policies
 		for i := 0; i < resourceCount; i++ {
-			delete(response[i].(map[string]interface{}), "policies")
-			response[i].(map[string]interface{})["email"] = response[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
+			delete((*response)[i].(map[string]interface{}), "policies")
+			(*response)[i].(map[string]interface{})["email"] = (*response)[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
 			roleIDs := []string{}
-			for _, role := range response[i].(map[string]interface{})["roles"].([]interface{}) {
+			for _, role := range (*response)[i].(map[string]interface{})["roles"].([]interface{}) {
 				roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
 			}
-			response[i].(map[string]interface{})["roles"] = roleIDs
-		}	
+			(*response)[i].(map[string]interface{})["roles"] = roleIDs
+		}
 	case "cloudflare_content_scanning_expression":
 		// wrap the response in body for tf
 		for i := 0; i < resourceCount; i++ {
-			payload := response[i].(map[string]interface{})["payload"]
-			response[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
+			payload := (*response)[i].(map[string]interface{})["payload"]
+			(*response)[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
 				"payload": payload,
 			}}
 		}
 	}
-	return nil
 }
 
 func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) {

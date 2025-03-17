@@ -1586,6 +1586,7 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 				roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
 			}
 			response[i].(map[string]interface{})["roles"] = roleIDs
+		}	
 	case "cloudflare_content_scanning_expression":
 		// wrap the response in body for tf
 		for i := 0; i < resourceCount; i++ {

@@ -144,6 +144,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					} else {
 						endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
 					}
+				} else if strings.Contains(endpoint, "{accounts_or_zones}") {
+					if accountID != "" {
+						endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
+					} else {
+						endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
+					}
 				}
 
 				// replace the URL placeholders with the actual values we have.

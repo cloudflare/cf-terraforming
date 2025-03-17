@@ -190,7 +190,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if err != nil {
 					log.Fatalf("failed to unmarshal result: %s", err)
 				}
-				err = processCustomCasesV5(jsonStructData, resourceType)
+				err = processCustomCasesV5(&jsonStructData, resourceType)
 				if err != nil {
 					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
 				}
@@ -1563,18 +1563,33 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 	}
 }
 
-func processCustomCasesV5(response []interface{}, resourceType string) error {
-	resourceCount := len(response)
+func processCustomCasesV5(response *[]interface{}, resourceType string) error {
+	resourceCount := len(*response)
 	switch resourceType {
 	case "cloudflare_managed_transforms":
 		// remap email and role_ids into the right structure and remove policies
 		for i := 0; i < resourceCount; i++ {
-			for j := range response[i].(map[string]interface{})["managed_request_headers"].([]interface{}) {
-				delete(response[i].(map[string]interface{})["managed_request_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			for j := range (*response)[i].(map[string]interface{})["managed_request_headers"].([]interface{}) {
+				delete((*response)[i].(map[string]interface{})["managed_request_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
 			}
-			for j := range response[i].(map[string]interface{})["managed_response_headers"].([]interface{}) {
-				delete(response[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			for j := range (*response)[i].(map[string]interface{})["managed_response_headers"].([]interface{}) {
+				delete((*response)[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
 			}
+		}
+	case "cloudflare_r2_bucket":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			buckets := r[i].(map[string]interface{})["buckets"]
+			bucketObjs := make([]interface{}, len(buckets.([]interface{})))
+			for j := range buckets.([]interface{}) {
+				b := buckets.([]interface{})[j]
+				bucketObjs[j] = b
+			finalResponse = append(finalResponse, bucketObjs...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
 		}
 	case "cloudflare_account_member":
 		// remap email and role_ids into the right structure and remove policies
@@ -1586,7 +1601,7 @@ func processCustomCasesV5(response []interface{}, resourceType string) error {
 				roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
 			}
 			response[i].(map[string]interface{})["roles"] = roleIDs
-		}	
+		}
 	case "cloudflare_content_scanning_expression":
 		// wrap the response in body for tf
 		for i := 0; i < resourceCount; i++ {

@@ -1581,11 +1581,14 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) error {
 		r := *response
 		for i := 0; i < resourceCount; i++ {
 			buckets := r[i].(map[string]interface{})["buckets"]
-			bucketObjs := make([]interface{}, len(buckets.([]interface{})))
+			//fmt.Println(fmt.Sprintf("buckets %+v", buckets))
+			delete(r[i].(map[string]interface{}), "buckets")
+			bucketObjects := make([]interface{}, len(buckets.([]interface{})))
 			for j := range buckets.([]interface{}) {
 				b := buckets.([]interface{})[j]
-				bucketObjs[j] = b
-			finalResponse = append(finalResponse, bucketObjs...)
+				bucketObjects[j] = b
+			}
+			finalResponse = append(finalResponse, bucketObjects...)
 		}
 		*response = make([]interface{}, len(finalResponse))
 		for i := range finalResponse {
@@ -1594,19 +1597,19 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) error {
 	case "cloudflare_account_member":
 		// remap email and role_ids into the right structure and remove policies
 		for i := 0; i < resourceCount; i++ {
-			delete(response[i].(map[string]interface{}), "policies")
-			response[i].(map[string]interface{})["email"] = response[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
+			delete((*response)[i].(map[string]interface{}), "policies")
+			(*response)[i].(map[string]interface{})["email"] = (*response)[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
 			roleIDs := []string{}
-			for _, role := range response[i].(map[string]interface{})["roles"].([]interface{}) {
+			for _, role := range (*response)[i].(map[string]interface{})["roles"].([]interface{}) {
 				roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
 			}
-			response[i].(map[string]interface{})["roles"] = roleIDs
+			(*response)[i].(map[string]interface{})["roles"] = roleIDs
 		}
 	case "cloudflare_content_scanning_expression":
 		// wrap the response in body for tf
 		for i := 0; i < resourceCount; i++ {
-			payload := response[i].(map[string]interface{})["payload"]
-			response[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
+			payload := (*response)[i].(map[string]interface{})["payload"]
+			(*response)[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
 				"payload": payload,
 			}}
 		}

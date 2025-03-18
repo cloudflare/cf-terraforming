@@ -1,0 +1,78 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/devices/posture
+      method: GET
+    response:
+      body: |
+        {
+          "result": [
+            {
+              "description": "My description",
+              "expiration": null,
+              "id": "459b1c36-6f6b-47d7-90de-b7d43bbf3ab2",
+              "input": {
+                "checkDisks": [],
+                "requireAll": true
+              },
+              "match": [
+                {
+                  "platform": "mac"
+                }
+              ],
+              "name": "wfbhpishtq",
+              "schedule": "24h",
+              "type": "disk_encryption"
+            },
+            {
+              "description": "My description",
+              "expiration": null,
+              "id": "e718a68e-a3d8-427e-aa4a-f735ce90e05e",
+              "input": {
+                "checkDisks": [],
+                "requireAll": true
+              },
+              "match": [
+                {
+                  "platform": "mac"
+                }
+              ],
+              "name": "jsdpiddjgv",
+              "schedule": "24h",
+              "type": "disk_encryption"
+            }           
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

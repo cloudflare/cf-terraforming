@@ -1,0 +1,84 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/devices/dex_tests
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "dex_tests": [
+              {
+                "created": "2024-10-21T22:42:49.86329Z",
+                "data": {
+                  "host": "1.1.1.1",
+                  "kind": "traceroute"
+                },
+                "description": "qmktnyxzho",
+                "enabled": true,
+                "interval": "0h30m0s",
+                "name": "qmktnyxzho",
+                "target_policies": [],
+                "targeted": false,
+                "test_id": "0af36b95-b659-4470-9c80-a154f43e009e",
+                "updated": "2024-10-21T22:42:49.86329Z"
+              },
+              {
+                "created": "2024-10-21T22:42:43.753028Z",
+                "data": {
+                  "host": "foo.cloudflare.com",
+                  "kind": "traceroute"
+                },
+                "description": "aibzxpxpyl",
+                "enabled": true,
+                "interval": "0h30m0s",
+                "name": "aibzxpxpyl",
+                "target_policies": [],
+                "targeted": false,
+                "test_id": "ffe90984-5e2d-455f-8323-2b1e6c853d7e",
+                "updated": "2024-10-21T22:42:43.753028Z"
+              }              
+            ]
+          },
+          "result_info": {
+            "count": 2,
+            "page": 1,
+            "per_page": 20,
+            "total_count": 2
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

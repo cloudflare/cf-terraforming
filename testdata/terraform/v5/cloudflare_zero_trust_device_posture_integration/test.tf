@@ -1,12 +1,12 @@
 resource "cloudflare_zero_trust_device_posture_integration" "terraform_managed_resource" {
-  account_id = "699d98642c564d2e855e9661899b7252"
+  account_id = "f037e56e89293a057740de681ac9abbe"
+  interval   = "24h"
+  name       = "ptstsjfmxl"
+  type       = "workspace_one"
   config = {
-    api_url = "https://as123.awmdm.com/API"
-    auth_url = "https://na.uemauth.vmwservices.com/connect/token"
-    client_id = "example client id"
-    client_secret = "example client secret"
+    api_url   = "https://techp-as.awmdm.com/API"
+    auth_url  = "https://na.uemauth.vmwservices.com/connect/token"
+    client_id = "d0ed71f01c884e8b94ec4e4d6639f609"
   }
-  interval = "10m"
-  name = "My Workspace One Integration"
-  type = "workspace_one"
 }
+

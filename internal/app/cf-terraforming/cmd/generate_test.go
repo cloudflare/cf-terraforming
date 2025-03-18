@@ -386,6 +386,11 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare workers custom domain":                    {identiferType: "account", resourceType: "cloudflare_workers_custom_domain", testdataFilename: "cloudflare_workers_custom_domain"},
 		"cloudflare workers kv namespace":                     {identiferType: "account", resourceType: "cloudflare_workers_kv_namespace", testdataFilename: "cloudflare_workers_kv_namespace"},
 		"cloudflare workers for platforms dispatch namespace": {identiferType: "account", resourceType: "cloudflare_workers_for_platforms_dispatch_namespace", testdataFilename: "cloudflare_workers_for_platforms_dispatch_namespace"},
+		"cloudflare zero trust dex test":                      {identiferType: "account", resourceType: "cloudflare_zero_trust_dex_test", testdataFilename: "cloudflare_zero_trust_dex_test"},
+		"cloudflare zero trust device custom profile":         {identiferType: "account", resourceType: "cloudflare_zero_trust_device_custom_profile", testdataFilename: "cloudflare_zero_trust_device_custom_profile"},
+		"cloudflare zero trust device posture rule":           {identiferType: "account", resourceType: "cloudflare_zero_trust_device_posture_rule", testdataFilename: "cloudflare_zero_trust_device_posture_rule"},
+		"cloudflare zero trust device posture integration":    {identiferType: "account", resourceType: "cloudflare_zero_trust_device_posture_integration", testdataFilename: "cloudflare_zero_trust_device_posture_integration"},
+		"cloudflare zero trust device managed networks":       {identiferType: "account", resourceType: "cloudflare_zero_trust_device_managed_networks", testdataFilename: "cloudflare_zero_trust_device_managed_networks"},
 		"cloudflare zone":                                     {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 		"cloudflare zone dnssec":                              {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
 	}

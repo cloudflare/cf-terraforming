@@ -402,8 +402,8 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust organization":                       {identiferType: "account", resourceType: "cloudflare_zero_trust_organization", testdataFilename: "cloudflare_zero_trust_organization"},
 		"cloudflare_zero_trust_risk_behavior":                      {identiferType: "account", resourceType: "cloudflare_zero_trust_risk_behavior", testdataFilename: "cloudflare_zero_trust_risk_behavior"},
 		"cloudflare zero trust tunnel cloudflared":                 {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared"},
-		"cloudflare_zero_trust_tunnel_cloudflared_route":           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_route", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_route"},
-		"cloudflare_zero_trust_tunnel_cloudflared_virtual_network": {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network"},
+		"cloudflare zero trust tunnel cloudflared route":           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_route", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_route"},
+		"cloudflare zero trust tunnel cloudflared virtual network": {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network"},
 		"cloudflare zone":                                          {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 		"cloudflare zone dnssec":                                   {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
 	}

@@ -1608,6 +1608,22 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 				"payload": payload,
 			}}
 		}
+	case "cloudflare_zero_trust_dex_test":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			dexTests := r[i].(map[string]interface{})["dex_tests"]
+			dtObjects := make([]interface{}, len(dexTests.([]interface{})))
+			for j := range dexTests.([]interface{}) {
+				dt := dexTests.([]interface{})[j]
+				dtObjects[j] = dt
+			}
+			finalResponse = append(finalResponse, dtObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
+		}
 	}
 }
 

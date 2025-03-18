@@ -1601,12 +1601,19 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 			(*response)[i].(map[string]interface{})["roles"] = roleIDs
 		}
 	case "cloudflare_content_scanning_expression":
-		// wrap the response in body for tf
+		// wrap the response in 'body' for tf
 		for i := 0; i < resourceCount; i++ {
 			payload := (*response)[i].(map[string]interface{})["payload"]
 			(*response)[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
 				"payload": payload,
 			}}
+		}
+	case "cloudflare_zero_trust_device_default_profile_local_domain_fallback":
+		// wrap the response in 'domains' for tf
+		for i := 0; i < resourceCount; i++ {
+			do := make(map[string]interface{})
+			do["domains"] = []interface{}{(*response)[i]}
+			(*response)[i] = do
 		}
 	case "cloudflare_zero_trust_dex_test":
 		finalResponse := make([]interface{}, 0)

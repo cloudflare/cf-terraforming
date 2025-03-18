@@ -24,103 +24,283 @@ interactions:
     url: https://api.cloudflare.com/client/v4/zones
     method: GET
   response:
-    body: '{"result":[{"id":"c1f416e3ae7b7e3873d501e5d3b93c2f","name":"a11y-testing.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["leah.ns.cloudflare.com","peyton.ns.cloudflare.com"],"original_name_servers":["brit.ns.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2020-10-30T02:05:15.549300Z","created_on":"2019-08-21T18:04:33.079522Z","activated_on":"2019-08-26T21:24:57.885581Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"d3d821f17e8a0f09b58be826091540db","name":"api.cloudflarecn.net","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["linda.ns.cloudflare.com","merlin.ns.cloudflare.com"],"original_name_servers":["ns79.dns.cf-ns.com","ns90.dns.cf-ns.com"],"original_registrar":"22net,
-      inc. (id: 1555)","original_dnshost":null,"modified_on":"2023-06-20T09:43:50.808668Z","created_on":"2023-06-20T09:37:09.971592Z","activated_on":"2023-06-20T09:43:50.808668Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"fad922598557ed97dcba616080c80f15","name":"api.cloudflare.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["linda.ns.cloudflare.com","merlin.ns.cloudflare.com"],"original_name_servers":["ns3.cloudflare.com","ns4.cloudflare.com","ns5.cloudflare.com","ns6.cloudflare.com","ns7.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2024-02-14T18:39:26.897528Z","created_on":"2019-08-16T20:28:05.207385Z","activated_on":"2019-09-24T20:04:12.794834Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"f14e5e7b2001238aaef9de1309b69b63","name":"api.staging.cloudflarecn.net","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["dane.ns.cloudflare.com","leah.ns.cloudflare.com"],"original_name_servers":["ns79.dns.cf-ns.com","ns90.dns.cf-ns.com"],"original_registrar":"22net,
-      inc. (id: 1555)","original_dnshost":null,"modified_on":"2023-06-20T22:06:15.039072Z","created_on":"2023-06-20T10:22:50.775531Z","activated_on":"2023-06-20T10:28:59.347922Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d98242917a12ae74b03c3e3058dbacbd","type":"organization","name":"API
-      Team Staging"},"account":{"id":"d98242917a12ae74b03c3e3058dbacbd","name":"API
-      Team Staging"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:edit","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dash_sso:edit","#dash_sso:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:edit","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:edit","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:pii","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"45ee6f6f92b38391c59688019ebf2307","name":"api.staging.cloudflare.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["dane.ns.cloudflare.com","leah.ns.cloudflare.com"],"original_name_servers":["ns3.cloudflare.com","ns4.cloudflare.com","ns5.cloudflare.com","ns6.cloudflare.com","ns7.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2024-07-10T16:30:57.485455Z","created_on":"2023-05-16T00:54:46.858709Z","activated_on":"2023-06-14T23:56:01.206518Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d98242917a12ae74b03c3e3058dbacbd","type":"organization","name":"API
-      Team Staging"},"account":{"id":"d98242917a12ae74b03c3e3058dbacbd","name":"API
-      Team Staging"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:edit","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dash_sso:edit","#dash_sso:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:edit","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:edit","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:pii","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"1b6aec1eb2206fb25177432096e41811","name":"api-team.cfapi.net","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["amy.ns.cloudflare.com","austin.ns.cloudflare.com"],"original_name_servers":["linda.ns.cloudflare.com","merlin.ns.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2022-10-18T01:02:25.312748Z","created_on":"2021-02-19T19:17:57.351079Z","activated_on":"2021-02-19T19:24:49.323486Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"9acb4528f2bf83cd8505bf1dfa9150f2","name":"api-worker-test.cloudflare.com","status":"pending","paused":false,"type":"full","development_mode":0,"name_servers":["amy.ns.cloudflare.com","austin.ns.cloudflare.com"],"original_name_servers":["ns3.cloudflare.com","ns4.cloudflare.com","ns5.cloudflare.com","ns6.cloudflare.com","ns7.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2021-06-10T00:53:22.724614Z","created_on":"2021-06-10T00:53:13.992805Z","activated_on":null,"vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"a34a4c9439715a6a20348690f73d9e25","name":"assets.dash.staging.cloudflare.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["aldo.ns.cloudflare.com","karsyn.ns.cloudflare.com"],"original_name_servers":["ns3.cloudflare.com","ns4.cloudflare.com","ns5.cloudflare.com","ns6.cloudflare.com","ns7.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2024-01-24T19:11:57.946690Z","created_on":"2024-01-24T19:05:44.743824Z","activated_on":"2024-01-24T19:11:57.946690Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"08a26bb5fab5f986a8cc6db85644b825","name":"burrito.guide","status":"active","paused":false,"type":"full","development_mode":-205107472,"name_servers":["leah.ns.cloudflare.com","peyton.ns.cloudflare.com"],"original_name_servers":["ns32.domaincontrol.com","ns31.domaincontrol.com"],"original_registrar":null,"original_dnshost":"godaddy","modified_on":"2020-10-27T07:47:53.884616Z","created_on":"2018-08-16T20:24:48.220142Z","activated_on":"2018-08-16T20:29:48.229841Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"03da06495f0c741b8b15c63f4d3f116e","name":"canary.dash.staging.cloudflare.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["aldo.ns.cloudflare.com","karsyn.ns.cloudflare.com"],"original_name_servers":["ns3.cloudflare.com","ns4.cloudflare.com","ns5.cloudflare.com","ns6.cloudflare.com","ns7.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2024-02-08T23:42:03.319649Z","created_on":"2021-04-16T19:07:57.089231Z","activated_on":"2021-04-16T20:11:51.330768Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"8186ff9ea25c52129683103438809ac5","name":"cfapi.net","status":"active","paused":false,"type":"full","development_mode":-139347225,"name_servers":["linda.ns.cloudflare.com","merlin.ns.cloudflare.com"],"original_name_servers":["uma.ns.cloudflare.com","art.ns.cloudflare.com"],"original_registrar":null,"original_dnshost":null,"modified_on":"2022-10-05T18:35:55.911533Z","created_on":"2018-08-10T15:36:02.119775Z","activated_on":"2018-08-10T18:43:55.879456Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"1fc1a820aee39d1533844ebd7173b9ed","name":"cfinlux.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["linda.ns.cloudflare.com","merlin.ns.cloudflare.com"],"original_name_servers":["hugh.ns.cloudflare.com","tani.ns.cloudflare.com"],"original_registrar":"cloudflare,
-      inc.","original_dnshost":null,"modified_on":"2024-06-05T18:16:07.168988Z","created_on":"2019-05-10T22:54:17.044996Z","activated_on":"2019-05-10T22:56:54.878708Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"24e02723da485c42dc5230b83591820b","name":"cfpreviewproxy.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["leah.ns.cloudflare.com","peyton.ns.cloudflare.com"],"original_name_servers":["leah.ns.cloudflare.com","peyton.ns.cloudflare.com"],"original_registrar":null,"original_dnshost":null,"modified_on":"2020-04-08T16:18:08.392162Z","created_on":"2019-02-15T14:36:56.423266Z","activated_on":"2019-02-15T14:38:33.420007Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"5e566c57fdb2cc7aaa8127618f64deb4","name":"cf.staging.cloudflaresso.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["amy.ns.cloudflare.com","austin.ns.cloudflare.com"],"original_name_servers":["fred.ns.cloudflare.com","jean.ns.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2020-02-10T21:48:56.803304Z","created_on":"2020-02-10T21:45:31.959762Z","activated_on":"2020-02-10T21:48:15.030927Z","meta":{"step":2,"custom_certificate_quota":0,"page_rule_quota":3,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"0feeeeeeeeeeeeeeeeeeeeeeeeeeeeee","name":"Free
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":false,"can_subscribe":false,"legacy_id":"free","legacy_discount":false,"externally_managed":false}},{"id":"cf535477f63b2257ba5013a592477ca3","name":"cloudflareapitest.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["linda.ns.cloudflare.com","merlin.ns.cloudflare.com"],"original_name_servers":["liz.ns.cloudflare.com","stan.ns.cloudflare.com"],"original_registrar":"cloudflare,
-      inc.","original_dnshost":null,"modified_on":"2020-04-07T22:14:43.327406Z","created_on":"2018-09-14T22:03:15.887056Z","activated_on":"2018-09-17T14:35:14.027347Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"07748bc9a1f1f7e751286824bdd9b068","name":"cloudflare-ui.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["leah.ns.cloudflare.com","peyton.ns.cloudflare.com"],"original_name_servers":["brit.ns.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2020-11-14T10:13:14.433239Z","created_on":"2019-09-19T10:42:58.286020Z","activated_on":"2019-09-20T22:32:21.691795Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"8016c9470dda0156ef0074901bb5fb2f","name":"cloudflareuitest.com","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["leah.ns.cloudflare.com","peyton.ns.cloudflare.com"],"original_name_servers":["brit.ns.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2020-10-30T16:34:31.915464Z","created_on":"2019-07-31T13:48:10.585182Z","activated_on":"2019-07-31T13:55:28.675945Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"a0c5b21e45c378008e814d8ce6dfe31a","name":"component-library.com","status":"active","paused":false,"type":"full","development_mode":-197336225,"name_servers":["leah.ns.cloudflare.com","peyton.ns.cloudflare.com"],"original_name_servers":["ns23.domaincontrol.com","ns24.domaincontrol.com"],"original_registrar":null,"original_dnshost":"godaddy","modified_on":"2020-10-26T17:41:21.171162Z","created_on":"2017-12-19T05:02:54.071298Z","activated_on":"2017-12-19T05:06:13.431340Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":4,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"998c66447b7b4c67497c499a9ab1b7dd","type":"organization","name":"Cloudflare
-      UI Team"},"account":{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"5a6460d3613d0147eaef18d8837bd2ee","name":"config.cfdata.org","status":"active","paused":false,"type":"full","development_mode":0,"name_servers":["amy.ns.cloudflare.com","austin.ns.cloudflare.com"],"original_name_servers":["ns1.cfdata.org","ns2.cfdata.org"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2022-10-05T18:47:55.557034Z","created_on":"2021-08-31T19:52:55.964473Z","activated_on":"2021-08-31T22:42:43.208785Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":2,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}},{"id":"2d20476a5c7a41de45ea95917ba90890","name":"dash.cloudflare.com","status":"active","paused":false,"type":"full","development_mode":-123588270,"name_servers":["linda.ns.cloudflare.com","merlin.ns.cloudflare.com"],"original_name_servers":["ns3.cloudflare.com","ns4.cloudflare.com","ns5.cloudflare.com","ns6.cloudflare.com","ns7.cloudflare.com"],"original_registrar":"cloudflare,
-      inc. (id: 1910)","original_dnshost":null,"modified_on":"2024-02-14T18:39:29.939064Z","created_on":"2019-10-08T17:53:59.147244Z","activated_on":"2019-10-08T20:04:39.950522Z","vanity_name_servers":[],"vanity_name_servers_ips":null,"meta":{"step":3,"custom_certificate_quota":1,"page_rule_quota":100,"phishing_detected":false},"owner":{"id":"d781e89412e1965584dc2a65a43b7fce","type":"organization","name":"API
-      Team Production"},"account":{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production"},"tenant":{"id":"46f0a1ce86ec3d91fae00db3b8b48cee","name":"Cloudflare,
-      Inc."},"tenant_unit":{"id":"7381208746ee42cbaf7ca36ea7f80144"},"permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"plan":{"id":"94f3b7b768b0458b56d2cac4fe5ec0f9","name":"Enterprise
-      Website","price":0,"currency":"USD","frequency":"","is_subscribed":true,"can_subscribe":true,"legacy_id":"enterprise","legacy_discount":false,"externally_managed":true}}],"result_info":{"page":1,"per_page":20,"total_pages":3,"count":20,"total_count":52},"success":true,"errors":[],"messages":[]}'
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "account": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "Foo Team Production"
+            },
+            "activated_on": "2023-06-20T09:43:50.808668Z",
+            "created_on": "2023-06-20T09:37:09.971592Z",
+            "development_mode": 0,
+            "id": "d3d821f17e8a0f09b58be826091540db",
+            "meta": {
+              "custom_certificate_quota": 1,
+              "page_rule_quota": 100,
+              "phishing_detected": false,
+              "step": 2
+            },
+            "modified_on": "2023-06-20T09:43:50.808668Z",
+            "name": "api.cloudflarecn.net",
+            "name_servers": [
+              "linda.ns.cloudflare.com",
+              "merlin.ns.cloudflare.com"
+            ],
+            "original_dnshost": null,
+            "original_name_servers": [
+              "ns79.dns.cf-ns.com",
+              "ns90.dns.cf-ns.com"
+            ],
+            "original_registrar": "22net, inc. (id: 1555)",
+            "owner": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "API Team Production",
+              "type": "organization"
+            },
+            "paused": false,
+            "permissions": [              
+              "#page_shield:edit",
+              "#zone:edit",
+              "#zone:read",
+              "#teams:report",
+              "#subscription:edit",
+              "#app:edit",
+              "#subscription:read",
+              "#cache_purge:edit",
+              "#auditlogs:read",
+              "#member:read",
+              "#legal:read"
+            ],
+            "plan": {
+              "can_subscribe": true,
+              "currency": "USD",
+              "externally_managed": true,
+              "frequency": "",
+              "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+              "is_subscribed": true,
+              "legacy_discount": false,
+              "legacy_id": "enterprise",
+              "name": "Enterprise Website",
+              "price": 0
+            },
+            "status": "active",
+            "tenant": {
+              "id": "46f0a1ce86ec3d91fae00db3b8b48cee",
+              "name": "Cloudflare, Inc."
+            },
+            "tenant_unit": {
+              "id": "7381208746ee42cbaf7ca36ea7f80144"
+            },
+            "type": "full",
+            "vanity_name_servers": [],
+            "vanity_name_servers_ips": null
+          },
+          {
+            "account": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "API Team Production"
+            },
+            "activated_on": "2019-09-24T20:04:12.794834Z",
+            "created_on": "2019-08-16T20:28:05.207385Z",
+            "development_mode": 0,
+            "id": "fad922598557ed97dcba616080c80f15",
+            "meta": {
+              "custom_certificate_quota": 1,
+              "page_rule_quota": 100,
+              "phishing_detected": false,
+              "step": 3
+            },
+            "modified_on": "2024-02-14T18:39:26.897528Z",
+            "name": "api.cloudflare.com",
+            "name_servers": [
+              "linda.ns.cloudflare.com",
+              "merlin.ns.cloudflare.com"
+            ],
+            "original_dnshost": null,
+            "original_name_servers": [
+              "ns3.cloudflare.com",
+              "ns4.cloudflare.com",
+              "ns5.cloudflare.com",
+              "ns6.cloudflare.com",
+              "ns7.cloudflare.com"
+            ],
+            "original_registrar": "cloudflare, inc. (id: 1910)",
+            "owner": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "API Team Production",
+              "type": "organization"
+            },
+            "paused": false,
+            "permissions": [
+              "#worker:edit",
+              "#worker:read",
+              "#teams:read",          
+              "#dns_records:read",
+              "#ces_integration:edit",
+              "#ces_integration:read",
+              "#ces_search:action",
+              "#ces_search:read",
+              "#ces_search:preview",
+              "#ces_search:raw",
+              "#ces_search:trace",
+              "#ces_phishguard:read",
+              "#ces_settings:edit",
+              "#ces_settings:read",
+              "#ces_analytics:read",
+              "#lb:edit",
+              "#lb:read",
+              "#vectorize:read",
+              "#vectorize:edit",
+              "#query_cache:read",
+              "#query_cache:edit",
+              "#integration:edit",
+              "#access:read",
+              "#access:edit",
+              "#r2_bucket_item:read",
+              "#r2_bucket_item:edit",
+              "#integration:read",
+              "#integration:install",
+              "#dex:read",
+              "#analytics:read",
+              "#dex:edit",
+              "#zone_versioning:read",
+              "#zone_versioning:edit",              
+              "#cache_purge:edit",
+              "#auditlogs:read",
+              "#member:read",
+              "#legal:read"
+            ],
+            "plan": {
+              "can_subscribe": true,
+              "currency": "USD",
+              "externally_managed": true,
+              "frequency": "",
+              "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+              "is_subscribed": true,
+              "legacy_discount": false,
+              "legacy_id": "enterprise",
+              "name": "Enterprise Website",
+              "price": 0
+            },
+            "status": "active",
+            "tenant": {
+              "id": "46f0a1ce86ec3d91fae00db3b8b48cee",
+              "name": "Cloudflare, Inc."
+            },
+            "tenant_unit": {
+              "id": "7381208746ee42cbaf7ca36ea7f80144"
+            },
+            "type": "full",
+            "vanity_name_servers": [],
+            "vanity_name_servers_ips": null
+          },
+          {
+            "account": {
+              "id": "d98242917a12ae74b03c3e3058dbacbd",
+              "name": "Foo Team Staging"
+            },
+            "activated_on": "2023-06-20T10:28:59.347922Z",
+            "created_on": "2023-06-20T10:22:50.775531Z",
+            "development_mode": 0,
+            "id": "f14e5e7b2001238aaef9de1309b69b63",
+            "meta": {
+              "custom_certificate_quota": 1,
+              "page_rule_quota": 100,
+              "phishing_detected": false,
+              "step": 2
+            },
+            "modified_on": "2023-06-20T22:06:15.039072Z",
+            "name": "api.staging.cloudflarecn.net",
+            "name_servers": [
+              "dane.ns.cloudflare.com",
+              "leah.ns.cloudflare.com"
+            ],
+            "original_dnshost": null,
+            "original_name_servers": [
+              "ns79.dns.cf-ns.com",
+              "ns90.dns.cf-ns.com"
+            ],
+            "original_registrar": "22net, inc. (id: 1555)",
+            "owner": {
+              "id": "d98242917a12ae74b03c3e3058dbacbd",
+              "name": "API Team Staging",
+              "type": "organization"
+            },
+            "paused": false,
+            "permissions": [
+              "#worker:edit",
+              "#worker:read",
+              "#teams:read",
+              "#teams:edit",
+              "#waitingroom:read",
+              "#waitingroom:edit",
+              "#fbm:edit",
+              "#organization:read",
+              "#organization:edit",
+              "#magic:read",
+              "#magic:edit",
+              "#logs:edit",
+              "#blocks:read",
+              "#blocks:edit",
+              "#cfone_read",
+              "#cfone_edit",
+              "#billing:read",
+              "#zone_settings:read",
+              "#zone_settings:edit",
+              "#cds_compute_account:edit",
+              "#cds_compute_account:read",              
+              "#page_shield:edit",
+              "#zone:edit",
+              "#zone:read",
+              "#teams:report",
+              "#subscription:edit",
+              "#app:edit",
+              "#subscription:read",
+              "#cache_purge:edit",
+              "#auditlogs:read",
+              "#member:edit",
+              "#member:read",
+              "#legal:read",
+              "#legal:edit"
+            ],
+            "plan": {
+              "can_subscribe": true,
+              "currency": "USD",
+              "externally_managed": true,
+              "frequency": "",
+              "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+              "is_subscribed": true,
+              "legacy_discount": false,
+              "legacy_id": "enterprise",
+              "name": "Enterprise Website",
+              "price": 0
+            },
+            "status": "active",
+            "tenant": {
+              "id": "46f0a1ce86ec3d91fae00db3b8b48cee",
+              "name": "Cloudflare, Inc."
+            },
+            "tenant_unit": {
+              "id": "7381208746ee42cbaf7ca36ea7f80144"
+            },
+            "type": "full",
+            "vanity_name_servers": [],
+            "vanity_name_servers_ips": null
+          }               
+        ],
+        "result_info": {
+          "count": 2,
+          "page": 1,
+          "per_page": 2,
+          "total_count": 2,
+          "total_pages": 1
+        },
+        "success": true
+      }
     headers:
       Cache-Control:
       - no-store, no-cache, must-revalidate, post-check=0, pre-check=0

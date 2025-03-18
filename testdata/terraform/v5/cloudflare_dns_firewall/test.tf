@@ -8,5 +8,9 @@ resource "cloudflare_dns_firewall" "terraform_managed_resource" {
   ratelimit              = 1000
   retries                = 2
   upstream_ips           = ["1.2.3.4"]
-  attack_mitigation      = {}
+  attack_mitigation = {
+    enabled                      = false
+    only_when_upstream_unhealthy = true
+  }
 }
+

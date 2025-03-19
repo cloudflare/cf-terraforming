@@ -399,6 +399,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust access policy":                                {identiferType: "account", resourceType: "cloudflare_zero_trust_access_policy", testdataFilename: "cloudflare_zero_trust_access_policy"},
 		"cloudflare zero trust access service token":                         {identiferType: "account", resourceType: "cloudflare_zero_trust_access_service_token", testdataFilename: "cloudflare_zero_trust_access_service_token"},
 		"cloudflare zero trust access tag":                                   {identiferType: "account", resourceType: "cloudflare_zero_trust_access_tag", testdataFilename: "cloudflare_zero_trust_access_tag"},
+		"cloudflare_zero_trust_gateway_settings":                             {identiferType: "account", resourceType: "cloudflare_zero_trust_gateway_settings", testdataFilename: "cloudflare_zero_trust_gateway_settings"},
 		"cloudflare zero trust organization":                                 {identiferType: "account", resourceType: "cloudflare_zero_trust_organization", testdataFilename: "cloudflare_zero_trust_organization"},
 		"cloudflare zero trust risk behavior":                                {identiferType: "account", resourceType: "cloudflare_zero_trust_risk_behavior", testdataFilename: "cloudflare_zero_trust_risk_behavior"},
 		"cloudflare zero trust tunnel cloudflared":                           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared"},

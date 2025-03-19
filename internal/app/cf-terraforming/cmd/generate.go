@@ -1631,6 +1631,20 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 		for i := range finalResponse {
 			(*response)[i] = finalResponse[i]
 		}
+	case "cloudflare_zero_trust_gateway_settings":
+		for i := 0; i < resourceCount; i++ {
+			settings, ok := (*response)[i].(map[string]interface{})["settings"]
+			if !ok {
+				fmt.Printf("resource %q does not have settings", resourceType)
+				return
+			}
+			customCert, ok := settings.(map[string]interface{})["custom_certificate"]
+			if ok {
+				delete(customCert.(map[string]interface{}), "binding_status")
+				delete(customCert.(map[string]interface{}), "expires_on")
+				delete(customCert.(map[string]interface{}), "updated_at")
+			}
+		}
 	}
 }
 

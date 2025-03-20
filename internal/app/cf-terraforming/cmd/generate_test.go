@@ -270,6 +270,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare address map":          {identiferType: "account", resourceType: "cloudflare_address_map", testdataFilename: "cloudflare_address_map"},
 		"cloudflare account member":       {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},
 		"cloudflare api shield operation": {identiferType: "zone", resourceType: "cloudflare_api_shield_operation", testdataFilename: "cloudflare_api_shield_operation"},
+		"cloudflare bot management":       {identiferType: "zone", resourceType: "cloudflare_bot_management", testdataFilename: "cloudflare_bot_management"},
 		// "cloudflare argo":                                    {identiferType: "zone", resourceType: "cloudflare_argo", testdataFilename: "cloudflare_argo"},
 		// "cloudflare bot management":                          {identiferType: "zone", resourceType: "cloudflare_bot_management", testdataFilename: "cloudflare_bot_management"},
 		// "cloudflare BYO IP prefix":                           {identiferType: "account", resourceType: "cloudflare_byo_ip_prefix", testdataFilename: "cloudflare_byo_ip_prefix"},

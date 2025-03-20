@@ -1645,6 +1645,48 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 				delete(customCert.(map[string]interface{}), "updated_at")
 			}
 		}
+	case "cloudflare_page_rule":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["target"] = (*response)[i].(map[string]interface{})["targets"].([]interface{})[0].(map[string]interface{})["constraint"].(map[string]interface{})["value"]
+			(*response)[i].(map[string]interface{})["actions"] = flattenAttrMap((*response)[i].(map[string]interface{})["actions"].([]interface{}))
+
+			// Have to remap the cache_ttl_by_status to conform to Terraform's more human-friendly structure.
+			if cache, ok := (*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_ttl_by_status"].(map[string]interface{}); ok {
+				cacheTtlByStatus := []map[string]interface{}{}
+
+				for codes, ttl := range cache {
+					if ttl == "no-cache" {
+						ttl = 0
+					} else if ttl == "no-store" {
+						ttl = -1
+					}
+					elem := map[string]interface{}{
+						"codes": codes,
+						"ttl":   ttl,
+					}
+
+					cacheTtlByStatus = append(cacheTtlByStatus, elem)
+				}
+
+				sort.SliceStable(cacheTtlByStatus, func(i int, j int) bool {
+					return cacheTtlByStatus[i]["codes"].(string) < cacheTtlByStatus[j]["codes"].(string)
+				})
+
+				(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_ttl_by_status"] = cacheTtlByStatus
+			}
+
+			// Remap cache_key_fields.query_string.include & .exclude wildcards (not in an array) to the appropriate "ignore" field value in Terraform.
+			if c, ok := (*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{}); ok {
+				if s, sok := c["query_string"].(map[string]interface{})["include"].(string); sok && s == "*" {
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["include"] = nil
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["ignore"] = false
+				}
+				if s, sok := c["query_string"].(map[string]interface{})["exclude"].(string); sok && s == "*" {
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["exclude"] = nil
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["ignore"] = true
+				}
+			}
+		}
 	}
 }
 

@@ -390,6 +390,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust access application":                           {identiferType: "account", resourceType: "cloudflare_zero_trust_access_application", testdataFilename: "cloudflare_zero_trust_access_application"},
 		"cloudflare zero trust access group":                                 {identiferType: "account", resourceType: "cloudflare_zero_trust_access_group", testdataFilename: "cloudflare_zero_trust_access_group"},
 		"cloudflare zero trust access infrastructure target":                 {identiferType: "account", resourceType: "cloudflare_zero_trust_access_infrastructure_target", testdataFilename: "cloudflare_zero_trust_access_infrastructure_target"},
+		"cloudflare zero trust access key configuration":                     {identiferType: "account", resourceType: "cloudflare_zero_trust_access_key_configuration", testdataFilename: "cloudflare_zero_trust_access_key_configuration"},
 		"cloudflare zero trust access policy":                                {identiferType: "account", resourceType: "cloudflare_zero_trust_access_policy", testdataFilename: "cloudflare_zero_trust_access_policy"},
 		"cloudflare zero trust access service token":                         {identiferType: "account", resourceType: "cloudflare_zero_trust_access_service_token", testdataFilename: "cloudflare_zero_trust_access_service_token"},
 		"cloudflare zero trust access tag":                                   {identiferType: "account", resourceType: "cloudflare_zero_trust_access_tag", testdataFilename: "cloudflare_zero_trust_access_tag"},
@@ -402,6 +403,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust device managed networks":                      {identiferType: "account", resourceType: "cloudflare_zero_trust_device_managed_networks", testdataFilename: "cloudflare_zero_trust_device_managed_networks"},
 		"cloudflare zero trust device default profile":                       {identiferType: "account", resourceType: "cloudflare_zero_trust_device_default_profile", testdataFilename: "cloudflare_zero_trust_device_default_profile"},
 		"cloudflare zero trust device default profile local domain fallback": {identiferType: "account", resourceType: "cloudflare_zero_trust_device_default_profile_local_domain_fallback", testdataFilename: "cloudflare_zero_trust_device_default_profile_local_domain_fallback"},
+		"cloudflare zero trust device default profile certificates":          {identiferType: "zone", resourceType: "cloudflare_zero_trust_device_default_profile_certificates", testdataFilename: "cloudflare_zero_trust_device_default_profile_certificates"},
 		"cloudflare zero trust dlp dataset":                                  {identiferType: "account", resourceType: "cloudflare_zero_trust_dlp_dataset", testdataFilename: "cloudflare_zero_trust_dlp_dataset"},
 		"cloudflare zero trust dns location":                                 {identiferType: "account", resourceType: "cloudflare_zero_trust_dns_location", testdataFilename: "cloudflare_zero_trust_dns_location"},
 		"cloudflare zero trust gateway certificate":                          {identiferType: "account", resourceType: "cloudflare_zero_trust_gateway_certificate", testdataFilename: "cloudflare_zero_trust_gateway_certificate"},
@@ -414,8 +416,8 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust tunnel cloudflared":                           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared"},
 		"cloudflare zero trust tunnel cloudflared route":                     {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_route", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_route"},
 		"cloudflare zero trust tunnel cloudflared virtual network":           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network"},
-		"cloudflare zone":                                                    {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
-		"cloudflare zone dnssec":                                             {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
+		"cloudflare zone":        {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
+		"cloudflare zone dnssec": {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
 	}
 
 	for name, tc := range tests {

@@ -1,0 +1,81 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/apps
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "allowed_idps": [],
+              "app_launcher_visible": true,
+              "aud": "5882a29dccd9fc08465a3392a01689f9c9cf37689d25a49a1ee861852b78e89a",
+              "auto_redirect_to_identity": false,
+              "created_at": "2025-03-19T20:20:42Z",
+              "destinations": [
+                {
+                  "type": "public",
+                  "uri": "gpfqbfyfcx.terraform.cfapi.net"
+                }
+              ],
+              "domain": "gpfqbfyfcx.terraform.cfapi.net",
+              "enable_binding_cookie": false,
+              "http_only_cookie_attribute": true,
+              "id": "a8316e2d-013b-4440-918d-12d8aab6276d",
+              "name": "gpfqbfyfcx",
+              "options_preflight_bypass": false,
+              "policies": [],
+              "self_hosted_domains": [
+                "gpfqbfyfcx.terraform.cfapi.net"
+              ],
+              "session_duration": "24h",
+              "tags": [],
+              "type": "self_hosted",
+              "uid": "a8316e2d-013b-4440-918d-12d8aab6276d",
+              "updated_at": "2025-03-19T20:20:42Z"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 1000,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

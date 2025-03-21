@@ -1616,6 +1616,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 			(*response)[i] = do
 		}
 	case "cloudflare_zero_trust_dex_test":
+		// remove the nesting under 'dex_test'
 		finalResponse := make([]interface{}, 0)
 		r := *response
 		for i := 0; i < resourceCount; i++ {
@@ -1635,7 +1636,6 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 		for i := 0; i < resourceCount; i++ {
 			settings, ok := (*response)[i].(map[string]interface{})["settings"]
 			if !ok {
-				fmt.Printf("resource %q does not have settings", resourceType)
 				return
 			}
 			customCert, ok := settings.(map[string]interface{})["custom_certificate"]
@@ -1686,6 +1686,12 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["ignore"] = true
 				}
 			}
+		}
+	case "cloudflare_zero_trust_access_short_lived_certificate":
+		// map id under app_id
+		for i := 0; i < resourceCount; i++ {
+			appID := (*response)[i].(map[string]interface{})["id"]
+			(*response)[i].(map[string]interface{})["app_id"] = appID
 		}
 	}
 }

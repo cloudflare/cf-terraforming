@@ -1,0 +1,58 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/apps/ca
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "aud": "fa484c3ffc320a396e97aac383ed391ac1aa48841afcd3059941a8b31e31a788",
+              "id": "cfbe00eac7cc8be0ce6e434f9596da50e59af07bee3cf2ec",
+              "public_key": "ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBNngDPI6sd3cbL2d0a+EuTbXwo1WASM9vJk0pLaWNFalgYrGKK4ueuLOzUEF9JrQE6FKtLrrlK1iPphwWUbQ6jA= open-ssh-ca@cloudflareaccess.org"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 100,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

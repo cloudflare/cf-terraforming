@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 
@@ -27,17 +28,20 @@ import (
 	"github.com/zclconf/go-cty/cty"
 )
 
-var resourceType string
+var (
+	resourceType    string
+	resourceIDFlags []string
+
+	generateCmd = &cobra.Command{
+		Use:    "generate",
+		Short:  "Fetch resources from the Cloudflare API and generate the respective Terraform stanzas",
+		Run:    generateResources(),
+		PreRun: sharedPreRun,
+	}
+)
 
 func init() {
 	rootCmd.AddCommand(generateCmd)
-}
-
-var generateCmd = &cobra.Command{
-	Use:    "generate",
-	Short:  "Fetch resources from the Cloudflare API and generate the respective Terraform stanzas",
-	Run:    generateResources(),
-	PreRun: sharedPreRun,
 }
 
 func generateResources() func(cmd *cobra.Command, args []string) {
@@ -106,6 +110,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		resources := strings.Split(resourceType, ",")
+
+		resourceIDsMap := make(map[string][]string)
+		if slices.Contains(resources, "cloudflare_zone_setting") || slices.Contains(resources, "cloudflare_tls_setting") {
+			resourceIDsMap = getResourceMappings()
+		}
 		for _, resourceType := range resources {
 			r := s.ResourceSchemas[resourceType]
 			log.WithFields(logrus.Fields{
@@ -156,42 +165,26 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					api.Options = append(api.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
 				}
 
-				err := api.Get(context.Background(), endpoint, nil, &result)
-				if err != nil {
-					var apierr *cloudflare.Error
-					if errors.As(err, &apierr) {
-						if apierr.StatusCode == http.StatusNotFound {
-							log.WithFields(logrus.Fields{
-								"resource": resourceType,
-								"endpoint": endpoint,
-							}).Debug("no resources found")
-							continue
-						}
+				pathParams, ok := resourceIDsMap[resourceType]
+				if ok && len(pathParams) > 0 {
+					endpoints := make([]string, 0)
+					for _, id := range pathParams {
+						endpoints = append(endpoints, strings.Clone(strings.NewReplacer("{setting_id}", id).Replace(endpoint)))
 					}
-					log.Fatalf("failed to fetch API endpoint: %s", err)
+					jsonStructData, err = GetAPIResponse(result, endpoints...)
+					if err != nil {
+						log.Infof("error getting API response for resource %s: %s", resourceType, err)
+						continue
+					}
+					resourceCount = len(jsonStructData)
+				} else {
+					jsonStructData, err = GetAPIResponse(result, endpoint)
+					if err != nil {
+						log.Infof("error getting API response for resource %s: %s", resourceType, err)
+						continue
+					}
+					resourceCount = len(jsonStructData)
 				}
-
-				body, err := io.ReadAll(result.Body)
-				if err != nil {
-					log.Fatalln(err)
-				}
-
-				value := gjson.Get(string(body), "result")
-				if value.Type == gjson.Null {
-					log.WithFields(logrus.Fields{
-						"resource": resourceType,
-						"endpoint": endpoint,
-					}).Debug("no result found")
-					continue
-				}
-
-				modifiedJSON := modifyResponsePayload(resourceType, value)
-				jsonStructData, err = unMarshallJSONStructData(modifiedJSON)
-				if err != nil {
-					log.Fatalf("failed to unmarshal result: %s", err)
-				}
-				processCustomCasesV5(&jsonStructData, resourceType)
-				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer
 				if accountID != "" {
@@ -1693,6 +1686,10 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 			appID := (*response)[i].(map[string]interface{})["id"]
 			(*response)[i].(map[string]interface{})["app_id"] = appID
 		}
+	case "cloudflare_zone_setting":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["setting_id"] = (*response)[i].(map[string]interface{})["id"]
+		}
 	}
 }
 
@@ -1755,4 +1752,47 @@ func addJSONEncode(f *hclwrite.File, attributeName string) {
 			body.SetAttributeRaw(attributeName, newTokens)
 		}
 	}
+}
+
+func GetAPIResponse(result *http.Response, endpoints ...string) ([]interface{}, error) {
+	var jsonStructData, results []interface{}
+	for _, endpoint := range endpoints {
+		err := api.Get(context.Background(), endpoint, nil, &result)
+		if err != nil {
+			var apierr *cloudflare.Error
+			if errors.As(err, &apierr) {
+				if apierr.StatusCode == http.StatusNotFound {
+					log.WithFields(logrus.Fields{
+						"resource": resourceType,
+						"endpoint": endpoint,
+					}).Debug("no resources found")
+					return nil, err
+				}
+			}
+			log.Fatalf("failed to fetch API endpoint: %s", err)
+		}
+
+		body, err := io.ReadAll(result.Body)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		value := gjson.Get(string(body), "result")
+		if value.Type == gjson.Null {
+			log.WithFields(logrus.Fields{
+				"resource": resourceType,
+				"endpoint": endpoint,
+			}).Debug("no result found")
+			return nil, errors.New("no result found")
+		}
+
+		modifiedJSON := modifyResponsePayload(resourceType, value)
+		jsonStructData, err = unMarshallJSONStructData(modifiedJSON)
+		if err != nil {
+			log.Fatalf("failed to unmarshal result: %s", err)
+		}
+
+		processCustomCasesV5(&jsonStructData, resourceType)
+		results = append(results, jsonStructData...)
+	}
+	return results, nil
 }

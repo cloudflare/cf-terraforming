@@ -7,24 +7,35 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"strings"
 )
 
-var log = logrus.New()
-var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath, providerRegistryHostname string
-var verbose, useModernImportBlock bool
-var apiV0 *cfv0.API
-var api *cloudflare.Client
-var terraformImportCmdPrefix = "terraform import"
-var terraformResourceNamePrefix = "terraform_managed_resource"
+var (
+	log = logrus.New()
 
-// rootCmd represents the base command when called without any subcommands.
-var rootCmd = &cobra.Command{
-	Use:   "cf-terraforming",
-	Short: "Bootstrapping Terraform from existing Cloudflare account",
-	Long: `cf-terraforming is an application that allows Cloudflare users
+	cfgFile, zoneID, hostname, apiEmail                                 string
+	apiKey, apiToken, accountID                                         string
+	terraformInstallPath, terraformBinaryPath, providerRegistryHostname string
+
+	verbose, useModernImportBlock bool
+
+	apiV0 *cfv0.API
+	api   *cloudflare.Client
+
+	// rootCmd represents the base command when called without any subcommands.
+	rootCmd = &cobra.Command{
+		Use:   "cf-terraforming",
+		Short: "Bootstrapping Terraform from existing Cloudflare account",
+		Long: `cf-terraforming is an application that allows Cloudflare users
 to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,
-}
+	}
+)
+
+const (
+	terraformImportCmdPrefix    = "terraform import"
+	terraformResourceNamePrefix = "terraform_managed_resource"
+)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -120,6 +131,7 @@ func init() {
 	if err = viper.BindEnv("provider-registry-hostname", "CLOUDFLARE_PROVIDER_REGISTRY_HOSTNAME"); err != nil {
 		log.Fatal(err)
 	}
+	rootCmd.PersistentFlags().StringSliceVar(&resourceIDFlags, "resource-id", []string{}, "Resource type and IDs mapping in format 'resource_type=id1,id2,id3' (can be specified multiple times)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -153,4 +165,35 @@ func initConfig() {
 	}
 
 	log.SetLevel(cfgLogLevel)
+}
+
+func getResourceMappings() map[string][]string {
+	settingsMap := map[string][]string{
+		"cloudflare_zone_setting":         make([]string, 0),
+		"cloudflare_hostname_tls_setting": make([]string, 0),
+	}
+
+	for _, mapping := range resourceIDFlags {
+		parts := strings.Split(mapping, "=")
+
+		rType := strings.TrimSpace(parts[0])
+		_, ok := settingsMap[rType]
+		if !ok {
+			log.Fatalf("unsupported resource type: %s", rType)
+		}
+		settingsString := parts[1]
+
+		settings := strings.Split(settingsString, ",")
+
+		var cleanSettings []string
+		for _, setting := range settings {
+			setting = strings.TrimSpace(setting)
+			if setting != "" {
+				cleanSettings = append(cleanSettings, setting)
+			}
+		}
+		settingsMap[rType] = cleanSettings
+	}
+
+	return settingsMap
 }

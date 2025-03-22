@@ -256,6 +256,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		identiferType    string
 		resourceType     string
 		testdataFilename string
+		cliFlags         string
 	}{
 		// "cloudflare access application simple (account)":     {identiferType: "account", resourceType: "cloudflare_access_application", testdataFilename: "cloudflare_access_application_simple_account"},
 		// "cloudflare access application with CORS (account)":  {identiferType: "account", resourceType: "cloudflare_access_application", testdataFilename: "cloudflare_access_application_with_cors_account"},
@@ -416,8 +417,9 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust tunnel cloudflared":                           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared"},
 		"cloudflare zero trust tunnel cloudflared route":                     {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_route", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_route"},
 		"cloudflare zero trust tunnel cloudflared virtual network":           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network"},
-		"cloudflare zone":        {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
-		"cloudflare zone dnssec": {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
+		"cloudflare zone":         {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
+		"cloudflare zone dnssec":  {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
+		"cloudflare zone setting": {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting", cliFlags: `"cloudflare_zone_setting=always_online,cache_level"`},
 	}
 
 	for name, tc := range tests {
@@ -487,8 +489,16 @@ func TestResourceGenerationV5(t *testing.T) {
 						Transport: r,
 					},
 				))
+				if tc.cliFlags != "" {
+					output, _ = executeCommandC(rootCmd, "generate",
+						"--resource-type", tc.resourceType,
+						"--zone", cloudflareTestZoneID,
+						"--resource-id", tc.cliFlags,
+					)
+				} else {
+					output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
+				}
 
-				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
 			}
 
 			expected := testDataFile("v5", tc.testdataFilename)

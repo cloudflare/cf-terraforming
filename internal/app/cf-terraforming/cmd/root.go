@@ -131,7 +131,7 @@ func init() {
 	if err = viper.BindEnv("provider-registry-hostname", "CLOUDFLARE_PROVIDER_REGISTRY_HOSTNAME"); err != nil {
 		log.Fatal(err)
 	}
-	rootCmd.PersistentFlags().StringSliceVar(&resourceIDFlags, "resource-id", []string{}, "Resource type and IDs mapping in format 'resource_type=id1,id2,id3' (can be specified multiple times)")
+	rootCmd.PersistentFlags().StringSliceVar(&resourceIDFlags, "resource-id", []string{}, "Resource type and IDs mapping in the format of `key` to comma separated values. Example: `cloudflare_zone_setting=always_online,cache_level,...`")
 }
 
 // initConfig reads in config file and ENV variables if set.

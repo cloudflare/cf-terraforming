@@ -36,7 +36,7 @@ var resourceToEndpoint = map[string]map[string]string{
 		"get":  "/zones/{zone_id}",
 	},
 	"cloudflare_zone_setting": {
-		"list": "",
+		"list": "/zones/{zone_id}/settings",
 		"get":  "/zones/{zone_id}/settings/{setting_id}",
 	},
 	"cloudflare_zone_hold": {

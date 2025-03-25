@@ -5,6 +5,11 @@
 *.so
 *.dylib
 
+# On *NIX systems, the literal file 'cf-terraforming' is generated through 'make build'
+# but we do not want to prevent directories that contain 'cf-terraforming' in their names
+/cf-terraforming
+!*/cf-terraforming
+
 # Test binary, build with `go test -c`
 *.test
 

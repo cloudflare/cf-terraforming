@@ -150,6 +150,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
 				endpoint = placeholderReplacer.Replace(endpoint)
 
+				// If the v4 API client has not been initialized, then initialize it.
+				if api == nil {
+					api = cloudflare.NewClient()
+				}
+
 				if apiToken != "" {
 					api.Options = append(api.Options, option.WithAPIToken(apiToken))
 				} else {

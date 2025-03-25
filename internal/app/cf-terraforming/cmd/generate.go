@@ -112,7 +112,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		resources := strings.Split(resourceType, ",")
 
 		resourceIDsMap := make(map[string][]string)
-		if slices.Contains(resources, "cloudflare_zone_setting") || slices.Contains(resources, "cloudflare_tls_setting") {
+		if slices.Contains(resources, "cloudflare_zone_setting") || slices.Contains(resources, "cloudflare_hostname_tls_setting") {
 			resourceIDsMap = getResourceMappings()
 		}
 		for _, resourceType := range resources {
@@ -171,14 +171,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					for _, id := range pathParams {
 						endpoints = append(endpoints, strings.Clone(strings.NewReplacer("{setting_id}", id).Replace(endpoint)))
 					}
-					jsonStructData, err = GetAPIResponse(result, endpoints...)
+					jsonStructData, err = GetAPIResponse(result, pathParams, endpoints...)
 					if err != nil {
 						log.Infof("error getting API response for resource %s: %s", resourceType, err)
 						continue
 					}
 					resourceCount = len(jsonStructData)
 				} else {
-					jsonStructData, err = GetAPIResponse(result, endpoint)
+					jsonStructData, err = GetAPIResponse(result, pathParams, endpoint)
 					if err != nil {
 						log.Infof("error getting API response for resource %s: %s", resourceType, err)
 						continue
@@ -1553,7 +1553,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 	}
 }
 
-func processCustomCasesV5(response *[]interface{}, resourceType string) {
+func processCustomCasesV5(response *[]interface{}, resourceType string, pathParam string) {
 	resourceCount := len(*response)
 	switch resourceType {
 	case "cloudflare_managed_transforms":
@@ -1690,6 +1690,10 @@ func processCustomCasesV5(response *[]interface{}, resourceType string) {
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["setting_id"] = (*response)[i].(map[string]interface{})["id"]
 		}
+	case "cloudflare_hostname_tls_setting":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["setting_id"] = pathParam
+		}
 	}
 }
 
@@ -1754,9 +1758,9 @@ func addJSONEncode(f *hclwrite.File, attributeName string) {
 	}
 }
 
-func GetAPIResponse(result *http.Response, endpoints ...string) ([]interface{}, error) {
+func GetAPIResponse(result *http.Response, pathParams []string, endpoints ...string) ([]interface{}, error) {
 	var jsonStructData, results []interface{}
-	for _, endpoint := range endpoints {
+	for i, endpoint := range endpoints {
 		err := api.Get(context.Background(), endpoint, nil, &result)
 		if err != nil {
 			var apierr *cloudflare.Error
@@ -1791,7 +1795,7 @@ func GetAPIResponse(result *http.Response, endpoints ...string) ([]interface{}, 
 			log.Fatalf("failed to unmarshal result: %s", err)
 		}
 
-		processCustomCasesV5(&jsonStructData, resourceType)
+		processCustomCasesV5(&jsonStructData, resourceType, pathParams[i])
 		results = append(results, jsonStructData...)
 	}
 	return results, nil

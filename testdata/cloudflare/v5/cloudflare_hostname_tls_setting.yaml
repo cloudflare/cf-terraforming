@@ -5,30 +5,67 @@ interactions:
     body: ""
     form: {}
     headers:
-      Content-Type:
+      Accept:
       - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.2.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.24.0
     url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/hostnames/settings/ciphers
     method: GET
   response:
-    body: |
-      {
-        "success": true,
-        "errors": [],
-        "messages": [],
-        "result": [
-          {
-            "created_at": "2023-11-13T23:23:27.367363Z",
-            "hostname": "terraform.cfapi.net",
-            "status": "active",
-            "updated_at": "2025-02-20T04:15:31.906851Z",
-            "value": [
-              "ECDHE-RSA-AES128-GCM-SHA256",
-              "AES128-GCM-SHA256"
-            ]
-          }
-        ]
-      }
+    body: '{"success":true,"errors":[],"messages":[],"result":[{"hostname":"cdvrjwgmzv.example.com","value":["AES128-SHA","ECDHE-RSA-AES256-SHA"],"status":"active","created_at":"2025-03-03T04:07:23.270691Z","updated_at":"2025-03-03T04:07:24.490037Z"},{"hostname":"example.com","value":["ECDHE-RSA-AES128-GCM-SHA256","AES128-GCM-SHA256"],"status":"active","created_at":"2023-11-13T23:23:27.367363Z","updated_at":"2025-02-20T04:15:31.906851Z"}],"result_info":{"page":1,"per_page":50,"count":2,"total_count":2,"total_pages":1}}'
     headers:
+      Cf-Auditlog-Id:
+      - 0195cf5b-1d7b-7c47-9911-a9f2b4ee48b0
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.2.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.24.0
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/hostnames/settings/min_tls_version
+    method: GET
+  response:
+    body: '{"success":true,"errors":[],"messages":[],"result":[],"result_info":{"page":1,"per_page":50,"count":0,"total_count":0}}'
+    headers:
+      Cf-Auditlog-Id:
+      - 0195cf5b-2689-7bc0-a82a-ced28c295a56
+      Connection:
+      - keep-alive
       Content-Type:
       - application/json
       Vary:

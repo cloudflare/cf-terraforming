@@ -127,7 +127,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount := 0
 			var jsonStructData []interface{}
 
-			if strings.HasPrefix(providerVersionString, "5") {
+			// The ruleset API has many gotchas that are accounted for in how we build
+			// the 'response' object that feeds into the HCL generation, and it's difficult
+			// to ensure the same compatability using the generated SDK.
+			useOldSDK := resourceType == "cloudflare_ruleset"
+
+			if strings.HasPrefix(providerVersionString, "5") && !useOldSDK {
 				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
 					log.WithFields(logrus.Fields{
 						"resource": resourceType,
@@ -946,6 +951,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					err = json.Unmarshal(m, &jsonStructData)
 					if err != nil {
 						log.Fatal(err)
+					}
+
+					if strings.HasPrefix(providerVersionString, "5") {
+						for i := 0; i < resourceCount; i++ {
+							rules := jsonStructData[i].(map[string]interface{})["rules"]
+							if rules != nil {
+								for ruleCounter := range rules.([]interface{}) {
+									rules.([]interface{})[ruleCounter].(map[string]interface{})["id"] = nil
+								}
+							}
+						}
+						continue
 					}
 
 					// Make the rules have the correct header structure

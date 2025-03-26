@@ -278,7 +278,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_turnstile_widget](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/turnstile_widget)              | Account         | ✅                 | ✅               |
 | [cloudflare_url_normalization_settings](https://www.terraform.io/docs/providers/cloudflare/r/url_normalization_settings)                         | Zone            | ✅                 | ❌               |
 | [cloudflare_waf_group](https://www.terraform.io/docs/providers/cloudflare/r/waf_group)                                                           | Zone            | ❌                 | ❌               |
-| [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override)                                                     | Zone            | ✅                 | ✅               |
+| [cloudflare_waf_override](https://www.terraform.io/docs/providers/cloudflare/r/waf_override)                                                     | Zone            | ❌                 | ✅               |
 | [cloudflare_waf_package](https://www.terraform.io/docs/providers/cloudflare/r/waf_package)                                                       | Zone            | ✅                 | ❌               |
 | [cloudflare_waf_rule](https://www.terraform.io/docs/providers/cloudflare/r/waf_rule)                                                             | Zone            | ❌                 | ❌               |
 | [cloudflare_waiting_room](https://www.terraform.io/docs/providers/cloudflare/r/waiting_room)                                                     | Zone            | ✅                 | ✅               |

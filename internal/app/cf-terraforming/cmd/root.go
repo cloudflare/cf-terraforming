@@ -1,13 +1,14 @@
 package cmd
 
 import (
+	"strings"
+
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"strings"
 )
 
 var (
@@ -124,7 +125,7 @@ func init() {
 		log.Fatal(err)
 	}
 
-	rootCmd.PersistentFlags().StringVarP(&providerRegistryHostname, "provider-registry-hostname", "", "registry.terraform.io", "Hostname to use for provider registry lookups")
+	rootCmd.PersistentFlags().StringVarP(&providerRegistryHostname, "provider-registry-hostname", "", "", "Hostname to use for provider registry lookups. Deprecated: this is no longer needed to be configured for custom registries.")
 	if err = viper.BindPFlag("provider-registry-hostname", rootCmd.PersistentFlags().Lookup("provider-registry-hostname")); err != nil {
 		log.Fatal(err)
 	}

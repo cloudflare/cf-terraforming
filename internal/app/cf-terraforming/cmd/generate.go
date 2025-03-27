@@ -54,7 +54,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		accountID = viper.GetString("account")
 		workingDir := viper.GetString("terraform-install-path")
 		execPath := viper.GetString("terraform-binary-path")
-		providerRegistryHostname := viper.GetString("provider-registry-hostname")
 
 		// Download terraform if no existing binary was provided
 		if execPath == "" {
@@ -82,7 +81,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured.
-		log.Debugf("initializing Terraform in %s", workingDir)
+		log.WithFields(logrus.Fields{
+			"directory": workingDir,
+		}).Debug("initializing Terraform")
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {
 			log.Fatal(err)
@@ -93,18 +94,34 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			log.Fatalf("failed to retrieve terraform and provider version information: %s", err)
 		}
 
-		providerVersionString := providerVersion[providerRegistryHostname+"/cloudflare/cloudflare"].String()
+		var registryPath string
+		for provider := range providerVersion {
+			if strings.Contains(provider, "/cloudflare/cloudflare") {
+				registryPath = provider
+				continue
+			}
+		}
+
+		detectedVersion, ok := providerVersion[registryPath]
+		if !ok {
+			log.WithFields(logrus.Fields{
+				"available_registries": providerVersion,
+			}).Fatal("failed to find registry")
+		}
+
+		providerVersionString := detectedVersion.String()
 		log.WithFields(logrus.Fields{
-			"version": providerVersionString,
+			"version":  providerVersionString,
+			"registry": registryPath,
 		}).Debug("detected provider")
 
-		log.Debug("reading Terraform schema for Cloudflare provider")
+		log.Debug("reading Terraform schema")
 		ps, err := tf.ProvidersSchema(context.Background())
 		if err != nil {
 			log.Fatal("failed to read provider schema", err)
 		}
 
-		s := ps.Schemas[providerRegistryHostname+"/cloudflare/cloudflare"]
+		s := ps.Schemas[registryPath]
 		if s == nil {
 			log.Fatal("failed to detect provider installation")
 		}

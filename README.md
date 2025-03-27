@@ -39,7 +39,6 @@ Flags:
       --hostname string                     Hostname to use to query the API
   -k, --key string                          API Key generated on the 'My Profile' page. See: https://dash.cloudflare.com/profile
       --modern-import-block                 Whether to generate HCL import blocks for generated resources instead of terraform import compatible CLI commands. This is only compatible with Terraform 1.5+
-      --provider-registry-hostname string   Hostname to use for provider registry lookups (default "registry.terraform.io")
       --resource-type string                Comma delimitered string of which resource(s) you wish to generate
       --terraform-binary-path string        Path to an existing Terraform binary (otherwise, one will be downloaded)
       --terraform-install-path string       Path to an initialized Terraform working directory (default ".")
@@ -182,14 +181,6 @@ cf-terraforming import \
   --zone $CLOUDFLARE_ZONE_ID
 ```
 
-## Using non-standard registries
-
-By default, we use the Hashicorp registry (registry.terraform.io) for looking up
-the provider to introspect the schema. If you are attempting to use another
-registry, you will need to provide the `--provider-registry-hostname` flag or
-`CLOUDFLARE_PROVIDER_REGISTRY_HOSTNAME` environment variable to query the correct
-registry.
-
 ## Using non-standard Terraform binaries
 
 Internally, we use [`terraform-exec`](https://github.com/hashicorp/terraform-exec)
@@ -206,7 +197,7 @@ existing binary, or you wish to provide a Terraform compatible binary (such as
 ## CDKTF
 
 If you'd like to use [cdktf](https://developer.hashicorp.com/terraform/cdktf)
-for your project resources, you can pipe the output from `cf-terraforming` into 
+for your project resources, you can pipe the output from `cf-terraforming` into
 `cdktf convert` in order to correctly generate CDKTF output automatically.
 
 Example:

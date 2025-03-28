@@ -1,0 +1,89 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "c0e45d27315a4fa2bf62ffa2312f935b",
+            "name": "default",
+            "description": "",
+            "kind": "zone",
+            "version": "5",
+            "last_updated": "2023-02-16T00:26:08.978517Z",
+            "phase": "http_request_transform"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/c0e45d27315a4fa2bf62ffa2312f935b
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "c0e45d27315a4fa2bf62ffa2312f935b",
+          "name": "default",
+          "description": "",
+          "kind": "zone",
+          "version": "5",
+          "rules": [
+            {
+              "id": "1fb6a3117e864d46bcda192d14a1e1dc",
+              "version": "5",
+              "action": "rewrite",
+              "expression": "true",
+              "description": "rewrite with no query string",
+              "last_updated": "2023-02-16T00:26:08.978517Z",
+              "ref": "1fb6a3117e864d46bcda192d14a1e1dc",
+              "enabled": true,
+              "action_parameters": {
+                "uri": {
+                  "query": {
+                    "value": ""
+                  }
+                }
+              }
+            }
+          ],
+          "last_updated": "2023-02-16T00:26:08.978517Z",
+          "phase": "http_request_transform"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

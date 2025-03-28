@@ -1,0 +1,133 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/load_balancers/monitors
+    method: GET
+  response:
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+           {
+             "allow_insecure": false,
+             "created_on": "2025-03-10T20:55:04.064765Z",
+             "description": "this is a very weird load balancer",
+             "expected_body": "dead",
+             "expected_codes": "5xx",
+             "follow_redirects": false,
+             "header": {
+               "Header": [
+                 "Host"
+               ],
+               "Values": [
+                 "terraform.cfapi.net"
+               ]
+             },
+             "id": "a356070a0443978005145b9b590eba48",
+             "interval": 60,
+             "method": "HEAD",
+             "modified_on": "2025-03-10T20:55:04.064765Z",
+             "path": "/custom",
+             "port": 8080,
+             "probe_zone": "",
+             "retries": 5,
+             "timeout": 9,
+             "type": "http"
+           },
+           {
+             "allow_insecure": false,
+             "created_on": "2024-09-26T17:17:46.545449Z",
+             "description": "",
+             "expected_body": "alive",
+             "expected_codes": "2xx",
+             "follow_redirects": false,
+             "header": {},
+             "id": "d866497ec9fa9d112f34f67b5525636b",
+             "interval": 60,
+             "method": "GET",
+             "modified_on": "2024-09-26T17:17:46.545449Z",
+             "path": "/",
+             "probe_zone": "",
+             "retries": 2,
+             "timeout": 5,
+             "type": "http"
+           },
+           {
+             "allow_insecure": false,
+             "created_on": "2024-09-26T17:40:19.340928Z",
+             "description": "",
+             "expected_body": "alive",
+             "expected_codes": "2xx",
+             "follow_redirects": false,
+             "header": {},
+             "id": "5c782c80dd25db6e430f83dedde16fa3",
+             "interval": 60,
+             "method": "GET",
+             "modified_on": "2024-09-26T17:40:19.340928Z",
+             "path": "/",
+             "probe_zone": "",
+             "retries": 2,
+             "timeout": 5,
+             "type": "http"
+           },
+           {
+             "allow_insecure": false,
+             "created_on": "2024-09-26T17:41:59.623439Z",
+             "description": "",
+             "expected_body": "alive",
+             "expected_codes": "2xx",
+             "follow_redirects": false,
+             "header": {},
+             "id": "6104b948d72186596192826c2d394005",
+             "interval": 60,
+             "method": "GET",
+             "modified_on": "2024-09-26T17:41:59.623439Z",
+             "path": "/",
+             "probe_zone": "",
+             "retries": 2,
+             "timeout": 5,
+             "type": "http"
+           },
+           {
+             "allow_insecure": false,
+             "created_on": "2024-09-26T17:54:29.439442Z",
+             "description": "",
+             "expected_body": "alive",
+             "expected_codes": "2xx",
+             "follow_redirects": false,
+             "header": {},
+             "id": "ad51f15ad89f14e481753de4e7938452",
+             "interval": 60,
+             "method": "GET",
+             "modified_on": "2024-09-26T17:54:29.439442Z",
+             "path": "/",
+             "probe_zone": "",
+             "retries": 2,
+             "timeout": 5,
+             "type": "http"
+           }
+        ],
+        "result_info": {
+          "count": 40,
+          "page": 1,
+          "per_page": 9223372036854775807,
+          "total_count": 40,
+          "total_pages": 1
+        },
+        "success": true
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

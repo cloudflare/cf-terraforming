@@ -14,7 +14,6 @@ import (
 
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
@@ -163,12 +162,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// replace the URL placeholders with the actual values we have.
 				placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
 				endpoint = placeholderReplacer.Replace(endpoint)
-
-				if apiToken != "" {
-					api.Options = append(api.Options, option.WithAPIToken(apiToken))
-				} else {
-					api.Options = append(api.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
-				}
 
 				pathParams, ok := resourceIDsMap[resourceType]
 				if ok && len(pathParams) > 0 {

@@ -14,7 +14,6 @@ import (
 
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
@@ -144,7 +143,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount := 0
 			var jsonStructData []interface{}
 
-			if strings.HasPrefix(providerVersionString, "5") {
+			// The ruleset API has many gotchas that are accounted for in how we build
+			// the 'response' object that feeds into the HCL generation, and it's difficult
+			// to ensure the same compatability using the generated SDK.
+			useOldSDK := resourceType == "cloudflare_ruleset"
+
+			if strings.HasPrefix(providerVersionString, "5") && !useOldSDK {
 				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
 					log.WithFields(logrus.Fields{
 						"resource": resourceType,
@@ -175,12 +179,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// replace the URL placeholders with the actual values we have.
 				placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
 				endpoint = placeholderReplacer.Replace(endpoint)
-
-				if apiToken != "" {
-					api.Options = append(api.Options, option.WithAPIToken(apiToken))
-				} else {
-					api.Options = append(api.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
-				}
 
 				pathParams, ok := resourceIDsMap[resourceType]
 				if ok && len(pathParams) > 0 {
@@ -963,6 +961,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					err = json.Unmarshal(m, &jsonStructData)
 					if err != nil {
 						log.Fatal(err)
+					}
+
+					if strings.HasPrefix(providerVersionString, "5") {
+						for i := 0; i < resourceCount; i++ {
+							rules := jsonStructData[i].(map[string]interface{})["rules"]
+							if rules != nil {
+								for ruleCounter := range rules.([]interface{}) {
+									rules.([]interface{})[ruleCounter].(map[string]interface{})["id"] = nil
+								}
+							}
+						}
+						continue
 					}
 
 					// Make the rules have the correct header structure
@@ -1812,7 +1822,11 @@ func GetAPIResponse(result *http.Response, pathParams []string, endpoints ...str
 			log.Fatalf("failed to unmarshal result: %s", err)
 		}
 
-		processCustomCasesV5(&jsonStructData, resourceType, pathParams[i])
+		param := ""
+		if len(pathParams) > 0 {
+			param = pathParams[i]
+		}
+		processCustomCasesV5(&jsonStructData, resourceType, param)
 		results = append(results, jsonStructData...)
 	}
 	return results, nil

@@ -1,0 +1,135 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "d1b807cb62c34dbc9c5f0315d5f9c299",
+            "name": "default",
+            "description": "",
+            "kind": "zone",
+            "version": "4",
+            "last_updated": "2022-02-07T16:58:54.317608Z",
+            "phase": "http_request_late_transform"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/d1b807cb62c34dbc9c5f0315d5f9c299
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "d1b807cb62c34dbc9c5f0315d5f9c299",
+          "name": "default",
+          "description": "",
+          "kind": "zone",
+          "version": "4",
+          "rules": [
+            {
+              "id": "e5b61605d6cf4ce08f729c17d42d76ef",
+              "version": "1",
+              "action": "rewrite",
+              "action_parameters": {
+                "headers": {
+                  "example-http-header-1": {
+                    "operation": "remove"
+                  },
+                  "example-http-header-2": {
+                    "operation": "remove"
+                  },
+                  "example-http-header-3": {
+                    "operation": "set",
+                    "expression": "(ip.geoip.continent eq \"pluto\")"
+                  }
+                },
+                "uri": {
+                  "path": {
+                    "value": "/aquarii_b"
+                  }
+                }
+              },
+              "expression": "(http.request.uri.path eq \"example.com\")",
+              "description": "test transform",
+              "last_updated": "2022-02-07T16:58:54.317608Z",
+              "ref": "e5b61605d6cf4ce08f729c17d42d76ef",
+              "enabled": true
+            },
+            {
+              "id": "8ec764cf386940c89dd83dbab7bb4c16",
+              "version": "1",
+              "action": "rewrite",
+              "action_parameters": {
+                "headers": {
+                  "example-http-static-header-1": {
+                    "operation": "set",
+                    "value": "my-http-header-1"
+                  }
+                }
+              },
+              "expression": "(http.request.uri.path eq \"example.com\")",
+              "description": "test transform set",
+              "last_updated": "2022-02-07T16:58:54.317608Z",
+              "ref": "8ec764cf386940c89dd83dbab7bb4c16",
+              "enabled": true
+            },
+            {
+              "id": "d0f1b4fdb4234adf9c6de9b614424836",
+              "version": "1",
+              "action": "rewrite",
+              "action_parameters": {
+                "uri": {
+                  "path": {
+                    "value": "/spaceship"
+                  }
+                }
+              },
+              "expression": "(http.request.uri.path eq \"pumpkin.com\")",
+              "description": "test uri rewrite set",
+              "last_updated": "2022-05-07T16:58:54.317608Z",
+              "ref": "d0f1b4fdb4234adf9c6de9b614424836",
+              "enabled": false
+            }
+          ],
+          "last_updated": "2022-02-07T16:58:54.317608Z",
+          "phase": "http_request_late_transform"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

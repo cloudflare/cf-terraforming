@@ -1812,7 +1812,11 @@ func GetAPIResponse(result *http.Response, pathParams []string, endpoints ...str
 			log.Fatalf("failed to unmarshal result: %s", err)
 		}
 
-		processCustomCasesV5(&jsonStructData, resourceType, pathParams[i])
+		param := ""
+		if len(pathParams) > 0 {
+			param = pathParams[i]
+		}
+		processCustomCasesV5(&jsonStructData, resourceType, param)
 		results = append(results, jsonStructData...)
 	}
 	return results, nil

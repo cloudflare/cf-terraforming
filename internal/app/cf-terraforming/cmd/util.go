@@ -10,7 +10,9 @@ import (
 	"sort"
 	"strings"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cfv0 "github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	tfjson "github.com/hashicorp/terraform-json"
 	"github.com/sirupsen/logrus"
@@ -98,14 +100,14 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		}).Debug("initializing cloudflare-go with API Token")
 	}
 
-	var options []cloudflare.Option
+	var options []cfv0.Option
 
 	if hostname != "" {
-		options = append(options, cloudflare.BaseURL("https://"+hostname+"/client/v4"))
+		options = append(options, cfv0.BaseURL("https://"+hostname+"/client/v4"))
 	}
 
 	if verbose {
-		options = append(options, cloudflare.Debug(true))
+		options = append(options, cfv0.Debug(true))
 	}
 
 	var err error
@@ -116,9 +118,11 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		var useToken = apiToken != ""
 
 		if useToken {
-			apiV0, err = cloudflare.NewWithAPIToken(apiToken, options...)
+			apiV0, err = cfv0.NewWithAPIToken(apiToken, options...)
+			api = cloudflare.NewClient(option.WithAPIToken(apiToken))
 		} else {
-			apiV0, err = cloudflare.New(apiKey, apiEmail, options...)
+			apiV0, err = cfv0.New(apiKey, apiEmail, options...)
+			api = cloudflare.NewClient(option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
 		}
 
 		if err != nil {

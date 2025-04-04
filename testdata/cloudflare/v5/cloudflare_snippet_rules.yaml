@@ -1,0 +1,52 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/snippets/snippet_rules
+      method: GET
+    response:
+      body: |
+        {
+          "result": [
+            {
+              "description": "",
+              "enabled": true,
+              "expression": "(http.request.full_uri wildcard \"/hello\")",
+              "id": "1c4b648384e3400c8831847de600631e",
+              "last_updated": "2025-03-13T17:06:37.766664Z",
+              "snippet_name": "remove_query_strings_template"
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 0195202f-11af-7d2f-983a-921c0a690945
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=utf-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

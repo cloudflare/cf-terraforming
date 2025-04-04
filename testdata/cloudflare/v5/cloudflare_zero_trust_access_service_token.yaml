@@ -1,0 +1,71 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/service_tokens
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "client_id": "3a87bb56e52c5a11fc9ac22389e640d0.access",
+              "created_at": "2024-10-29T21:40:40Z",
+              "duration": "8760h",
+              "expires_at": "2025-10-29T21:40:41Z",
+              "id": "87b9cc94-06e5-4fc3-8d1c-6fd9fb2ec565",
+              "name": "woogukybal-updated",
+              "updated_at": "2024-10-29T21:40:41Z"
+            },
+            {
+              "client_id": "131e640c38655e7e50652b0e00365227.access",
+              "created_at": "2024-10-29T21:45:15Z",
+              "duration": "8760h",
+              "expires_at": "2025-10-29T21:45:15Z",
+              "id": "b6c395cc-98c7-4fb2-8458-52132f0f0871",
+              "name": "holdimofbl-updated",
+              "updated_at": "2024-10-29T21:45:15Z"
+            }            
+          ],
+          "result_info": {
+            "count": 2,
+            "page": 1,
+            "per_page": 1000,
+            "total_count": 2,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

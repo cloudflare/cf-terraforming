@@ -1,10 +1,14 @@
-resource "cloudflare_address_map" "terraform_managed_resource" {
-  account_id = "258def64c72dae45f3e4c8516e2111f2"
-  description = "My Ecommerce zones"
-  enabled = true
-  ips = ["192.0.2.1"]
-  memberships = [{
-    identifier = "023e105f4ecef8ad9ca31a8372d0c353"
-    kind = "zone"
-  }]
+resource "cloudflare_address_map" "terraform_managed_resource_0" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  default_sni = "*.terraform.cfapi.net"
+  description = "qvkynjoxpz"
+  enabled     = true
 }
+
+resource "cloudflare_address_map" "terraform_managed_resource_1" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  default_sni = "*.terraform.cfapi.net"
+  description = "tlrcfnztky"
+  enabled     = true
+}
+

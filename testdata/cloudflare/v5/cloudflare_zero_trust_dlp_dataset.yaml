@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.2.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.24.0
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/dlp/datasets
+    method: GET
+  response:
+    body: '{"result":[{"name":"tf-test","id":"fb4a1d8d-f386-41f8-a560-814c3b39adc4","status":"empty","num_cells":0,"created_at":"2025-03-20T15:42:22Z","updated_at":"2025-03-20T15:42:22Z","uploads":[{"version":1,"status":"empty","num_cells":0}],"secret":true,"encoding_version":1,"columns":[]}],"success":true,"errors":[],"messages":[]}'
+    headers:
+      Cf-Auditlog-Id:
+      - 0195b439-2e2c-7c2c-aeee-02d6e0805a3b
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

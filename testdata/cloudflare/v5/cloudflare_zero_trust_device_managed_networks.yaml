@@ -1,0 +1,64 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/devices/networks
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "config": {
+                "sha256": "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c",
+                "tls_sockaddr": "foobar:1234"
+              },
+              "name": "ibpcelbfgw",
+              "network_id": "d24d1719-eea3-42e7-a46d-5288b2a2f573",
+              "type": "tls"
+            },
+            {
+              "config": {
+                "sha256": "b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c",
+                "tls_sockaddr": "foobar:1234"
+              },
+              "name": "idivalyfsp",
+              "network_id": "89ff6787-4bd7-4741-9749-3dce10b561fa",
+              "type": "tls"
+            }            
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

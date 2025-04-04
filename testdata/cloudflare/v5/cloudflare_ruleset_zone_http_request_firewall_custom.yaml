@@ -1,0 +1,122 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+      method: GET
+    response:
+      body: |
+        {
+          "result": [
+            {
+              "id": "4c971a697dd249939460f4520dcd7184",
+              "name": "default",
+              "description": "",
+              "source": "firewall_custom",
+              "kind": "zone",
+              "version": "1",
+              "last_updated": "2021-07-01T16:59:14.386598Z",
+              "phase": "http_request_firewall_custom"
+            }
+          ],
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/4c971a697dd249939460f4520dcd7184
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "id": "4c971a697dd249939460f4520dcd7184",
+            "name": "zone",
+            "description": "",
+            "source": "firewall_custom",
+            "kind": "zone",
+            "version": "2",
+            "rules": [
+              {
+                "id": "88dcb30401e348ba9e1352c2598f2a4c",
+                "version": "2",
+                "action": "skip",
+                "expression": "(http.host eq \"test.example.com\")",
+                "description": "test.example.com",
+                "last_updated": "2022-11-24T14:24:14.756247Z",
+                "ref": "88dcb30401e348ba9e1352c2598f2a4c",
+                "enabled": true,
+                "logging": {
+                  "enabled": true
+                },
+                "action_parameters": {
+                  "ruleset": "current",
+                  "phases": [
+                    "http_ratelimit",
+                    "http_request_firewall_managed"
+                  ],
+                  "products": [
+                    "zoneLockdown",
+                    "uaBlock",
+                    "bic",
+                    "hot",
+                    "securityLevel",
+                    "rateLimit",
+                    "waf"
+                  ]
+                }
+              },
+              {
+                "id": "b3cc5e4cc6604f9d90a6a106df867760",
+                "version": "29",
+                "action": "challenge",
+                "expression": "(cf.bot_management.score eq 50 and cf.bot_management.static_resource)",
+                "description": "customRule-test",
+                "last_updated": "2022-11-07T19:03:05.198191Z",
+                "ref": "b3cc5e4cc6604f9d90a6a106df867760",
+                "enabled": true
+              },
+              {
+                "id": "1ecf73bdf7bd4227969a734412b13ad1",
+                "version": "7",
+                "action": "log",
+                "expression": "(cf.waf.score le 20)",
+                "description": "AWAF ML",
+                "last_updated": "2022-12-09T16:53:19.003821Z",
+                "ref": "1ecf73bdf7bd4227969a734412b13ad1",
+                "enabled": false
+              }
+            ],
+            "last_updated": "2021-09-03T06:42:41.341405Z",
+            "phase": "http_request_firewall_custom"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

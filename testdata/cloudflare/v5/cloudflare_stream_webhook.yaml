@@ -1,0 +1,62 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/stream/webhook
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "modified": "2025-03-13T16:37:10.369168Z",
+            "notificationUrl": "https://example.com",
+            "notification_url": "https://example.com",
+            "secret": "88ff5e0c66e3ce35e36e036a6895213dbad339fb"
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

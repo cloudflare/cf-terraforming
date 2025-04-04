@@ -1,20 +1,12 @@
 resource "cloudflare_zero_trust_access_group" "terraform_managed_resource" {
+  account_id = "f037e56e89293a057740de681ac9abbe"
+  name       = "kskryelbix"
+  exclude    = []
   include = [{
-    group = {
-      id = "aa0a4aab-672b-4bdb-bc33-a59f1130a11f"
+    email_list = {
+      id = "140f88f4-e69f-4d51-8ca0-8af660000039"
     }
   }]
-  name = "Allow devs"
-  zone_id = "zone_id"
-  exclude = [{
-    group = {
-      id = "aa0a4aab-672b-4bdb-bc33-a59f1130a11f"
-    }
-  }]
-  is_default = true
-  require = [{
-    group = {
-      id = "aa0a4aab-672b-4bdb-bc33-a59f1130a11f"
-    }
-  }]
+  require = []
 }
+

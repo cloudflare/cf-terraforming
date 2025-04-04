@@ -1,0 +1,118 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/pagerules
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "actions": [
+                {
+                  "id": "ssl",
+                  "value": "full"
+                },
+                {
+                  "id": "cache_level",
+                  "value": "cache_everything"
+                },
+                {
+                  "id": "resolve_override",
+                  "value": "prod-notion-assets-s3.terraform.cfapi.net"
+                },
+                {
+                  "id": "host_header_override",
+                  "value": "prod-notion-assets.terraform.cfapi.net"
+                },
+                {
+                  "id": "explicit_cache_control",
+                  "value": "on"
+                }
+              ],
+              "created_on": "2025-03-18T02:41:27.000000Z",
+              "id": "8c1b54054e07463e69f84df12bad8a99",
+              "modified_on": "2025-03-18T02:41:39.000000Z",
+              "priority": 2,
+              "status": "active",
+              "targets": [
+                {
+                  "constraint": {
+                    "operator": "matches",
+                    "value": "*terraform.cfapi.net/_assets/*"
+                  },
+                  "target": "url"
+                }
+              ]
+            },
+            {
+              "actions": [
+                {
+                  "id": "email_obfuscation",
+                  "value": "off"
+                }
+              ],
+              "created_on": "2025-03-13T20:40:15.000000Z",
+              "id": "0a1e25d39d772bd2474ecc2bafa0cb26",
+              "modified_on": "2025-03-13T20:40:15.000000Z",
+              "priority": 1,
+              "status": "active",
+              "targets": [
+                {
+                  "constraint": {
+                    "operator": "matches",
+                    "value": "www.example./com/*"
+                  },
+                  "target": "url"
+                }
+              ]
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

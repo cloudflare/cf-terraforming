@@ -24,12 +24,95 @@ interactions:
     url: https://api.cloudflare.com/client/v4/user
     method: GET
   response:
-    body: '{"result":{"id":"57e4f6979065965cedced698c2ca1982","email":"musa@cloudflare.com","username":"7c51fc2b8eb76dbdb94c5d6537baf5b1","first_name":null,"last_name":null,"telephone":null,"country":null,"zipcode":null,"two_factor_authentication_enabled":false,"two_factor_authentication_locked":true,"created_on":"2023-11-09T17:05:43.878709Z","modified_on":"2024-06-27T19:38:53.717489Z","organizations":[{"id":"d781e89412e1965584dc2a65a43b7fce","name":"API
-      Team Production","status":"member","permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"roles":["Administrator"]},{"id":"d98242917a12ae74b03c3e3058dbacbd","name":"API
-      Team Staging","status":"member","permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:edit","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dash_sso:edit","#dash_sso:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:edit","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:edit","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:pii","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"roles":["Super
-      Administrator - All Privileges"]},{"id":"998c66447b7b4c67497c499a9ab1b7dd","name":"Cloudflare
-      UI Team","status":"member","permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"roles":["Administrator"]},{"id":"f037e56e89293a057740de681ac9abbe","name":"Terraform
-      Provider Acceptance Testing","status":"member","permissions":["#access:edit","#access:read","#analytics:read","#api_gateway:edit","#api_gateway:read","#app:edit","#auditlogs:read","#billing:read","#blocks:edit","#blocks:read","#cache_purge:edit","#cds_compute_account:edit","#cds_compute_account:read","#cds:edit","#cds:read","#ces_analytics:read","#ces_integration:edit","#ces_integration:read","#ces_phishguard:read","#ces_search:action","#ces_search:preview","#ces_search:raw","#ces_search:read","#ces_search:trace","#ces_settings:edit","#ces_settings:read","#cfone:edit","#cfone:read","#dex:edit","#dex:read","#dns_records:edit","#dns_records:read","#fbm_acc:edit","#fbm:edit","#fbm:read","#healthchecks:edit","#healthchecks:read","#http_applications:edit","#http_applications:read","#image:edit","#image:read","#integration:edit","#integration:install","#integration:read","#lb:edit","#lb:read","#legal:read","#logs:edit","#logs:read","#magic:edit","#magic:read","#member:read","#organization:edit","#organization:read","#page_shield:edit","#page_shield:read","#query_cache:edit","#query_cache:read","#r2_bucket:edit","#r2_bucket:read","#ssl:edit","#ssl:read","#stream:edit","#stream:read","#subscription:edit","#subscription:read","#teams:edit","#teams:read","#teams:report","#turnstile:edit","#turnstile:read","#vectorize:edit","#vectorize:read","#waf:edit","#waf:read","#waitingroom:edit","#waitingroom:read","#webhooks:edit","#webhooks:read","#worker:edit","#worker:read","#zaraz:edit","#zaraz:publish","#zaraz:read","#zone:edit","#zone:read","#zone_settings:edit","#zone_settings:read","#zone_versioning:edit","#zone_versioning:read"],"roles":["Administrator"]}],"has_pro_zones":false,"has_business_zones":false,"has_enterprise_zones":true,"suspended":false},"success":true,"errors":[],"messages":[]}'
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": {
+          "betas": [
+            "zone_level_access_beta"
+          ],
+          "country": "US",
+          "created_on": "2024-08-19T19:21:39.179578Z",
+          "email": "johndoe@cloudflare.com",
+          "first_name": "john",
+          "has_business_zones": false,
+          "has_enterprise_zones": true,
+          "has_pro_zones": false,
+          "id": "e1f5b6cf650a61b94721860e208f9112",
+          "last_name": "doe",
+          "modified_on": "2024-10-03T17:19:28.158824Z",
+          "organizations": [
+            {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "Foo Team Production",
+              "permissions": [               
+                "#teams:read",
+                "#turnstile:read",
+                "#vectorize:read",
+                "#waf:read",
+                "#waitingroom:read",
+                "#webhooks:read",
+                "#worker:read",
+                "#zaraz:read",
+                "#zone:read",
+                "#zone_settings:read",
+                "#zone_versioning:read"
+              ],
+              "roles": [
+                "Administrator Read Only"
+              ],
+              "status": "member"
+            },
+            {
+              "id": "d98242917a12ae74b03c3e3058dbacbd",
+              "name": "Foo Team Staging",
+              "permissions": [
+                "#access:read",
+                "#analytics:read",
+                "#api_gateway:read",
+                "#auditlogs:read",
+                "#billing:read",
+                "#blocks:read",
+                "#cds_compute_account:read",
+                "#cds:read",
+                "#ces_analytics:read",
+                "#ces_integration:read",
+                "#ces_phishguard:read",
+                "#ces_search:read",
+                "#ces_settings:read",
+                "#cfone:read",
+                "#dex:read",
+                "#dns_records:read",
+                "#fbm:read",
+                "#healthchecks:read",
+                "#http_applications:read",
+                "#image:read",
+                "#integration:read",
+                "#lb:read"
+              ],
+              "roles": [
+                "Administrator Read Only"
+              ],
+              "status": "member"
+            },
+            {
+              "id": "f037e56e89293a057740de681ac9abbe",
+              "name": "Testing",
+              "permissions": null,
+              "roles": null,
+              "status": "member"
+            }
+          ],
+          "suspended": false,
+          "telephone": "+1234567890",
+          "two_factor_authentication_enabled": false,
+          "two_factor_authentication_locked": true,
+          "username": "9cef13f8a5298eac2ac8221ee4f0c855",
+          "zipcode": "1234"
+        },
+        "success": true
+      }
     headers:
       Cache-Control:
       - no-store, no-cache, must-revalidate, post-check=0, pre-check=0

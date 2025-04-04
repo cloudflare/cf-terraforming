@@ -1,0 +1,94 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/cfd_tunnel
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "account_tag": "f037e56e89293a057740de681ac9abbe",
+              "connections": [],
+              "conns_active_at": null,
+              "conns_inactive_at": "2024-12-26T03:27:13.740652Z",
+              "created_at": "2024-12-26T03:27:13.740652Z",
+              "deleted_at": "2024-12-26T03:27:16.138681Z",
+              "id": "000b966b-81b5-413f-8dbb-ca473af575e0",
+              "metadata": {},
+              "name": "wctzrdnxht",
+              "remote_config": false,
+              "status": "inactive",
+              "tun_type": "cfd_tunnel"
+            },
+            {
+              "account_tag": "f037e56e89293a057740de681ac9abbe",
+              "connections": [],
+              "conns_active_at": null,
+              "conns_inactive_at": "2025-01-29T03:22:29.834091Z",
+              "created_at": "2025-01-29T03:22:29.834091Z",
+              "deleted_at": "2025-01-29T03:22:32.197813Z",
+              "id": "0018660d-d508-4bc6-af78-ccf8a84c0df4",
+              "metadata": {},
+              "name": "kqvpdktike",
+              "remote_config": false,
+              "status": "inactive",
+              "tun_type": "cfd_tunnel"
+            },
+            {
+              "account_tag": "f037e56e89293a057740de681ac9abbe",
+              "connections": [],
+              "conns_active_at": null,
+              "conns_inactive_at": "2022-07-29T05:09:29.263299Z",
+              "created_at": "2022-07-29T05:09:29.263299Z",
+              "deleted_at": "2022-07-29T05:09:31.488814Z",
+              "id": "001ae5a5-8f06-40f4-adfb-6685706fe61d",
+              "metadata": {},
+              "name": "xiovjntpkl",
+              "remote_config": false,
+              "status": "inactive",
+              "tun_type": "cfd_tunnel"
+            }                                    
+          ],
+          "result_info": {
+            "count": 3,
+            "page": 1,
+            "per_page": 1000,
+            "total_count": 3
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

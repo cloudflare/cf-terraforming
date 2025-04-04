@@ -8,15 +8,16 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
 	"sort"
 	"strings"
 
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
-	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/sirupsen/logrus"
@@ -26,17 +27,20 @@ import (
 	"github.com/zclconf/go-cty/cty"
 )
 
-var resourceType string
+var (
+	resourceType    string
+	resourceIDFlags []string
+
+	generateCmd = &cobra.Command{
+		Use:    "generate",
+		Short:  "Fetch resources from the Cloudflare API and generate the respective Terraform stanzas",
+		Run:    generateResources(),
+		PreRun: sharedPreRun,
+	}
+)
 
 func init() {
 	rootCmd.AddCommand(generateCmd)
-}
-
-var generateCmd = &cobra.Command{
-	Use:    "generate",
-	Short:  "Fetch resources from the Cloudflare API and generate the respective Terraform stanzas",
-	Run:    generateResources(),
-	PreRun: sharedPreRun,
 }
 
 func generateResources() func(cmd *cobra.Command, args []string) {
@@ -49,7 +53,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		accountID = viper.GetString("account")
 		workingDir := viper.GetString("terraform-install-path")
 		execPath := viper.GetString("terraform-binary-path")
-		providerRegistryHostname := viper.GetString("provider-registry-hostname")
 
 		// Download terraform if no existing binary was provided
 		if execPath == "" {
@@ -77,7 +80,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 		// Setup and configure Terraform to operate in the temporary directory where
 		// the provider is already configured.
-		log.Debugf("initializing Terraform in %s", workingDir)
+		log.WithFields(logrus.Fields{
+			"directory": workingDir,
+		}).Debug("initializing Terraform")
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {
 			log.Fatal(err)
@@ -88,23 +93,44 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			log.Fatalf("failed to retrieve terraform and provider version information: %s", err)
 		}
 
-		providerVersionString := providerVersion[providerRegistryHostname+"/cloudflare/cloudflare"].String()
+		var registryPath string
+		for provider := range providerVersion {
+			if strings.Contains(provider, "/cloudflare/cloudflare") {
+				registryPath = provider
+				continue
+			}
+		}
+
+		detectedVersion, ok := providerVersion[registryPath]
+		if !ok {
+			log.WithFields(logrus.Fields{
+				"available_registries": providerVersion,
+			}).Fatal("failed to find registry")
+		}
+
+		providerVersionString := detectedVersion.String()
 		log.WithFields(logrus.Fields{
-			"version": providerVersionString,
+			"version":  providerVersionString,
+			"registry": registryPath,
 		}).Debug("detected provider")
 
-		log.Debug("reading Terraform schema for Cloudflare provider")
+		log.Debug("reading Terraform schema")
 		ps, err := tf.ProvidersSchema(context.Background())
 		if err != nil {
 			log.Fatal("failed to read provider schema", err)
 		}
 
-		s := ps.Schemas[providerRegistryHostname+"/cloudflare/cloudflare"]
+		s := ps.Schemas[registryPath]
 		if s == nil {
 			log.Fatal("failed to detect provider installation")
 		}
 
 		resources := strings.Split(resourceType, ",")
+
+		resourceIDsMap := make(map[string][]string)
+		if slices.Contains(resources, "cloudflare_zone_setting") || slices.Contains(resources, "cloudflare_hostname_tls_setting") {
+			resourceIDsMap = getResourceMappings()
+		}
 		for _, resourceType := range resources {
 			r := s.ResourceSchemas[resourceType]
 			log.WithFields(logrus.Fields{
@@ -117,7 +143,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			resourceCount := 0
 			var jsonStructData []interface{}
 
-			if strings.HasPrefix(providerVersionString, "5") {
+			// The ruleset API has many gotchas that are accounted for in how we build
+			// the 'response' object that feeds into the HCL generation, and it's difficult
+			// to ensure the same compatability using the generated SDK.
+			useOldSDK := resourceType == "cloudflare_ruleset"
+
+			if strings.HasPrefix(providerVersionString, "5") && !useOldSDK {
 				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
 					log.WithFields(logrus.Fields{
 						"resource": resourceType,
@@ -130,20 +161,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				// by default, we want to use the `list` operation however, there are times
 				// when resources exist only as `get` operations but contain multiple
 				// resources.
-				isList := true
 				endpoint := resourceToEndpoint[resourceType]["list"]
 				if endpoint == "" {
 					endpoint = resourceToEndpoint[resourceType]["get"]
-					isList = false
 				}
 
 				// if we encounter a combined endpoint, we need to rewrite to use the correct
 				// endpoint depending on what parameters are being provided.
-				if strings.Contains(endpoint, "{account_or_zone}") {
+				if strings.Contains(endpoint, "{accounts_or_zones}") {
 					if accountID != "" {
-						endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
+						endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
 					} else {
-						endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
+						endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
 					}
 				}
 
@@ -151,54 +180,26 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
 				endpoint = placeholderReplacer.Replace(endpoint)
 
-				if apiToken != "" {
-					api.Options = append(api.Options, option.WithAPIToken(apiToken))
-				} else {
-					api.Options = append(api.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
-				}
-
-				err := api.Get(context.Background(), endpoint, nil, &result)
-				if err != nil {
-					var apierr *cloudflare.Error
-					if errors.As(err, &apierr) {
-						if apierr.StatusCode == http.StatusNotFound {
-							log.WithFields(logrus.Fields{
-								"resource": resourceType,
-								"endpoint": endpoint,
-							}).Debug("no resources found")
-							continue
-						}
+				pathParams, ok := resourceIDsMap[resourceType]
+				if ok && len(pathParams) > 0 {
+					endpoints := make([]string, 0)
+					for _, id := range pathParams {
+						endpoints = append(endpoints, strings.Clone(strings.NewReplacer("{setting_id}", id).Replace(endpoint)))
 					}
-					log.Fatalf("failed to fetch API endpoint: %s", err)
+					jsonStructData, err = GetAPIResponse(result, pathParams, endpoints...)
+					if err != nil {
+						log.Infof("error getting API response for resource %s: %s", resourceType, err)
+						continue
+					}
+					resourceCount = len(jsonStructData)
+				} else {
+					jsonStructData, err = GetAPIResponse(result, pathParams, endpoint)
+					if err != nil {
+						log.Infof("error getting API response for resource %s: %s", resourceType, err)
+						continue
+					}
+					resourceCount = len(jsonStructData)
 				}
-
-				body, err := io.ReadAll(result.Body)
-				if err != nil {
-					log.Fatalln(err)
-				}
-
-				value := gjson.Get(string(body), "result")
-				if value.Type == gjson.Null {
-					log.WithFields(logrus.Fields{
-						"resource": resourceType,
-						"endpoint": endpoint,
-					}).Debug("no result found")
-					continue
-				}
-
-				modifiedJSON := modifyResponsePayload(resourceType, value)
-				if !isList {
-					modifiedJSON = "[" + modifiedJSON + "]"
-				}
-				err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
-				if err != nil {
-					log.Fatalf("failed to unmarshal result: %s", err)
-				}
-				err = processCustomCasesV5(jsonStructData, resourceType)
-				if err != nil {
-					log.Fatalf("failed to process custom case for %s: %s", resourceType, err)
-				}
-				resourceCount = len(jsonStructData)
 			} else {
 				var identifier *cfv0.ResourceContainer
 				if accountID != "" {
@@ -962,6 +963,18 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						log.Fatal(err)
 					}
 
+					if strings.HasPrefix(providerVersionString, "5") {
+						for i := 0; i < resourceCount; i++ {
+							rules := jsonStructData[i].(map[string]interface{})["rules"]
+							if rules != nil {
+								for ruleCounter := range rules.([]interface{}) {
+									rules.([]interface{})[ruleCounter].(map[string]interface{})["id"] = nil
+								}
+							}
+						}
+						continue
+					}
+
 					// Make the rules have the correct header structure
 					for i, ruleset := range jsonStructData {
 						if ruleset.(map[string]interface{})["rules"] != nil {
@@ -1560,15 +1573,261 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				f.Body().AppendNewline()
 			}
 
+			postProcess(f, resourceType)
 			tfOutput := string(hclwrite.Format(f.Bytes()))
 			fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 		}
 	}
 }
 
-func processCustomCasesV5(response []interface{}, resourceType string) error {
+func processCustomCasesV5(response *[]interface{}, resourceType string, pathParam string) {
+	resourceCount := len(*response)
 	switch resourceType {
+	case "cloudflare_managed_transforms":
+		// remap email and role_ids into the right structure and remove policies
+		for i := 0; i < resourceCount; i++ {
+			for j := range (*response)[i].(map[string]interface{})["managed_request_headers"].([]interface{}) {
+				delete((*response)[i].(map[string]interface{})["managed_request_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			}
+			for j := range (*response)[i].(map[string]interface{})["managed_response_headers"].([]interface{}) {
+				delete((*response)[i].(map[string]interface{})["managed_response_headers"].([]interface{})[j].(map[string]interface{}), "has_conflict")
+			}
+		}
+	case "cloudflare_r2_bucket":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			buckets := r[i].(map[string]interface{})["buckets"]
+			bucketObjects := make([]interface{}, len(buckets.([]interface{})))
+			for j := range buckets.([]interface{}) {
+				b := buckets.([]interface{})[j]
+				bucketObjects[j] = b
+			}
+			finalResponse = append(finalResponse, bucketObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
+		}
+	case "cloudflare_account_member":
+		// remap email and role_ids into the right structure and remove policies
+		for i := 0; i < resourceCount; i++ {
+			delete((*response)[i].(map[string]interface{}), "policies")
+			(*response)[i].(map[string]interface{})["email"] = (*response)[i].(map[string]interface{})["user"].(map[string]interface{})["email"]
+			roleIDs := []string{}
+			for _, role := range (*response)[i].(map[string]interface{})["roles"].([]interface{}) {
+				roleIDs = append(roleIDs, role.(map[string]interface{})["id"].(string))
+			}
+			(*response)[i].(map[string]interface{})["roles"] = roleIDs
+		}
+	case "cloudflare_content_scanning_expression":
+		// wrap the response in 'body' for tf
+		for i := 0; i < resourceCount; i++ {
+			payload := (*response)[i].(map[string]interface{})["payload"]
+			(*response)[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
+				"payload": payload,
+			}}
+		}
+	case "cloudflare_zero_trust_device_default_profile_local_domain_fallback":
+		// wrap the response in 'domains' for tf
+		for i := 0; i < resourceCount; i++ {
+			do := make(map[string]interface{})
+			do["domains"] = []interface{}{(*response)[i]}
+			(*response)[i] = do
+		}
+	case "cloudflare_zero_trust_dex_test":
+		// remove the nesting under 'dex_test'
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			dexTests := r[i].(map[string]interface{})["dex_tests"]
+			dtObjects := make([]interface{}, len(dexTests.([]interface{})))
+			for j := range dexTests.([]interface{}) {
+				dt := dexTests.([]interface{})[j]
+				dtObjects[j] = dt
+			}
+			finalResponse = append(finalResponse, dtObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
+		}
+	case "cloudflare_zero_trust_gateway_settings":
+		for i := 0; i < resourceCount; i++ {
+			settings, ok := (*response)[i].(map[string]interface{})["settings"]
+			if !ok {
+				return
+			}
+			customCert, ok := settings.(map[string]interface{})["custom_certificate"]
+			if ok {
+				delete(customCert.(map[string]interface{}), "binding_status")
+				delete(customCert.(map[string]interface{}), "expires_on")
+				delete(customCert.(map[string]interface{}), "updated_at")
+			}
+		}
+	case "cloudflare_page_rule":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["target"] = (*response)[i].(map[string]interface{})["targets"].([]interface{})[0].(map[string]interface{})["constraint"].(map[string]interface{})["value"]
+			(*response)[i].(map[string]interface{})["actions"] = flattenAttrMap((*response)[i].(map[string]interface{})["actions"].([]interface{}))
 
+			// Have to remap the cache_ttl_by_status to conform to Terraform's more human-friendly structure.
+			if cache, ok := (*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_ttl_by_status"].(map[string]interface{}); ok {
+				cacheTtlByStatus := []map[string]interface{}{}
+
+				for codes, ttl := range cache {
+					if ttl == "no-cache" {
+						ttl = 0
+					} else if ttl == "no-store" {
+						ttl = -1
+					}
+					elem := map[string]interface{}{
+						"codes": codes,
+						"ttl":   ttl,
+					}
+
+					cacheTtlByStatus = append(cacheTtlByStatus, elem)
+				}
+
+				sort.SliceStable(cacheTtlByStatus, func(i int, j int) bool {
+					return cacheTtlByStatus[i]["codes"].(string) < cacheTtlByStatus[j]["codes"].(string)
+				})
+
+				(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_ttl_by_status"] = cacheTtlByStatus
+			}
+
+			// Remap cache_key_fields.query_string.include & .exclude wildcards (not in an array) to the appropriate "ignore" field value in Terraform.
+			if c, ok := (*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{}); ok {
+				if s, sok := c["query_string"].(map[string]interface{})["include"].(string); sok && s == "*" {
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["include"] = nil
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["ignore"] = false
+				}
+				if s, sok := c["query_string"].(map[string]interface{})["exclude"].(string); sok && s == "*" {
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["exclude"] = nil
+					(*response)[i].(map[string]interface{})["actions"].(map[string]interface{})["cache_key_fields"].(map[string]interface{})["query_string"].(map[string]interface{})["ignore"] = true
+				}
+			}
+		}
+	case "cloudflare_zero_trust_access_short_lived_certificate":
+		// map id under app_id
+		for i := 0; i < resourceCount; i++ {
+			appID := (*response)[i].(map[string]interface{})["id"]
+			(*response)[i].(map[string]interface{})["app_id"] = appID
+		}
+	case "cloudflare_zone_setting":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["setting_id"] = (*response)[i].(map[string]interface{})["id"]
+		}
+	case "cloudflare_hostname_tls_setting":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["setting_id"] = pathParam
+		}
 	}
-	return nil
+}
+
+func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) {
+	var data interface{}
+	err := json.Unmarshal([]byte(modifiedJSONString), &data)
+	if err != nil {
+		return nil, err
+	}
+	if dataSlice, ok := data.([]interface{}); ok {
+		return dataSlice, nil
+	}
+	return []interface{}{data}, nil
+}
+
+// postProcess allows you to perform additional actions on the generated hcl.
+func postProcess(f *hclwrite.File, resourceType string) {
+	switch resourceType {
+	case "cloudflare_stream_live_input", "cloudflare_stream":
+		addJSONEncode(f, "meta")
+	}
+}
+
+// addJSONEncode wraps a hcl block with the jsonencode function.
+func addJSONEncode(f *hclwrite.File, attributeName string) {
+	for _, block := range f.Body().Blocks() {
+		if block.Type() != "resource" {
+			continue
+		}
+		if len(block.Labels()) < 1 {
+			continue
+		}
+		if block.Labels()[0] != resourceType {
+			continue
+		}
+		body := block.Body()
+		attr := body.GetAttribute(attributeName)
+		if attr == nil {
+			continue
+		}
+		exprTokens := attr.Expr().BuildTokens(nil)
+		exprText := string(exprTokens.Bytes())
+
+		trimmed := strings.TrimSpace(exprText)
+		// Wrap the attribute with jsonencode
+		if len(trimmed) > 0 && trimmed[0] == '{' {
+			body.RemoveAttribute(attributeName)
+			newTokens := hclwrite.Tokens{}
+			fnStart := &hclwrite.Token{
+				Type:  hclsyntax.TokenIdent,
+				Bytes: []byte("jsonencode("),
+			}
+			newTokens = append(newTokens, fnStart)
+			newTokens = append(newTokens, exprTokens...)
+			fnEnd := &hclwrite.Token{
+				Type:  hclsyntax.TokenCParen,
+				Bytes: []byte(")"),
+			}
+			newTokens = append(newTokens, fnEnd)
+			body.SetAttributeRaw(attributeName, newTokens)
+		}
+	}
+}
+
+func GetAPIResponse(result *http.Response, pathParams []string, endpoints ...string) ([]interface{}, error) {
+	var jsonStructData, results []interface{}
+	for i, endpoint := range endpoints {
+		err := api.Get(context.Background(), endpoint, nil, &result)
+		if err != nil {
+			var apierr *cloudflare.Error
+			if errors.As(err, &apierr) {
+				if apierr.StatusCode == http.StatusNotFound {
+					log.WithFields(logrus.Fields{
+						"resource": resourceType,
+						"endpoint": endpoint,
+					}).Debug("no resources found")
+					return nil, err
+				}
+			}
+			log.Fatalf("failed to fetch API endpoint: %s", err)
+		}
+
+		body, err := io.ReadAll(result.Body)
+		if err != nil {
+			log.Fatalln(err)
+		}
+		value := gjson.Get(string(body), "result")
+		if value.Type == gjson.Null {
+			log.WithFields(logrus.Fields{
+				"resource": resourceType,
+				"endpoint": endpoint,
+			}).Debug("no result found")
+			return nil, errors.New("no result found")
+		}
+
+		modifiedJSON := modifyResponsePayload(resourceType, value)
+		jsonStructData, err = unMarshallJSONStructData(modifiedJSON)
+		if err != nil {
+			log.Fatalf("failed to unmarshal result: %s", err)
+		}
+
+		param := ""
+		if len(pathParams) > 0 {
+			param = pathParams[i]
+		}
+		processCustomCasesV5(&jsonStructData, resourceType, param)
+		results = append(results, jsonStructData...)
+	}
+	return results, nil
 }

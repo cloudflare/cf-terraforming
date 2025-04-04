@@ -1,0 +1,143 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/pages/projects
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "build_config": {
+                "build_command": "",
+                "destination_dir": "",
+                "root_dir": "",
+                "web_analytics_tag": "",
+                "web_analytics_token": ""
+              },
+              "canonical_deployment": null,
+              "created_on": "2022-10-13T00:48:26.430003Z",
+              "deployment_configs": {
+                "preview": {
+                  "always_use_latest_compatibility_date": false,
+                  "build_image_major_version": 1,
+                  "compatibility_flags": [],
+                  "env_vars": null,
+                  "fail_open": true,
+                  "usage_model": "standard"
+                },
+                "production": {
+                  "always_use_latest_compatibility_date": false,
+                  "build_image_major_version": 1,
+                  "compatibility_flags": [],
+                  "env_vars": null,
+                  "fail_open": true,
+                  "usage_model": "standard"
+                }
+              },
+              "domains": [
+                "mlfinedniz.pages.dev"
+              ],
+              "id": "b2809bf3-4696-4962-846c-112cea8e0656",
+              "latest_deployment": null,
+              "name": "mlfinedniz",
+              "preview_script_name": "pages-worker--560620-preview",
+              "production_branch": "main",
+              "production_script_name": "pages-worker--560620-production",
+              "subdomain": "mlfinedniz.pages.dev"
+            },            
+            {
+              "build_config": {
+                "build_command": "",
+                "destination_dir": "",
+                "root_dir": "",
+                "web_analytics_tag": "",
+                "web_analytics_token": ""
+              },
+              "canonical_deployment": null,
+              "created_on": "2022-10-03T23:44:31.797028Z",
+              "deployment_configs": {
+                "preview": {
+                  "always_use_latest_compatibility_date": false,
+                  "build_image_major_version": 1,
+                  "compatibility_flags": [],
+                  "env_vars": null,
+                  "fail_open": true,
+                  "usage_model": "standard"
+                },
+                "production": {
+                  "always_use_latest_compatibility_date": false,
+                  "build_image_major_version": 1,
+                  "compatibility_flags": [],
+                  "env_vars": null,
+                  "fail_open": true,
+                  "usage_model": "standard"
+                }
+              },
+              "domains": [
+                "uquivnkfgv.pages.dev"
+              ],
+              "id": "807e901e-413e-4510-a452-09b6dd2407bf",
+              "latest_deployment": null,
+              "name": "uquivnkfgv",
+              "preview_script_name": "pages-worker--543724-preview",
+              "production_branch": "main",
+              "production_script_name": "pages-worker--543724-production",
+              "subdomain": "uquivnkfgv.pages.dev"
+            }            
+          ],
+          "result_info": {
+            "count": 2,
+            "page": 1,
+            "per_page": 10,
+            "total_count": 21,
+            "total_pages": 3
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

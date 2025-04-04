@@ -1,0 +1,118 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/rules
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "action": "block",
+              "created_at": "2024-11-27T23:02:23Z",
+              "deleted_at": null,
+              "description": "desc",
+              "device_posture": "",
+              "enabled": false,
+              "filters": [
+                "dns"
+              ],
+              "id": "c532c4b7-4077-4923-915f-aeb09aa8ddba",
+              "identity": "",
+              "name": "rytdytpfmz",
+              "precedence": 12302,
+              "rule_settings": {
+                "add_headers": null,
+                "biso_admin_controls": null,
+                "block_page_enabled": true,
+                "block_reason": "cuz",
+                "check_session": null,
+                "egress": {
+                  "ipv4": "203.0.113.1",
+                  "ipv6": "2001:db8::/32"
+                },
+                "insecure_disable_dnssec_validation": false,
+                "ip_categories": false,
+                "ip_indicator_feeds": false,
+                "l4override": null,
+                "override_host": "",
+                "override_ips": null,
+                "payload_log": {
+                  "enabled": true
+                },
+                "untrusted_cert": {
+                  "action": "error"
+                }
+              },
+              "traffic": "any(dns.domains[*] == \"example.com\")",
+              "updated_at": "2024-11-27T23:02:23Z",
+              "version": 1
+            },
+            {
+              "action": "block",
+              "created_at": "2025-03-03T17:17:34Z",
+              "deleted_at": null,
+              "description": "test description ",
+              "device_posture": "",
+              "enabled": true,
+              "filters": [
+                "http"
+              ],
+              "id": "b8e9f87a-c035-4efd-a3ad-10584bdbce3c",
+              "identity": "",
+              "name": "test-http",
+              "precedence": 13302,
+              "rule_settings": {
+                "add_headers": null,
+                "biso_admin_controls": null,
+                "block_page_enabled": false,
+                "block_reason": "",
+                "check_session": null,
+                "insecure_disable_dnssec_validation": false,
+                "ip_categories": false,
+                "ip_indicator_feeds": false,
+                "l4override": null,
+                "override_host": "",
+                "override_ips": null
+              },
+              "traffic": "http.request.uri.path == \"/foo\"",
+              "updated_at": "2025-03-03T17:17:34Z",
+              "version": 1
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

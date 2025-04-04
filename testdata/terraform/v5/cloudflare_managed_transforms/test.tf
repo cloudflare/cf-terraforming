@@ -1,11 +1,12 @@
 resource "cloudflare_managed_transforms" "terraform_managed_resource" {
-  zone_id = "9f1839b6152d298aca64c4e906b6d074"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   managed_request_headers = [{
-    id = "add_bot_protection_headers"
-    enabled = true
+    enabled = false
+    id      = "add_bot_protection_headers"
   }]
   managed_response_headers = [{
-    id = "add_security_headers"
-    enabled = true
+    enabled = false
+    id      = "remove_x-powered-by_header"
   }]
 }
+

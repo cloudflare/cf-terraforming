@@ -1,0 +1,74 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/logpush/jobs
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [            
+            {
+              "dataset": "workers_trace_events",
+              "destination_conf": "r2://terraform-acctest/date={DATE}?account-id=f037e56e89293a057740de681ac9abbe&access-key-id=0c6710b6f5a77c3b4735f49616694cf2&secret-access-key=7bb918ea5bc7c68729c597a3444e1095b3bbbcaacdce8288f1f243bfd822f337",
+              "enabled": true,
+              "error_message": null,
+              "frequency": "high",
+              "id": 235658,
+              "kind": "",
+              "last_complete": null,
+              "last_error": null,
+              "logpull_options": "fields=Event,EventTimestampMs,Outcome,Exceptions,Logs,ScriptName",
+              "name": "fmvpbbpnkb",
+              "time_created": "2023-05-24T02:14:54Z"
+            },
+            {
+              "dataset": "workers_trace_events",
+              "destination_conf": "r2://terraform-acctest/date={DATE}?account-id=f037e56e89293a057740de681ac9abbe&access-key-id=0c6710b6f5a77c3b4735f49616694cf2&secret-access-key=7bb918ea5bc7c68729c597a3444e1095b3bbbcaacdce8288f1f243bfd822f337",
+              "enabled": true,
+              "error_message": null,
+              "frequency": "high",
+              "id": 234884,
+              "kind": "",
+              "last_complete": null,
+              "last_error": null,
+              "logpull_options": "fields=Event,EventTimestampMs,Outcome,Exceptions,Logs,ScriptName",
+              "name": "httgotkhpj",
+              "time_created": "2023-05-23T02:13:21Z"
+            }            
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

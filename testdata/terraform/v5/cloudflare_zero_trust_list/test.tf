@@ -1,10 +1,14 @@
-resource "cloudflare_zero_trust_list" "terraform_managed_resource" {
-  account_id = "699d98642c564d2e855e9661899b7252"
-  name = "Admin Serial Numbers"
-  type = "SERIAL"
-  description = "The serial numbers for administrators"
-  items = [{
-    description = "Austin office IP"
-    value = "8GE8721REF"
-  }]
+resource "cloudflare_zero_trust_list" "terraform_managed_resource_0" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  description = "My description"
+  name        = "zghnfpwgng"
+  type        = "SERIAL"
 }
+
+resource "cloudflare_zero_trust_list" "terraform_managed_resource_1" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  description = "My description"
+  name        = "ozoscmnfcy"
+  type        = "SERIAL"
+}
+

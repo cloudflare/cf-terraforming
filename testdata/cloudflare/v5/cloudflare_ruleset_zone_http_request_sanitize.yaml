@@ -1,0 +1,92 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "a624c23f94c84994815636e827d17937",
+            "name": "Zone sanitize ruleset",
+            "description": "",
+            "kind": "zone",
+            "version": "3",
+            "last_updated": "2021-08-19T23:41:34.985519Z",
+            "phase": "http_request_sanitize"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/a624c23f94c84994815636e827d17937
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "a624c23f94c84994815636e827d17937",
+          "name": "Zone sanitize ruleset",
+          "description": "",
+          "kind": "zone",
+          "version": "3",
+          "rules": [
+            {
+              "id": "0789dc4343054d1e981f8c44bedc6fbd",
+              "version": "1",
+              "action": "execute",
+              "action_parameters": {
+                "id": "70339d97bdb34195bbf054b1ebe81f76",
+                "version": "latest",
+                "overrides": {
+                  "rules": [
+                    {
+                      "id": "78723a9e0c7c4c6dbec5684cb766231d",
+                      "enabled": true
+                    }
+                  ]
+                }
+              },
+              "expression": "true",
+              "last_updated": "2021-08-19T23:41:34.985519Z",
+              "ref": "0789dc4343054d1e981f8c44bedc6fbd",
+              "enabled": true
+            }
+          ],
+          "last_updated": "2021-08-19T23:41:34.985519Z",
+          "phase": "http_request_sanitize"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

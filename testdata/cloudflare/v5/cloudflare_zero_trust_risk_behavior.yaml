@@ -1,0 +1,66 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/zt_risk_scoring/behaviors
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "behaviors": {
+              "high_dlp": {
+                "description": "User has triggered an active DLP profile in a Gateway policy fifteen times or more within one minute.",
+                "enabled": true,
+                "name": "High Number of DLP Policies Triggered",
+                "risk_level": "medium"
+              },
+              "imp_travel": {
+                "description": "A user had a successful Access application log in from two locations that they could not have traveled to in that period of time.",
+                "enabled": true,
+                "name": "Impossible Travel",
+                "risk_level": "high"
+              },
+              "sentinel_one": {
+                "description": "User is signed in on a device where Sentinel One EDR detects an active threat or infection.",
+                "enabled": false,
+                "name": "SentinelOne Infection Detected",
+                "risk_level": "medium"
+              }
+            }
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

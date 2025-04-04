@@ -1,18 +1,28 @@
-resource "cloudflare_zero_trust_dex_test" "terraform_managed_resource" {
-  account_id = "699d98642c564d2e855e9661899b7252"
+resource "cloudflare_zero_trust_dex_test" "terraform_managed_resource_0" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  description = "qmktnyxzho"
+  enabled     = true
+  interval    = "0h30m0s"
+  name        = "qmktnyxzho"
+  targeted    = false
   data = {
-    host = "https://dash.cloudflare.com"
-    kind = "http"
-    method = "GET"
+    host = "1.1.1.1"
+    kind = "traceroute"
   }
-  enabled = true
-  interval = "30m"
-  name = "HTTP dash health check"
-  description = "Checks the dash endpoint every 30 minutes"
-  target_policies = [{
-    id = "id"
-    default = true
-    name = "name"
-  }]
-  targeted = true
+  target_policies = []
 }
+
+resource "cloudflare_zero_trust_dex_test" "terraform_managed_resource_1" {
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  description = "aibzxpxpyl"
+  enabled     = true
+  interval    = "0h30m0s"
+  name        = "aibzxpxpyl"
+  targeted    = false
+  data = {
+    host = "foo.cloudflare.com"
+    kind = "traceroute"
+  }
+  target_policies = []
+}
+

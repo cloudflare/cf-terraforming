@@ -1,0 +1,66 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rules/lists
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "created_on": "2024-10-10T02:22:32Z",
+              "description": "list named cdpxtbboal",
+              "id": "36b7f6d95e7a4e09be9dc97900a44b46",
+              "kind": "redirect",
+              "modified_on": "2024-10-10T02:22:32Z",
+              "name": "cdpxtbboal",
+              "num_items": 0,
+              "num_referencing_filters": 0
+            },
+            {
+              "created_on": "2024-10-24T03:59:28Z",
+              "description": "eplfravddj",
+              "id": "2691254765e049eb95bb3826cc4a526c",
+              "kind": "ip",
+              "modified_on": "2024-10-24T03:59:28Z",
+              "name": "eplfravddj",
+              "num_items": 0,
+              "num_referencing_filters": 0
+            }                        
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

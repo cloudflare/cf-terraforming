@@ -1,0 +1,64 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/organizations
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "allow_authenticate_via_warp": false,
+            "auth_domain": "lklfsevdnw-terraform-cfapi.cloudflareaccess.com",
+            "cache_device_posture": true,
+            "created_at": "2024-09-05T03:00:41Z",
+            "has_migrated_private_apps": true,
+            "is_ui_read_only": false,
+            "login_design": {
+              "background_color": "#FFFFFF",
+              "footer_text": "My footer text",
+              "header_text": "My header text updated",
+              "logo_path": "https://example.com/logo.png",
+              "text_color": "#000000"
+            },
+            "name": "terraform-cfapi.cloudflareaccess.com",
+            "session_duration": "12h",
+            "updated_at": "2025-01-23T22:25:57Z",
+            "user_seat_expiration_inactive_time": "1460h",
+            "warp_auth_session_duration": "36h"
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

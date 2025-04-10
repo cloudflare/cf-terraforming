@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -250,7 +252,7 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	t.Skip("skip until the v5 provider is fully supported")
+	//t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string
@@ -292,7 +294,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare filter": {identiferType: "zone", resourceType: "cloudflare_filter", testdataFilename: "cloudflare_filter"},
 		// "cloudflare firewall rule":                           {identiferType: "zone", resourceType: "cloudflare_firewall_rule", testdataFilename: "cloudflare_firewall_rule"},
 		"cloudflare health check":         {identiferType: "zone", resourceType: "cloudflare_healthcheck", testdataFilename: "cloudflare_healthcheck"},
-		"cloudflare hostname tls setting": {identiferType: "zone", resourceType: "cloudflare_hostname_tls_setting", testdataFilename: "cloudflare_hostname_tls_setting", cliFlags: `"cloudflare_hostname_tls_setting=ciphers,min_tls_version"`},
+		"cloudflare hostname tls setting": {identiferType: "zone", resourceType: "cloudflare_hostname_tls_setting", testdataFilename: "cloudflare_hostname_tls_setting", cliFlags: "cloudflare_hostname_tls_setting=ciphers,min_tls_version"},
 		"cloudflare mtls certificate":     {identiferType: "account", resourceType: "cloudflare_mtls_certificate", testdataFilename: "cloudflare_mtls_certificate"},
 		// "cloudflare list (asn)":                              {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_asn"},
 		// "cloudflare list (hostname)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_hostname"},
@@ -419,7 +421,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust tunnel cloudflared virtual network":           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network"},
 		"cloudflare zone":         {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 		"cloudflare zone dnssec":  {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
-		"cloudflare zone setting": {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting", cliFlags: `"cloudflare_zone_setting=always_online,cache_level"`},
+		"cloudflare zone setting": {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting", cliFlags: "cloudflare_zone_setting=always_online,cache_level"},
 	}
 
 	for name, tc := range tests {
@@ -513,6 +515,46 @@ func TestResourceGenerationV5(t *testing.T) {
 
 			expected := testDataFile("v5", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
+			tfValidate(fmt.Sprintf("../../../../testdata/terraform/v5/%s", resourceType))
 		})
 	}
+}
+
+func tfValidate(path string) {
+	absoluteDir, err := filepath.Abs(path)
+	if err != nil {
+		fmt.Printf("Error resolving absolute path: %s\n", err)
+		return
+	}
+	err = os.Chdir(absoluteDir)
+	if err != nil {
+		fmt.Printf("Error changing directory: %s\n", err)
+		return
+	}
+
+	fmt.Printf("Changed directory to: %s\n", absoluteDir)
+
+	initCmd := exec.Command("terraform", "init")
+	initCmd.Stdout = os.Stdout
+	initCmd.Stderr = os.Stderr
+
+	fmt.Println("Running: terraform init")
+	err = initCmd.Run()
+	if err != nil {
+		fmt.Printf("Error running terraform init: %s\n", err)
+		return
+	}
+
+	validateCmd := exec.Command("terraform", "validate")
+	validateCmd.Stdout = os.Stdout
+	validateCmd.Stderr = os.Stderr
+
+	fmt.Println("Running: terraform validate")
+	err = validateCmd.Run()
+	if err != nil {
+		fmt.Printf("Error running terraform validate: %s\n", err)
+		return
+	}
+
+	fmt.Println("Terraform commands completed successfully")
 }

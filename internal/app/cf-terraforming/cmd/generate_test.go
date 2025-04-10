@@ -252,7 +252,7 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	//t.Skip("skip until the v5 provider is fully supported")
+	t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string

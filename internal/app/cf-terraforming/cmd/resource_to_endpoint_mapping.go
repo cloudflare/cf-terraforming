@@ -499,7 +499,7 @@ var resourceToEndpoint = map[string]map[string]string{
 		"list": "/accounts/{account_id}/workers/dispatch/namespaces",
 		"get":  "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}",
 	},
-	"cloudflare_workers_secret": {
+	"cloudflare_workers_for_platforms_script_secret": {
 		"list": "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets",
 		"get":  "/accounts/{account_id}/workers/dispatch/namespaces/{dispatch_namespace}/scripts/{script_name}/secrets/{secret_name}",
 	},
@@ -742,5 +742,9 @@ var resourceToEndpoint = map[string]map[string]string{
 	"cloudflare_content_scanning_expression": {
 		"list": "/zones/{zone_id}/content-upload-scan/payloads",
 		"get":  "/zones/{zone_id}/content-upload-scan/payloads",
+	},
+	"cloudflare_custom_pages": {
+		"list": "/{accounts_or_zones}/{account_or_zone_id}/custom_pages",
+		"get":  "/{accounts_or_zones}/{account_or_zone_id}/custom_pages/{identifier}",
 	},
 }

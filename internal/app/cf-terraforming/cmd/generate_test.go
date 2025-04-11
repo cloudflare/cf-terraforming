@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -250,7 +252,7 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	t.Skip("skip until the v5 provider is fully supported")
+	//t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string
@@ -420,6 +422,11 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zone":         {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 		"cloudflare zone dnssec":  {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
 		"cloudflare zone setting": {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting", cliFlags: "cloudflare_zone_setting=always_online,cache_level"},
+
+		"cloudflare registrar domain":                      {identiferType: "account", resourceType: "cloudflare_registrar_domain", testdataFilename: "cloudflare_registrar_domain"},
+		"cloudflare email security trusted domains":        {identiferType: "account", resourceType: "cloudflare_email_security_trusted_domains", testdataFilename: "cloudflare_email_security_trusted_domains"},
+		"cloudflare email security impersonation registry": {identiferType: "account", resourceType: "cloudflare_email_security_impersonation_registry", testdataFilename: "cloudflare_email_security_impersonation_registry"},
+		"cloudflare rate limit":                            {identiferType: "zone", resourceType: "cloudflare_rate_limit", testdataFilename: "cloudflare_rate_limit"},
 	}
 
 	for name, tc := range tests {
@@ -510,9 +517,57 @@ func TestResourceGenerationV5(t *testing.T) {
 				}
 
 			}
-
+			overwriteAndValidate(output)
 			expected := testDataFile("v5", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}
+}
+
+func overwriteAndValidate(output string) {
+	path := fmt.Sprintf("../../../../testdata/terraform/v5/%s", resourceType)
+	if err := os.WriteFile(path+"/test.tf", []byte(output), 0644); err != nil {
+		log.Fatalf("error writing test.tf for %s", resourceType)
+	}
+	log.Printf("test.tf created for %s", resourceType)
+	tfValidate(path)
+}
+
+func tfValidate(path string) {
+	absoluteDir, err := filepath.Abs(path)
+	if err != nil {
+		fmt.Printf("Error resolving absolute path: %s\n", err)
+		return
+	}
+	err = os.Chdir(absoluteDir)
+	if err != nil {
+		fmt.Printf("Error changing directory: %s\n", err)
+		return
+	}
+
+	fmt.Printf("Changed directory to: %s\n", absoluteDir)
+
+	initCmd := exec.Command("terraform", "init")
+	initCmd.Stdout = os.Stdout
+	initCmd.Stderr = os.Stderr
+
+	fmt.Println("Running: terraform init")
+	err = initCmd.Run()
+	if err != nil {
+		fmt.Printf("Error running terraform init: %s\n", err)
+		return
+	}
+
+	validateCmd := exec.Command("terraform", "validate")
+	validateCmd.Stdout = os.Stdout
+	validateCmd.Stderr = os.Stderr
+
+	fmt.Println("Running: terraform validate")
+	err = validateCmd.Run()
+	if err != nil {
+		fmt.Printf("Error running terraform validate: %s\n", err)
+		return
+	}
+
+	fmt.Println("Terraform commands completed successfully")
 }

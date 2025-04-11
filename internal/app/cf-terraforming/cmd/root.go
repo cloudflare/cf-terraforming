@@ -173,28 +173,19 @@ func getResourceMappings() map[string][]string {
 		"cloudflare_zone_setting":         make([]string, 0),
 		"cloudflare_hostname_tls_setting": make([]string, 0),
 	}
-
-	for _, mapping := range resourceIDFlags {
-		parts := strings.Split(mapping, "=")
-
-		rType := strings.TrimSpace(parts[0])
-		_, ok := settingsMap[rType]
-		if !ok {
-			log.Fatalf("unsupported resource type: %s", rType)
-		}
-		settingsString := parts[1]
-
-		settings := strings.Split(settingsString, ",")
-
-		var cleanSettings []string
-		for _, setting := range settings {
-			setting = strings.TrimSpace(setting)
-			if setting != "" {
-				cleanSettings = append(cleanSettings, setting)
+	var rType string
+	for _, flag := range resourceIDFlags {
+		if strings.Contains(flag, "=") {
+			flagParts := strings.Split(flag, "=")
+			rType = strings.TrimSpace(flagParts[0])
+			_, ok := settingsMap[rType]
+			if !ok {
+				log.Fatalf("unsupported resource type: %s", rType)
 			}
+			settingsMap[rType] = append(settingsMap[rType], strings.TrimSpace(flagParts[1]))
+		} else {
+			settingsMap[rType] = append(settingsMap[rType], strings.TrimSpace(flag))
 		}
-		settingsMap[rType] = cleanSettings
 	}
-
 	return settingsMap
 }

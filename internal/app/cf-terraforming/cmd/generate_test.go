@@ -292,7 +292,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare filter": {identiferType: "zone", resourceType: "cloudflare_filter", testdataFilename: "cloudflare_filter"},
 		// "cloudflare firewall rule":                           {identiferType: "zone", resourceType: "cloudflare_firewall_rule", testdataFilename: "cloudflare_firewall_rule"},
 		"cloudflare health check":         {identiferType: "zone", resourceType: "cloudflare_healthcheck", testdataFilename: "cloudflare_healthcheck"},
-		"cloudflare hostname tls setting": {identiferType: "zone", resourceType: "cloudflare_hostname_tls_setting", testdataFilename: "cloudflare_hostname_tls_setting", cliFlags: `"cloudflare_hostname_tls_setting=ciphers,min_tls_version"`},
+		"cloudflare hostname tls setting": {identiferType: "zone", resourceType: "cloudflare_hostname_tls_setting", testdataFilename: "cloudflare_hostname_tls_setting", cliFlags: "cloudflare_hostname_tls_setting=ciphers,min_tls_version"},
 		"cloudflare mtls certificate":     {identiferType: "account", resourceType: "cloudflare_mtls_certificate", testdataFilename: "cloudflare_mtls_certificate"},
 		// "cloudflare list (asn)":                              {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_asn"},
 		// "cloudflare list (hostname)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_hostname"},
@@ -419,7 +419,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare zero trust tunnel cloudflared virtual network":           {identiferType: "account", resourceType: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network", testdataFilename: "cloudflare_zero_trust_tunnel_cloudflared_virtual_network"},
 		"cloudflare zone":         {identiferType: "zone", resourceType: "cloudflare_zone", testdataFilename: "cloudflare_zone"},
 		"cloudflare zone dnssec":  {identiferType: "zone", resourceType: "cloudflare_zone_dnssec", testdataFilename: "cloudflare_zone_dnssec"},
-		"cloudflare zone setting": {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting", cliFlags: `"cloudflare_zone_setting=always_online,cache_level"`},
+		"cloudflare zone setting": {identiferType: "zone", resourceType: "cloudflare_zone_setting", testdataFilename: "cloudflare_zone_setting", cliFlags: "cloudflare_zone_setting=always_online,cache_level"},
 	}
 
 	for name, tc := range tests {

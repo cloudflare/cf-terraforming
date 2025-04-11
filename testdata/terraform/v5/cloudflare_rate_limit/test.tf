@@ -1,28 +1,34 @@
 resource "cloudflare_rate_limit" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
+  period    = 900
+  threshold = 60
+  zone_id   = "0da42c8d2132a9ddaf714f9e7c920711"
   action = {
-    mode = "simulate"
+    mode = "ban"
     response = {
-      body = "<error>This request has been rate-limited.</error>"
-      content_type = "text/xml"
+      body         = "{\"response\":\"your request has been rate limited\"}"
+      content_type = "application/json"
     }
-    timeout = 86400
+    timeout = 3600
   }
   match = {
-    headers = [{
-      name = "Cf-Cache-Status"
-      op = "eq"
-      value = "HIT"
-    }]
     request = {
-      methods = ["GET", "POST"]
-      schemes = ["HTTP", "HTTPS"]
-      url = "*.example.org/path*"
+      methods = ["POST"]
+      schemes = ["_ALL_"]
+      url     = "example.com"
     }
     response = {
-      origin_traffic = true
+      headers = [{
+        name  = "My_origin_field"
+        op    = "eq"
+        value = "block_request"
+        }, {
+        name  = "Other"
+        op    = "eq"
+        value = "block_request"
+      }]
+      origin_traffic = false
+      status         = [401, 403]
     }
   }
-  period = 900
-  threshold = 60
 }
+

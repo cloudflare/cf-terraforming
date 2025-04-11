@@ -1721,6 +1721,10 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["setting_id"] = pathParam
 		}
+	case "cloudflare_registrar_domain":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["domain_name"] = (*response)[i].(map[string]interface{})["name"]
+		}
 	}
 }
 

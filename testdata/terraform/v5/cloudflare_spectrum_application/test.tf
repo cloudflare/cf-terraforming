@@ -1,24 +1,18 @@
 resource "cloudflare_spectrum_application" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
+  ip_firewall    = false
+  origin_direct  = ["tcp://128.66.0.4:3389"]
+  protocol       = "rdp"
+  proxy_protocol = "off"
+  tls            = "off"
+  traffic_type   = "direct"
+  zone_id        = "0da42c8d2132a9ddaf714f9e7c920711"
   dns = {
-    name = "ssh.example.com"
+    name = "ledfaootii.terraform.cfapi.net"
     type = "CNAME"
   }
-  ip_firewall = true
-  protocol = "tcp/22"
-  proxy_protocol = "off"
-  tls = "off"
-  traffic_type = "direct"
-  argo_smart_routing = true
   edge_ips = {
     connectivity = "all"
-    type = "dynamic"
+    type         = "dynamic"
   }
-  origin_direct = ["tcp://127.0.0.1:8080"]
-  origin_dns = {
-    name = "origin.example.com"
-    ttl = 600
-    type = ""
-  }
-  origin_port = 22
 }
+

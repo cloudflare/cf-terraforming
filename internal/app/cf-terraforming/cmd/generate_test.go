@@ -322,13 +322,17 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare leaked credential check":                 {identiferType: "zone", resourceType: "cloudflare_leaked_credential_check", testdataFilename: "cloudflare_leaked_credential_check"},
 		"cloudflare leaked credential check rule":            {identiferType: "zone", resourceType: "cloudflare_leaked_credential_check_rule", testdataFilename: "cloudflare_leaked_credential_check_rule"},
 		"cloudflare list":                                    {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list"},
+		"cloudflare list item":                               {identiferType: "account", resourceType: "cloudflare_list_item", testdataFilename: "cloudflare_list_item", cliFlags: "cloudflare_list_item=2a4b8b2017aa4b3cb9e1151b52c81d22"},
 		"cloudflare logpush job":                             {identiferType: "account", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job"},
 		"cloudflare logpull retention":                       {identiferType: "zone", resourceType: "cloudflare_logpull_retention", testdataFilename: "cloudflare_logpull_retention"},
 		"cloudflare notification policy":                     {identiferType: "account", resourceType: "cloudflare_notification_policy", testdataFilename: "cloudflare_notification_policy"},
 		"cloudflare notification policy webhooks":            {identiferType: "account", resourceType: "cloudflare_notification_policy_webhooks", testdataFilename: "cloudflare_notification_policy_webhooks"},
+		"cloudflare pages domain":                            {identiferType: "account", resourceType: "cloudflare_pages_domain", testdataFilename: "cloudflare_pages_domain", cliFlags: "cloudflare_pages_domain=ykfjmcgpfs"},
 		"cloudflare pages project":                           {identiferType: "account", resourceType: "cloudflare_pages_project", testdataFilename: "cloudflare_pages_project"},
 		"cloudflare page shield policy":                      {identiferType: "zone", resourceType: "cloudflare_page_shield_policy", testdataFilename: "cloudflare_page_shield_policy"},
 		"cloudflare r2 bucket":                               {identiferType: "account", resourceType: "cloudflare_r2_bucket", testdataFilename: "cloudflare_r2_bucket"},
+		"cloudflare r2 managed domain":                       {identiferType: "account", resourceType: "cloudflare_r2_managed_domain", testdataFilename: "cloudflare_r2_managed_domain", cliFlags: "cloudflare_r2_managed_domain=jb-test-bucket,bnfywlzwpt"},
+		"cloudflare r2 custom domain":                        {identiferType: "account", resourceType: "cloudflare_r2_custom_domain", testdataFilename: "cloudflare_r2_custom_domain", cliFlags: "cloudflare_r2_custom_domain=jb-test-bucket,bnfywlzwpt"},
 		"cloudflare page rule":                               {identiferType: "zone", resourceType: "cloudflare_page_rule", testdataFilename: "cloudflare_page_rule"},
 		"cloudflare ruleset (ddos_l7)":                       {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_ddos_l7"},
 		"cloudflare ruleset (http_log_custom_fields)":        {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_http_log_custom_fields"},
@@ -487,8 +491,16 @@ func TestResourceGenerationV5(t *testing.T) {
 						Transport: r,
 					},
 				))
+				if tc.cliFlags != "" {
+					output, _ = executeCommandC(rootCmd, "generate",
+						"--resource-type", tc.resourceType,
+						"--account", cloudflareTestAccountID,
+						"--resource-id", tc.cliFlags,
+					)
+				} else {
+					output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
+				}
 
-				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
 				api = cloudflare.NewClient(option.WithHTTPClient(

@@ -31,6 +31,17 @@ var (
 to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,
 	}
+
+	// Resources for which path params are supported.
+	settingsMap = map[string][]string{
+		"cloudflare_zone_setting":         make([]string, 0),
+		"cloudflare_hostname_tls_setting": make([]string, 0),
+		"cloudflare_waiting_room_event":   make([]string, 0),
+		"cloudflare_r2_managed_domain":    make([]string, 0),
+		"cloudflare_r2_custom_domain":     make([]string, 0),
+		"cloudflare_pages_domain":         make([]string, 0),
+		"cloudflare_list_item":            make([]string, 0),
+	}
 )
 
 const (
@@ -169,10 +180,6 @@ func initConfig() {
 }
 
 func getResourceMappings() map[string][]string {
-	settingsMap := map[string][]string{
-		"cloudflare_zone_setting":         make([]string, 0),
-		"cloudflare_hostname_tls_setting": make([]string, 0),
-	}
 	var rType string
 	for _, flag := range resourceIDFlags {
 		if strings.Contains(flag, "=") {

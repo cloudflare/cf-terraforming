@@ -126,11 +126,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		resources := strings.Split(resourceType, ",")
-
-		resourceIDsMap := make(map[string][]string)
-		if slices.Contains(resources, "cloudflare_zone_setting") || slices.Contains(resources, "cloudflare_hostname_tls_setting") {
-			resourceIDsMap = getResourceMappings()
-		}
 		for _, resourceType := range resources {
 			r := s.ResourceSchemas[resourceType]
 			log.WithFields(logrus.Fields{
@@ -149,6 +144,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			useOldSDK := resourceType == "cloudflare_ruleset"
 
 			if strings.HasPrefix(providerVersionString, "5") && !useOldSDK {
+				resourceIDsMap := make(map[string][]string)
+				if isSupportedPathParam(resources, resourceType) {
+					resourceIDsMap = getResourceMappings()
+
+					ids, ok := resourceIDsMap[resourceType]
+					if ok && len(ids) == 0 {
+						log.Fatalf("No resource IDs defined in Terraform for resource %s", resourceType)
+					}
+				}
+
 				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
 					log.WithFields(logrus.Fields{
 						"resource": resourceType,
@@ -182,10 +187,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 				pathParams, ok := resourceIDsMap[resourceType]
 				if ok && len(pathParams) > 0 {
-					endpoints := make([]string, 0)
-					for _, id := range pathParams {
-						endpoints = append(endpoints, strings.Clone(strings.NewReplacer("{setting_id}", id).Replace(endpoint)))
-					}
+					endpoints := replacePathParams(pathParams, endpoint, resourceType)
 					jsonStructData, err = GetAPIResponse(result, pathParams, endpoints...)
 					if err != nil {
 						log.Infof("error getting API response for resource %s: %s", resourceType, err)
@@ -1725,6 +1727,36 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["domain_name"] = (*response)[i].(map[string]interface{})["name"]
 		}
+	case "cloudflare_r2_managed_domain":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["bucket_name"] = pathParam
+		}
+	case "cloudflare_r2_custom_domain":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			domains := r[i].(map[string]interface{})["domains"]
+			bucketObjects := make([]interface{}, len(domains.([]interface{})))
+			for j := range domains.([]interface{}) {
+				b := domains.([]interface{})[j]
+				b.(map[string]interface{})["bucket_name"] = pathParam
+				b.(map[string]interface{})["zone_id"] = b.(map[string]interface{})["zoneId"]
+				bucketObjects[j] = b
+			}
+			finalResponse = append(finalResponse, bucketObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
+		}
+	case "cloudflare_pages_domain":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["project_name"] = pathParam
+		}
+	case "cloudflare_list_item":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["list_id"] = (*response)[i].(map[string]interface{})["id"]
+		}
 	}
 }
 
@@ -1834,4 +1866,35 @@ func GetAPIResponse(result *http.Response, pathParams []string, endpoints ...str
 		results = append(results, jsonStructData...)
 	}
 	return results, nil
+}
+
+func isSupportedPathParam(resources []string, rType string) bool {
+	_, ok := settingsMap[rType]
+	if !ok {
+		return false
+	}
+	return slices.Contains(resources, rType)
+}
+
+func replacePathParams(params []string, endpoint string, rType string) []string {
+	endpoints := make([]string, 0)
+	var placeholder string
+	switch rType {
+	case "cloudflare_zone_setting", "cloudflare_hostname_tls_setting":
+		placeholder = "{setting_id}"
+	case "cloudflare_waiting_room_event":
+		placeholder = "{waiting_room_id}"
+	case "cloudflare_r2_managed_domain", "cloudflare_r2_custom_domain":
+		placeholder = "{bucket_name}"
+	case "cloudflare_pages_domain":
+		placeholder = "{project_name}"
+	case "cloudflare_list_item":
+		placeholder = "{list_id}"
+	default:
+		return endpoints
+	}
+	for _, id := range params {
+		endpoints = append(endpoints, strings.Clone(strings.NewReplacer(placeholder, id).Replace(endpoint)))
+	}
+	return endpoints
 }

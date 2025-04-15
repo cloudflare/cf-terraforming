@@ -1,0 +1,61 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rules/lists/2a4b8b2017aa4b3cb9e1151b52c81d22/items
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "comment": "okhejrsmza",
+              "created_on": "2024-10-24T04:23:10Z",
+              "id": "6cafa626bdb6453fac7a9be3aacf73ca",
+              "modified_on": "2024-10-24T04:23:10Z",
+              "redirect": {
+                "include_subdomains": false,
+                "preserve_path_suffix": false,
+                "preserve_query_string": false,
+                "source_url": "example.com/",
+                "status_code": 301,
+                "subpath_matching": false,
+                "target_url": "https://example1.com"
+              }
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

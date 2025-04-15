@@ -126,16 +126,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		resources := strings.Split(resourceType, ",")
-
-		resourceIDsMap := make(map[string][]string)
-		if isSupportedPathParam(resources, resourceType) {
-			resourceIDsMap = getResourceMappings()
-
-			ids, ok := resourceIDsMap[resourceType]
-			if ok && len(ids) == 0 {
-				log.Fatalf("No resource IDs defined in Terraform for resource %s", resourceType)
-			}
-		}
 		for _, resourceType := range resources {
 			r := s.ResourceSchemas[resourceType]
 			log.WithFields(logrus.Fields{
@@ -154,6 +144,16 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			useOldSDK := resourceType == "cloudflare_ruleset"
 
 			if strings.HasPrefix(providerVersionString, "5") && !useOldSDK {
+				resourceIDsMap := make(map[string][]string)
+				if isSupportedPathParam(resources, resourceType) {
+					resourceIDsMap = getResourceMappings()
+
+					ids, ok := resourceIDsMap[resourceType]
+					if ok && len(ids) == 0 {
+						log.Fatalf("No resource IDs defined in Terraform for resource %s", resourceType)
+					}
+				}
+
 				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
 					log.WithFields(logrus.Fields{
 						"resource": resourceType,

@@ -1,0 +1,67 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/spectrum/apps
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "created_on": "2025-04-15T18:11:22.484548Z",
+              "dns": {
+                "name": "ledfaootii.terraform.cfapi.net",
+                "type": "CNAME"
+              },
+              "edge_ips": {
+                "connectivity": "all",
+                "type": "dynamic"
+              },
+              "id": "af93687c10dc4ebfa7d1e89595fade22",
+              "ip_firewall": false,
+              "modified_on": "2025-04-15T18:11:22.484548Z",
+              "origin_direct": [
+                "tcp://128.66.0.4:3389"
+              ],
+              "protocol": "rdp",
+              "proxy_protocol": "off",
+              "tls": "off",
+              "traffic_type": "direct"
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

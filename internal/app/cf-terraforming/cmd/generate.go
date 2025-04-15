@@ -1757,6 +1757,14 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["list_id"] = (*response)[i].(map[string]interface{})["id"]
 		}
+	case "cloudflare_api_shield_schema":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["file"] = (*response)[i].(map[string]interface{})["source"]
+		}
+	case "cloudflare_api_shield_discovery_operation":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["operation_id"] = (*response)[i].(map[string]interface{})["id"]
+		}
 	}
 }
 

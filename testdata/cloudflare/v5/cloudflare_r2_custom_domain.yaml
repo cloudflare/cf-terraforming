@@ -1,0 +1,137 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/r2/buckets/jb-test-bucket/domains/custom
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "domains": [
+              {
+                "domain": "terraform2.cfapi.net",
+                "enabled": true,
+                "minTLS": "1.0",
+                "status": {
+                  "ownership": "pending",
+                  "ssl": "initializing"
+                },
+                "zoneId": "b72110c08e3382597095c29ba7e661ea",
+                "zoneName": "terraform2.cfapi.net"
+              },
+             {
+                "domain": "terraform32.cfapi.net",
+                "enabled": true,
+                "minTLS": "1.2",
+                "status": {
+                  "ownership": "pending",
+                  "ssl": "initializing"
+                },
+                "zoneId": "b72110c08e3382597095c29ba7e661ea",
+                "zoneName": "terraform32.cfapi.net"
+              }
+            ]
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: { }
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/r2/buckets/bnfywlzwpt/domains/custom
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "domains": [
+              {
+                "domain": "terraform2.cfapi.net",
+                "enabled": true,
+                "minTLS": "1.0",
+                "status": {
+                  "ownership": "pending",
+                  "ssl": "initializing"
+                },
+                "zoneId": "b72110c08e3382597095c29ba7e661ea",
+                "zoneName": "terraform2.cfapi.net"
+              },
+              {
+                "domain": "terraform22.cfapi.net",
+                "enabled": true,
+                "minTLS": "1.0",
+                "status": {
+                  "ownership": "pending",
+                  "ssl": "initializing"
+                },
+                "zoneId": "b72110c08e3382597095c29ba7e661ea",
+                "zoneName": "terraform22.cfapi.net"
+              }
+            ]
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

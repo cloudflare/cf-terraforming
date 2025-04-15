@@ -32,7 +32,7 @@ to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,
 	}
 
-	// resources for which path params are supported
+	// Resources for which path params are supported.
 	settingsMap = map[string][]string{
 		"cloudflare_zone_setting":         make([]string, 0),
 		"cloudflare_hostname_tls_setting": make([]string, 0),

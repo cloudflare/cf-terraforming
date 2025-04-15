@@ -133,10 +133,10 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			log.WithFields(logrus.Fields{
 				"resource": resourceType,
 			}).Debug("reading and building resource")
-			if r.Block.Deprecated || slices.Contains(deprecatedResources, resourceType) {
+			if (r != nil && r.Block != nil && r.Block.Deprecated) || slices.Contains(deprecatedResources, resourceType) {
 				log.Warnf(fmt.Sprintf("resource %s is deprecated. The terraform config might not be generated.", resourceType))
 			}
-			
+
 			// Initialise `resourceCount` outside of the switch for supported resources
 			// to allow it to be referenced further down in the loop that outputs the
 			// newly generated resources.

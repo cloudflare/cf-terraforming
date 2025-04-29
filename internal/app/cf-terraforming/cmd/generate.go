@@ -1806,7 +1806,6 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 							"resource": resourceType,
 							"endpoint": endpoint,
 						}).Debug("no resources found")
-
 					}
 				}
 				log.Fatalf("failed to fetch API endpoint: %s", err)

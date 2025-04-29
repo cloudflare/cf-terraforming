@@ -1770,6 +1770,10 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["operation_id"] = (*response)[i].(map[string]interface{})["id"]
 		}
+	case "cloudflare_zero_trust_dlp_predefined_profile":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["profile_id"] = pathParam
+		}
 	}
 }
 
@@ -1903,6 +1907,8 @@ func replacePathParams(params []string, endpoint string, rType string) []string 
 		placeholder = "{project_name}"
 	case "cloudflare_list_item":
 		placeholder = "{list_id}"
+	case "cloudflare_zero_trust_dlp_predefined_profile":
+		placeholder = "{profile_id}"
 	default:
 		return endpoints
 	}

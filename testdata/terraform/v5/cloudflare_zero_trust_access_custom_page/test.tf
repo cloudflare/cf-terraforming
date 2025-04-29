@@ -1,7 +1,8 @@
 resource "cloudflare_zero_trust_access_custom_page" "terraform_managed_resource" {
-  account_id = "023e105f4ecef8ad9ca31a8372d0c353"
+  account_id  = "f037e56e89293a057740de681ac9abbe"
+  app_count   = 0
   custom_html = "<html><body><h1>Access Denied</h1></body></html>"
-  name = "name"
-  type = "identity_denied"
-  app_count = 0
+  name        = "plabknfrou"
+  type        = "forbidden"
 }
+

@@ -34,13 +34,14 @@ all of their existing Cloudflare configuration into Terraform.`,
 
 	// Resources for which path params are supported.
 	settingsMap = map[string][]string{
-		"cloudflare_zone_setting":         make([]string, 0),
-		"cloudflare_hostname_tls_setting": make([]string, 0),
-		"cloudflare_waiting_room_event":   make([]string, 0),
-		"cloudflare_r2_managed_domain":    make([]string, 0),
-		"cloudflare_r2_custom_domain":     make([]string, 0),
-		"cloudflare_pages_domain":         make([]string, 0),
-		"cloudflare_list_item":            make([]string, 0),
+		"cloudflare_zone_setting":                      make([]string, 0),
+		"cloudflare_hostname_tls_setting":              make([]string, 0),
+		"cloudflare_waiting_room_event":                make([]string, 0),
+		"cloudflare_r2_managed_domain":                 make([]string, 0),
+		"cloudflare_r2_custom_domain":                  make([]string, 0),
+		"cloudflare_pages_domain":                      make([]string, 0),
+		"cloudflare_list_item":                         make([]string, 0),
+		"cloudflare_zero_trust_dlp_predefined_profile": make([]string, 0),
 	}
 )
 

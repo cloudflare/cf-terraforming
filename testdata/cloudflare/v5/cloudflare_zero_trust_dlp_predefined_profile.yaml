@@ -1,0 +1,229 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: { }
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/dlp/profiles/predefined/c8932cc4-3312-4152-8041-f3f257122dc4
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "ai_context_enabled": false,
+            "allowed_match_count": 0,
+            "context_awareness": {
+              "enabled": false,
+              "skip": {
+                "files": false
+              }
+            },
+            "entries": [
+              {
+                "confidence": {
+                  "ai_context_available": true,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "d8fcfc9c-773c-405e-8426-21ecbb67ba93",
+                "name": "Amazon AWS Access Key ID",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": false,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "2c0e33e1-71da-40c8-aad3-32e674ad3d96",
+                "name": "Amazon AWS Secret Access Key",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": true,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "6c6579e4-d832-42d5-905c-8e53340930f2",
+                "name": "Google GCP API Key",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": true,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "4e92c006-3802-4dff-bbe1-8e1513b1c92a",
+                "name": "Microsoft Azure Client Secret",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": false,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "5c713294-2375-4904-abcf-e4a15be4d592",
+                "name": "SSH Private Key",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              }
+            ],
+            "id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+            "name": "Credentials and Secrets",
+            "ocr_enabled": false,
+            "open_access": false,
+            "type": "predefined"
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: { }
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/dlp/profiles/predefined/56a8c060-01bb-4f89-ba1e-3ad42770a342
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "ai_context_enabled": false,
+            "allowed_match_count": 0,
+            "context_awareness": {
+              "enabled": false,
+              "skip": {
+                "files": false
+              }
+            },
+            "entries": [
+              {
+                "confidence": {
+                  "ai_context_available": true,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "d8fcfc9c-773c-405e-8426-21ecbb67ba93",
+                "name": "Amazon AWS Access Key ID",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": false,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "2c0e33e1-71da-40c8-aad3-32e674ad3d96",
+                "name": "Amazon AWS Secret Access Key",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": true,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "6c6579e4-d832-42d5-905c-8e53340930f2",
+                "name": "Google GCP API Key",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": true,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "4e92c006-3802-4dff-bbe1-8e1513b1c92a",
+                "name": "Microsoft Azure Client Secret",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              },
+              {
+                "confidence": {
+                  "ai_context_available": false,
+                  "available": false
+                },
+                "enabled": false,
+                "id": "5c713294-2375-4904-abcf-e4a15be4d592",
+                "name": "SSH Private Key",
+                "profile_id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+                "type": "predefined"
+              }
+            ],
+            "id": "c8932cc4-3312-4152-8041-f3f257122dc4",
+            "name": "Credentials and Secrets",
+            "ocr_enabled": false,
+            "open_access": false,
+            "type": "predefined"
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

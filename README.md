@@ -10,9 +10,14 @@ and converting them to Terraform configurations that can be used with the
 
 This tool is ideal if you already have Cloudflare resources defined but want to
 start managing them via Terraform, and don't want to spend the time to manually
-write the Terraform configuration to describe them.
+write the Terraform configuration to describe them. The intention is that this
+would be a one-time HCL generation of whichever resource(s) you want to begin
+managing exclusively through Terraform.
 
 Read the [announcement blog](https://blog.cloudflare.com/cloudflares-partnership-with-hashicorp-and-bootstrapping-terraform-with-cf-terraforming/) for further details on using `cf-terraforming` in your workflow.
+
+> [!WARNING]
+> This tool is not intended for use in CI.
 
 > [!NOTE]
 > If you would like to export resources compatible with Terraform < 0.12.x,

@@ -1774,6 +1774,60 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["profile_id"] = pathParam
 		}
+	case "cloudflare_zero_trust_access_identity_provider":
+		for i := 0; i < resourceCount; i++ {
+			cfg, ok := (*response)[i].(map[string]interface{})["config"]
+			if ok {
+				delete(cfg.(map[string]interface{}), "redirect_url")
+			}
+			scimCFG, ok := (*response)[i].(map[string]interface{})["scim_config"]
+			if ok {
+				delete(scimCFG.(map[string]interface{}), "scim_base_url")
+			}
+		}
+	case "cloudflare_zero_trust_access_custom_page":
+		// fetch each object one by one to get 'custom_html' field.
+		endpointFMT := resourceToEndpoint[resourceType]["get"]
+		placeholderReplacer := strings.NewReplacer("{account_id}", accountID)
+		endpointFMT = placeholderReplacer.Replace(endpointFMT)
+		for i := 0; i < resourceCount; i++ {
+			uid, ok := (*response)[i].(map[string]interface{})["uid"]
+			if !ok {
+				continue
+			}
+			endpoint := strings.Replace(endpointFMT, "{custom_page_id}", uid.(string), 1)
+			result := new(http.Response)
+			err := api.Get(context.Background(), endpoint, nil, &result)
+			if err != nil {
+				var apierr *cloudflare.Error
+				if errors.As(err, &apierr) {
+					if apierr.StatusCode == http.StatusNotFound {
+						log.WithFields(logrus.Fields{
+							"resource": resourceType,
+							"endpoint": endpoint,
+						}).Debug("no resources found")
+					}
+				}
+				log.Fatalf("failed to fetch API endpoint: %s", err)
+			}
+			body, err := io.ReadAll(result.Body)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			value := gjson.Get(string(body), "result")
+			if value.Type == gjson.Null {
+				log.WithFields(logrus.Fields{
+					"resource": resourceType,
+					"endpoint": endpoint,
+				}).Debug("no result found")
+				continue
+			}
+			customHTML := gjson.Get(value.Raw, "custom_html")
+			if value.Type == gjson.Null {
+				continue
+			}
+			(*response)[i].(map[string]interface{})["custom_html"] = customHTML.String()
+		}
 	}
 }
 

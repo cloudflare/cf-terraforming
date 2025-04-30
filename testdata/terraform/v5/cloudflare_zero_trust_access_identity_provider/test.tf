@@ -1,21 +1,32 @@
-resource "cloudflare_zero_trust_access_identity_provider" "terraform_managed_resource" {
-  config = {
-    claims = ["email_verified", "preferred_username", "custom_claim_name"]
-    client_id = "<your client id>"
-    client_secret = "<your client secret>"
-    conditional_access_enabled = true
-    directory_id = "<your azure directory uuid>"
-    email_claim_name = "custom_claim_name"
-    prompt = "login"
-    support_groups = true
-  }
-  name = "Widget Corps IDP"
-  type = "onetimepin"
-  zone_id = "zone_id"
+resource "cloudflare_zero_trust_access_identity_provider" "terraform_managed_resource_0" {
+  name    = "Widget Corps IDP"
+  type    = "onetimepin"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
+  config  = {}
   scim_config = {
-    enabled = true
-    identity_update_behavior = "automatic"
-    seat_deprovision = true
-    user_deprovision = true
+    enabled                  = false
+    group_member_deprovision = false
+    seat_deprovision         = false
+    user_deprovision         = false
   }
 }
+
+resource "cloudflare_zero_trust_access_identity_provider" "terraform_managed_resource_1" {
+  name    = "lnfbpxpksi"
+  type    = "azureAD"
+  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
+  config = {
+    azure_cloud                = "default"
+    client_id                  = "test"
+    conditional_access_enabled = false
+    directory_id               = "directory"
+    support_groups             = true
+  }
+  scim_config = {
+    enabled                  = true
+    group_member_deprovision = false
+    seat_deprovision         = true
+    user_deprovision         = true
+  }
+}
+

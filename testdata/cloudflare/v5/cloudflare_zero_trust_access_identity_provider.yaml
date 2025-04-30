@@ -1,0 +1,91 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/access/identity_providers
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "config": {
+                "redirect_url": "https://lklfsevdnw-terraform-cfapi.cloudflareaccess.com/cdn-cgi/access/callback"
+              },
+              "id": "df769912-7f47-4faf-a58f-8cb669ee95c3",
+              "name": "Widget Corps IDP",
+              "scim_config": {
+                "enabled": false,
+                "group_member_deprovision": false,
+                "seat_deprovision": false,
+                "user_deprovision": false
+              },
+              "type": "onetimepin",
+              "uid": "df769912-7f47-4faf-a58f-8cb669ee95c3",
+              "version": "1a380549c849da39dcce7e876084c7e6"
+            },
+            {
+              "config": {
+                "azure_cloud": "default",
+                "client_id": "test",
+                "conditional_access_enabled": false,
+                "directory_id": "directory",
+                "redirect_url": "https://lklfsevdnw-terraform-cfapi.cloudflareaccess.com/cdn-cgi/access/callback",
+                "support_groups": true
+              },
+              "id": "3133c0fe-e89c-45ad-a862-e1aa4b321b95",
+              "name": "lnfbpxpksi",
+              "scim_config": {
+                "enabled": true,
+                "group_member_deprovision": false,
+                "scim_base_url": "https://lklfsevdnw-terraform-cfapi.cloudflareaccess.com/scim/3133c0fe-e89c-45ad-a862-e1aa4b321b95",
+                "seat_deprovision": true,
+                "user_deprovision": true
+              },
+              "type": "azureAD",
+              "uid": "3133c0fe-e89c-45ad-a862-e1aa4b321b95",
+              "version": "2206eb62a8f25929f0efdc8e9c9762f9"
+            }
+          ],
+          "result_info": {
+            "count": 2,
+            "page": 1,
+            "per_page": 200,
+            "total_count": 2,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

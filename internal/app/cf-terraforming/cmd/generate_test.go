@@ -391,6 +391,8 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare custom certificates":    {identiferType: "zone", resourceType: "cloudflare_custom_certificates", testdataFilename: "cloudflare_custom_certificates"},
 		// "cloudflare custom SSL": {identiferType: "zone", resourceType: "cloudflare_custom_ssl", testdataFilename: "cloudflare_custom_ssl"},
 		"cloudflare queue":                 {identiferType: "account", resourceType: "cloudflare_queue", testdataFilename: "cloudflare_queue"},
+		"cloudflare web analytics site":    {identiferType: "account", resourceType: "cloudflare_web_analytics_site", testdataFilename: "cloudflare_web_analytics_site"},
+		"cloudflare web analytics rule":    {identiferType: "account", resourceType: "cloudflare_web_analytics_rule", testdataFilename: "cloudflare_web_analytics_rule", cliFlags: "cloudflare_web_analytics_rule=2fa89d8f-35f7-49ef-87d3-f24e866a5d5e"},
 		"cloudflare waiting room":          {identiferType: "zone", resourceType: "cloudflare_waiting_room", testdataFilename: "cloudflare_waiting_room"},
 		"cloudflare waiting room settings": {identiferType: "zone", resourceType: "cloudflare_waiting_room_settings", testdataFilename: "cloudflare_waiting_room_settings"},
 		// "cloudflare worker cron trigger":    {identiferType: "zone", resourceType: "cloudflare_worker_cron_trigger", testdataFilename: "cloudflare_worker_cron_trigger"},

@@ -1,0 +1,79 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rum/site_info/list
+      method: GET
+    response:
+      body: |
+        {
+          "errors": null,
+          "messages": null,
+          "result": [
+            {
+              "auto_install": true,
+              "created": "2025-04-30T17:05:07.642651Z",
+              "ruleset": {
+                "enabled": true,
+                "id": "2fa89d8f-35f7-49ef-87d3-f24e866a5d5e",
+                "lite": false,
+                "zone_name": "terraform.cfapi.net",
+                "zone_tag": "0da42c8d2132a9ddaf714f9e7c920711"
+              },
+              "site_tag": "2a7e4c1ab0eb427398b56da869532fe2",
+              "site_token": "1588ed51737b456296761f45b23ae48b",
+              "snippet": "<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"1588ed51737b456296761f45b23ae48b\"}'></script><!-- End Cloudflare Web Analytics -->"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 10,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

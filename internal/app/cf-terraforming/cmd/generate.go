@@ -1828,6 +1828,23 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			}
 			(*response)[i].(map[string]interface{})["custom_html"] = customHTML.String()
 		}
+	case "cloudflare_web_analytics_rule":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			rules := r[i].(map[string]interface{})["rules"]
+			ruleObjects := make([]interface{}, len(rules.([]interface{})))
+			for j := range rules.([]interface{}) {
+				b := rules.([]interface{})[j]
+				b.(map[string]interface{})["ruleset_id"] = pathParam
+				ruleObjects[j] = b
+			}
+			finalResponse = append(finalResponse, ruleObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
+		}
 	}
 }
 
@@ -1963,6 +1980,9 @@ func replacePathParams(params []string, endpoint string, rType string) []string 
 		placeholder = "{list_id}"
 	case "cloudflare_zero_trust_dlp_predefined_profile":
 		placeholder = "{profile_id}"
+	case "cloudflare_web_analytics_rule":
+		placeholder = "{ruleset_id}"
+
 	default:
 		return endpoints
 	}

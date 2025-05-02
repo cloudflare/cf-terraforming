@@ -1,0 +1,85 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/waiting_rooms/e7f9e4c190ea8d6c66cab32ac110f39a/events
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "created_on": "2025-05-01T20:49:54.465842Z",
+              "custom_page_html": "{{#waitTimeKnown}} {{waitTime}} mins {{/waitTimeKnown}} {{^waitTimeKnown}} Event is prequeueing / Queue all enabled {{/waitTimeKnown}}",
+              "description": "Production event - DO NOT MODIFY",
+              "disable_session_renewal": null,
+              "event_end_time": "2021-09-28T17:00:00Z",
+              "event_start_time": "2021-09-28T15:30:00Z",
+              "id": "40aa062d83bfbd6c9a6062f1d4b2b23c",
+              "modified_on": "2025-05-01T20:49:54.465842Z",
+              "name": "production_webinar_event",
+              "new_users_per_minute": null,
+              "prequeue_start_time": "2021-09-28T15:00:00Z",
+              "queueing_method": "random",
+              "session_duration": null,
+              "shuffle_at_event_start": false,
+              "suspended": false,
+              "total_active_users": null,
+              "turnstile_action": null,
+              "turnstile_mode": null
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 25,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 0195060d-02f1-7e32-9ce1-a4fe3839e12e
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

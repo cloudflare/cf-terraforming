@@ -1671,6 +1671,13 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 				delete(customCert.(map[string]interface{}), "expires_on")
 				delete(customCert.(map[string]interface{}), "updated_at")
 			}
+			blockPage, ok := settings.(map[string]interface{})["block_page"]
+			if ok {
+				mode := blockPage.(map[string]interface{})["mode"]
+				if mode.(string) == "" {
+					delete(blockPage.(map[string]interface{}), "mode")
+				}
+			}
 		}
 	case "cloudflare_page_rule":
 		for i := 0; i < resourceCount; i++ {
@@ -1844,6 +1851,10 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		*response = make([]interface{}, len(finalResponse))
 		for i := range finalResponse {
 			(*response)[i] = finalResponse[i]
+		}
+	case "cloudflare_waiting_room_event":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["waiting_room_id"] = pathParam
 		}
 	}
 }

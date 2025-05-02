@@ -23,7 +23,6 @@ resource "cloudflare_zero_trust_gateway_settings" "terraform_managed_resource" {
       logo_path        = "https://example.com"
       mailto_address   = "test@cloudflare.com"
       mailto_subject   = "hello"
-      mode             = ""
       name             = "iddghecuxq"
       suppress_footer  = false
       target_uri       = ""

@@ -22,7 +22,7 @@ jobs:
           path: ~/go/pkg/mod
           key: go1.20-${{ hashFiles('**/go.sum') }}
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v7
+        uses: golangci/golangci-lint-action@v8
         with:
           version: latest
           args: "--config .golintci.yml"

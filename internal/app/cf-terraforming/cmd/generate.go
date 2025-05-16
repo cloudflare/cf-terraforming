@@ -104,10 +104,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		}
 
 		detectedVersion, ok := providerVersion[registryPath]
-		if !ok {
+		if !ok || detectedVersion == nil { // Add nil check for detectedVersion
 			log.WithFields(logrus.Fields{
 				"available_registries": providerVersion,
-			}).Fatal("failed to find registry")
+			}).Fatal("Failed to find Cloudflare provider registry or version.\n\n" +
+				"Please ensure the following in your working directory:\n" +
+				"  1. Terraform configuration files (.tf files) exist that define the Cloudflare provider.\n" +
+				"     Example: terraform { required_providers { cloudflare = { source = \"cloudflare/cloudflare\" } } }\n" +
+				"  2. The command 'terraform init' has been run successfully in that directory.\n\n\n")
 		}
 
 		providerVersionString := detectedVersion.String()

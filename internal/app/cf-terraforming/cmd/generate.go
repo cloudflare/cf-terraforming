@@ -1856,6 +1856,13 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["waiting_room_id"] = pathParam
 		}
+	case "cloudflare_waiting_room_rules":
+		*response = []interface{}{
+			map[string]interface{}{
+				"waiting_room_id": pathParam,
+				"rules":           *response,
+			},
+		}
 	}
 }
 
@@ -1993,6 +2000,8 @@ func replacePathParams(params []string, endpoint string, rType string) []string 
 		placeholder = "{profile_id}"
 	case "cloudflare_web_analytics_rule":
 		placeholder = "{ruleset_id}"
+	case "cloudflare_waiting_room_rules":
+		placeholder = "{waiting_room_id}"
 
 	default:
 		return endpoints

@@ -43,6 +43,7 @@ all of their existing Cloudflare configuration into Terraform.`,
 		"cloudflare_list_item":                         make([]string, 0),
 		"cloudflare_zero_trust_dlp_predefined_profile": make([]string, 0),
 		"cloudflare_web_analytics_rule":                make([]string, 0),
+		"cloudflare_waiting_room_rules":                make([]string, 0),
 	}
 )
 

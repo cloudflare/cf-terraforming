@@ -1,0 +1,76 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/waiting_rooms/8bbd1b13450f6c63ab6ab4e08a63762d/rules
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "action": "bypass_waiting_room",
+              "description": "cf-test",
+              "enabled": true,
+              "expression": "(http.cookie eq \"foo\")",
+              "id": "c5c159572b7a44a78bffd87ac2d6457d",
+              "last_updated": "2025-05-27T18:26:07.047916Z",
+              "version": "1"
+            },
+            {
+              "action": "bypass_waiting_room",
+              "description": "rule-2",
+              "enabled": true,
+              "expression": "(ip.src.is_in_european_union)",
+              "id": "30bb12976d124f2aacb2335cda5b2817",
+              "last_updated": "2025-05-27T18:53:44.853226Z",
+              "version": "1"
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 0195060d-02f1-7e32-9ce1-a4fe3839e12e
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

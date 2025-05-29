@@ -1,0 +1,63 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/keyless_certificates
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "created_on": "2025-05-29T18:17:41.50537Z",
+              "enabled": false,
+              "host": "terraform.cfapi.net",
+              "id": "ebe3d64c-64b7-4c49-9f29-ca9c222aa814",
+              "modified_on": "2025-05-29T18:17:43.526917Z",
+              "name": "ydvgqcbbcq",
+              "port": 24008,
+              "status": "active"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 20,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a6f-b8d0-7d86-a5e0-e59e4f6de28b
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

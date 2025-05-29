@@ -1863,6 +1863,18 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 				"rules":           *response,
 			},
 		}
+	case "cloudflare_keyless_certificate":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["certificate"] = "-----INSERT CERTIFICATE-----"
+		}
+	case "cloudflare_stream_watermark":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["file"] = `REPLACE with filebase64("path-to-file")`
+		}
+	case "cloudflare_authenticated_origin_pulls_certificate":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["private_key"] = "-----INSERT PRIVATE KEY-----"
+		}
 	}
 }
 

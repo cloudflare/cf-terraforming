@@ -1,51 +1,85 @@
 resource "cloudflare_zero_trust_tunnel_cloudflared_config" "terraform_managed_resource" {
-  account_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  tunnel_id = "f70ff985-a4ef-4643-bbbc-4a0ed4fc8415"
+  account_id = "f037e56e89293a057740de681ac9abbe"
+  source     = "cloudflare"
+  tunnel_id  = "285f508d-d6ef-4ce4-9293-983d5bdc269e"
   config = {
     ingress = [{
-      hostname = "tunnel.example.com"
-      service = "https://localhost:8001"
-      origin_request = {
+      hostname = "foo"
+      originRequest = {
+        bastionMode            = false
+        caPool                 = ""
+        connectTimeout         = 15
+        disableChunkedEncoding = false
+        http2Origin            = false
+        httpHostHeader         = ""
+        keepAliveConnections   = 100
+        keepAliveTimeout       = 90
+        noHappyEyeballs        = false
+        noTLSVerify            = false
+        originServerName       = ""
+        proxyAddress           = "127.0.0.1"
+        proxyPort              = 0
+        proxyType              = ""
+        tcpKeepAlive           = 30
+        tlsTimeout             = 10
+      }
+      path    = "/bar"
+      service = "http://10.0.0.2:8080"
+      }, {
+      hostname = "bar"
+      originRequest = {
         access = {
-          aud_tag = ["string"]
-          team_name = "teamName"
+          audTag   = ["AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]
           required = true
+          teamName = "terraform"
         }
-        ca_pool = "caPool"
-        connect_timeout = 0
-        disable_chunked_encoding = true
-        http2_origin = true
-        http_host_header = "httpHostHeader"
-        keep_alive_connections = 0
-        keep_alive_timeout = 0
-        no_happy_eyeballs = true
-        no_tls_verify = true
-        origin_server_name = "originServerName"
-        proxy_type = "proxyType"
-        tcp_keep_alive = 0
-        tls_timeout = 0
+        bastionMode            = false
+        caPool                 = ""
+        connectTimeout         = 30
+        disableChunkedEncoding = false
+        http2Origin            = false
+        httpHostHeader         = ""
+        keepAliveConnections   = 100
+        keepAliveTimeout       = 90
+        noHappyEyeballs        = false
+        noTLSVerify            = false
+        originServerName       = ""
+        proxyAddress           = "127.0.0.1"
+        proxyPort              = 0
+        proxyType              = ""
+        tcpKeepAlive           = 30
+        tlsTimeout             = 10
       }
-      path = "subpath"
+      path    = "/foo"
+      service = "http://10.0.0.3:8081"
+      }, {
+      service = "https://10.0.0.4:8082"
     }]
-    origin_request = {
-      access = {
-        aud_tag = ["string"]
-        team_name = "teamName"
-        required = true
-      }
-      ca_pool = "caPool"
-      connect_timeout = 0
-      disable_chunked_encoding = true
-      http2_origin = true
-      http_host_header = "httpHostHeader"
-      keep_alive_connections = 0
-      keep_alive_timeout = 0
-      no_happy_eyeballs = true
-      no_tls_verify = true
-      origin_server_name = "originServerName"
-      proxy_type = "proxyType"
-      tcp_keep_alive = 0
-      tls_timeout = 0
+    originRequest = {
+      bastionMode            = false
+      caPool                 = "/path/to/unsigned/ca/pool"
+      connectTimeout         = 60
+      disableChunkedEncoding = false
+      http2Origin            = true
+      httpHostHeader         = "baz"
+      ipRules = [{
+        ports  = [80, 443]
+        prefix = "/web"
+      }]
+      keepAliveConnections = 1024
+      keepAliveTimeout     = 60
+      noHappyEyeballs      = false
+      noTLSVerify          = false
+      originServerName     = "foobar"
+      proxyAddress         = "10.0.0.1"
+      proxyPort            = 8123
+      proxyType            = "socks"
+      tcpKeepAlive         = 60
+      tlsTimeout           = 60
+    }
+    warp-routing = {
+      enabled = true
     }
   }
 }
+

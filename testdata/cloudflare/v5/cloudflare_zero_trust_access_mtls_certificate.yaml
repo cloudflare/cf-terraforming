@@ -1,0 +1,62 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/certificates
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "associated_hostnames": [],
+              "created_at": "2025-03-20T15:52:00Z",
+              "expires_on": "2026-03-20T00:00:00Z",
+              "fingerprint": "MD5 Fingerprint=2C:1E:B8:ED:2C:44:38:95:B5:89:C6:F6:4E:CD:DB:E9",
+              "id": "63b92c05-8635-4a44-ae8d-45236af35d00",
+              "name": "Allow devs",
+              "updated_at": "2025-03-20T15:52:00Z"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 50,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

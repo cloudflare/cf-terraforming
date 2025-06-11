@@ -1,5 +1,6 @@
 resource "cloudflare_api_shield_operation_schema_validation_settings" "terraform_managed_resource" {
-  zone_id = "023e105f4ecef8ad9ca31a8372d0c353"
-  operation_id = "f174e90a-fafe-4643-bbbc-4a0ed4fc8415"
   mitigation_action = "log"
+  operation_id      = "8255d5da-5a46-4928-ad00-01de7d48c1e7"
+  zone_id           = "0da42c8d2132a9ddaf714f9e7c920711"
 }
+

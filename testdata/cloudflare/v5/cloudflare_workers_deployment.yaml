@@ -1,0 +1,94 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/workers/scripts/script_2/deployments
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "deployments": [
+              {
+                "annotations": {
+                  "workers/message": "Automatic deployment on upload.",
+                  "workers/triggered_by": "upload"
+                },
+                "author_email": "foo@gmail.com",
+                "created_on": "2024-12-19T00:31:46.147856Z",
+                "id": "18f35814-5301-4d20-8168-cacc6f61945c",
+                "source": "terraform",
+                "strategy": "percentage",
+                "versions": [
+                  {
+                    "percentage": 100,
+                    "version_id": "a81e19c8-2d06-4495-b4dd-7fcbf7729a86"
+                  }
+                ]
+              },
+              {
+                "annotations": {
+                  "workers/message": "Automatic deployment on upload.",
+                  "workers/triggered_by": "upload"
+                },
+                "author_email": "fo2o@gmail.com",
+                "created_on": "2024-12-19T00:31:46.147856Z",
+                "id": "18f35814-5301-4d20-8168-cacc6f61945c",
+                "source": "terraform",
+                "strategy": "percentage",
+                "versions": [
+                  {
+                    "percentage": 100,
+                    "version_id": "a81e19c8-2d06-4495-b4dd-7fcbf7729a86"
+                  }
+                ]
+              }
+            ]
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

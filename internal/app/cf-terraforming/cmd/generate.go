@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"slices"
 	"sort"
@@ -17,7 +18,6 @@ import (
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
 	"github.com/hashicorp/hc-install/releases"
-	"github.com/hashicorp/hcl/v2/hclsyntax"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/sirupsen/logrus"
@@ -193,14 +193,14 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				pathParams, ok := resourceIDsMap[resourceType]
 				if ok && len(pathParams) > 0 {
 					endpoints := replacePathParams(pathParams, endpoint, resourceType)
-					jsonStructData, err = GetAPIResponse(result, pathParams, endpoints...)
+					jsonStructData, err = getAPIResponse(result, pathParams, endpoints...)
 					if err != nil {
 						log.Infof("error getting API response for resource %s: %s", resourceType, err)
 						continue
 					}
 					resourceCount = len(jsonStructData)
 				} else {
-					jsonStructData, err = GetAPIResponse(result, pathParams, endpoint)
+					jsonStructData, err = getAPIResponse(result, pathParams, endpoint)
 					if err != nil {
 						log.Infof("error getting API response for resource %s: %s", resourceType, err)
 						continue
@@ -1875,6 +1875,62 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			(*response)[i].(map[string]interface{})["private_key"] = "-----INSERT PRIVATE KEY-----"
 		}
+	case "cloudflare_zero_trust_access_mtls_certificate":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["certificate"] = "-----INSERT CERTIFICATE-----"
+		}
+	case "cloudflare_zero_trust_access_mtls_hostname_settings":
+		*response = []interface{}{
+			map[string]interface{}{
+				"settings": *response,
+			},
+		}
+	case "cloudflare_workers_script_subdomain":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["script_name"] = pathParam
+		}
+	case "cloudflare_workers_deployment":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			deployments := r[i].(map[string]interface{})["deployments"]
+			deploymentObjects := make([]interface{}, len(deployments.([]interface{})))
+			for j := range deployments.([]interface{}) {
+				d := deployments.([]interface{})[j]
+				d.(map[string]interface{})["script_name"] = pathParam
+				deploymentObjects[j] = d
+			}
+			finalResponse = append(finalResponse, deploymentObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
+		}
+	case "cloudflare_workers_cron_trigger":
+		for i := 0; i < resourceCount; i++ {
+			(*response)[i].(map[string]interface{})["script_name"] = pathParam
+			schedules, ok := (*response)[i].(map[string]interface{})["schedules"]
+			if !ok {
+				continue
+			}
+			for j := range schedules.([]interface{}) {
+				delete(schedules.([]interface{})[j].(map[string]interface{}), "created_on")
+				delete(schedules.([]interface{})[j].(map[string]interface{}), "modified_on")
+			}
+		}
+	case "cloudflare_authenticated_origin_pulls":
+		for i := 0; i < resourceCount; i++ {
+			hName := (*response)[i].(map[string]interface{})["hostname"]
+			cID := (*response)[i].(map[string]interface{})["cert_id"]
+			enabled := (*response)[i].(map[string]interface{})["enabled"]
+			(*response)[i].(map[string]interface{})["config"] = []interface{}{
+				map[string]interface{}{
+					"hostname": hName,
+					"cert_id":  cID,
+					"enabled":  enabled,
+				},
+			}
+		}
 	}
 }
 
@@ -1890,56 +1946,7 @@ func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) 
 	return []interface{}{data}, nil
 }
 
-// postProcess allows you to perform additional actions on the generated hcl.
-func postProcess(f *hclwrite.File, resourceType string) {
-	switch resourceType {
-	case "cloudflare_stream_live_input", "cloudflare_stream":
-		addJSONEncode(f, "meta")
-	}
-}
-
-// addJSONEncode wraps a hcl block with the jsonencode function.
-func addJSONEncode(f *hclwrite.File, attributeName string) {
-	for _, block := range f.Body().Blocks() {
-		if block.Type() != "resource" {
-			continue
-		}
-		if len(block.Labels()) < 1 {
-			continue
-		}
-		if block.Labels()[0] != resourceType {
-			continue
-		}
-		body := block.Body()
-		attr := body.GetAttribute(attributeName)
-		if attr == nil {
-			continue
-		}
-		exprTokens := attr.Expr().BuildTokens(nil)
-		exprText := string(exprTokens.Bytes())
-
-		trimmed := strings.TrimSpace(exprText)
-		// Wrap the attribute with jsonencode
-		if len(trimmed) > 0 && trimmed[0] == '{' {
-			body.RemoveAttribute(attributeName)
-			newTokens := hclwrite.Tokens{}
-			fnStart := &hclwrite.Token{
-				Type:  hclsyntax.TokenIdent,
-				Bytes: []byte("jsonencode("),
-			}
-			newTokens = append(newTokens, fnStart)
-			newTokens = append(newTokens, exprTokens...)
-			fnEnd := &hclwrite.Token{
-				Type:  hclsyntax.TokenCParen,
-				Bytes: []byte(")"),
-			}
-			newTokens = append(newTokens, fnEnd)
-			body.SetAttributeRaw(attributeName, newTokens)
-		}
-	}
-}
-
-func GetAPIResponse(result *http.Response, pathParams []string, endpoints ...string) ([]interface{}, error) {
+func getAPIResponse(result *http.Response, pathParams []string, endpoints ...string) ([]interface{}, error) {
 	var jsonStructData, results []interface{}
 	for i, endpoint := range endpoints {
 		err := api.Get(context.Background(), endpoint, nil, &result)
@@ -2014,7 +2021,21 @@ func replacePathParams(params []string, endpoint string, rType string) []string 
 		placeholder = "{ruleset_id}"
 	case "cloudflare_waiting_room_rules":
 		placeholder = "{waiting_room_id}"
-
+	case "cloudflare_zero_trust_tunnel_cloudflared_config":
+		placeholder = "{tunnel_id}"
+	case "cloudflare_workers_script_subdomain", "cloudflare_workers_deployment", "cloudflare_workers_cron_trigger":
+		placeholder = "{script_name}"
+	case "cloudflare_authenticated_origin_pulls":
+		placeholder = "{hostname}"
+	case "cloudflare_queue_consumer":
+		placeholder = "{queue_id}"
+	case "cloudflare_api_shield_operation_schema_validation_settings":
+		placeholder = "{operation_id}"
+	case "cloudflare_observatory_scheduled_test":
+		for _, id := range params {
+			endpoints = append(endpoints, strings.Clone(strings.NewReplacer("{url}", url.QueryEscape(id)).Replace(endpoint)))
+		}
+		return endpoints
 	default:
 		return endpoints
 	}

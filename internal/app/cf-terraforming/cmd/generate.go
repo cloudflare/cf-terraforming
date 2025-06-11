@@ -2036,6 +2036,8 @@ func replacePathParams(params []string, endpoint string, rType string) []string 
 			endpoints = append(endpoints, strings.Clone(strings.NewReplacer("{url}", url.QueryEscape(id)).Replace(endpoint)))
 		}
 		return endpoints
+	case "cloudflare_zero_trust_dlp_custom_profile":
+		placeholder = "{profile_id}"
 	default:
 		return endpoints
 	}

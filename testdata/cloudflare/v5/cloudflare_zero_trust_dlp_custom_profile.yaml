@@ -1,0 +1,77 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/dlp/profiles/custom/38f45ad8-476e-4b56-ad16-42f364250802
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "ai_context_enabled": false,
+            "allowed_match_count": 0,
+            "confidence_threshold": "low",
+            "context_awareness": {
+              "enabled": false,
+              "skip": {
+                "files": false
+              }
+            },
+            "created_at": "2024-05-15T06:02:05Z",
+            "description": "custom profile",
+            "entries": [
+              {
+                "created_at": "2024-05-15T06:02:05Z",
+                "enabled": true,
+                "id": "34f2bd4b-5069-4f5b-a22e-3f7878912032",
+                "name": "psuhmwlpqf_entry1",
+                "pattern": {
+                  "regex": "^4[0-9]",
+                  "validation": "luhn"
+                },
+                "profile_id": "38f45ad8-476e-4b56-ad16-42f364250802",
+                "type": "custom",
+                "updated_at": "2024-05-15T06:02:05Z"
+              }
+            ],
+            "id": "38f45ad8-476e-4b56-ad16-42f364250802",
+            "name": "psuhmwlpqf",
+            "ocr_enabled": true,
+            "type": "custom",
+            "updated_at": "2024-05-15T06:02:05Z"
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

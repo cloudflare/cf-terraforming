@@ -1,0 +1,66 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/magic/routes
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "routes": [
+              {
+                "prefix": "192.168.125.0/24",
+                "id": "2fcf572bf5564643b677d494be1d668c",
+                "created_on": "2025-06-09T19:31:40.750025Z",
+                "modified_on": "2025-06-10T15:02:43.143449Z",
+                "nexthop": "172.16.255.3",
+                "priority": 100,
+                "description": "VLAN-125-IPSec2"
+              },
+              {
+                "prefix": "192.168.125.0/24",
+                "id": "bd3769abdc6f4248b2430e1805b3538f",
+                "created_on": "2025-06-09T19:31:13.780469Z",
+                "modified_on": "2025-06-10T14:45:14.927558Z",
+                "nexthop": "172.16.255.1",
+                "priority": 100,
+                "description": "VLAN-125-IPSec1"
+              }
+            ]
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

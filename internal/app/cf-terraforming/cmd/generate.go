@@ -1931,6 +1931,22 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 				},
 			}
 		}
+	case "cloudflare_magic_wan_static_route":
+		finalResponse := make([]interface{}, 0)
+		r := *response
+		for i := 0; i < resourceCount; i++ {
+			routes := r[i].(map[string]interface{})["routes"]
+			routeObjects := make([]interface{}, len(routes.([]interface{})))
+			for j := range routes.([]interface{}) {
+				r := routes.([]interface{})[j]
+				routeObjects[j] = r
+			}
+			finalResponse = append(finalResponse, routeObjects...)
+		}
+		*response = make([]interface{}, len(finalResponse))
+		for i := range finalResponse {
+			(*response)[i] = finalResponse[i]
+		}
 	}
 }
 

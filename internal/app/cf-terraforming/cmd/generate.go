@@ -906,6 +906,11 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						jsonStructData[i].(map[string]interface{})["proxiable"] = nil
 						jsonStructData[i].(map[string]interface{})["value"] = nil
 
+						_, hasData := jsonStructData[i].(map[string]interface{})["data"]
+						if hasData {
+							jsonStructData[i].(map[string]interface{})["content"] = nil
+						}
+
 						if jsonStructData[i].(map[string]interface{})["name"].(string) != zone.Name {
 							jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+zone.Name, "")
 						}
@@ -1590,6 +1595,13 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 func processCustomCasesV5(response *[]interface{}, resourceType string, pathParam string) {
 	resourceCount := len(*response)
 	switch resourceType {
+	case "cloudflare_dns_record":
+		for i := 0; i < resourceCount; i++ {
+			_, hasData := (*response)[i].(map[string]interface{})["data"]
+			if hasData {
+				delete((*response)[i].(map[string]interface{}), "content")
+			}
+		}
 	case "cloudflare_managed_transforms":
 		// remap email and role_ids into the right structure and remove policies
 		for i := 0; i < resourceCount; i++ {

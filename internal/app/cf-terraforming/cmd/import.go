@@ -4,9 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/json"
-	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"regexp"
@@ -14,7 +12,6 @@ import (
 	"time"
 
 	cfv0 "github.com/cloudflare/cloudflare-go"
-	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/hashicorp/go-version"
 	"github.com/hashicorp/hc-install/product"
@@ -24,49 +21,108 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tidwall/gjson"
 	"github.com/zclconf/go-cty/cty"
 )
 
 // resourceImportStringFormats contains a mapping of the resource type to the
 // composite ID that is compatible with performing an import.
 var resourceImportStringFormats = map[string]string{
-	"cloudflare_access_application":    ":account_id/:id",
-	"cloudflare_access_group":          ":account_id/:id",
-	"cloudflare_access_rule":           ":identifier_type/:identifier_value/:id",
-	"cloudflare_account_member":        ":account_id/:id",
-	"cloudflare_argo":                  ":zone_id/argo",
-	"cloudflare_bot_management":        ":zone_id",
-	"cloudflare_byo_ip_prefix":         ":id",
-	"cloudflare_certificate_pack":      ":zone_id/:id",
-	"cloudflare_custom_hostname":       ":zone_id/:id",
-	"cloudflare_custom_pages":          ":identifier_type/:identifier_value/:id",
-	"cloudflare_custom_ssl":            ":zone_id/:id",
-	"cloudflare_filter":                ":zone_id/:id",
-	"cloudflare_firewall_rule":         ":zone_id/:id",
-	"cloudflare_healthcheck":           ":zone_id/:id",
-	"cloudflare_ip_list":               ":account_id/:id",
-	"cloudflare_load_balancer":         ":zone_id/:id",
-	"cloudflare_load_balancer_pool":    ":account_id/:id",
-	"cloudflare_load_balancer_monitor": ":account_id/:id",
-	"cloudflare_origin_ca_certificate": ":id",
-	"cloudflare_page_rule":             ":zone_id/:id",
-	"cloudflare_rate_limit":            ":zone_id/:id",
-	"cloudflare_record":                ":zone_id/:id",
-	"cloudflare_ruleset":               ":identifier_type/:identifier_value/:id",
-	"cloudflare_spectrum_application":  ":zone_id/:id",
-	"cloudflare_teams_list":            ":account_id/:id",
-	"cloudflare_teams_location":        ":account_id/:id",
-	"cloudflare_teams_proxy_endpoint":  ":account_id/:id",
-	"cloudflare_teams_rule":            ":account_id/:id",
-	"cloudflare_tunnel":                ":account_id/:id",
-	"cloudflare_turnstile_widget":      ":account_id/:id",
-	"cloudflare_waf_override":          ":zone_id/:id",
-	"cloudflare_waiting_room":          ":zone_id/:id",
-	"cloudflare_worker_route":          ":zone_id/:id",
-	"cloudflare_workers_kv_namespace":  ":account_id/:id",
-	"cloudflare_zone_lockdown":         ":zone_id/:id",
-	"cloudflare_zone":                  ":id",
+	"cloudflare_access_application":                            ":account_id/:id",
+	"cloudflare_access_group":                                  ":account_id/:id",
+	"cloudflare_access_rule":                                   ":identifier_type/:identifier_value/:id",
+	"cloudflare_account":                                       ":account_id",
+	"cloudflare_account_member":                                ":account_id/:id",
+	"cloudflare_api_shield_operation":                          ":zone_id/:id",
+	"cloudflare_argo":                                          ":zone_id/argo",
+	"cloudflare_bot_management":                                ":zone_id",
+	"cloudflare_byo_ip_prefix":                                 ":id",
+	"cloudflare_certificate_pack":                              ":zone_id/:id",
+	"cloudflare_custom_hostname":                               ":zone_id/:id",
+	"cloudflare_custom_pages":                                  ":identifier_type/:identifier_value/:id",
+	"cloudflare_custom_ssl":                                    ":zone_id/:id",
+	"cloudflare_d1_database":                                   ":account_id/:id",
+	"cloudflare_dns_firewall":                                  ":account_id/:id",
+	"cloudflare_dns_record":                                    ":zone_id/:id",
+	"cloudflare_dns_zone_transfers_acl":                        ":account_id/:id",
+	"cloudflare_dns_zone_transfers_incoming":                   ":zone_id",
+	"cloudflare_dns_zone_transfers_outgoing":                   ":zone_id",
+	"cloudflare_dns_zone_transfers_peer":                       ":account_id/:id",
+	"cloudflare_dns_zone_transfers_tsig":                       ":account_id/:id",
+	"cloudflare_email_routing_address":                         ":account_id/:id",
+	"cloudflare_email_routing_catch_all":                       ":zone_id",
+	"cloudflare_email_routing_dns":                             ":zone_id",
+	"cloudflare_email_routing_rule":                            ":zone_id/:id",
+	"cloudflare_email_routing_settings":                        ":zone_id",
+	"cloudflare_email_security_block_sender":                   ":account_id/:id",
+	"cloudflare_email_security_impersonation_registry":         ":account_id/:id",
+	"cloudflare_email_security_trusted_domains":                ":account_id/:id",
+	"cloudflare_filter":                                        ":zone_id/:id",
+	"cloudflare_firewall_rule":                                 ":zone_id/:id",
+	"cloudflare_healthcheck":                                   ":zone_id/:id",
+	"cloudflare_ip_list":                                       ":account_id/:id",
+	"cloudflare_keyless_certificate":                           ":zone_id/:id",
+	"cloudflare_list":                                          ":account_id/:id",
+	"cloudflare_load_balancer":                                 ":zone_id/:id",
+	"cloudflare_load_balancer_monitor":                         ":account_id/:id",
+	"cloudflare_load_balancer_pool":                            ":account_id/:id",
+	"cloudflare_managed_transforms":                            ":zone_id",
+	"cloudflare_mtls_certificate":                              ":account_id/:id",
+	"cloudflare_notification_policy":                           ":account_id/:id",
+	"cloudflare_notification_policy_webhooks":                  ":account_id/:id",
+	"cloudflare_origin_ca_certificate":                         ":id",
+	"cloudflare_page_rule":                                     ":zone_id/:id",
+	"cloudflare_page_shield_policy":                            ":zone_id/:id",
+	"cloudflare_pages_project":                                 ":account_id/:id",
+	"cloudflare_queue":                                         ":account_id/:id",
+	"cloudflare_r2_bucket":                                     ":account_id/:id",
+	"cloudflare_rate_limit":                                    ":zone_id/:id",
+	"cloudflare_record":                                        ":zone_id/:id",
+	"cloudflare_regional_hostname":                             ":zone_id/:id",
+	"cloudflare_regional_tiered_cache":                         ":zone_id",
+	"cloudflare_ruleset":                                       ":identifier_type/:identifier_value/:id",
+	"cloudflare_spectrum_application":                          ":zone_id/:id",
+	"cloudflare_stream_key":                                    ":account_id",
+	"cloudflare_tiered_cache":                                  ":zone_id",
+	"cloudflare_total_tls":                                     ":zone_id",
+	"cloudflare_tunnel":                                        ":account_id/:id",
+	"cloudflare_turnstile_widget":                              ":account_id/:id",
+	"cloudflare_url_normalization_settings":                    ":zone_id",
+	"cloudflare_waf_override":                                  ":zone_id/:id",
+	"cloudflare_waiting_room":                                  ":zone_id/:id",
+	"cloudflare_waiting_room_settings":                         ":zone_id",
+	"cloudflare_web3_hostname":                                 ":zone_id/:id",
+	"cloudflare_web_analytics_site":                            ":account_id/:id",
+	"cloudflare_worker_route":                                  ":zone_id/:id",
+	"cloudflare_workers_custom_domain":                         ":account_id/:id",
+	"cloudflare_workers_for_platforms_dispatch_namespace":      ":account_id/:id",
+	"cloudflare_workers_kv_namespace":                          ":account_id/:id",
+	"cloudflare_zone":                                          ":id",
+	"cloudflare_zone_dnssec":                                   ":zone_id",
+	"cloudflare_zone_lockdown":                                 ":zone_id/:id",
+	"cloudflare_zone_setting":                                  ":zone_id/:id",
+	"cloudflare_zero_trust_access_custom_page":                 ":account_id/:id",
+	"cloudflare_zero_trust_access_infrastructure_target":       ":account_id/:id",
+	"cloudflare_zero_trust_access_key_configuration":           ":account_id",
+	"cloudflare_zero_trust_access_policy":                      ":account_id/:id",
+	"cloudflare_zero_trust_access_short_lived_certificate":     ":identifier_type/:identifier_value/:id",
+	"cloudflare_zero_trust_access_tag":                         ":account_id/:id",
+	"cloudflare_zero_trust_device_custom_profile":              ":account_id/:id",
+	"cloudflare_zero_trust_device_default_profile":             ":account_id",
+	"cloudflare_zero_trust_device_managed_networks":            ":account_id/:id",
+	"cloudflare_zero_trust_device_posture_integration":         ":account_id/:id",
+	"cloudflare_zero_trust_device_posture_rule":                ":account_id/:id",
+	"cloudflare_zero_trust_dex_test":                           ":account_id/:id",
+	"cloudflare_zero_trust_dlp_predefined_profile":             ":account_id/:id",
+	"cloudflare_zero_trust_dns_location":                       ":account_id/:id",
+	"cloudflare_zero_trust_gateway_certificate":                ":account_id/:id",
+	"cloudflare_zero_trust_gateway_policy":                     ":account_id/:id",
+	"cloudflare_zero_trust_gateway_proxy_endpoint":             ":account_id/:id",
+	"cloudflare_zero_trust_gateway_settings":                   ":account_id",
+	"cloudflare_zero_trust_list":                               ":account_id/:id",
+	"cloudflare_zero_trust_risk_scoring_integration":           ":account_id/:id",
+	"cloudflare_zero_trust_tunnel_cloudflared":                 ":account_id/:id",
+	"cloudflare_zero_trust_tunnel_cloudflared_route":           ":account_id/:id",
+	"cloudflare_zero_trust_tunnel_cloudflared_virtual_network": ":account_id/:id",
 }
 
 var providerVersionString string
@@ -143,17 +199,29 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}).Fatal("failed to find registry")
 		}
 
-		providerVersionString := detectedVersion.String()
+		providerVersionString = detectedVersion.String()
 		log.WithFields(logrus.Fields{
 			"version":  providerVersionString,
 			"registry": registryPath,
 		}).Debug("detected provider")
 
-		var jsonStructData []interface{}
+		resourceIDsMap := make(map[string][]string)
+		var (
+			jsonStructData                       []interface{}
+			pathParams, endpointsWithResourceIDs []string
+		)
 
 		if strings.HasPrefix(providerVersionString, "5") {
 			resources := strings.Split(resourceType, ",")
 			for _, resourceType := range resources {
+				if isSupportedPathParam(resources, resourceType) {
+					resourceIDsMap = getResourceMappings()
+					pathParams, ok = resourceIDsMap[resourceType]
+					if ok && len(pathParams) == 0 {
+						log.Fatalf("No resource IDs defined in Terraform for resource %s", resourceType)
+					}
+
+				}
 				var result *http.Response
 
 				// by default, we want to use the `list` operation however, there are times
@@ -166,11 +234,11 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 				// if we encounter a combined endpoint, we need to rewrite to use the correct
 				// endpoint depending on what parameters are being provided.
-				if strings.Contains(endpoint, "{account_or_zone}") {
+				if strings.Contains(endpoint, "{accounts_or_zones}") {
 					if accountID != "" {
-						endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
+						endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
 					} else {
-						endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
+						endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
 					}
 				}
 
@@ -178,57 +246,25 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				placeholderReplacer := strings.NewReplacer("{account_id}", accountID, "{zone_id}", zoneID)
 				endpoint = placeholderReplacer.Replace(endpoint)
 
-				if strings.Contains(endpoint, "{") {
-					log.WithFields(logrus.Fields{
-						"resource": resourceType,
-						"endpoint": endpoint,
-					}).Debug("failed to substitute all path placeholders due to unknown parameters")
-
-					continue
-				}
-
-				client := cloudflare.NewClient()
 				if apiToken != "" {
-					client.Options = append(client.Options, option.WithAPIToken(apiToken))
+					api.Options = append(api.Options, option.WithAPIToken(apiToken))
 				} else {
-					client.Options = append(client.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
+					api.Options = append(api.Options, option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
 				}
 
-				err := client.Get(context.Background(), endpoint, nil, &result)
-				if err != nil {
-					var apierr *cloudflare.Error
-					if errors.As(err, &apierr) {
-						if apierr.StatusCode == http.StatusNotFound {
-							log.WithFields(logrus.Fields{
-								"resource": resourceType,
-								"endpoint": endpoint,
-							}).Debug("no resources found")
-
-							continue
-						}
+				if len(pathParams) > 0 {
+					endpointsWithResourceIDs = replacePathParams(pathParams, endpoint, resourceType)
+					jsonStructData, err = getAPIResponse(result, pathParams, endpointsWithResourceIDs...)
+					if err != nil {
+						log.Infof("error getting API response for resource %s: %s", resourceType, err)
+						continue
 					}
-					log.Fatalf("failed to fetch API endpoint: %s", err)
-				}
-
-				body, err := io.ReadAll(result.Body)
-				if err != nil {
-					log.Fatalln(err)
-				}
-
-				value := gjson.Get(string(body), "result")
-				if value.Type == gjson.Null {
-					log.WithFields(logrus.Fields{
-						"resource": resourceType,
-						"endpoint": endpoint,
-					}).Debug("no result found")
-
-					continue
-				}
-
-				modifiedJSON := modifyResponsePayload(resourceType, value)
-				err = json.Unmarshal([]byte(modifiedJSON), &jsonStructData)
-				if err != nil {
-					log.Fatalf("failed to unmarshal result: %s", err)
+				} else {
+					jsonStructData, err = getAPIResponse(result, pathParams, endpoint)
+					if err != nil {
+						log.Infof("error getting API response for resource %s: %s", resourceType, err)
+						continue
+					}
 				}
 			}
 		} else {
@@ -713,7 +749,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 		importFile := hclwrite.NewEmptyFile()
 		importBody := importFile.Body()
-
 		for _, data := range jsonStructData {
 			var id string
 
@@ -726,9 +761,13 @@ func runImport() func(cmd *cobra.Command, args []string) {
 					id = zoneID
 				}
 			} else {
-				id = data.(map[string]interface{})["id"].(string)
+				switch data.(map[string]interface{})["id"].(type) {
+				case float64:
+					id = fmt.Sprintf("%d", int(data.(map[string]interface{})["id"].(float64)))
+				default:
+					id = data.(map[string]interface{})["id"].(string)
+				}
 			}
-
 			if useModernImportBlock {
 				idvalue := buildRawImportAddress(resourceType, id, resourceToEndpoint[resourceType]["get"])
 				imp := importBody.AppendNewBlock("import", []string{}).Body()
@@ -736,7 +775,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 				imp.SetAttributeValue("id", cty.StringVal(idvalue))
 				importFile.Body().AppendNewline()
 			} else {
-				fmt.Fprint(cmd.OutOrStdout(), buildTerraformImportCommand(resourceType, id, resourceToEndpoint[resourceType]["get"]))
+				_, _ = fmt.Fprint(cmd.OutOrStdout(), buildTerraformImportCommand(resourceType, id, resourceToEndpoint[resourceType]["get"]))
 			}
 		}
 
@@ -744,25 +783,25 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			// don't format the output; there is a bug in hclwrite.Format that
 			// splits incorrectly on certain characters. instead, manually
 			// insert new lines on the block.
-			fmt.Fprint(cmd.OutOrStdout(), string(importFile.Bytes()))
+			_, _ = fmt.Fprint(cmd.OutOrStdout(), string(importFile.Bytes()))
 		}
 	}
 }
 
 // buildTerraformImportCommand takes the resourceType and resourceID in order to
-// lookup the resource type import string and then return a suitable composite
+// look up the resource type import string and then return a suitable composite
 // value that is compatible with `terraform import`.
 //
-// Note: `endpoint` is only used on > v4. Otherwise it is ignored.
+// Note: `endpoint` is only used on > v4. Otherwise, it is ignored.
 func buildTerraformImportCommand(resourceType, resourceID, endpoint string) string {
 	resourceImportAddress := buildRawImportAddress(resourceType, resourceID, endpoint)
 	return fmt.Sprintf("%s %s.%s_%s %s\n", terraformImportCmdPrefix, resourceType, terraformResourceNamePrefix, resourceID, resourceImportAddress)
 }
 
-// buildRawImportAddress takes the resourceType and resourceID in order to lookup
+// buildRawImportAddress takes the resourceType and resourceID in order to look up
 // the resource type import string and then return a suitable address.
 //
-// Note: `endpoint` is only used on > v4. Otherwise it is ignored.
+// Note: `endpoint` is only used on > v4. Otherwise, it is ignored.
 func buildRawImportAddress(resourceType, resourceID, endpoint string) string {
 	if strings.HasPrefix(providerVersionString, "5") {
 		prefix := ""
@@ -789,6 +828,11 @@ func buildRawImportAddress(resourceType, resourceID, endpoint string) string {
 			if len(matches) == 1 {
 				matches[0] = resourceID
 			} else {
+				if matches[0] == "{account_id}" {
+					matches[0] = accountID
+				} else if matches[0] == "{zone_id}" {
+					matches[0] = zoneID
+				}
 				matches[1] = resourceID
 			}
 		}
@@ -803,7 +847,6 @@ func buildRawImportAddress(resourceType, resourceID, endpoint string) string {
 		if prefix != "" {
 			output = prefix + "/" + output
 		}
-
 		return replacer.Replace(output)
 	} else {
 		if _, ok := resourceImportStringFormats[resourceType]; !ok {

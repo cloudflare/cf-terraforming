@@ -1,0 +1,158 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/settings/always_online
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "editable": true,
+            "id": "always_online",
+            "modified_on": null,
+            "value": "off"
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 0195060d-02f1-7e32-9ce1-a4fe3839e12e
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: { }
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/subscription
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "cancel_at_period_end": false,
+            "component_values": [
+              {
+                "default": 1,
+                "name": "spectrum_bytes_transferred",
+                "value": 1
+              },
+              {
+                "name": "page_rules",
+                "value": 125
+              }
+            ],
+            "created_date": "2024-08-15T09:00:55Z",
+            "currency": "USD",
+            "frequency": "not-applicable",
+            "handler": "stripe",
+            "id": "ae519a85da7140dfb99192abd9722e84",
+            "intent": "EMPLOYEE",
+            "price": 0,
+            "product": {
+              "billing": "",
+              "duration": 0,
+              "name": "prod_cloudflare",
+              "period": "",
+              "public_name": "CloudFlare Services"
+            },
+            "rate_plan": {
+              "currency": "USD",
+              "externally_managed": false,
+              "id": "cf_ent",
+              "is_contract": true,
+              "public_name": "Enterprise",
+              "scope": "zone",
+              "sets": null
+            },
+            "state": "Paid",
+            "trial": null,
+            "zone": {
+              "id": "0da42c8d2132a9ddaf714f9e7c920711",
+              "name": "terraform.cfapi.net"
+            }
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 0195060d-02f1-7e32-9ce1-a4fe3839e12e
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

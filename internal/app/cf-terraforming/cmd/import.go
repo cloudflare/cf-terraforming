@@ -220,7 +220,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 					if ok && len(pathParams) == 0 {
 						log.Fatalf("No resource IDs defined in Terraform for resource %s", resourceType)
 					}
-
 				}
 				var result *http.Response
 

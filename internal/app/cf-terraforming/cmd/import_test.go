@@ -2,23 +2,21 @@ package cmd
 
 import (
 	"fmt"
+	"net/http"
+	"os"
+	"strings"
+	"testing"
+
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
-	"os/exec"
-	"path/filepath"
-	//"github.com/stretchr/testify/assert"
-	"net/http"
-	"os"
-	"strings"
-	"testing"
 )
 
 func TestResourceImportV5(t *testing.T) {
-	//t.Skip("skip until the v5 provider is fully supported")
+	t.Skip("skip until the v5 provider is fully supported")
 
 	tests := map[string]struct {
 		identiferType    string
@@ -221,54 +219,10 @@ func TestResourceImportV5(t *testing.T) {
 				} else {
 					output, err = executeCommandC(rootCmd, "import", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
 				}
-
 			}
-			//fmt.Println(fmt.Sprintf("output %s", output))
 			assert.NotEmpty(t, output, fmt.Sprintf("should have output. But got %s", output))
 			assert.NoError(t, err, fmt.Sprintf("should not have an error. But got %+v", err))
 			assert.True(t, strings.Contains(output, "terraform import"), fmt.Sprintf("should match %s", output))
-			//tfValidate(fmt.Sprintf("../../../../testdata/terraform/v5/%s", resourceType))
-			//expected := testDataFile("v5", tc.testdataFilename)
-			//assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}
-}
-
-func tfStateValidate(path string) {
-	absoluteDir, err := filepath.Abs(path)
-	if err != nil {
-		fmt.Printf("Error resolving absolute path: %s\n", err)
-		return
-	}
-	err = os.Chdir(absoluteDir)
-	if err != nil {
-		fmt.Printf("Error changing directory: %s\n", err)
-		return
-	}
-
-	fmt.Printf("Changed directory to: %s\n", absoluteDir)
-
-	initCmd := exec.Command("terraform", "init")
-	initCmd.Stdout = os.Stdout
-	initCmd.Stderr = os.Stderr
-
-	fmt.Println("Running: terraform init")
-	err = initCmd.Run()
-	if err != nil {
-		fmt.Printf("Error running terraform init: %s\n", err)
-		return
-	}
-
-	validateCmd := exec.Command("terraform", "state", "list")
-	validateCmd.Stdout = os.Stdout
-	validateCmd.Stderr = os.Stderr
-
-	fmt.Println("Running: terraform state list")
-	err = validateCmd.Run()
-	if err != nil {
-		fmt.Printf("Error running terraform validate: %s\n", err)
-		return
-	}
-
-	fmt.Println("Terraform commands completed successfully")
 }

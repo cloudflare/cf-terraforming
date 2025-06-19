@@ -25,17 +25,7 @@ test:
 		CLOUDFLARE_EMAIL="$(CLOUDFLARE_EMAIL)" \
 		CLOUDFLARE_API_KEY="$(CLOUDFLARE_API_KEY)" \
 		CLOUDFLARE_ZONE_ID="$(CLOUDFLARE_ZONE_ID)" \
-		go test $(TEST) -timeout 120m -v -run '^(?!.*V5).*$'
-
-test-v5:
-	@CI=true \
-		USE_STATIC_RESOURCE_IDS=true \
-		CHECKPOINT_TIMEOUT=$(HASHICORP_CHECKPOINT_TIMEMOUT) \
-		CLOUDFLARE_TERRAFORM_INSTALL_PATH=$(CLOUDFLARE_TERRAFORM_INSTALL_PATH) \
-		CLOUDFLARE_EMAIL="$(CLOUDFLARE_EMAIL)" \
-		CLOUDFLARE_API_KEY="$(CLOUDFLARE_API_KEY)" \
-		CLOUDFLARE_ZONE_ID="$(CLOUDFLARE_ZONE_ID)" \
-		go test $(TEST) -timeout 120m -v -run 'V5'
+		go test $(TEST) -timeout 120m -v $(TESTARGS)
 
 fmt:
 	gofmt -w $(GO_FILES)
@@ -46,4 +36,4 @@ validate-tf:
 validate-tf-v5:
 	@bash scripts/validate-tf-v5.sh
 
-.PHONY: build test fmt validate-tf
+.PHONY: build test fmt validate-tf validate-tf-v5

@@ -50,7 +50,7 @@ jobs:
             CLOUDFLARE_EMAIL: noone@cloudflare.com
             CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
-        run: make test
+        run: TESTARGS="-run '^(?!.*V5).*$'" make test
   test-v5:
     name: Go + Terraform v5
     runs-on: ubuntu-latest
@@ -90,4 +90,4 @@ jobs:
           CLOUDFLARE_EMAIL: noone@cloudflare.com
           CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
           CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
-        run: make test-v5
+        run: TESTARGS="-run '^V5'" make test-v5

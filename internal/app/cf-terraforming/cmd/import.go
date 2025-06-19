@@ -175,10 +175,6 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			"directory": workingDir,
 		}).Debug("initializing Terraform")
 
-		terraformBinary := os.Getenv("TERRAFORM_CLI_PATH")
-		if terraformBinary != "" {
-			workingDir = terraformBinary
-		}
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {
 			log.Fatal(err)

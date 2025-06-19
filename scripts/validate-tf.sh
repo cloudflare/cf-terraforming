@@ -15,3 +15,11 @@ for dir in testdata/terraform/v4/*; do
     terraform validate -no-color
     cd $rootdir
 done
+
+for dir in testdata/terraform/v5/*; do
+    echo "==> $dir (test.tf)"
+    cd $dir
+    terraform init -backend=false -no-color
+    terraform validate -no-color
+    cd $rootdir
+done

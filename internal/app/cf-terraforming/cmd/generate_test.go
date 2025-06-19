@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -285,7 +287,6 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare calls sfu app":                                   {identiferType: "account", resourceType: "cloudflare_calls_sfu_app", testdataFilename: "cloudflare_calls_sfu_app"},
 		"cloudflare calls turn_app":                                  {identiferType: "account", resourceType: "cloudflare_calls_turn_app", testdataFilename: "cloudflare_calls_turn_app"},
 		// "cloudflare argo":                                    {identiferType: "zone", resourceType: "cloudflare_argo", testdataFilename: "cloudflare_argo"},
-		// "cloudflare bot management":                          {identiferType: "zone", resourceType: "cloudflare_bot_management", testdataFilename: "cloudflare_bot_management"},
 		// "cloudflare BYO IP prefix":                           {identiferType: "account", resourceType: "cloudflare_byo_ip_prefix", testdataFilename: "cloudflare_byo_ip_prefix"},
 		"cloudflare certificate pack":                {identiferType: "zone", resourceType: "cloudflare_certificate_pack", testdataFilename: "cloudflare_certificate_pack"},
 		"cloudflare content scanning expression":     {identiferType: "zone", resourceType: "cloudflare_content_scanning_expression", testdataFilename: "cloudflare_content_scanning_expression"},
@@ -303,25 +304,18 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare email security impersonation registry": {identiferType: "account", resourceType: "cloudflare_email_security_impersonation_registry", testdataFilename: "cloudflare_email_security_impersonation_registry"},
 		"cloudflare filter":                                {identiferType: "zone", resourceType: "cloudflare_filter", testdataFilename: "cloudflare_filter"},
 		// "cloudflare firewall rule":                           {identiferType: "zone", resourceType: "cloudflare_firewall_rule", testdataFilename: "cloudflare_firewall_rule"},
-		"cloudflare health check":         {identiferType: "zone", resourceType: "cloudflare_healthcheck", testdataFilename: "cloudflare_healthcheck"},
-		"cloudflare hostname tls setting": {identiferType: "zone", resourceType: "cloudflare_hostname_tls_setting", testdataFilename: "cloudflare_hostname_tls_setting", cliFlags: "cloudflare_hostname_tls_setting=ciphers,min_tls_version"},
-		"cloudflare keyless certificate":  {identiferType: "zone", resourceType: "cloudflare_keyless_certificate", testdataFilename: "cloudflare_keyless_certificate"},
-		"cloudflare mtls certificate":     {identiferType: "account", resourceType: "cloudflare_mtls_certificate", testdataFilename: "cloudflare_mtls_certificate"},
-		// "cloudflare list (asn)":                              {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_asn"},
-		// "cloudflare list (hostname)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_hostname"},
-		// "cloudflare list (ip)":                               {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_ip"},
-		// "cloudflare list (redirect)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_redirect"},
+		"cloudflare health check":          {identiferType: "zone", resourceType: "cloudflare_healthcheck", testdataFilename: "cloudflare_healthcheck"},
+		"cloudflare hostname tls setting":  {identiferType: "zone", resourceType: "cloudflare_hostname_tls_setting", testdataFilename: "cloudflare_hostname_tls_setting", cliFlags: "cloudflare_hostname_tls_setting=ciphers,min_tls_version"},
+		"cloudflare keyless certificate":   {identiferType: "zone", resourceType: "cloudflare_keyless_certificate", testdataFilename: "cloudflare_keyless_certificate"},
+		"cloudflare mtls certificate":      {identiferType: "account", resourceType: "cloudflare_mtls_certificate", testdataFilename: "cloudflare_mtls_certificate"},
 		"cloudflare load balancer":         {identiferType: "zone", resourceType: "cloudflare_load_balancer", testdataFilename: "cloudflare_load_balancer"},
 		"cloudflare load balancer monitor": {identiferType: "account", resourceType: "cloudflare_load_balancer_monitor", testdataFilename: "cloudflare_load_balancer_monitor"},
 		"cloudflare load balancer pool":    {identiferType: "account", resourceType: "cloudflare_load_balancer_pool", testdataFilename: "cloudflare_load_balancer_pool"},
 		// "cloudflare logpush jobs with filter":                {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job_with_filter"},
-		// "cloudflare logpush jobs":                            {identiferType: "zone", resourceType: "cloudflare_logpush_job", testdataFilename: "cloudflare_logpush_job"},
 		"cloudflare managed transforms":    {identiferType: "zone", resourceType: "cloudflare_managed_transforms", testdataFilename: "cloudflare_managed_transforms"},
 		"cloudflare origin ca certificate": {identiferType: "zone", resourceType: "cloudflare_origin_ca_certificate", testdataFilename: "cloudflare_origin_ca_certificate"},
-		// "cloudflare page rule":                               {identiferType: "zone", resourceType: "cloudflare_page_rule", testdataFilename: "cloudflare_page_rule"},
-		// "cloudflare rate limit":                              {identiferType: "zone", resourceType: "cloudflare_rate_limit", testdataFilename: "cloudflare_rate_limit"},
-		"cloudflare d1 database":  {identiferType: "account", resourceType: "cloudflare_d1_database", testdataFilename: "cloudflare_d1_database"},
-		"cloudflare dns firewall": {identiferType: "account", resourceType: "cloudflare_dns_firewall", testdataFilename: "cloudflare_dns_firewall"},
+		"cloudflare d1 database":           {identiferType: "account", resourceType: "cloudflare_d1_database", testdataFilename: "cloudflare_d1_database"},
+		"cloudflare dns firewall":          {identiferType: "account", resourceType: "cloudflare_dns_firewall", testdataFilename: "cloudflare_dns_firewall"},
 		// "cloudflare dns record CAA":                          {identiferType: "zone", resourceType: "cloudflare_dns_record", testdataFilename: "cloudflare_dns_record_caa"},
 		// "cloudflare dns record PTR":                          {identiferType: "zone", resourceType: "cloudflare_dns_record", testdataFilename: "cloudflare_dns_record_ptr"},
 		"cloudflare dns record simple": {identiferType: "zone", resourceType: "cloudflare_dns_record", testdataFilename: "cloudflare_dns_record"},
@@ -551,9 +545,57 @@ func TestResourceGenerationV5(t *testing.T) {
 				}
 
 			}
-
+			overwriteAndValidate(output)
 			expected := testDataFile("v5", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}
+}
+
+func overwriteAndValidate(output string) {
+	path := fmt.Sprintf("../../../../testdata/terraform/v5/%s", resourceType)
+	if err := os.WriteFile(path+"/test.tf", []byte(output), 0644); err != nil {
+		log.Fatalf("error writing test.tf for %s", resourceType)
+	}
+	log.Printf("test.tf created for %s", resourceType)
+	tfValidate(path)
+}
+
+func tfValidate(path string) {
+	absoluteDir, err := filepath.Abs(path)
+	if err != nil {
+		fmt.Printf("Error resolving absolute path: %s\n", err)
+		return
+	}
+	err = os.Chdir(absoluteDir)
+	if err != nil {
+		fmt.Printf("Error changing directory: %s\n", err)
+		return
+	}
+
+	fmt.Printf("Changed directory to: %s\n", absoluteDir)
+
+	initCmd := exec.Command("terraform", "init")
+	initCmd.Stdout = os.Stdout
+	initCmd.Stderr = os.Stderr
+
+	fmt.Println("Running: terraform init")
+	err = initCmd.Run()
+	if err != nil {
+		fmt.Printf("Error running terraform init: %s\n", err)
+		return
+	}
+
+	validateCmd := exec.Command("terraform", "validate")
+	validateCmd.Stdout = os.Stdout
+	validateCmd.Stderr = os.Stderr
+
+	fmt.Println("Running: terraform validate")
+	err = validateCmd.Run()
+	if err != nil {
+		fmt.Printf("Error running terraform validate: %s\n", err)
+		return
+	}
+
+	fmt.Println("Terraform commands completed successfully")
 }

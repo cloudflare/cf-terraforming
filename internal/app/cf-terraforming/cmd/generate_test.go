@@ -50,7 +50,7 @@ var (
 	cloudflareTestAccountID = "f037e56e89293a057740de681ac9abbe"
 )
 
-func TestGenerate_writeAttrLine(t *testing.T) {
+func TestGenerate_writeAttrLineV4(t *testing.T) {
 	multilineListOfStrings := heredoc.Doc(`
 		a = ["b", "c", "d"]
 	`)

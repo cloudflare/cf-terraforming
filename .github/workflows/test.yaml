@@ -51,3 +51,43 @@ jobs:
             CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
             CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
         run: make test
+  test-v5:
+    name: Go + Terraform v5
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: install go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: go1.20-${{ hashFiles('**/go.sum') }}
+      - name: Vet
+        run: go vet ./...
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: write Terraform configuration for v5
+        run: |
+          cat > main.tf <<EOF
+          terraform {
+            required_providers {
+              cloudflare = {
+                source = "cloudflare/cloudflare"
+                version = "~> 5"
+              }
+            }
+          }
+          EOF
+      - name: terraform init
+        run: terraform init
+      - name: go test
+        env:
+          CLOUDFLARE_EMAIL: noone@cloudflare.com
+          CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
+        run: make test-v5

@@ -85,9 +85,15 @@ jobs:
           EOF
       - name: terraform init
         run: terraform init
-      - name: go test
+      - name: go test generate
         env:
           CLOUDFLARE_EMAIL: noone@cloudflare.com
           CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
           CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
-        run: TESTARGS="-run=V5" make test
+        run: TESTARGS="-run=^TestResourceGenerationV5" make test
+      - name: go test import
+        env:
+          CLOUDFLARE_EMAIL: noone@cloudflare.com
+          CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
+        run: TESTARGS="-run=^TestResourceImportV5" make test

@@ -11,67 +11,84 @@ on:
       - 'LICENSE'
 
 name: Test
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # needed for `only-new-issues` to compare diffs
-      - name: install go
+
+      - name: Install Go
         uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
+
       - uses: actions/cache@v4
         with:
           path: ~/go/pkg/mod
           key: go1.20-${{ hashFiles('**/go.sum') }}
+
       - name: Vet
         run: go vet ./...
-      - name: setup Terraform
+
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-      - name: write Terraform configuration
+
+      - name: Write Terraform v4 config
         run: |
-            cat > main.tf <<EOF
-            terraform {
-              required_providers {
-                cloudflare = {
-                  source = "cloudflare/cloudflare"
-                  version = "~> 4"
-                }
+          cat > main.tf <<EOF
+          terraform {
+            required_providers {
+              cloudflare = {
+                source = "cloudflare/cloudflare"
+                version = "~> 4"
               }
             }
-            EOF
-      - name: terraform init
+          }
+          EOF
+
+      - name: Terraform Init
         run: terraform init
-      - name: go test
+
+      - name: Go Test (Terraform v4)
         env:
-            CLOUDFLARE_EMAIL: noone@cloudflare.com
-            CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-            CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
-        run: TESTARGS="-run=V4" make test
+          CLOUDFLARE_EMAIL: noone@cloudflare.com
+          CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          TERRAFORM_CLI_PATH: ${{ runner.temp }}/terraform-v4
+          CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
+        run: |
+          mkdir -p $TERRAFORM_CLI_PATH
+          TESTARGS="-run=V4" make test
+
   test-v5:
     name: Go + Terraform v5
     runs-on: ubuntu-latest
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: install go
+
+      - name: Install Go
         uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
+
       - uses: actions/cache@v4
         with:
           path: ~/go/pkg/mod
           key: go1.20-${{ hashFiles('**/go.sum') }}
+
       - name: Vet
         run: go vet ./...
-      - name: setup Terraform
+
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-      - name: write Terraform configuration for v5
+
+      - name: Write Terraform v5 config
         run: |
           cat > main.tf <<EOF
           terraform {
@@ -83,17 +100,26 @@ jobs:
             }
           }
           EOF
-      - name: terraform init
+
+      - name: Terraform Init
         run: terraform init
-      - name: go test generate
+
+      - name: Go Test (Generate V5)
         env:
           CLOUDFLARE_EMAIL: noone@cloudflare.com
           CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          TERRAFORM_CLI_PATH: ${{ runner.temp }}/terraform-v5
           CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
-        run: TESTARGS="-run=^TestResourceGenerationV5" make test
-      - name: go test import
+        run: |
+          mkdir -p $TERRAFORM_CLI_PATH
+          TESTARGS="-run=^TestResourceGenerationV5" make test
+
+      - name: Go Test (Import V5)
         env:
           CLOUDFLARE_EMAIL: noone@cloudflare.com
           CLOUDFLARE_API_KEY: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          TERRAFORM_CLI_PATH: ${{ runner.temp }}/terraform-v5
           CLOUDFLARE_TERRAFORM_INSTALL_PATH: ${{ github.workspace }}
-        run: TESTARGS="-run=^TestResourceImportV5" make test
+        run: |
+          mkdir -p $TERRAFORM_CLI_PATH
+          TESTARGS="-run=^TestResourceImportV5" make test

@@ -83,13 +83,13 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 	}
 }
 
-func TestGenerate_ResourceNotSupported(t *testing.T) {
+func TestGenerate_ResourceNotSupportedV4(t *testing.T) {
 	output, err := executeCommandC(rootCmd, "generate", "--resource-type", "notreal")
 	assert.Nil(t, err)
-	assert.Equal(t, output, `"notreal" is not yet supported for automatic generation`)
+	assert.Equal(t, `"notreal" is not yet supported for automatic generation`, output)
 }
 
-func TestResourceGeneration(t *testing.T) {
+func TestResourceGenerationV4(t *testing.T) {
 	tests := map[string]struct {
 		identiferType    string
 		resourceType     string
@@ -554,17 +554,6 @@ func TestResourceGenerationV5(t *testing.T) {
 
 			expected := testDataFile("v5", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
-			makeTable()
 		})
-	}
-}
-
-func makeTable() {
-	for resource, endpoints := range resourceToEndpoint {
-		for _, endpoint := range endpoints {
-			if strings.Contains(endpoint, "{accounts_or_zones}") {
-				fmt.Println(resource)
-			}
-		}
 	}
 }

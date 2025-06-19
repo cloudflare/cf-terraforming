@@ -8,12 +8,16 @@ import (
 	"testing"
 
 	"github.com/MakeNowJust/heredoc/v2"
+
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
+
 	"github.com/hashicorp/hcl/v2/hclwrite"
+
 	"github.com/spf13/viper"
 
 	"github.com/stretchr/testify/assert"
@@ -250,8 +254,6 @@ func TestResourceGeneration(t *testing.T) {
 }
 
 func TestResourceGenerationV5(t *testing.T) {
-	t.Skip("skip until the v5 provider is fully supported")
-
 	tests := map[string]struct {
 		identiferType    string
 		resourceType     string
@@ -552,6 +554,17 @@ func TestResourceGenerationV5(t *testing.T) {
 
 			expected := testDataFile("v5", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
+			makeTable()
 		})
+	}
+}
+
+func makeTable() {
+	for resource, endpoints := range resourceToEndpoint {
+		for _, endpoint := range endpoints {
+			if strings.Contains(endpoint, "{accounts_or_zones}") {
+				fmt.Println(resource)
+			}
+		}
 	}
 }

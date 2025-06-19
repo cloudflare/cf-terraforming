@@ -9,15 +9,16 @@ import (
 
 	"github.com/cloudflare/cloudflare-go/v4"
 	"github.com/cloudflare/cloudflare-go/v4/option"
+
 	"github.com/dnaeon/go-vcr/cassette"
 	"github.com/dnaeon/go-vcr/recorder"
+
 	"github.com/spf13/viper"
+
 	"github.com/stretchr/testify/assert"
 )
 
 func TestResourceImportV5(t *testing.T) {
-	t.Skip("skip until the v5 provider is fully supported")
-
 	tests := map[string]struct {
 		identiferType    string
 		resourceType     string

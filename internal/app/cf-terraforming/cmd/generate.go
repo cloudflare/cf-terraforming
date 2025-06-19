@@ -1587,6 +1587,40 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 	}
 }
 
+func addAttributeKeyValue(response *[]interface{}, resourceCount int, key string, value string) {
+	for i := 0; i < resourceCount; i++ {
+		(*response)[i].(map[string]interface{})[key] = value
+	}
+}
+
+func remapProperty(response *[]interface{}, resourceCount int, responseProperty string, remappedProperty string) {
+	for i := 0; i < resourceCount; i++ {
+		prop, ok := (*response)[i].(map[string]interface{})[responseProperty]
+		if !ok {
+			continue
+		}
+		(*response)[i].(map[string]interface{})[remappedProperty] = prop
+	}
+}
+
+func denestResponses(response *[]interface{}, resourceCount int, nestedAttributeName string) {
+	finalResponse := make([]interface{}, 0)
+	r := *response
+	for i := 0; i < resourceCount; i++ {
+		nestedObjects := r[i].(map[string]interface{})[nestedAttributeName]
+		objects := make([]interface{}, len(nestedObjects.([]interface{})))
+		for j := range nestedObjects.([]interface{}) {
+			o := nestedObjects.([]interface{})[j]
+			objects[j] = o
+		}
+		finalResponse = append(finalResponse, objects...)
+	}
+	*response = make([]interface{}, len(finalResponse))
+	for i := range finalResponse {
+		(*response)[i] = finalResponse[i]
+	}
+}
+
 func processCustomCasesV5(response *[]interface{}, resourceType string, pathParam string) {
 	resourceCount := len(*response)
 	switch resourceType {
@@ -1601,21 +1635,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			}
 		}
 	case "cloudflare_r2_bucket":
-		finalResponse := make([]interface{}, 0)
-		r := *response
-		for i := 0; i < resourceCount; i++ {
-			buckets := r[i].(map[string]interface{})["buckets"]
-			bucketObjects := make([]interface{}, len(buckets.([]interface{})))
-			for j := range buckets.([]interface{}) {
-				b := buckets.([]interface{})[j]
-				bucketObjects[j] = b
-			}
-			finalResponse = append(finalResponse, bucketObjects...)
-		}
-		*response = make([]interface{}, len(finalResponse))
-		for i := range finalResponse {
-			(*response)[i] = finalResponse[i]
-		}
+		denestResponses(response, resourceCount, "buckets")
 	case "cloudflare_account_member":
 		// remap email and role_ids into the right structure and remove policies
 		for i := 0; i < resourceCount; i++ {
@@ -1643,22 +1663,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			(*response)[i] = do
 		}
 	case "cloudflare_zero_trust_dex_test":
-		// remove the nesting under 'dex_test'
-		finalResponse := make([]interface{}, 0)
-		r := *response
-		for i := 0; i < resourceCount; i++ {
-			dexTests := r[i].(map[string]interface{})["dex_tests"]
-			dtObjects := make([]interface{}, len(dexTests.([]interface{})))
-			for j := range dexTests.([]interface{}) {
-				dt := dexTests.([]interface{})[j]
-				dtObjects[j] = dt
-			}
-			finalResponse = append(finalResponse, dtObjects...)
-		}
-		*response = make([]interface{}, len(finalResponse))
-		for i := range finalResponse {
-			(*response)[i] = finalResponse[i]
-		}
+		denestResponses(response, resourceCount, "dex_tests")
 	case "cloudflare_zero_trust_gateway_settings":
 		for i := 0; i < resourceCount; i++ {
 			settings, ok := (*response)[i].(map[string]interface{})["settings"]
@@ -1722,27 +1727,15 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			}
 		}
 	case "cloudflare_zero_trust_access_short_lived_certificate":
-		// map id under app_id
-		for i := 0; i < resourceCount; i++ {
-			appID := (*response)[i].(map[string]interface{})["id"]
-			(*response)[i].(map[string]interface{})["app_id"] = appID
-		}
+		remapProperty(response, resourceCount, "id", "app_id")
 	case "cloudflare_zone_setting":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["setting_id"] = (*response)[i].(map[string]interface{})["id"]
-		}
+		remapProperty(response, resourceCount, "id", "setting_id")
 	case "cloudflare_hostname_tls_setting":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["setting_id"] = pathParam
-		}
+		addAttributeKeyValue(response, resourceCount, "setting_id", pathParam)
 	case "cloudflare_registrar_domain":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["domain_name"] = (*response)[i].(map[string]interface{})["name"]
-		}
+		remapProperty(response, resourceCount, "name", "domain_name")
 	case "cloudflare_r2_managed_domain":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["bucket_name"] = pathParam
-		}
+		addAttributeKeyValue(response, resourceCount, "bucket_name", pathParam)
 	case "cloudflare_r2_custom_domain":
 		finalResponse := make([]interface{}, 0)
 		r := *response
@@ -1762,25 +1755,15 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			(*response)[i] = finalResponse[i]
 		}
 	case "cloudflare_pages_domain":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["project_name"] = pathParam
-		}
+		addAttributeKeyValue(response, resourceCount, "project_name", pathParam)
 	case "cloudflare_list_item":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["list_id"] = (*response)[i].(map[string]interface{})["id"]
-		}
+		remapProperty(response, resourceCount, "id", "list_id")
 	case "cloudflare_api_shield_schema":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["file"] = (*response)[i].(map[string]interface{})["source"]
-		}
+		remapProperty(response, resourceCount, "source", "file")
 	case "cloudflare_api_shield_discovery_operation":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["operation_id"] = (*response)[i].(map[string]interface{})["id"]
-		}
+		remapProperty(response, resourceCount, "id", "operation_id")
 	case "cloudflare_zero_trust_dlp_predefined_profile":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["profile_id"] = pathParam
-		}
+		addAttributeKeyValue(response, resourceCount, "profile_id", pathParam)
 	case "cloudflare_zero_trust_access_identity_provider":
 		for i := 0; i < resourceCount; i++ {
 			cfg, ok := (*response)[i].(map[string]interface{})["config"]
@@ -1853,9 +1836,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			(*response)[i] = finalResponse[i]
 		}
 	case "cloudflare_waiting_room_event":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["waiting_room_id"] = pathParam
-		}
+		addAttributeKeyValue(response, resourceCount, "waiting_room_id", pathParam)
 	case "cloudflare_waiting_room_rules":
 		*response = []interface{}{
 			map[string]interface{}{
@@ -1864,21 +1845,13 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			},
 		}
 	case "cloudflare_keyless_certificate":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["certificate"] = "-----INSERT CERTIFICATE-----"
-		}
+		addAttributeKeyValue(response, resourceCount, "certificate", "-----INSERT CERTIFICATE-----")
 	case "cloudflare_stream_watermark":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["file"] = `REPLACE with filebase64("path-to-file")`
-		}
+		addAttributeKeyValue(response, resourceCount, "file", `REPLACE with filebase64("path-to-file")`)
 	case "cloudflare_authenticated_origin_pulls_certificate":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["private_key"] = "-----INSERT PRIVATE KEY-----"
-		}
+		addAttributeKeyValue(response, resourceCount, "private_key", "-----INSERT PRIVATE KEY-----")
 	case "cloudflare_zero_trust_access_mtls_certificate":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["certificate"] = "-----INSERT CERTIFICATE-----"
-		}
+		addAttributeKeyValue(response, resourceCount, "certificate", "-----INSERT CERTIFICATE-----")
 	case "cloudflare_zero_trust_access_mtls_hostname_settings":
 		*response = []interface{}{
 			map[string]interface{}{
@@ -1886,9 +1859,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			},
 		}
 	case "cloudflare_workers_script_subdomain":
-		for i := 0; i < resourceCount; i++ {
-			(*response)[i].(map[string]interface{})["script_name"] = pathParam
-		}
+		addAttributeKeyValue(response, resourceCount, "script_name", pathParam)
 	case "cloudflare_workers_deployment":
 		finalResponse := make([]interface{}, 0)
 		r := *response
@@ -1932,21 +1903,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			}
 		}
 	case "cloudflare_magic_wan_static_route":
-		finalResponse := make([]interface{}, 0)
-		r := *response
-		for i := 0; i < resourceCount; i++ {
-			routes := r[i].(map[string]interface{})["routes"]
-			routeObjects := make([]interface{}, len(routes.([]interface{})))
-			for j := range routes.([]interface{}) {
-				r := routes.([]interface{})[j]
-				routeObjects[j] = r
-			}
-			finalResponse = append(finalResponse, routeObjects...)
-		}
-		*response = make([]interface{}, len(finalResponse))
-		for i := range finalResponse {
-			(*response)[i] = finalResponse[i]
-		}
+		denestResponses(response, resourceCount, "routes")
 	}
 }
 

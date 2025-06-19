@@ -32,6 +32,7 @@ SKIP_DIRS=(
 "testdata/terraform/v5/cloudflare_workers_script"
 "testdata/terraform/v5/cloudflare_workers_secret"
 "testdata/terraform/v5/cloudflare_zone_subscription"
+"testdata/terraform/v5/cloudflare_user_agent_blocking_rule"
 )
 rootdir=$(pwd)
 

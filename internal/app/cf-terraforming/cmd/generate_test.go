@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"os/exec"
-	"path/filepath"
 	"strings"
 	"testing"
 
@@ -545,57 +543,8 @@ func TestResourceGenerationV5(t *testing.T) {
 				}
 
 			}
-			overwriteAndValidate(output)
 			expected := testDataFile("v5", tc.testdataFilename)
 			assert.Equal(t, strings.TrimRight(expected, "\n"), strings.TrimRight(output, "\n"))
 		})
 	}
-}
-
-func overwriteAndValidate(output string) {
-	path := fmt.Sprintf("../../../../testdata/terraform/v5/%s", resourceType)
-	if err := os.WriteFile(path+"/test.tf", []byte(output), 0644); err != nil {
-		log.Fatalf("error writing test.tf for %s", resourceType)
-	}
-	log.Printf("test.tf created for %s", resourceType)
-	tfValidate(path)
-}
-
-func tfValidate(path string) {
-	absoluteDir, err := filepath.Abs(path)
-	if err != nil {
-		fmt.Printf("Error resolving absolute path: %s\n", err)
-		return
-	}
-	err = os.Chdir(absoluteDir)
-	if err != nil {
-		fmt.Printf("Error changing directory: %s\n", err)
-		return
-	}
-
-	fmt.Printf("Changed directory to: %s\n", absoluteDir)
-
-	initCmd := exec.Command("terraform", "init")
-	initCmd.Stdout = os.Stdout
-	initCmd.Stderr = os.Stderr
-
-	fmt.Println("Running: terraform init")
-	err = initCmd.Run()
-	if err != nil {
-		fmt.Printf("Error running terraform init: %s\n", err)
-		return
-	}
-
-	validateCmd := exec.Command("terraform", "validate")
-	validateCmd.Stdout = os.Stdout
-	validateCmd.Stderr = os.Stderr
-
-	fmt.Println("Running: terraform validate")
-	err = validateCmd.Run()
-	if err != nil {
-		fmt.Printf("Error running terraform validate: %s\n", err)
-		return
-	}
-
-	fmt.Println("Terraform commands completed successfully")
 }

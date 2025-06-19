@@ -497,19 +497,18 @@ func TestResourceGenerationV5(t *testing.T) {
 			})
 
 			output := ""
-
+			api = cloudflare.NewClient(option.WithHTTPClient(
+				&http.Client{
+					Transport: r,
+				},
+			))
+			apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
+				&http.Client{
+					Transport: r,
+				},
+			))
 			if tc.identiferType == "account" {
 				viper.Set("account", cloudflareTestAccountID)
-				api = cloudflare.NewClient(option.WithHTTPClient(
-					&http.Client{
-						Transport: r,
-					},
-				))
-				apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
-					&http.Client{
-						Transport: r,
-					},
-				))
 				if tc.cliFlags != "" {
 					output, _ = executeCommandC(rootCmd, "generate",
 						"--resource-type", tc.resourceType,
@@ -522,16 +521,6 @@ func TestResourceGenerationV5(t *testing.T) {
 
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
-				api = cloudflare.NewClient(option.WithHTTPClient(
-					&http.Client{
-						Transport: r,
-					},
-				))
-				apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
-					&http.Client{
-						Transport: r,
-					},
-				))
 				if tc.cliFlags != "" {
 					output, _ = executeCommandC(rootCmd, "generate",
 						"--resource-type", tc.resourceType,

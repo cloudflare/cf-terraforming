@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -317,50 +318,79 @@ func unMarshallJSONStructData(modifiedJSONString string) ([]interface{}, error) 
 }
 
 func getAPIResponse(result *http.Response, pathParams []string, endpoints ...string) ([]interface{}, error) {
-	var jsonStructData, results []interface{}
-	for i, endpoint := range endpoints {
-		err := api.Get(context.Background(), endpoint, nil, &result)
-		if err != nil {
-			var apierr *cloudflare.Error
-			if errors.As(err, &apierr) {
-				if apierr.StatusCode == http.StatusNotFound {
+	var allResults []interface{}
+
+	for i, baseEndpoint := range endpoints {
+		page := 1
+		totalPages := 1
+		param := ""
+		if len(pathParams) > 0 {
+			param = pathParams[i]
+		}
+
+		for {
+			var endpoint string
+			// no page param for first request
+			if page == 1 {
+				endpoint = baseEndpoint
+			} else {
+				sep := "?"
+				if strings.Contains(baseEndpoint, "?") {
+					sep = "&"
+				}
+				endpoint = fmt.Sprintf("%s%spage=%d", baseEndpoint, sep, page)
+			}
+
+			err := api.Get(context.Background(), endpoint, nil, &result)
+			if err != nil {
+				var apierr *cloudflare.Error
+				if errors.As(err, &apierr) && apierr.StatusCode == http.StatusNotFound {
 					log.WithFields(logrus.Fields{
 						"resource": resourceType,
 						"endpoint": endpoint,
 					}).Debug("no resources found")
 					return nil, err
 				}
+				log.Fatalf("failed to fetch API endpoint: %s", err)
 			}
-			log.Fatalf("failed to fetch API endpoint: %s", err)
-		}
 
-		body, err := io.ReadAll(result.Body)
-		if err != nil {
-			log.Fatalln(err)
-		}
-		value := gjson.Get(string(body), "result")
-		if value.Type == gjson.Null {
-			log.WithFields(logrus.Fields{
-				"resource": resourceType,
-				"endpoint": endpoint,
-			}).Debug("no result found")
-			return nil, errors.New("no result found")
-		}
+			body, err := io.ReadAll(result.Body)
+			if err != nil {
+				log.Fatalln(err)
+			}
 
-		modifiedJSON := modifyResponsePayload(resourceType, value)
-		jsonStructData, err = unMarshallJSONStructData(modifiedJSON)
-		if err != nil {
-			log.Fatalf("failed to unmarshal result: %s", err)
-		}
+			resultVal := gjson.Get(string(body), "result")
+			if resultVal.Type == gjson.Null {
+				log.WithFields(logrus.Fields{
+					"resource": resourceType,
+					"endpoint": endpoint,
+				}).Debug("no result found")
+				return nil, errors.New("no result found")
+			}
 
-		param := ""
-		if len(pathParams) > 0 {
-			param = pathParams[i]
+			modifiedJSON := modifyResponsePayload(resourceType, resultVal)
+			jsonStructData, err := unMarshallJSONStructData(modifiedJSON)
+			if err != nil {
+				log.Fatalf("failed to unmarshal result: %s", err)
+			}
+
+			processCustomCasesV5(&jsonStructData, resourceType, param)
+			allResults = append(allResults, jsonStructData...)
+
+			if page == 1 {
+				totalPagesVal := gjson.Get(string(body), "result_info.total_pages")
+				if totalPagesVal.Exists() {
+					totalPages = int(totalPagesVal.Int())
+				}
+			}
+
+			if page >= totalPages {
+				break
+			}
+			page++
 		}
-		processCustomCasesV5(&jsonStructData, resourceType, param)
-		results = append(results, jsonStructData...)
 	}
-	return results, nil
+	return allResults, nil
 }
 
 func isSupportedPathParam(resources []string, rType string) bool {

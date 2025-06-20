@@ -21,3 +21,14 @@ jobs:
         uses: hashicorp/setup-terraform@v3
       - name: validate generated terraform configuration
         run: make validate-tf
+
+  validate-v5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v3
+      - name: validate generated terraform configuration
+        run: make validate-tf-v5
+

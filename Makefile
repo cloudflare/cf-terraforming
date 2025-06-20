@@ -33,4 +33,7 @@ fmt:
 validate-tf:
 	@bash scripts/validate-tf.sh
 
-.PHONY: build test fmt validate-tf
+validate-tf-v5:
+	@bash scripts/validate-tf-v5.sh
+
+.PHONY: build test fmt validate-tf validate-tf-v5

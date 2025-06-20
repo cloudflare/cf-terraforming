@@ -174,6 +174,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 		log.WithFields(logrus.Fields{
 			"directory": workingDir,
 		}).Debug("initializing Terraform")
+
 		tf, err := tfexec.NewTerraform(workingDir, execPath)
 		if err != nil {
 			log.Fatal(err)

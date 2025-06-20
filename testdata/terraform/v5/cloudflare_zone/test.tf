@@ -1,5 +1,6 @@
 resource "cloudflare_zone" "terraform_managed_resource_0" {
   name                = "api.cloudflarecn.net"
+  paused              = false
   type                = "full"
   vanity_name_servers = []
   account = {
@@ -10,6 +11,7 @@ resource "cloudflare_zone" "terraform_managed_resource_0" {
 
 resource "cloudflare_zone" "terraform_managed_resource_1" {
   name                = "api.cloudflare.com"
+  paused              = false
   type                = "full"
   vanity_name_servers = []
   account = {
@@ -20,6 +22,7 @@ resource "cloudflare_zone" "terraform_managed_resource_1" {
 
 resource "cloudflare_zone" "terraform_managed_resource_2" {
   name                = "api.staging.cloudflarecn.net"
+  paused              = false
   type                = "full"
   vanity_name_servers = []
   account = {

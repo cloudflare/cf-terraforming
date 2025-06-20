@@ -222,221 +222,221 @@ are known issues and will be addressed in the later releases.
 
 Any resources not listed may have known issues. The HCL config may still be generated but might need manual modifications.
 
-| Resource Type                                                      | Identifier Type   | CLI Flags Example                                                                                                      |
-|:-------------------------------------------------------------------|:------------------|:-----------------------------------------------------------------------------------------------------------------------|
-| cloudflare_account                                                 | account           |                                                                                                                        |
-| cloudflare_account_member                                          | account           |                                                                                                                        |
-| cloudflare_account_subscription                                    | account           |                                                                                                                        |
-| cloudflare_address_map                                             | account           |                                                                                                                        |
-| cloudflare_api_shield_discovery_operation                          | zone              |                                                                                                                        |
-| cloudflare_api_shield_operation                                    | zone              |                                                                                                                        |
-| cloudflare_api_shield_operation_schema_validation_settings         | zone              | cloudflare_api_shield_operation_schema_validation_settings=8255d5da-5a46-4928-ad00-01de7d48c1e7                        |
-| cloudflare_api_shield_schema                                       | zone              |                                                                                                                        |
-| cloudflare_api_shield_schema_validation_settings                   | zone              |                                                                                                                        |
-| cloudflare_argo_smart_routing                                      | zone              |                                                                                                                        |
-| cloudflare_argo_tiered_caching                                     | zone              |                                                                                                                        |
-| cloudflare_authenticated_origin_pulls                              | zone              | cloudflare_authenticated_origin_pulls=jotsqcjaho.terraform.cfapi.net                                                   |
-| cloudflare_authenticated_origin_pulls_certificate                  | zone              |                                                                                                                        |
-| cloudflare_bot_management                                          | zone              |                                                                                                                        |
-| cloudflare_calls_sfu_app                                           | account           |                                                                                                                        |
-| cloudflare_calls_turn_app                                          | account           |                                                                                                                        |
-| cloudflare_certificate_pack                                        | zone              |                                                                                                                        |
-| cloudflare_content_scanning_expression                             | zone              |                                                                                                                        |
-| cloudflare_custom_hostname                                         | zone              |                                                                                                                        |
-| cloudflare_custom_hostname_fallback_origin                         | zone              |                                                                                                                        |
-| cloudflare_d1_database                                             | account           |                                                                                                                        |
-| cloudflare_dns_firewall                                            | account           |                                                                                                                        |
-| cloudflare_dns_record                                              | zone              |                                                                                                                        |
-| cloudflare_dns_zone_transfers_acl                                  | account           |                                                                                                                        |
-| cloudflare_dns_zone_transfers_incoming                             | zone              |                                                                                                                        |
-| cloudflare_dns_zone_transfers_outgoing                             | zone              |                                                                                                                        |
-| cloudflare_dns_zone_transfers_peer                                 | account           |                                                                                                                        |
-| cloudflare_dns_zone_transfers_tsig                                 | account           |                                                                                                                        |
-| cloudflare_email_routing_address                                   | account           |                                                                                                                        |
-| cloudflare_email_routing_catch_all                                 | zone              |                                                                                                                        |
-| cloudflare_email_routing_dns                                       | zone              |                                                                                                                        |
-| cloudflare_email_routing_rule                                      | zone              |                                                                                                                        |
-| cloudflare_email_routing_settings                                  | zone              |                                                                                                                        |
-| cloudflare_email_security_block_sender                             | account           |                                                                                                                        |
-| cloudflare_email_security_impersonation_registry                   | account           |                                                                                                                        |
-| cloudflare_email_security_trusted_domains                          | account           |                                                                                                                        |
-| cloudflare_filter                                                  | zone              |                                                                                                                        |
-| cloudflare_healthcheck                                             | zone              |                                                                                                                        |
-| cloudflare_hostname_tls_setting                                    | zone              | cloudflare_hostname_tls_setting=ciphers,min_tls_version                                                                |
-| cloudflare_keyless_certificate                                     | zone              |                                                                                                                        |
-| cloudflare_leaked_credential_check                                 | zone              |                                                                                                                        |
-| cloudflare_leaked_credential_check_rule                            | zone              |                                                                                                                        |
-| cloudflare_list                                                    | account           |                                                                                                                        |
-| cloudflare_list_item                                               | account           | cloudflare_list_item=2a4b8b2017aa4b3cb9e1151b52c81d22                                                                  |
-| cloudflare_load_balancer                                           | zone              |                                                                                                                        |
-| cloudflare_load_balancer_monitor                                   | account           |                                                                                                                        |
-| cloudflare_load_balancer_pool                                      | account           |                                                                                                                        |
-| cloudflare_logpull_retention                                       | zone              |                                                                                                                        |
-| cloudflare_logpush_job                                             | account           |                                                                                                                        |
-| cloudflare_magic_wan_static_route                                  | account           |                                                                                                                        |
-| cloudflare_managed_transforms                                      | zone              |                                                                                                                        |
-| cloudflare_mtls_certificate                                        | account           |                                                                                                                        |
-| cloudflare_notification_policy                                     | account           |                                                                                                                        |
-| cloudflare_notification_policy_webhooks                            | account           |                                                                                                                        |
-| cloudflare_observatory_scheduled_test                              | zone              | cloudflare_observatory_scheduled_test=terraform.cfapi.net/thyygxveip                                                   |
-| cloudflare_origin_ca_certificate                                   | zone              |                                                                                                                        |
-| cloudflare_page_rule                                               | zone              |                                                                                                                        |
-| cloudflare_page_shield_policy                                      | zone              |                                                                                                                        |
-| cloudflare_pages_domain                                            | account           | cloudflare_pages_domain=ykfjmcgpfs                                                                                     |
-| cloudflare_pages_project                                           | account           |                                                                                                                        |
-| cloudflare_queue                                                   | account           |                                                                                                                        |
-| cloudflare_queue_consumer                                          | account           | cloudflare_queue_consumer=2dde6ac405cd457c9ce59dc4bda20c65                                                             |
-| cloudflare_r2_bucket                                               | account           |                                                                                                                        |
-| cloudflare_r2_custom_domain                                        | account           | cloudflare_r2_custom_domain=jb-test-bucket,bnfywlzwpt                                                                  |
-| cloudflare_r2_managed_domain                                       | account           | cloudflare_r2_managed_domain=jb-test-bucket,bnfywlzwpt                                                                 |
-| cloudflare_rate_limit                                              | zone              |                                                                                                                        |
-| cloudflare_regional_hostname                                       | zone              |                                                                                                                        |
-| cloudflare_regional_tiered_cache                                   | zone              |                                                                                                                        |
-| cloudflare_registrar_domain                                        | account           |                                                                                                                        |
-| cloudflare_ruleset                                                 | zone              |                                                                                                                        |
-| cloudflare_snippet_rules                                           | zone              |                                                                                                                        |
-| cloudflare_snippets                                                | zone              |                                                                                                                        |
-| cloudflare_spectrum_application                                    | zone              |                                                                                                                        |
-| cloudflare_stream                                                  | account           |                                                                                                                        |
-| cloudflare_stream_key                                              | account           |                                                                                                                        |
-| cloudflare_stream_live_input                                       | account           |                                                                                                                        |
-| cloudflare_stream_watermark                                        | account           |                                                                                                                        |
-| cloudflare_stream_webhook                                          | account           |                                                                                                                        |
-| cloudflare_tiered_cache                                            | zone              |                                                                                                                        |
-| cloudflare_total_tls                                               | zone              |                                                                                                                        |
-| cloudflare_turnstile_widget                                        | account           |                                                                                                                        |
-| cloudflare_url_normalization_settings                              | zone              |                                                                                                                        |
-| cloudflare_user                                                    | account           |                                                                                                                        |
-| cloudflare_waiting_room                                            | zone              |                                                                                                                        |
-| cloudflare_waiting_room_event                                      | zone              | cloudflare_waiting_room_event=e7f9e4c190ea8d6c66cab32ac110f39a                                                         |
-| cloudflare_waiting_room_rules                                      | zone              | cloudflare_waiting_room_rules=8bbd1b13450f6c63ab6ab4e08a63762d                                                         |
-| cloudflare_waiting_room_settings                                   | zone              |                                                                                                                        |
-| cloudflare_web3_hostname                                           | zone              |                                                                                                                        |
-| cloudflare_web_analytics_rule                                      | account           | cloudflare_web_analytics_rule=2fa89d8f-35f7-49ef-87d3-f24e866a5d5e                                                     |
-| cloudflare_web_analytics_site                                      | account           |                                                                                                                        |
-| cloudflare_workers_cron_trigger                                    | account           | cloudflare_workers_cron_trigger=script_2                                                                               |
-| cloudflare_workers_custom_domain                                   | account           |                                                                                                                        |
-| cloudflare_workers_deployment                                      | account           | cloudflare_workers_deployment=script_2                                                                                 |
-| cloudflare_workers_for_platforms_dispatch_namespace                | account           |                                                                                                                        |
-| cloudflare_workers_kv_namespace                                    | account           |                                                                                                                        |
-| cloudflare_workers_script_subdomain                                | account           | cloudflare_workers_script_subdomain=accounts                                                                           |
-| cloudflare_zero_trust_access_application                           | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_custom_page                           | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_group                                 | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_identity_provider                     | zone              |                                                                                                                        |
-| cloudflare_zero_trust_access_infrastructure_target                 | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_key_configuration                     | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_mtls_certificate                      | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_mtls_hostname_settings                | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_policy                                | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_service_token                         | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_short_lived_certificate               | account           |                                                                                                                        |
-| cloudflare_zero_trust_access_tag                                   | account           |                                                                                                                        |
-| cloudflare_zero_trust_device_custom_profile                        | account           |                                                                                                                        |
-| cloudflare_zero_trust_device_default_profile                       | account           |                                                                                                                        |
-| cloudflare_zero_trust_device_default_profile_certificates          | zone              |                                                                                                                        |
-| cloudflare_zero_trust_device_default_profile_local_domain_fallback | account           |                                                                                                                        |
-| cloudflare_zero_trust_device_managed_networks                      | account           |                                                                                                                        |
-| cloudflare_zero_trust_device_posture_integration                   | account           |                                                                                                                        |
-| cloudflare_zero_trust_device_posture_rule                          | account           |                                                                                                                        |
-| cloudflare_zero_trust_dex_test                                     | account           |                                                                                                                        |
-| cloudflare_zero_trust_dlp_custom_profile                           | account           | cloudflare_zero_trust_dlp_custom_profile=38f45ad8-476e-4b56-ad16-42f364250802                                          |
-| cloudflare_zero_trust_dlp_dataset                                  | account           |                                                                                                                        |
-| cloudflare_zero_trust_dlp_predefined_profile                       | account           | cloudflare_zero_trust_dlp_predefined_profile=c8932cc4-3312-4152-8041-f3f257122dc4,56a8c060-01bb-4f89-ba1e-3ad42770a342 |
-| cloudflare_zero_trust_dns_location                                 | account           |                                                                                                                        |
-| cloudflare_zero_trust_gateway_certificate                          | account           |                                                                                                                        |
-| cloudflare_zero_trust_gateway_policy                               | account           |                                                                                                                        |
-| cloudflare_zero_trust_gateway_proxy_endpoint                       | account           |                                                                                                                        |
-| cloudflare_zero_trust_gateway_settings                             | account           |                                                                                                                        |
-| cloudflare_zero_trust_list                                         | account           |                                                                                                                        |
-| cloudflare_zero_trust_organization                                 | account           |                                                                                                                        |
-| cloudflare_zero_trust_risk_behavior                                | account           |                                                                                                                        |
-| cloudflare_zero_trust_risk_scoring_integration                     | account           |                                                                                                                        |
-| cloudflare_zero_trust_tunnel_cloudflared                           | account           |                                                                                                                        |
-| cloudflare_zero_trust_tunnel_cloudflared_config                    | account           | cloudflare_zero_trust_tunnel_cloudflared_config=285f508d-d6ef-4ce4-9293-983d5bdc269e                                   |
-| cloudflare_zero_trust_tunnel_cloudflared_route                     | account           |                                                                                                                        |
-| cloudflare_zero_trust_tunnel_cloudflared_virtual_network           | account           |                                                                                                                        |
-| cloudflare_zone                                                    | zone              |                                                                                                                        |
-| cloudflare_zone_cache_reserve                                      | zone              |                                                                                                                        |
-| cloudflare_zone_cache_variants                                     | zone              |                                                                                                                        |
-| cloudflare_zone_dnssec                                             | zone              |                                                                                                                        |
-| cloudflare_zone_lockdown                                           | zone              |                                                                                                                        |
-| cloudflare_zone_setting                                            | zone              | cloudflare_zone_setting=always_online,cache_level                                                                      |
+| Resource Type                                                      | Identifier Type | CLI Flags Example                                                                                                      |
+|:-------------------------------------------------------------------|:----------------|:-----------------------------------------------------------------------------------------------------------------------|
+| cloudflare_account                                                 | account         |                                                                                                                        |
+| cloudflare_account_member                                          | account         |                                                                                                                        |
+| cloudflare_account_subscription                                    | account         |                                                                                                                        |
+| cloudflare_address_map                                             | account         |                                                                                                                        |
+| cloudflare_api_shield_discovery_operation                          | zone            |                                                                                                                        |
+| cloudflare_api_shield_operation                                    | zone            |                                                                                                                        |
+| cloudflare_api_shield_operation_schema_validation_settings         | zone            | cloudflare_api_shield_operation_schema_validation_settings=8255d5da-5a46-4928-ad00-01de7d48c1e7                        |
+| cloudflare_api_shield_schema                                       | zone            |                                                                                                                        |
+| cloudflare_api_shield_schema_validation_settings                   | zone            |                                                                                                                        |
+| cloudflare_argo_smart_routing                                      | zone            |                                                                                                                        |
+| cloudflare_argo_tiered_caching                                     | zone            |                                                                                                                        |
+| cloudflare_authenticated_origin_pulls                              | zone            | cloudflare_authenticated_origin_pulls=jotsqcjaho.terraform.cfapi.net                                                   |
+| cloudflare_authenticated_origin_pulls_certificate                  | zone            |                                                                                                                        |
+| cloudflare_bot_management                                          | zone            |                                                                                                                        |
+| cloudflare_calls_sfu_app                                           | account         |                                                                                                                        |
+| cloudflare_calls_turn_app                                          | account         |                                                                                                                        |
+| cloudflare_certificate_pack                                        | zone            |                                                                                                                        |
+| cloudflare_content_scanning_expression                             | zone            |                                                                                                                        |
+| cloudflare_custom_hostname                                         | zone            |                                                                                                                        |
+| cloudflare_custom_hostname_fallback_origin                         | zone            |                                                                                                                        |
+| cloudflare_d1_database                                             | account         |                                                                                                                        |
+| cloudflare_dns_firewall                                            | account         |                                                                                                                        |
+| cloudflare_dns_record                                              | zone            |                                                                                                                        |
+| cloudflare_dns_zone_transfers_acl                                  | account         |                                                                                                                        |
+| cloudflare_dns_zone_transfers_incoming                             | zone            |                                                                                                                        |
+| cloudflare_dns_zone_transfers_outgoing                             | zone            |                                                                                                                        |
+| cloudflare_dns_zone_transfers_peer                                 | account         |                                                                                                                        |
+| cloudflare_dns_zone_transfers_tsig                                 | account         |                                                                                                                        |
+| cloudflare_email_routing_address                                   | account         |                                                                                                                        |
+| cloudflare_email_routing_catch_all                                 | zone            |                                                                                                                        |
+| cloudflare_email_routing_dns                                       | zone            |                                                                                                                        |
+| cloudflare_email_routing_rule                                      | zone            |                                                                                                                        |
+| cloudflare_email_routing_settings                                  | zone            |                                                                                                                        |
+| cloudflare_email_security_block_sender                             | account         |                                                                                                                        |
+| cloudflare_email_security_impersonation_registry                   | account         |                                                                                                                        |
+| cloudflare_email_security_trusted_domains                          | account         |                                                                                                                        |
+| cloudflare_filter                                                  | zone            |                                                                                                                        |
+| cloudflare_healthcheck                                             | zone            |                                                                                                                        |
+| cloudflare_hostname_tls_setting                                    | zone            | cloudflare_hostname_tls_setting=ciphers,min_tls_version                                                                |
+| cloudflare_keyless_certificate                                     | zone            |                                                                                                                        |
+| cloudflare_leaked_credential_check                                 | zone            |                                                                                                                        |
+| cloudflare_leaked_credential_check_rule                            | zone            |                                                                                                                        |
+| cloudflare_list                                                    | account         |                                                                                                                        |
+| cloudflare_list_item                                               | account         | cloudflare_list_item=2a4b8b2017aa4b3cb9e1151b52c81d22                                                                  |
+| cloudflare_load_balancer                                           | zone            |                                                                                                                        |
+| cloudflare_load_balancer_monitor                                   | account         |                                                                                                                        |
+| cloudflare_load_balancer_pool                                      | account         |                                                                                                                        |
+| cloudflare_logpull_retention                                       | zone            |                                                                                                                        |
+| cloudflare_logpush_job                                             | account or zone |                                                                                                                        |
+| cloudflare_magic_wan_static_route                                  | account         |                                                                                                                        |
+| cloudflare_managed_transforms                                      | zone            |                                                                                                                        |
+| cloudflare_mtls_certificate                                        | account         |                                                                                                                        |
+| cloudflare_notification_policy                                     | account         |                                                                                                                        |
+| cloudflare_notification_policy_webhooks                            | account         |                                                                                                                        |
+| cloudflare_observatory_scheduled_test                              | zone            | cloudflare_observatory_scheduled_test=terraform.cfapi.net/thyygxveip                                                   |
+| cloudflare_origin_ca_certificate                                   | zone            |                                                                                                                        |
+| cloudflare_page_rule                                               | zone            |                                                                                                                        |
+| cloudflare_page_shield_policy                                      | zone            |                                                                                                                        |
+| cloudflare_pages_domain                                            | account         | cloudflare_pages_domain=ykfjmcgpfs                                                                                     |
+| cloudflare_pages_project                                           | account         |                                                                                                                        |
+| cloudflare_queue                                                   | account         |                                                                                                                        |
+| cloudflare_queue_consumer                                          | account         | cloudflare_queue_consumer=2dde6ac405cd457c9ce59dc4bda20c65                                                             |
+| cloudflare_r2_bucket                                               | account         |                                                                                                                        |
+| cloudflare_r2_custom_domain                                        | account         | cloudflare_r2_custom_domain=jb-test-bucket,bnfywlzwpt                                                                  |
+| cloudflare_r2_managed_domain                                       | account         | cloudflare_r2_managed_domain=jb-test-bucket,bnfywlzwpt                                                                 |
+| cloudflare_rate_limit                                              | zone            |                                                                                                                        |
+| cloudflare_regional_hostname                                       | zone            |                                                                                                                        |
+| cloudflare_regional_tiered_cache                                   | zone            |                                                                                                                        |
+| cloudflare_registrar_domain                                        | account         |                                                                                                                        |
+| cloudflare_ruleset                                                 | account or zone |                                                                                                                        |
+| cloudflare_snippet_rules                                           | zone            |                                                                                                                        |
+| cloudflare_snippets                                                | zone            |                                                                                                                        |
+| cloudflare_spectrum_application                                    | zone            |                                                                                                                        |
+| cloudflare_stream                                                  | account         |                                                                                                                        |
+| cloudflare_stream_key                                              | account         |                                                                                                                        |
+| cloudflare_stream_live_input                                       | account         |                                                                                                                        |
+| cloudflare_stream_watermark                                        | account         |                                                                                                                        |
+| cloudflare_stream_webhook                                          | account         |                                                                                                                        |
+| cloudflare_tiered_cache                                            | zone            |                                                                                                                        |
+| cloudflare_total_tls                                               | zone            |                                                                                                                        |
+| cloudflare_turnstile_widget                                        | account         |                                                                                                                        |
+| cloudflare_url_normalization_settings                              | zone            |                                                                                                                        |
+| cloudflare_user                                                    | account         |                                                                                                                        |
+| cloudflare_waiting_room                                            | account or zone |                                                                                                                        |
+| cloudflare_waiting_room_event                                      | zone            | cloudflare_waiting_room_event=e7f9e4c190ea8d6c66cab32ac110f39a                                                         |
+| cloudflare_waiting_room_rules                                      | zone            | cloudflare_waiting_room_rules=8bbd1b13450f6c63ab6ab4e08a63762d                                                         |
+| cloudflare_waiting_room_settings                                   | zone            |                                                                                                                        |
+| cloudflare_web3_hostname                                           | zone            |                                                                                                                        |
+| cloudflare_web_analytics_rule                                      | account         | cloudflare_web_analytics_rule=2fa89d8f-35f7-49ef-87d3-f24e866a5d5e                                                     |
+| cloudflare_web_analytics_site                                      | account         |                                                                                                                        |
+| cloudflare_workers_cron_trigger                                    | account         | cloudflare_workers_cron_trigger=script_2                                                                               |
+| cloudflare_workers_custom_domain                                   | account         |                                                                                                                        |
+| cloudflare_workers_deployment                                      | account         | cloudflare_workers_deployment=script_2                                                                                 |
+| cloudflare_workers_for_platforms_dispatch_namespace                | account         |                                                                                                                        |
+| cloudflare_workers_kv_namespace                                    | account         |                                                                                                                        |
+| cloudflare_workers_script_subdomain                                | account         | cloudflare_workers_script_subdomain=accounts                                                                           |
+| cloudflare_zero_trust_access_application                           | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_access_custom_page                           | account         |                                                                                                                        |
+| cloudflare_zero_trust_access_group                                 | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_access_identity_provider                     | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_access_infrastructure_target                 | account         |                                                                                                                        |
+| cloudflare_zero_trust_access_key_configuration                     | account         |                                                                                                                        |
+| cloudflare_zero_trust_access_mtls_certificate                      | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_access_mtls_hostname_settings                | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_access_policy                                | account         |                                                                                                                        |
+| cloudflare_zero_trust_access_service_token                         | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_access_short_lived_certificate               | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_access_tag                                   | account         |                                                                                                                        |
+| cloudflare_zero_trust_device_custom_profile                        | account         |                                                                                                                        |
+| cloudflare_zero_trust_device_default_profile                       | account         |                                                                                                                        |
+| cloudflare_zero_trust_device_default_profile_certificates          | zone            |                                                                                                                        |
+| cloudflare_zero_trust_device_default_profile_local_domain_fallback | account         |                                                                                                                        |
+| cloudflare_zero_trust_device_managed_networks                      | account         |                                                                                                                        |
+| cloudflare_zero_trust_device_posture_integration                   | account         |                                                                                                                        |
+| cloudflare_zero_trust_device_posture_rule                          | account         |                                                                                                                        |
+| cloudflare_zero_trust_dex_test                                     | account         |                                                                                                                        |
+| cloudflare_zero_trust_dlp_custom_profile                           | account         | cloudflare_zero_trust_dlp_custom_profile=38f45ad8-476e-4b56-ad16-42f364250802                                          |
+| cloudflare_zero_trust_dlp_dataset                                  | account         |                                                                                                                        |
+| cloudflare_zero_trust_dlp_predefined_profile                       | account         | cloudflare_zero_trust_dlp_predefined_profile=c8932cc4-3312-4152-8041-f3f257122dc4,56a8c060-01bb-4f89-ba1e-3ad42770a342 |
+| cloudflare_zero_trust_dns_location                                 | account         |                                                                                                                        |
+| cloudflare_zero_trust_gateway_certificate                          | account         |                                                                                                                        |
+| cloudflare_zero_trust_gateway_policy                               | account         |                                                                                                                        |
+| cloudflare_zero_trust_gateway_proxy_endpoint                       | account         |                                                                                                                        |
+| cloudflare_zero_trust_gateway_settings                             | account         |                                                                                                                        |
+| cloudflare_zero_trust_list                                         | account         |                                                                                                                        |
+| cloudflare_zero_trust_organization                                 | account or zone |                                                                                                                        |
+| cloudflare_zero_trust_risk_behavior                                | account         |                                                                                                                        |
+| cloudflare_zero_trust_risk_scoring_integration                     | account         |                                                                                                                        |
+| cloudflare_zero_trust_tunnel_cloudflared                           | account         |                                                                                                                        |
+| cloudflare_zero_trust_tunnel_cloudflared_config                    | account         | cloudflare_zero_trust_tunnel_cloudflared_config=285f508d-d6ef-4ce4-9293-983d5bdc269e                                   |
+| cloudflare_zero_trust_tunnel_cloudflared_route                     | account         |                                                                                                                        |
+| cloudflare_zero_trust_tunnel_cloudflared_virtual_network           | account         |                                                                                                                        |
+| cloudflare_zone                                                    | zone            |                                                                                                                        |
+| cloudflare_zone_cache_reserve                                      | zone            |                                                                                                                        |
+| cloudflare_zone_cache_variants                                     | zone            |                                                                                                                        |
+| cloudflare_zone_dnssec                                             | zone            |                                                                                                                        |
+| cloudflare_zone_lockdown                                           | zone            |                                                                                                                        |
+| cloudflare_zone_setting                                            | zone            | cloudflare_zone_setting=always_online,cache_level                                                                      |
 
 
 #### Import
 
 Any resources not listed may have known issues or may not yet support import.
 
-| Resource Type                                           | Identifier Type   | CLI Flags Example                                                  |
-|:--------------------------------------------------------|:------------------|:-------------------------------------------------------------------|
-| cloudflare_account                                      | account           |                                                                    |
-| cloudflare_account_member                               | account           |                                                                    |
-| cloudflare_address_map                                  | account           |                                                                    |
-| cloudflare_api_shield_operation                         | zone              |                                                                    |
-| cloudflare_bot_management                               | zone              |                                                                    |
-| cloudflare_certificate_pack                             | zone              |                                                                    |
-| cloudflare_custom_hostname                              | zone              |                                                                    |
-| cloudflare_custom_hostname_fallback_origin              | zone              |                                                                    |
-| cloudflare_d1_database                                  | account           |                                                                    |
-| cloudflare_dns_firewall                                 | account           |                                                                    |
-| cloudflare_dns_record                                   | zone              |                                                                    |
-| cloudflare_dns_zone_transfers_acl                       | account           |                                                                    |
-| cloudflare_dns_zone_transfers_incoming                  | zone              |                                                                    |
-| cloudflare_dns_zone_transfers_outgoing                  | zone              |                                                                    |
-| cloudflare_dns_zone_transfers_peer                      | account           |                                                                    |
-| cloudflare_dns_zone_transfers_tsig                      | account           |                                                                    |
-| cloudflare_email_routing_address                        | account           |                                                                    |
-| cloudflare_email_routing_catch_all                      | zone              |                                                                    |
-| cloudflare_email_routing_dns                            | zone              |                                                                    |
-| cloudflare_email_routing_rule                           | zone              |                                                                    |
-| cloudflare_email_routing_settings                       | zone              |                                                                    |
-| cloudflare_email_security_block_sender                  | account           |                                                                    |
-| cloudflare_email_security_impersonation_registry        | account           |                                                                    |
-| cloudflare_email_security_trusted_domains               | account           |                                                                    |
-| cloudflare_filter                                       | zone              |                                                                    |
-| cloudflare_healthcheck                                  | zone              |                                                                    |
-| cloudflare_hostname_tls_setting                         | zone              | cloudflare_hostname_tls_setting=ciphers,min_tls_version            |
-| cloudflare_keyless_certificate                          | zone              |                                                                    |
-| cloudflare_list                                         | account           |                                                                    |
-| cloudflare_list_item                                    | account           | cloudflare_list_item=2a4b8b2017aa4b3cb9e1151b52c81d22              |
-| cloudflare_load_balancer                                | zone              |                                                                    |
-| cloudflare_load_balancer_monitor                        | account           |                                                                    |
-| cloudflare_load_balancer_pool                           | account           |                                                                    |
-| cloudflare_logpush_job                                  | account           |                                                                    |
-| cloudflare_managed_transforms                           | zone              |                                                                    |
-| cloudflare_mtls_certificate                             | account           |                                                                    |
-| cloudflare_notification_policy                          | account           |                                                                    |
-| cloudflare_notification_policy_webhooks                 | account           |                                                                    |
-| cloudflare_origin_ca_certificate                        | zone              |                                                                    |
-| cloudflare_page_rule                                    | zone              |                                                                    |
-| cloudflare_page_shield_policy                           | zone              |                                                                    |
-| cloudflare_pages_domain                                 | account           | cloudflare_pages_domain=ykfjmcgpfs                                 |
-| cloudflare_pages_project                                | account           |                                                                    |
-| cloudflare_queue                                        | account           |                                                                    |
-| cloudflare_r2_bucket                                    | account           |                                                                    |
-| cloudflare_r2_custom_domain                             | account           | cloudflare_r2_custom_domain=jb-test-bucket,bnfywlzwpt              |
-| cloudflare_r2_managed_domain                            | account           | cloudflare_r2_managed_domain=jb-test-bucket,bnfywlzwpt             |
-| cloudflare_rate_limit                                   | zone              |                                                                    |
-| cloudflare_regional_hostname                            | zone              |                                                                    |
-| cloudflare_regional_tiered_cache                        | zone              |                                                                    |
-| cloudflare_ruleset                                      | zone              |                                                                    |
-| cloudflare_spectrum_application                         | zone              |                                                                    |
-| cloudflare_tiered_cache                                 | zone              |                                                                    |
-| cloudflare_total_tls                                    | zone              |                                                                    |
-| cloudflare_turnstile_widget                             | account           |                                                                    |
-| cloudflare_url_normalization_settings                   | zone              |                                                                    |
-| cloudflare_waiting_room                                 | zone              |                                                                    |
-| cloudflare_waiting_room_event                           | zone              | cloudflare_waiting_room_event=e7f9e4c190ea8d6c66cab32ac110f39a     |
-| cloudflare_waiting_room_rules                           | zone              | cloudflare_waiting_room_rules=8bbd1b13450f6c63ab6ab4e08a63762d     |
-| cloudflare_waiting_room_settings                        | zone              |                                                                    |
-| cloudflare_web3_hostname                                | zone              |                                                                    |
-| cloudflare_web_analytics_rule                           | account           | cloudflare_web_analytics_rule=2fa89d8f-35f7-49ef-87d3-f24e866a5d5e |
-| cloudflare_web_analytics_site                           | account           |                                                                    |
-| cloudflare_workers_custom_domain                        | account           |                                                                    |
-| cloudflare_workers_for_platforms_dispatch_namespace     | account           |                                                                    |
-| cloudflare_workers_kv_namespace                         | account           |                                                                    |
-| cloudflare_zero_trust_access_application                |
+| Resource Type                                           | Identifier Type | CLI Flags Example                                                  |
+|:--------------------------------------------------------|:----------------|:-------------------------------------------------------------------|
+| cloudflare_account                                      | account         |                                                                    |
+| cloudflare_account_member                               | account         |                                                                    |
+| cloudflare_address_map                                  | account         |                                                                    |
+| cloudflare_api_shield_operation                         | zone            |                                                                    |
+| cloudflare_bot_management                               | zone            |                                                                    |
+| cloudflare_certificate_pack                             | zone            |                                                                    |
+| cloudflare_custom_hostname                              | zone            |                                                                    |
+| cloudflare_custom_hostname_fallback_origin              | zone            |                                                                    |
+| cloudflare_d1_database                                  | account         |                                                                    |
+| cloudflare_dns_firewall                                 | account         |                                                                    |
+| cloudflare_dns_record                                   | zone            |                                                                    |
+| cloudflare_dns_zone_transfers_acl                       | account         |                                                                    |
+| cloudflare_dns_zone_transfers_incoming                  | zone            |                                                                    |
+| cloudflare_dns_zone_transfers_outgoing                  | zone            |                                                                    |
+| cloudflare_dns_zone_transfers_peer                      | account         |                                                                    |
+| cloudflare_dns_zone_transfers_tsig                      | account         |                                                                    |
+| cloudflare_email_routing_address                        | account         |                                                                    |
+| cloudflare_email_routing_catch_all                      | zone            |                                                                    |
+| cloudflare_email_routing_dns                            | zone            |                                                                    |
+| cloudflare_email_routing_rule                           | zone            |                                                                    |
+| cloudflare_email_routing_settings                       | zone            |                                                                    |
+| cloudflare_email_security_block_sender                  | account         |                                                                    |
+| cloudflare_email_security_impersonation_registry        | account         |                                                                    |
+| cloudflare_email_security_trusted_domains               | account         |                                                                    |
+| cloudflare_filter                                       | zone            |                                                                    |
+| cloudflare_healthcheck                                  | zone            |                                                                    |
+| cloudflare_hostname_tls_setting                         | zone            | cloudflare_hostname_tls_setting=ciphers,min_tls_version            |
+| cloudflare_keyless_certificate                          | zone            |                                                                    |
+| cloudflare_list                                         | account         |                                                                    |
+| cloudflare_list_item                                    | account         | cloudflare_list_item=2a4b8b2017aa4b3cb9e1151b52c81d22              |
+| cloudflare_load_balancer                                | zone            |                                                                    |
+| cloudflare_load_balancer_monitor                        | account         |                                                                    |
+| cloudflare_load_balancer_pool                           | account         |                                                                    |
+| cloudflare_logpush_job                                  | account or zone |                                                                    |
+| cloudflare_managed_transforms                           | zone            |                                                                    |
+| cloudflare_mtls_certificate                             | account         |                                                                    |
+| cloudflare_notification_policy                          | account         |                                                                    |
+| cloudflare_notification_policy_webhooks                 | account         |                                                                    |
+| cloudflare_origin_ca_certificate                        | zone            |                                                                    |
+| cloudflare_page_rule                                    | zone            |                                                                    |
+| cloudflare_page_shield_policy                           | zone            |                                                                    |
+| cloudflare_pages_domain                                 | account         | cloudflare_pages_domain=ykfjmcgpfs                                 |
+| cloudflare_pages_project                                | account         |                                                                    |
+| cloudflare_queue                                        | account         |                                                                    |
+| cloudflare_r2_bucket                                    | account         |                                                                    |
+| cloudflare_r2_custom_domain                             | account         | cloudflare_r2_custom_domain=jb-test-bucket,bnfywlzwpt              |
+| cloudflare_r2_managed_domain                            | account         | cloudflare_r2_managed_domain=jb-test-bucket,bnfywlzwpt             |
+| cloudflare_rate_limit                                   | zone            |                                                                    |
+| cloudflare_regional_hostname                            | zone            |                                                                    |
+| cloudflare_regional_tiered_cache                        | zone            |                                                                    |
+| cloudflare_ruleset                                      | account or zone |                                                                    |
+| cloudflare_spectrum_application                         | zone            |                                                                    |
+| cloudflare_tiered_cache                                 | zone            |                                                                    |
+| cloudflare_total_tls                                    | zone            |                                                                    |
+| cloudflare_turnstile_widget                             | account         |                                                                    |
+| cloudflare_url_normalization_settings                   | zone            |                                                                    |
+| cloudflare_waiting_room                                 | zone            |                                                                    |
+| cloudflare_waiting_room_event                           | zone            | cloudflare_waiting_room_event=e7f9e4c190ea8d6c66cab32ac110f39a     |
+| cloudflare_waiting_room_rules                           | zone            | cloudflare_waiting_room_rules=8bbd1b13450f6c63ab6ab4e08a63762d     |
+| cloudflare_waiting_room_settings                        | zone            |                                                                    |
+| cloudflare_web3_hostname                                | zone            |                                                                    |
+| cloudflare_web_analytics_rule                           | account         | cloudflare_web_analytics_rule=2fa89d8f-35f7-49ef-87d3-f24e866a5d5e |
+| cloudflare_web_analytics_site                           | account         |                                                                    |
+| cloudflare_workers_custom_domain                        | account         |                                                                    |
+| cloudflare_workers_for_platforms_dispatch_namespace     | account         |                                                                    |
+| cloudflare_workers_kv_namespace                         | account         |                                                                    |
+| cloudflare_zero_trust_access_application                | account or zone |                                                                    |
 
 ### v4
 

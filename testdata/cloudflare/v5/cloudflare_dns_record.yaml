@@ -104,7 +104,7 @@ interactions:
             "per_page": 100,
             "count": 100,
             "total_count": 193,
-            "total_pages": 2
+            "total_pages": 1
         }
       }
     headers:

@@ -6,9 +6,21 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
   rules = [{
     action = "log_custom_field"
     action_parameters = {
-      cookie_fields   = ["cookie", "fields"]
-      request_fields  = ["request", "fields"]
-      response_fields = ["response", "fields"]
+      cookie_fields = [{
+        name = "cookie"
+        }, {
+        name = "fields"
+      }]
+      request_fields = [{
+        name = "request"
+        }, {
+        name = "fields"
+      }]
+      response_fields = [{
+        name = "response"
+        }, {
+        name = "fields"
+      }]
     }
     description  = "zone"
     enabled      = true

@@ -18,7 +18,9 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
             resolved = false
           }
           query_string = {
-            exclude = ["*"]
+            exclude = {
+              list = ["*"]
+            }
           }
         }
         ignore_query_strings_order = false

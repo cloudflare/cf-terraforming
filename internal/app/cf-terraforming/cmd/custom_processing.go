@@ -302,6 +302,88 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		}
 	case "cloudflare_magic_wan_static_route":
 		denestResponses(response, resourceCount, "routes")
+	case "cloudflare_ruleset":
+		ruleHeaders := map[string][]map[string]interface{}{}
+		for i, ruleset := range *response {
+			if ruleset.(map[string]interface{})["rules"] != nil {
+				for j, rule := range ruleset.(map[string]interface{})["rules"].([]interface{}) {
+					ID := rule.(map[string]interface{})["id"]
+					if ID != nil {
+						headers, exists := ruleHeaders[ID.(string)]
+						if exists {
+							(*response)[i].(map[string]interface{})["rules"].([]interface{})[j].(map[string]interface{})["action_parameters"].(map[string]interface{})["headers"] = headers
+						}
+					}
+				}
+			}
+		}
+
+		// log custom fields specific transformation fields
+		logCustomFieldsTransform := []string{"cookie_fields", "request_fields", "response_fields"}
+
+		for i := 0; i < resourceCount; i++ {
+			rules := (*response)[i].(map[string]interface{})["rules"]
+			if rules != nil {
+				for ruleCounter := range rules.([]interface{}) {
+					// should the `ref` be the default `id`, don't output it
+					// as we don't need to track a computed default.
+					id := rules.([]interface{})[ruleCounter].(map[string]interface{})["id"]
+					ref := rules.([]interface{})[ruleCounter].(map[string]interface{})["ref"]
+					if id == ref {
+						rules.([]interface{})[ruleCounter].(map[string]interface{})["ref"] = nil
+					}
+
+					actionParams := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"]
+					if actionParams != nil {
+						// check for log custom fields that need to be transformed
+						for _, logCustomFields := range logCustomFieldsTransform {
+							// check if the field exists and make sure it has at least one element
+							if actionParams.(map[string]interface{})[logCustomFields] != nil && len(actionParams.(map[string]interface{})[logCustomFields].([]interface{})) > 0 {
+								// Create a new list to store the data in.
+								var newLogCustomFields []interface{}
+								// iterate over each of the keys and add them to a generic list
+								for logCustomFieldsCounter := range actionParams.(map[string]interface{})[logCustomFields].([]interface{}) {
+									newLogCustomFields = append(newLogCustomFields, map[string]interface{}{"name": actionParams.(map[string]interface{})[logCustomFields].([]interface{})[logCustomFieldsCounter].(map[string]interface{})["name"]})
+								}
+								actionParams.(map[string]interface{})[logCustomFields] = newLogCustomFields
+							}
+						}
+
+						// check if our ruleset is of action 'skip'
+						if rules.([]interface{})[ruleCounter].(map[string]interface{})["action"] == "skip" && (*response)[i].(map[string]interface{})["phase"] != "http_request_firewall_managed" {
+							for rule := range actionParams.(map[string]interface{}) {
+								// "rules" is the only map[string][]string we need to remap. The others are all []string and are handled naturally.
+								if rule == "rules" {
+									for key, value := range actionParams.(map[string]interface{})[rule].(map[string]interface{}) {
+										var rulesList []string
+										for _, val := range value.([]interface{}) {
+											rulesList = append(rulesList, val.(string))
+										}
+										actionParams.(map[string]interface{})[rule].(map[string]interface{})[key] = strings.Join(rulesList, ",")
+									}
+								}
+							}
+						}
+
+						// Cache Rules transformation
+						if (*response)[i].(map[string]interface{})["phase"] == "http_request_cache_settings" {
+							if ck, ok := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"]; ok {
+								if c, cok := ck.(map[string]interface{})["custom_key"]; cok {
+									if qs, qok := c.(map[string]interface{})["query_string"]; qok {
+										if s, sok := qs.(map[string]interface{})["include"]; sok && s == "*" {
+											rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["include"] = map[string]interface{}{"list": []string{"*"}}
+										}
+										if s, sok := qs.(map[string]interface{})["exclude"]; sok && s == "*" {
+											rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"].(map[string]interface{})["custom_key"].(map[string]interface{})["query_string"].(map[string]interface{})["exclude"] = map[string]interface{}{"list": []string{"*"}}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -479,4 +561,8 @@ func denestResponses(response *[]interface{}, resourceCount int, nestedAttribute
 	for i := range finalResponse {
 		(*response)[i] = finalResponse[i]
 	}
+}
+
+func processRulesetV5() {
+
 }

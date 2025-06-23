@@ -67,7 +67,7 @@ resource "cloudflare_ruleset" "terraform_managed_resource" {
     action = "skip"
     action_parameters = {
       rules = {
-        "4814384a9e5d4991b9815dcfc25d2f1f" = "37da7855d2f94f69865365d894a556a4,6afe6795ee6a48d6a1dfe59255395a78,5a6f5a57cde8428ab0668ce17cdec0c8,5e4903d6afa841c9b88b96203297003f,2380cd409b604c2a9273042f3eb29c4e,f5aebedc99a14c8d9e8cfa2ce5f94216,edf8c37cc81747d382690b3c77e82ce4,1129dfb383bb42e48466488cf3b37cb1"
+        "4814384a9e5d4991b9815dcfc25d2f1f" = ["37da7855d2f94f69865365d894a556a4", "6afe6795ee6a48d6a1dfe59255395a78", "5a6f5a57cde8428ab0668ce17cdec0c8", "5e4903d6afa841c9b88b96203297003f", "2380cd409b604c2a9273042f3eb29c4e", "f5aebedc99a14c8d9e8cfa2ce5f94216", "edf8c37cc81747d382690b3c77e82ce4", "1129dfb383bb42e48466488cf3b37cb1"]
       }
     }
     description  = "Bypass managed OWSAP SQL Injection rules for /api/v1/identity"

@@ -21,7 +21,7 @@ interactions:
           - go
         X-Stainless-Runtime-Version:
           - go1.23.5
-      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/devices/dex_tests
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/dex/devices/dex_tests
       method: GET
     response:
       body: |

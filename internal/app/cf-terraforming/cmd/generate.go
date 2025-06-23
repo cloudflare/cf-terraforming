@@ -1467,7 +1467,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					return
 				}
 			}
-			fmt.Println(fmt.Sprintf("%+v generated successfully", resourceType))
 			log.WithFields(logrus.Fields{
 				"count":    resourceCount,
 				"resource": resourceType,

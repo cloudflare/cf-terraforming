@@ -562,7 +562,3 @@ func denestResponses(response *[]interface{}, resourceCount int, nestedAttribute
 		(*response)[i] = finalResponse[i]
 	}
 }
-
-func processRulesetV5() {
-
-}

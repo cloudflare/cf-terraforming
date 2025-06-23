@@ -117,6 +117,15 @@ resource "cloudflare_record" "terraform_managed_resource" {
 }
 ```
 
+Some resource require an ID to be passed in to be able to either generate the hcl block or import command. The resources
+which require an id are listed in the table below for the v5 provider. Example usage:
+
+```bash
+cf-terraforming generate \
+  --zone $CLOUDFLARE_ZONE_ID \
+  --resource-type "cloudflare_hostname_tls_setting" \
+  --resource-id "cloudflare_hostname_tls_setting=ciphers"
+```
 ## Prerequisites
 
 - A Cloudflare account with resources defined (e.g. a few zones, some load

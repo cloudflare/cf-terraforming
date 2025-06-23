@@ -225,25 +225,17 @@ func TestResourceGenerationV4(t *testing.T) {
 				return nil
 			})
 
+			apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
+				&http.Client{
+					Transport: r,
+				},
+			))
 			output := ""
-
 			if tc.identiferType == "account" {
 				viper.Set("account", cloudflareTestAccountID)
-				apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
-					&http.Client{
-						Transport: r,
-					},
-				))
-
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--account", cloudflareTestAccountID)
 			} else {
 				viper.Set("zone", cloudflareTestZoneID)
-				apiV0, _ = cfv0.New(viper.GetString("key"), viper.GetString("email"), cfv0.HTTPClient(
-					&http.Client{
-						Transport: r,
-					},
-				))
-
 				output, _ = executeCommandC(rootCmd, "generate", "--resource-type", tc.resourceType, "--zone", cloudflareTestZoneID)
 			}
 

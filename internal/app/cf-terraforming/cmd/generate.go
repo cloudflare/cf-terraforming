@@ -978,7 +978,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 								}
 							}
 						}
-						continue
 					}
 
 					// Make the rules have the correct header structure
@@ -1468,7 +1467,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					return
 				}
 			}
-
+			fmt.Println(fmt.Sprintf("%+v generated successfully", resourceType))
 			log.WithFields(logrus.Fields{
 				"count":    resourceCount,
 				"resource": resourceType,

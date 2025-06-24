@@ -496,7 +496,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 					jsonStructData = newJsonStructData
 					resourceCount = len(jsonStructData)
-
 				case "cloudflare_custom_hostname_fallback_origin":
 					var jsonPayload []cfv0.CustomHostnameFallbackOrigin
 					apiCall, err := apiV0.CustomHostnameFallbackOrigin(context.Background(), zoneID)
@@ -714,7 +713,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 							}
 						}
 					}
-
 				case "cloudflare_load_balancer_pool":
 					jsonPayload, err := apiV0.ListLoadBalancerPools(context.Background(), identifier, cfv0.ListLoadBalancerPoolParams{})
 					if err != nil {
@@ -884,7 +882,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						// Remap match.response.status to match.response.statuses
 						jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["statuses"] = jsonStructData[i].(map[string]interface{})["match"].(map[string]interface{})["response"].(map[string]interface{})["status"]
 					}
-
 				case "cloudflare_record":
 					jsonPayload, _, err := apiV0.ListDNSRecords(context.Background(), identifier, cfv0.ListDNSRecordsParams{})
 					if err != nil {
@@ -978,7 +975,8 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 								}
 							}
 						}
-						continue
+						processCustomCasesV5(&jsonStructData, resourceType, "")
+						goto GEN_HCL
 					}
 
 					// Make the rules have the correct header structure
@@ -1401,7 +1399,6 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					if err != nil {
 						log.Fatal(err)
 					}
-
 				case "cloudflare_zone_settings_override":
 					jsonPayload, err := apiV0.ZoneSettings(context.Background(), zoneID)
 					if err != nil {
@@ -1468,12 +1465,12 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					return
 				}
 			}
-
 			log.WithFields(logrus.Fields{
 				"count":    resourceCount,
 				"resource": resourceType,
 			}).Debug("generating resource output")
 
+		GEN_HCL:
 			// If we don't have any resources to generate, just bail out early.
 			if resourceCount == 0 {
 				fmt.Fprintf(cmd.OutOrStderr(), "no resources of type %q found to generate", resourceType)

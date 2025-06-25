@@ -100,6 +100,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_zone_dnssec":                                   ":zone_id",
 	"cloudflare_zone_lockdown":                                 ":zone_id/:id",
 	"cloudflare_zone_setting":                                  ":zone_id/:id",
+	"cloudflare_zero_trust_access_application":                 ":identifier_type/:identifier_value/:id",
 	"cloudflare_zero_trust_access_custom_page":                 ":account_id/:id",
 	"cloudflare_zero_trust_access_infrastructure_target":       ":account_id/:id",
 	"cloudflare_zero_trust_access_key_configuration":           ":account_id",
@@ -805,13 +806,13 @@ func buildTerraformImportCommand(resourceType, resourceID, endpoint string) stri
 func buildRawImportAddress(resourceType, resourceID, endpoint string) string {
 	if strings.HasPrefix(providerVersionString, "5") {
 		prefix := ""
-		if strings.Contains(endpoint, "{account_or_zone}") {
+		if strings.Contains(endpoint, "{accounts_or_zones}") {
 			if accountID != "" {
 				prefix = "accounts"
-				endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
+				endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
 			} else {
 				prefix = "zones"
-				endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
+				endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
 			}
 		}
 

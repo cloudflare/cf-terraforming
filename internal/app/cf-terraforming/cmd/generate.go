@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"path/filepath"
 	"slices"
 	"sort"
 	"strings"
@@ -53,30 +54,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		zoneID = viper.GetString("zone")
 		accountID = viper.GetString("account")
 		workingDir := viper.GetString("terraform-install-path")
-		execPath := viper.GetString("terraform-binary-path")
-
-		// Download terraform if no existing binary was provided
-		if execPath == "" {
-			tmpDir, err := os.MkdirTemp("", "tfinstall")
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer os.RemoveAll(tmpDir)
-
-			installConstraints, err := version.NewConstraint("~> 1.0")
-			if err != nil {
-				log.Fatal("failed to parse version constraints for installation version")
-			}
-
-			installer := &releases.LatestVersion{
-				Product:     product.Terraform,
-				Constraints: installConstraints,
-			}
-
-			execPath, err = installer.Install(context.Background())
-			if err != nil {
-				log.Fatalf("error installing Terraform: %s", err)
-			}
+		execPath, err := findOrInstallTerraform()
+		if err != nil {
+			log.Fatalf("Could not find or install Terraform: %v", err)
 		}
 
 		// Setup and configure Terraform to operate in the temporary directory where
@@ -1581,4 +1561,87 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 			fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 		}
 	}
+}
+
+func findOrInstallTerraform() (string, error) {
+	// Check if the user has provided an explicit path to the binary. This is the highest priority.
+	if execPath := viper.GetString("terraform-binary-path"); execPath != "" {
+		log.Printf("Using Terraform binary from explicit path: %s", execPath)
+		// Quick check to ensure the file actually exists
+		if _, err := os.Stat(execPath); err != nil {
+			return "", fmt.Errorf("binary specified in 'terraform-binary-path' not found at %s: %w", execPath, err)
+		}
+		return execPath, nil
+	}
+
+	// Determine the persistent installation directory.
+	installPath := viper.GetString("terraform-install-path")
+	if installPath == "" {
+		// If no install path is set, create a sensible default in the user's cache directory.
+		cacheDir, err := os.UserCacheDir()
+		if err != nil {
+			return "", fmt.Errorf("failed to get user cache directory: %w", err)
+		}
+		// Use a subdirectory specific to your application to be a good system citizen.
+		installPath = filepath.Join(cacheDir, viper.GetString("app-name"), "terraform")
+		log.Printf("'terraform-install-path' not set, defaulting to: %s", installPath)
+	}
+	
+	expectedBinaryPath := filepath.Join(installPath, "terraform")
+
+	// Check if the binary already exists in our persistent location.
+	if _, err := os.Stat(expectedBinaryPath); err == nil {
+		log.Printf("Found existing Terraform binary at: %s", expectedBinaryPath)
+		return expectedBinaryPath, nil
+	}
+
+	// If we've reached here, the binary doesn't exist. We need to install it.
+	log.Printf("Terraform not found at %s. Starting download...", expectedBinaryPath)
+
+	// Ensure the target installation directory exists.
+	if err := os.MkdirAll(installPath, 0755); err != nil {
+		return "", fmt.Errorf("failed to create install directory at %s: %w", installPath, err)
+	}
+
+	// Use hc-install to find the latest version matching the constraints.
+	installConstraints, err := version.NewConstraint("~> 1.0")
+	if err != nil {
+		return "", fmt.Errorf("failed to parse version constraints for installation: %w", err)
+	}
+
+	installer := &releases.LatestVersion{
+		Product:     product.Terraform,
+		Constraints: installConstraints,
+		// This library correctly handles installing to a temporary location before
+		// we move it, so we don't need to create our own temp dir.
+	}
+
+	// This installs Terraform to a temporary directory and returns the path.
+	tempExecPath, err := installer.Install(context.Background())
+	if err != nil {
+		return "", fmt.Errorf("error installing Terraform: %w", err)
+	}
+
+	// Move the newly installed binary from its temporary location to our persistent path.
+	log.Printf("Moving Terraform from %s to %s", tempExecPath, expectedBinaryPath)
+	if err = os.Rename(tempExecPath, expectedBinaryPath); err != nil {
+		// Fallback to copy/delete if rename fails (e.g., across different filesystems).
+		// Note: This is a simplified copy; a more robust solution would handle permissions.
+		var input []byte
+		input, err = os.ReadFile(tempExecPath)
+		if err != nil {
+			return "", fmt.Errorf("failed to read temporary binary for copying: %w", err)
+		}
+		if err = os.WriteFile(expectedBinaryPath, input, 0755); err != nil {
+			return "", fmt.Errorf("failed to write binary to persistent location: %w", err)
+		}
+		// Clean up the original
+		err = os.Remove(tempExecPath)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	log.Printf("Terraform installed successfully.")
+	return expectedBinaryPath, nil
 }

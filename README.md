@@ -97,10 +97,6 @@ token: "<token>"
 
 ## Example usage
 
-### Note
-Define `--terraform-binary-path` on the generate command which will ensure we're reusing the installed version of 
-terraform instead of fetching a new one each time.
-
 ```bash
 cf-terraforming generate \
   --zone $CLOUDFLARE_ZONE_ID \
@@ -130,6 +126,10 @@ cf-terraforming generate \
   --resource-type "cloudflare_hostname_tls_setting" \
   --resource-id "cloudflare_hostname_tls_setting=ciphers"
 ```
+
+Define `--terraform-binary-path` on the generate command which will ensure we're reusing the installed version of
+terraform instead of fetching a new one each time, if you're seeing issues.
+
 ## Prerequisites
 
 - A Cloudflare account with resources defined (e.g. a few zones, some load

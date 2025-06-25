@@ -97,6 +97,10 @@ token: "<token>"
 
 ## Example usage
 
+### Note
+Define `--terraform-binary-path` on the generate command which will ensure we're reusing the installed version of 
+terraform instead of fetching a new one each time.
+
 ```bash
 cf-terraforming generate \
   --zone $CLOUDFLARE_ZONE_ID \

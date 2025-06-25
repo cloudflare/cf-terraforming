@@ -1566,7 +1566,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 func findOrInstallTerraform() (string, error) {
 	// Check if the user has provided an explicit path to the binary. This is the highest priority.
 	if execPath := viper.GetString("terraform-binary-path"); execPath != "" {
-		log.Printf("Using Terraform binary from explicit path: %s", execPath)
+		log.Debugf("Using Terraform binary from explicit path: %s", execPath)
 		// Quick check to ensure the file actually exists
 		if _, err := os.Stat(execPath); err != nil {
 			return "", fmt.Errorf("binary specified in 'terraform-binary-path' not found at %s: %w", execPath, err)
@@ -1584,19 +1584,18 @@ func findOrInstallTerraform() (string, error) {
 		}
 		// Use a subdirectory specific to your application to be a good system citizen.
 		installPath = filepath.Join(cacheDir, viper.GetString("app-name"), "terraform")
-		log.Printf("'terraform-install-path' not set, defaulting to: %s", installPath)
+		log.Debugf("'terraform-install-path' not set, defaulting to: %s", installPath)
 	}
-	
 	expectedBinaryPath := filepath.Join(installPath, "terraform")
 
 	// Check if the binary already exists in our persistent location.
 	if _, err := os.Stat(expectedBinaryPath); err == nil {
-		log.Printf("Found existing Terraform binary at: %s", expectedBinaryPath)
+		log.Debugf("Found existing Terraform binary at: %s", expectedBinaryPath)
 		return expectedBinaryPath, nil
 	}
 
 	// If we've reached here, the binary doesn't exist. We need to install it.
-	log.Printf("Terraform not found at %s. Starting download...", expectedBinaryPath)
+	log.Debugf("Terraform not found at %s. Starting download...", expectedBinaryPath)
 
 	// Ensure the target installation directory exists.
 	if err := os.MkdirAll(installPath, 0755); err != nil {
@@ -1623,7 +1622,7 @@ func findOrInstallTerraform() (string, error) {
 	}
 
 	// Move the newly installed binary from its temporary location to our persistent path.
-	log.Printf("Moving Terraform from %s to %s", tempExecPath, expectedBinaryPath)
+	log.Debugf("Moving Terraform from %s to %s", tempExecPath, expectedBinaryPath)
 	if err = os.Rename(tempExecPath, expectedBinaryPath); err != nil {
 		// Fallback to copy/delete if rename fails (e.g., across different filesystems).
 		// Note: This is a simplified copy; a more robust solution would handle permissions.
@@ -1642,6 +1641,6 @@ func findOrInstallTerraform() (string, error) {
 		}
 	}
 
-	log.Printf("Terraform installed successfully.")
+	log.Debugf("Terraform installed successfully.")
 	return expectedBinaryPath, nil
 }

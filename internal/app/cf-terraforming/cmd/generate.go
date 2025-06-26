@@ -1487,8 +1487,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 							id = structData["id"].(string)
 						}
 					}
-
-					resourceID = fmt.Sprintf("terraform_managed_resource_%s", id)
+					resourceID = fmt.Sprintf("terraform_managed_resource_%s_%d", id, i)
 				}
 				resource := rootBody.AppendNewBlock("resource", []string{resourceType, resourceID}).Body()
 

@@ -518,6 +518,53 @@ Any resources not listed are currently not supported.
 | [cloudflare_zone_lockdown](https://www.terraform.io/docs/providers/cloudflare/r/zone_lockdown)                                                   | Zone            | ✅                 | ✅               |
 | [cloudflare_zone_settings_override](https://www.terraform.io/docs/providers/cloudflare/r/zone_settings_override)                                 | Zone            | ✅                 | ❌               |
 
+## Build cf-terraforming Locally
+
+### Quickstart
+A quick and easy way to get it installed in the directory you’re currently working in is to run the following command.
+
+```bash
+GOBIN=$(pwd) go install -v github.com/cloudflare/cf-terraforming/cmd/cf-terraforming@master
+```
+
+### Manual Build
+#### Step 1: Clone the Repository
+To clone the cf-terraforming repository from GitHub, run the following command:
+
+```bash
+git clone https://github.com/cloudflare/cf-terraforming.git
+cd cf-terraforming
+```
+
+#### Step 2: Build cf-terraforming
+To build cf-terraforming locally, run the following command in the terminal:
+
+```bash
+go build -o cf-terraforming ./cmd/cf-terraforming
+```
+This will compile the source code and create an executable named `cf-terraforming` in the directory you’re currently in.
+Once the binary is built, you can run the following command to run cf-terraforming directly from the directory where 
+the binary was built.
+
+```bash
+./cf-terraforming --help
+```
+
+
+### Step 3: Add to PATH (Optional)
+The following is completely optional and might differ depending on the OS you’re on.
+To make `cf-terraforming` globally accessible from the terminal, move it to a directory included in your $PATH. 
+For example, you can move it to `/usr/local/bin/`
+
+```bash
+sudo mv cf-terraforming /usr/local/bin/
+```
+You can also verify if the command is in your $PATH by typing:
+
+```bash
+cf-terraforming --help
+```
+
 ## Testing
 
 To ensure changes don't introduce regressions this tool uses an automated test

@@ -6,16 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"regexp"
 	"strings"
 	"time"
 
 	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4/option"
-	"github.com/hashicorp/go-version"
-	"github.com/hashicorp/hc-install/product"
-	"github.com/hashicorp/hc-install/releases"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	"github.com/hashicorp/terraform-exec/tfexec"
 	"github.com/sirupsen/logrus"
@@ -100,6 +96,7 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_zone_dnssec":                                   ":zone_id",
 	"cloudflare_zone_lockdown":                                 ":zone_id/:id",
 	"cloudflare_zone_setting":                                  ":zone_id/:id",
+	"cloudflare_zero_trust_access_application":                 ":identifier_type/:identifier_value/:id",
 	"cloudflare_zero_trust_access_custom_page":                 ":account_id/:id",
 	"cloudflare_zero_trust_access_infrastructure_target":       ":account_id/:id",
 	"cloudflare_zero_trust_access_key_configuration":           ":account_id",
@@ -143,30 +140,9 @@ func runImport() func(cmd *cobra.Command, args []string) {
 		zoneID = viper.GetString("zone")
 		accountID = viper.GetString("account")
 		workingDir := viper.GetString("terraform-install-path")
-		execPath := viper.GetString("terraform-binary-path")
-
-		// Download terraform if no existing binary was provided
-		if execPath == "" {
-			tmpDir, err := os.MkdirTemp("", "tfinstall")
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer os.RemoveAll(tmpDir)
-
-			installConstraints, err := version.NewConstraint("~> 1.0")
-			if err != nil {
-				log.Fatal("failed to parse version constraints for installation version")
-			}
-
-			installer := &releases.LatestVersion{
-				Product:     product.Terraform,
-				Constraints: installConstraints,
-			}
-
-			execPath, err = installer.Install(context.Background())
-			if err != nil {
-				log.Fatalf("error installing Terraform: %s", err)
-			}
+		execPath, err := findOrInstallTerraform()
+		if err != nil {
+			log.Fatalf("Could not find or install Terraform: %v", err)
 		}
 
 		// Setup and configure Terraform to operate in the temporary directory where
@@ -805,13 +781,13 @@ func buildTerraformImportCommand(resourceType, resourceID, endpoint string) stri
 func buildRawImportAddress(resourceType, resourceID, endpoint string) string {
 	if strings.HasPrefix(providerVersionString, "5") {
 		prefix := ""
-		if strings.Contains(endpoint, "{account_or_zone}") {
+		if strings.Contains(endpoint, "{accounts_or_zones}") {
 			if accountID != "" {
 				prefix = "accounts"
-				endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
+				endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
 			} else {
 				prefix = "zones"
-				endpoint = strings.Replace(endpoint, "/{account_or_zone}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
+				endpoint = strings.Replace(endpoint, "/{accounts_or_zones}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
 			}
 		}
 

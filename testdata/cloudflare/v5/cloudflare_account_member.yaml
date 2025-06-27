@@ -3,7 +3,7 @@ version: 1
 interactions:
   - request:
       body: ""
-      form: {}
+      form: { }
       headers:
         Accept:
           - application/json
@@ -95,7 +95,131 @@ interactions:
            "result_info":{
               "page":1,
               "per_page":15,
-              "total_pages":2,
+              "total_pages":3,
+              "count":15,
+              "total_count":18
+           },
+           "success":true,
+           "errors":[
+
+           ],
+           "messages":[
+
+           ]
+        }
+      headers:
+        Allow:
+          - GET, POST
+        Cache-Control:
+          - private,no-cache,no-store
+        Cf-Auditlog-Id:
+          - 01951b40-03ef-736b-b60f-86e9bf38f85c
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Pragma:
+          - no-cache
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/members?page=2
+      method: GET
+    response:
+      body: |
+        {
+           "result":[
+              {
+                 "id":"9ad9fa82d0ca4f4da16d8869b062892b",
+                 "user":{
+                    "id":"fffe8afdb4bd5b94c5b093a23a741135",
+                    "first_name":"John",
+                    "last_name":"doe",
+                    "email":"jdoe@cloudflare.com",
+                    "two_factor_authentication_enabled":true
+                 },
+                 "status":"accepted",
+                 "api_access_enabled":null,
+                 "policies":[
+                    {
+                       "id":"aa0fe1963f8f49c8a4f2d73314146e23",
+                       "access":"allow",
+                       "permission_groups":[
+                          {
+                             "id":"8e23b19e4e0d44c29d239c5688ba8cbb",
+                             "name":"Super Administrator - All Privileges",
+                             "meta":{
+                                "description":"Can edit any Cloudflare setting, make purchases, update billing, and manage memberships. Super Administrators can revoke the access of other Super Administrators.",
+                                "editable":"false",
+                                "label":"all_privileges",
+                                "scopes":"com.cloudflare.api.account"
+                             }
+                          }
+                       ],
+                       "resource_groups":[
+                          {
+                             "id":"68dfcdfb261c4d48aa75ec0e5413f2c3",
+                             "name":"com.cloudflare.api.account.f037e56e89293a057740de681ac9abbe",
+                             "meta":{
+                                "editable":"false"
+                             },
+                             "scope":{
+                                "key":"com.cloudflare.api.account.f037e56e89293a057740de681ac9abbe",
+                                "objects":[
+                                   {
+                                      "key":"*"
+                                   }
+                                ]
+                             }
+                          }
+                       ]
+                    }
+                 ],
+                 "roles":[
+                    {
+                       "id":"33666b9c79b9a5273fc7344ff42f953d",
+                       "name":"Super Administrator - All Privileges",
+                       "description":"Can edit any Cloudflare setting, make purchases, update billing, and manage memberships. Super Administrators can revoke the access of other Super Administrators.",
+                       "permissions":{
+                          "access":{
+                             "edit":true,
+                             "read":true
+                          },
+                          "analytics":{
+                             "edit":false,
+                             "read":true
+                          }                        
+                       }
+                    }
+                 ]
+              }            
+           ],
+           "result_info":{
+              "page":2,
+              "per_page":15,
+              "total_pages":3,
               "count":15,
               "total_count":18
            },
@@ -105,6 +229,130 @@ interactions:
            ],
            "messages":[
         
+           ]
+        }
+      headers:
+        Allow:
+          - GET, POST
+        Cache-Control:
+          - private,no-cache,no-store
+        Cf-Auditlog-Id:
+          - 01951b40-03ef-736b-b60f-86e9bf38f85c
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Pragma:
+          - no-cache
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: { }
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/members?page=3
+      method: GET
+    response:
+      body: |
+        {
+           "result":[
+              {
+                 "id":"9ad9fa82d0ca4f4da16d8869b062892b",
+                 "user":{
+                    "id":"fffe8afdb4bd5b94c5b093a23a741135",
+                    "first_name":"John",
+                    "last_name":"doe",
+                    "email":"jdoe@cloudflare.com",
+                    "two_factor_authentication_enabled":true
+                 },
+                 "status":"accepted",
+                 "api_access_enabled":null,
+                 "policies":[
+                    {
+                       "id":"aa0fe1963f8f49c8a4f2d73314146e23",
+                       "access":"allow",
+                       "permission_groups":[
+                          {
+                             "id":"8e23b19e4e0d44c29d239c5688ba8cbb",
+                             "name":"Super Administrator - All Privileges",
+                             "meta":{
+                                "description":"Can edit any Cloudflare setting, make purchases, update billing, and manage memberships. Super Administrators can revoke the access of other Super Administrators.",
+                                "editable":"false",
+                                "label":"all_privileges",
+                                "scopes":"com.cloudflare.api.account"
+                             }
+                          }
+                       ],
+                       "resource_groups":[
+                          {
+                             "id":"68dfcdfb261c4d48aa75ec0e5413f2c3",
+                             "name":"com.cloudflare.api.account.f037e56e89293a057740de681ac9abbe",
+                             "meta":{
+                                "editable":"false"
+                             },
+                             "scope":{
+                                "key":"com.cloudflare.api.account.f037e56e89293a057740de681ac9abbe",
+                                "objects":[
+                                   {
+                                      "key":"*"
+                                   }
+                                ]
+                             }
+                          }
+                       ]
+                    }
+                 ],
+                 "roles":[
+                    {
+                       "id":"33666b9c79b9a5273fc7344ff42f953d",
+                       "name":"Super Administrator - All Privileges",
+                       "description":"Can edit any Cloudflare setting, make purchases, update billing, and manage memberships. Super Administrators can revoke the access of other Super Administrators.",
+                       "permissions":{
+                          "access":{
+                             "edit":true,
+                             "read":true
+                          },
+                          "analytics":{
+                             "edit":false,
+                             "read":true
+                          }                        
+                       }
+                    }
+                 ]
+              }            
+           ],
+           "result_info":{
+              "page":3,
+              "per_page":15,
+              "total_pages":3,
+              "count":15,
+              "total_count":18
+           },
+           "success":true,
+           "errors":[
+
+           ],
+           "messages":[
+
            ]
         }
       headers:

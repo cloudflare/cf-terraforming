@@ -489,6 +489,7 @@ Any resources not listed are currently not supported.
 | [cloudflare_logpush_job](https://www.terraform.io/docs/providers/cloudflare/r/logpush_job)                                                       | Zone            | ✅                 | ❌               |
 | [cloudflare_logpush_ownership_challenge](https://www.terraform.io/docs/providers/cloudflare/r/logpush_ownership_challenge)                       | Zone            | ❌                 | ❌               |
 | [cloudflare_magic_firewall_ruleset](https://www.terraform.io/docs/providers/cloudflare/r/magic_firewall_ruleset)                                 | Account         | ❌                 | ❌               |
+| [cloudflare_managed_headers](https://www.terraform.io/docs/providers/cloudflare/r/managed_headers)                                               | Zone            | ✅                 | ❌               |
 | [cloudflare_origin_ca_certificate](https://www.terraform.io/docs/providers/cloudflare/r/origin_ca_certificate)                                   | Zone            | ✅                 | ✅               |
 | [cloudflare_page_rule](https://www.terraform.io/docs/providers/cloudflare/r/page_rule)                                                           | Zone            | ✅                 | ✅               |
 | [cloudflare_rate_limit](https://www.terraform.io/docs/providers/cloudflare/r/rate_limit)                                                         | Zone            | ✅                 | ✅               |

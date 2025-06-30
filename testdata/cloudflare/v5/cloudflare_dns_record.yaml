@@ -28,6 +28,26 @@ interactions:
       {
         "result": [
           {
+              "comment": null,
+              "content": "1 . alpn=\"h2\"",
+              "created_on": "2025-05-21T21:28:00.865156Z",
+              "data": {
+                "priority": 1,
+                "target": ".",
+                "value": "alpn=\"h2\""
+              },
+              "id": "50482cd5681fbda79e55b5ba7be67d89",
+              "meta": {},
+              "modified_on": "2025-05-21T21:28:00.865156Z",
+              "name": "bryzmhjmhl.terraform.cfapi.net",
+              "proxiable": false,
+              "proxied": false,
+              "settings": {},
+              "tags": [],
+              "ttl": 300,
+              "type": "HTTPS"
+          },
+          {
               "id": "b0f691dc77d6f468f758f26eb7a81cd2",
               "zone_id": "0da42c8d2132a9ddaf714f9e7c920711",
               "zone_name": "example.com",

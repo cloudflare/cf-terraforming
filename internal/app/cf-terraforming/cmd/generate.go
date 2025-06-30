@@ -885,6 +885,9 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						if jsonStructData[i].(map[string]interface{})["name"].(string) != zone.Name {
 							jsonStructData[i].(map[string]interface{})["name"] = strings.ReplaceAll(jsonStructData[i].(map[string]interface{})["name"].(string), "."+zone.Name, "")
 						}
+						if _, hasData := jsonStructData[i].(map[string]interface{})["data"]; hasData {
+							jsonStructData[i].(map[string]interface{})["content"] = nil
+						}
 					}
 				case "cloudflare_ruleset":
 					jsonPayload, err := apiV0.ListRulesets(context.Background(), identifier, cfv0.ListRulesetsParams{})

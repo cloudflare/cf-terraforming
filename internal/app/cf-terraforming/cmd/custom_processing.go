@@ -384,6 +384,12 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 				}
 			}
 		}
+	case "cloudflare_dns_record":
+		for i := 0; i < resourceCount; i++ {
+			if _, hasData := (*response)[i].(map[string]interface{})["data"]; hasData {
+				delete((*response)[i].(map[string]interface{}), "content")
+			}
+		}
 	}
 }
 

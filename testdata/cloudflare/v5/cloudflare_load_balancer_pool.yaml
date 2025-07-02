@@ -33,7 +33,10 @@ interactions:
                 "address": "example.com",
                 "enabled": true,
                 "name": "example-1",
-                "weight": 1
+                "weight": 1,
+                "header":{
+                  "host": ["origin_address"]
+                }
               }
             ]
           },

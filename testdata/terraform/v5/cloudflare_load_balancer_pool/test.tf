@@ -6,8 +6,11 @@ resource "cloudflare_load_balancer_pool" "terraform_managed_resource_0" {
   origins = [{
     address = "example.com"
     enabled = true
-    name    = "example-1"
-    weight  = 1
+    header = {
+      host = ["origin_address"]
+    }
+    name   = "example-1"
+    weight = 1
   }]
 }
 

@@ -725,7 +725,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 		importFile := hclwrite.NewEmptyFile()
 		importBody := importFile.Body()
-		for _, data := range jsonStructData {
+		for i, data := range jsonStructData {
 			var id string
 
 			if data.(map[string]interface{})["id"] == nil {
@@ -747,11 +747,11 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if useModernImportBlock {
 				idvalue := buildRawImportAddress(resourceType, id, resourceToEndpoint[resourceType]["get"])
 				imp := importBody.AppendNewBlock("import", []string{}).Body()
-				imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%s", terraformResourceNamePrefix, id))))
+				imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%d", terraformResourceNamePrefix, i))))
 				imp.SetAttributeValue("id", cty.StringVal(idvalue))
 				importFile.Body().AppendNewline()
 			} else {
-				_, _ = fmt.Fprint(cmd.OutOrStdout(), buildTerraformImportCommand(resourceType, id, resourceToEndpoint[resourceType]["get"]))
+				_, _ = fmt.Fprint(cmd.OutOrStdout(), buildTerraformImportCommand(i, resourceType, id, resourceToEndpoint[resourceType]["get"]))
 			}
 		}
 
@@ -769,9 +769,9 @@ func runImport() func(cmd *cobra.Command, args []string) {
 // value that is compatible with `terraform import`.
 //
 // Note: `endpoint` is only used on > v4. Otherwise, it is ignored.
-func buildTerraformImportCommand(resourceType, resourceID, endpoint string) string {
+func buildTerraformImportCommand(i int, resourceType, resourceID, endpoint string) string {
 	resourceImportAddress := buildRawImportAddress(resourceType, resourceID, endpoint)
-	return fmt.Sprintf("%s %s.%s_%s %s\n", terraformImportCmdPrefix, resourceType, terraformResourceNamePrefix, resourceID, resourceImportAddress)
+	return fmt.Sprintf("%s %s.%s %s\n", terraformImportCmdPrefix, resourceType, fmt.Sprintf("%s_%d", terraformResourceNamePrefix, i), resourceImportAddress)
 }
 
 // buildRawImportAddress takes the resourceType and resourceID in order to look up

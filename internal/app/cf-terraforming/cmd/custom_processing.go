@@ -75,9 +75,9 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 				delete(customCert.(map[string]interface{}), "updated_at")
 			}
 			blockPage, ok := settings.(map[string]interface{})["block_page"]
-			if ok {
-				mode := blockPage.(map[string]interface{})["mode"]
-				if mode.(string) == "" {
+			if ok && blockPage != nil {
+				mode, ok := blockPage.(map[string]interface{})["mode"]
+				if ok && mode.(string) == "" {
 					delete(blockPage.(map[string]interface{}), "mode")
 				}
 			}
@@ -388,6 +388,20 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		for i := 0; i < resourceCount; i++ {
 			if _, hasData := (*response)[i].(map[string]interface{})["data"]; hasData {
 				delete((*response)[i].(map[string]interface{}), "content")
+			}
+		}
+	case "cloudflare_web_analytics_site":
+		for i := 0; i < resourceCount; i++ {
+			if rs, hasRuleSet := (*response)[i].(map[string]interface{})["ruleset"]; hasRuleSet {
+				if enabled, ok := rs.(map[string]interface{})["enabled"]; ok {
+					(*response)[i].(map[string]interface{})["enabled"] = enabled
+				}
+				if zoneTag, ok := rs.(map[string]interface{})["zone_tag"]; ok {
+					(*response)[i].(map[string]interface{})["zone_tag"] = zoneTag
+				}
+				if lite, ok := rs.(map[string]interface{})["lite"]; ok {
+					(*response)[i].(map[string]interface{})["lite"] = lite
+				}
 			}
 		}
 	}

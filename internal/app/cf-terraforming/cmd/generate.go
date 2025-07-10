@@ -93,7 +93,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 		log.WithFields(logrus.Fields{
 			"version":  providerVersionString,
 			"registry": registryPath,
-		}).Debug("detected provider")
+		}).Info("detected provider")
 
 		log.Debug("reading Terraform schema")
 		ps, err := tf.ProvidersSchema(context.Background())
@@ -141,7 +141,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 				if resourceToEndpoint[resourceType]["list"] == "" && resourceToEndpoint[resourceType]["get"] == "" {
 					log.WithFields(logrus.Fields{
 						"resource": resourceType,
-					}).Debug("did not find API endpoint. does it exist in the mapping?")
+					}).Warn("Unsupported terraform v5 provider resource")
 					continue
 				}
 
@@ -1560,7 +1560,7 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 
 			postProcess(f, resourceType)
 			tfOutput := string(hclwrite.Format(f.Bytes()))
-			fmt.Fprint(cmd.OutOrStdout(), tfOutput)
+			_, _ = fmt.Fprint(cmd.OutOrStdout(), tfOutput)
 		}
 	}
 }
@@ -1568,17 +1568,21 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 func findOrInstallTerraform() (string, error) {
 	// Check if the user has provided an explicit path to the binary. This is the highest priority.
 	if execPath := viper.GetString("terraform-binary-path"); execPath != "" {
-		log.Debugf("Using Terraform binary from explicit path: %s", execPath)
+		log.WithFields(logrus.Fields{
+			"terraform-binary-path": execPath,
+		}).Info("Using Terraform binary from explicit path")
 		// Quick check to ensure the file actually exists
 		if _, err := os.Stat(execPath); err != nil {
 			return "", fmt.Errorf("binary specified in 'terraform-binary-path' not found at %s: %w", execPath, err)
 		}
 		return execPath, nil
 	}
+	log.Info("terraform-binary-path flag not set")
 
 	// Determine the persistent installation directory.
 	installPath := viper.GetString("terraform-install-path")
 	if installPath == "" {
+		log.Info("terraform-install-path flag not set")
 		// If no install path is set, create a sensible default in the user's cache directory.
 		cacheDir, err := os.UserCacheDir()
 		if err != nil {
@@ -1588,6 +1592,9 @@ func findOrInstallTerraform() (string, error) {
 		installPath = filepath.Join(cacheDir, viper.GetString("app-name"), "terraform")
 		log.Debugf("'terraform-install-path' not set, defaulting to: %s", installPath)
 	}
+	log.WithFields(logrus.Fields{
+		"terraform-install-path": installPath,
+	}).Info("Using explicit Terraform install path")
 	expectedBinaryPath := filepath.Join(installPath, "terraform")
 
 	// Check if the binary already exists in our persistent location.

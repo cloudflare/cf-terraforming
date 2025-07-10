@@ -747,7 +747,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			if useModernImportBlock {
 				idvalue := buildRawImportAddress(resourceType, id, resourceToEndpoint[resourceType]["get"])
 				imp := importBody.AppendNewBlock("import", []string{}).Body()
-				imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%d", terraformResourceNamePrefix, i))))
+				imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%s_%d", terraformResourceNamePrefix, id, i))))
 				imp.SetAttributeValue("id", cty.StringVal(idvalue))
 				importFile.Body().AppendNewline()
 			} else {
@@ -771,7 +771,7 @@ func runImport() func(cmd *cobra.Command, args []string) {
 // Note: `endpoint` is only used on > v4. Otherwise, it is ignored.
 func buildTerraformImportCommand(i int, resourceType, resourceID, endpoint string) string {
 	resourceImportAddress := buildRawImportAddress(resourceType, resourceID, endpoint)
-	return fmt.Sprintf("%s %s.%s %s\n", terraformImportCmdPrefix, resourceType, fmt.Sprintf("%s_%d", terraformResourceNamePrefix, i), resourceImportAddress)
+	return fmt.Sprintf("%s %s.%s %s\n", terraformImportCmdPrefix, resourceType, fmt.Sprintf("%s_%s_%d", terraformResourceNamePrefix, resourceID, i), resourceImportAddress)
 }
 
 // buildRawImportAddress takes the resourceType and resourceID in order to look up

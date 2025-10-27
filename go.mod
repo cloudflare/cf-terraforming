@@ -6,7 +6,7 @@ toolchain go1.24.0
 
 require (
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
-	github.com/cloudflare/cloudflare-go v0.115.0
+	github.com/cloudflare/cloudflare-go v0.116.0
 	github.com/cloudflare/cloudflare-go/v4 v4.4.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/hashicorp/go-version v1.7.0

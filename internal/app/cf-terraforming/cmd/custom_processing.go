@@ -132,6 +132,8 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		addAttributeKeyValue(response, resourceCount, "setting_id", pathParam)
 	case "cloudflare_registrar_domain":
 		remapProperty(response, resourceCount, "name", "domain_name")
+	case "cloudflare_zero_trust_tunnel_cloudflared_config":
+		remapProperty(response, resourceCount, "tunnel_id", "id")
 	case "cloudflare_r2_managed_domain":
 		addAttributeKeyValue(response, resourceCount, "bucket_name", pathParam)
 	case "cloudflare_r2_custom_domain":

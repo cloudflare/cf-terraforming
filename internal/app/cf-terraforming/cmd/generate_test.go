@@ -347,6 +347,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare ruleset (override remapping = disabled)": {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_override_remapping_disabled"},
 		"cloudflare ruleset (override remapping = enabled)":  {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_override_remapping_enabled"},
 		"cloudflare ruleset (rewrite to empty query string)": {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_rewrite_to_empty_query_parameter"},
+		"cloudflare ruleset (empty rules to rulesets)":       {identiferType: "account", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_empty_rules_to_rulesets"},
 		"cloudflare ruleset":                                 {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset"},
 		"cloudflare stream":                                  {identiferType: "account", resourceType: "cloudflare_stream", testdataFilename: "cloudflare_stream"},
 		"cloudflare stream keys":                             {identiferType: "account", resourceType: "cloudflare_stream_key", testdataFilename: "cloudflare_stream_key"},

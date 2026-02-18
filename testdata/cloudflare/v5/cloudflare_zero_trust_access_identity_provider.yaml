@@ -35,12 +35,6 @@ interactions:
               },
               "id": "df769912-7f47-4faf-a58f-8cb669ee95c3",
               "name": "Widget Corps IDP",
-              "scim_config": {
-                "enabled": false,
-                "group_member_deprovision": false,
-                "seat_deprovision": false,
-                "user_deprovision": false
-              },
               "type": "onetimepin",
               "uid": "df769912-7f47-4faf-a58f-8cb669ee95c3",
               "version": "1a380549c849da39dcce7e876084c7e6"

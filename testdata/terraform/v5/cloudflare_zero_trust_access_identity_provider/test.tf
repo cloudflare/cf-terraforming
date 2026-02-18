@@ -3,12 +3,6 @@ resource "cloudflare_zero_trust_access_identity_provider" "terraform_managed_res
   type    = "onetimepin"
   zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
   config  = {}
-  scim_config = {
-    enabled                  = false
-    group_member_deprovision = false
-    seat_deprovision         = false
-    user_deprovision         = false
-  }
 }
 
 resource "cloudflare_zero_trust_access_identity_provider" "terraform_managed_resource_1" {

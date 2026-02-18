@@ -30,7 +30,9 @@ interactions:
             {
               "created_on": "2025-01-28T03:10:38Z",
               "modified_on": "2025-01-28T03:10:38Z",
-              "snippet_name": "example_snippet"
+              "snippet_name": "example_snippet",
+              "main_module": "main.js",
+              "files": []
             }
           ],
           "result_info": {

@@ -48,9 +48,6 @@ interactions:
               "name": "gpfqbfyfcx",
               "options_preflight_bypass": false,
               "policies": [],
-              "self_hosted_domains": [
-                "gpfqbfyfcx.terraform.cfapi.net"
-              ],
               "session_duration": "24h",
               "tags": [],
               "type": "self_hosted",

@@ -4,7 +4,6 @@ resource "cloudflare_zero_trust_dex_test" "terraform_managed_resource_0" {
   enabled     = true
   interval    = "0h30m0s"
   name        = "qmktnyxzho"
-  targeted    = false
   data = {
     host = "1.1.1.1"
     kind = "traceroute"
@@ -18,7 +17,6 @@ resource "cloudflare_zero_trust_dex_test" "terraform_managed_resource_1" {
   enabled     = true
   interval    = "0h30m0s"
   name        = "aibzxpxpyl"
-  targeted    = false
   data = {
     host = "foo.cloudflare.com"
     kind = "traceroute"

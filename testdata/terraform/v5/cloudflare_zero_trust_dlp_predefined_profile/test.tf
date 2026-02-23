@@ -4,12 +4,6 @@ resource "cloudflare_zero_trust_dlp_predefined_profile" "terraform_managed_resou
   allowed_match_count = 0
   ocr_enabled         = false
   profile_id          = "c8932cc4-3312-4152-8041-f3f257122dc4"
-  context_awareness = {
-    enabled = false
-    skip = {
-      files = false
-    }
-  }
   entries = [{
     confidence = {
       ai_context_available = true
@@ -69,12 +63,6 @@ resource "cloudflare_zero_trust_dlp_predefined_profile" "terraform_managed_resou
   allowed_match_count = 0
   ocr_enabled         = false
   profile_id          = "56a8c060-01bb-4f89-ba1e-3ad42770a342"
-  context_awareness = {
-    enabled = false
-    skip = {
-      files = false
-    }
-  }
   entries = [{
     confidence = {
       ai_context_available = true

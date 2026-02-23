@@ -8,7 +8,6 @@ resource "cloudflare_zero_trust_access_application" "terraform_managed_resource"
   http_only_cookie_attribute = true
   name                       = "gpfqbfyfcx"
   options_preflight_bypass   = false
-  self_hosted_domains        = ["gpfqbfyfcx.terraform.cfapi.net"]
   session_duration           = "24h"
   tags                       = []
   type                       = "self_hosted"

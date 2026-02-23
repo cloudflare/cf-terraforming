@@ -186,6 +186,43 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 					}
 					resourceCount = len(jsonStructData)
 				}
+
+				// Transform flat structure to nested body structure for cloudflare_filter
+				if resourceType == "cloudflare_filter" {
+					for i := 0; i < resourceCount; i++ {
+						filterData := jsonStructData[i].(map[string]interface{})
+
+						// Create body array with filter attributes
+						body := map[string]interface{}{
+							"expression": filterData["expression"],
+							"paused":     filterData["paused"],
+						}
+
+						// Set body as an array
+						filterData["body"] = []interface{}{body}
+
+						// Remove individual attributes from top level
+						delete(filterData, "expression")
+						delete(filterData, "paused")
+					}
+				}
+
+				// Remove extra fields from rate_plan for cloudflare_account_subscription
+				if resourceType == "cloudflare_account_subscription" {
+					for i := 0; i < resourceCount; i++ {
+						subscriptionData := jsonStructData[i].(map[string]interface{})
+
+						if ratePlan, ok := subscriptionData["rate_plan"].(map[string]interface{}); ok {
+							// Keep only id and scope, remove all other fields
+							cleanedRatePlan := map[string]interface{}{
+								"id":    ratePlan["id"],
+								"scope": ratePlan["scope"],
+							}
+							subscriptionData["rate_plan"] = cleanedRatePlan
+						}
+					}
+				}
+
 			} else {
 				var identifier *cfv0.ResourceContainer
 				if accountID != "" {

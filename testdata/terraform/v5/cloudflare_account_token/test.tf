@@ -4,9 +4,7 @@ resource "cloudflare_account_token" "vpd-tests" {
   policies = [
     {
       effect = "allow"
-      resources = {
-        "com.cloudflare.api.account.a67e14daa5f8dceeb91fe5449ba496eb" = "*"
-      }
+      resources = "*"
       permission_groups = [{
         id = "e53155bef40b42b1b150c9d5700e29fa",
       }]

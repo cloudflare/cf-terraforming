@@ -404,6 +404,40 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 				}
 			}
 		}
+	case "cloudflare_snippet_rules":
+		// Transform the array of snippet rule objects into a single resource with a 'rules' array
+		// The API returns multiple snippet rules, but Terraform expects them wrapped in a 'rules' array
+		rules := make([]interface{}, 0, resourceCount)
+		for i := 0; i < resourceCount; i++ {
+			rule := (*response)[i].(map[string]interface{})
+			// Extract only the fields we need for Terraform
+			transformedRule := map[string]interface{}{
+				"expression":   rule["expression"],
+				"snippet_name": rule["snippet_name"],
+				"description":  rule["description"],
+				"enabled":      rule["enabled"],
+			}
+			rules = append(rules, transformedRule)
+		}
+		// Replace the response with a single object containing the rules array
+		*response = []interface{}{
+			map[string]interface{}{
+				"rules": rules,
+			},
+		}
+	case "cloudflare_snippets":
+		// Transform main_module field into metadata block
+		for i := 0; i < resourceCount; i++ {
+			snippet := (*response)[i].(map[string]interface{})
+			if mainModule, ok := snippet["main_module"]; ok {
+				// Create metadata object with main_module
+				snippet["metadata"] = map[string]interface{}{
+					"main_module": mainModule,
+				}
+				// Remove main_module from top level since it's now in metadata
+				delete(snippet, "main_module")
+			}
+		}
 	}
 }
 

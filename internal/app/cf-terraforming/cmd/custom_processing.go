@@ -365,6 +365,44 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 							}
 						}
 
+						// Convert empty rules map to rulesets list
+						// When action_parameters.rules is a map with all empty arrays,
+						// convert it to action_parameters.rulesets (a list of the map keys)
+						if rulesField, hasRules := actionParams.(map[string]interface{})["rules"]; hasRules {
+							if rulesMap, isMap := rulesField.(map[string]interface{}); isMap {
+								allEmpty := true
+								var rulesetIds []string
+
+								// Check if all values are empty arrays
+								for key, value := range rulesMap {
+									rulesetIds = append(rulesetIds, key)
+									if valueArray, ok := value.([]interface{}); ok {
+										if len(valueArray) > 0 {
+											allEmpty = false
+											break
+										}
+									} else {
+										// If value is not an array, don't convert
+										allEmpty = false
+										break
+									}
+								}
+
+								// If all arrays are empty, convert to rulesets
+								if allEmpty && len(rulesetIds) > 0 {
+									// Sort for deterministic output
+									sort.Strings(rulesetIds)
+									// Convert to []interface{} for consistency
+									var rulesetsInterface []interface{}
+									for _, id := range rulesetIds {
+										rulesetsInterface = append(rulesetsInterface, id)
+									}
+									actionParams.(map[string]interface{})["rulesets"] = rulesetsInterface
+									delete(actionParams.(map[string]interface{}), "rules")
+								}
+							}
+						}
+
 						// Cache Rules transformation
 						if (*response)[i].(map[string]interface{})["phase"] == "http_request_cache_settings" {
 							if ck, ok := rules.([]interface{})[ruleCounter].(map[string]interface{})["action_parameters"].(map[string]interface{})["cache_key"]; ok {

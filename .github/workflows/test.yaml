@@ -30,7 +30,7 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
       - name: write Terraform configuration
         run: |
           cat > main.tf <<EOF
@@ -71,7 +71,7 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
       - name: write Terraform configuration for v5
         run: |
           cat > main.tf <<EOF
@@ -112,7 +112,7 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
       - name: write Terraform configuration for v5
         run: |
           cat > main.tf <<EOF

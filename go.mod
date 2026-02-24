@@ -1,8 +1,6 @@
 module github.com/cloudflare/cf-terraforming
 
-go 1.23.0
-
-toolchain go1.24.0
+go 1.25
 
 require (
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
@@ -20,7 +18,7 @@ require (
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
 	github.com/tidwall/gjson v1.18.0
-	github.com/zclconf/go-cty v1.16.3
+	github.com/zclconf/go-cty v1.18.0
 )
 
 require (

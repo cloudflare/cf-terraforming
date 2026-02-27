@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"sort"
 	"testing"
 
@@ -10,6 +12,41 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/zclconf/go-cty/cty"
 )
+
+func TestUserAgentTransport(t *testing.T) {
+	var capturedUA string
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		capturedUA = r.Header.Get("User-Agent")
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	t.Run("appends cf-terraforming token when no existing User-Agent", func(t *testing.T) {
+		capturedUA = ""
+		transport := &userAgentTransport{rt: http.DefaultTransport}
+		client := &http.Client{Transport: transport}
+
+		req, _ := http.NewRequest(http.MethodGet, server.URL, nil)
+		req.Header.Del("User-Agent")
+		resp, err := client.Do(req)
+		assert.NoError(t, err)
+		resp.Body.Close()
+		assert.Equal(t, "cf-terraforming/"+versionString, capturedUA)
+	})
+
+	t.Run("appends to existing User-Agent without overwriting it", func(t *testing.T) {
+		capturedUA = ""
+		transport := &userAgentTransport{rt: http.DefaultTransport}
+		client := &http.Client{Transport: transport}
+
+		req, _ := http.NewRequest(http.MethodGet, server.URL, nil)
+		req.Header.Set("User-Agent", "cloudflare-go/1.2.3")
+		resp, err := client.Do(req)
+		assert.NoError(t, err)
+		resp.Body.Close()
+		assert.Equal(t, "cloudflare-go/1.2.3 cf-terraforming/"+versionString, capturedUA)
+	})
+}
 
 func TestProcessExpression(t *testing.T) {
 	tests := []struct {

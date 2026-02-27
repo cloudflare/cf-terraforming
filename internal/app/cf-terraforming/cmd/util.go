@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -23,6 +24,23 @@ import (
 )
 
 var hasNumber = regexp.MustCompile("[0-9]+").MatchString
+
+// userAgentTransport is an http.RoundTripper that appends a cf-terraforming
+// product token to the outgoing User-Agent header so that API requests
+// originating from this tool are identifiable in Cloudflare's logs.
+type userAgentTransport struct {
+	rt http.RoundTripper
+}
+
+func (t *userAgentTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req = req.Clone(req.Context())
+	ua := fmt.Sprintf("cf-terraforming/%s", versionString)
+	if existing := req.Header.Get("User-Agent"); existing != "" {
+		ua = existing + " " + ua
+	}
+	req.Header.Set("User-Agent", ua)
+	return t.rt.RoundTrip(req)
+}
 
 func contains(slice []string, item string) bool {
 	set := make(map[string]struct{}, len(slice))
@@ -112,6 +130,11 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 
 	var err error
 
+	httpClient := &http.Client{
+		Transport: &userAgentTransport{rt: http.DefaultTransport},
+	}
+	options = append(options, cfv0.HTTPClient(httpClient))
+
 	// Don't initialise a client in CI as this messes with VCR and the ability to
 	// mock out the HTTP interactions.
 	if os.Getenv("CI") != "true" {
@@ -119,10 +142,10 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 
 		if useToken {
 			apiV0, err = cfv0.NewWithAPIToken(apiToken, options...)
-			api = cloudflare.NewClient(option.WithAPIToken(apiToken))
+			api = cloudflare.NewClient(option.WithAPIToken(apiToken), option.WithHTTPClient(httpClient))
 		} else {
 			apiV0, err = cfv0.New(apiKey, apiEmail, options...)
-			api = cloudflare.NewClient(option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail))
+			api = cloudflare.NewClient(option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail), option.WithHTTPClient(httpClient))
 		}
 
 		if err != nil {

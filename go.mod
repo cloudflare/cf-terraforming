@@ -9,7 +9,7 @@ require (
 	github.com/cloudflare/cloudflare-go v0.115.0
 	github.com/cloudflare/cloudflare-go/v4 v4.4.0
 	github.com/dnaeon/go-vcr v1.2.0
-	github.com/hashicorp/go-version v1.7.0
+	github.com/hashicorp/go-version v1.8.0
 	github.com/hashicorp/hc-install v0.9.2
 	github.com/hashicorp/hcl/v2 v2.23.0
 	github.com/hashicorp/terraform-exec v0.23.0

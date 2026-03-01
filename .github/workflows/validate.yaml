@@ -18,7 +18,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
       - name: validate generated terraform configuration
         run: make validate-tf
 
@@ -28,7 +28,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
       - name: validate generated terraform configuration
         run: make validate-tf-v5
 

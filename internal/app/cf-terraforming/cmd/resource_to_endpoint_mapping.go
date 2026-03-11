@@ -587,6 +587,14 @@ var resourceToEndpoint = map[string]map[string]string{
 		"list": "/accounts/{account_id}/access/tags",
 		"get":  "/accounts/{account_id}/access/tags/{tag_name}",
 	},
+	"cloudflare_zero_trust_access_ai_controls_mcp_portal": {
+		"list": "/accounts/{account_id}/access/ai-controls/mcp/portals",
+		"get":  "/accounts/{account_id}/access/ai-controls/mcp/portals/{portal_id}",
+	},
+	"cloudflare_zero_trust_access_ai_controls_mcp_server": {
+		"list": "/accounts/{account_id}/access/ai-controls/mcp/servers",
+		"get":  "/accounts/{account_id}/access/ai-controls/mcp/servers/{server_id}",
+	},
 	"cloudflare_zero_trust_access_policy": {
 		"list": "/accounts/{account_id}/access/policies",
 		"get":  "/accounts/{account_id}/access/policies/{policy_id}",

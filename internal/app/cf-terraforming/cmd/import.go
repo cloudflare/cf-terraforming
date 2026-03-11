@@ -102,6 +102,8 @@ var resourceImportStringFormats = map[string]string{
 	"cloudflare_zero_trust_access_key_configuration":           ":account_id",
 	"cloudflare_zero_trust_access_policy":                      ":account_id/:id",
 	"cloudflare_zero_trust_access_short_lived_certificate":     ":identifier_type/:identifier_value/:id",
+	"cloudflare_zero_trust_access_ai_controls_mcp_portal":      ":account_id/:id",
+	"cloudflare_zero_trust_access_ai_controls_mcp_server":      ":account_id/:id",
 	"cloudflare_zero_trust_access_tag":                         ":account_id/:id",
 	"cloudflare_zero_trust_device_custom_profile":              ":account_id/:id",
 	"cloudflare_zero_trust_device_default_profile":             ":account_id",

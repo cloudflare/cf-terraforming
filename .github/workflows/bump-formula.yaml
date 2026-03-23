@@ -20,7 +20,7 @@ jobs:
           else
             echo "tag-name=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           fi
-      - uses: mislav/bump-homebrew-formula-action@v3
+      - uses: mislav/bump-homebrew-formula-action@v4
         with:
           formula-name: cf-terraforming
           formula-path: cf-terraforming.rb

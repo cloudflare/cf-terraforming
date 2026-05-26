@@ -4,7 +4,7 @@ go 1.25.8
 
 require (
 	github.com/MakeNowJust/heredoc/v2 v2.0.1
-	github.com/cloudflare/cloudflare-go v0.115.0
+	github.com/cloudflare/cloudflare-go v0.117.0
 	github.com/cloudflare/cloudflare-go/v4 v4.4.0
 	github.com/dnaeon/go-vcr v1.2.0
 	github.com/hashicorp/go-version v1.9.0

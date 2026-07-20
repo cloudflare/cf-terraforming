@@ -747,4 +747,8 @@ var resourceToEndpoint = map[string]map[string]string{
 		"list": "/{accounts_or_zones}/{account_or_zone_id}/custom_pages",
 		"get":  "/{accounts_or_zones}/{account_or_zone_id}/custom_pages/{identifier}",
 	},
+	"cloudflare_ai_gateway": {
+		"list": "/accounts/{account_id}/ai-gateway/gateways",
+		"get":  "/accounts/{account_id}/ai-gateway/gateways/{id}",
+	},
 }

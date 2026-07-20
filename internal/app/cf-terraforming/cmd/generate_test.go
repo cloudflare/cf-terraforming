@@ -263,6 +263,7 @@ func TestResourceGenerationV5(t *testing.T) {
 		// "cloudflare access rule (zone)":                      {identiferType: "zone", resourceType: "cloudflare_access_rule", testdataFilename: "cloudflare_access_rule_zone"},
 		"cloudflare account subscription":                            {identiferType: "account", resourceType: "cloudflare_account_subscription", testdataFilename: "cloudflare_account_subscription"},
 		"cloudflare address map":                                     {identiferType: "account", resourceType: "cloudflare_address_map", testdataFilename: "cloudflare_address_map"},
+		"cloudflare ai gateway":                                      {identiferType: "account", resourceType: "cloudflare_ai_gateway", testdataFilename: "cloudflare_ai_gateway"},
 		"cloudflare account member":                                  {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},
 		"cloudflare api shield schema":                               {identiferType: "zone", resourceType: "cloudflare_api_shield_schema", testdataFilename: "cloudflare_api_shield_schema"},
 		"cloudflare api shield discovery operation":                  {identiferType: "zone", resourceType: "cloudflare_api_shield_discovery_operation", testdataFilename: "cloudflare_api_shield_discovery_operation"},

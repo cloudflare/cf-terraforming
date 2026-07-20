@@ -17,3 +17,7 @@
 
 # ignore for testing locally
 main.tf
+
+# build artifacts
+/cf-terraforming
+/terraform

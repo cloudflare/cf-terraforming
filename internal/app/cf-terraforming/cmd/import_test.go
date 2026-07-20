@@ -27,6 +27,10 @@ func TestResourceImportV5(t *testing.T) {
 	}{
 		"cloudflare account":                                       {identiferType: "account", resourceType: "cloudflare_account", testdataFilename: "cloudflare_account"},
 		"cloudflare address map":                                   {identiferType: "account", resourceType: "cloudflare_address_map", testdataFilename: "cloudflare_address_map"},
+		"cloudflare ai gateway":                                    {identiferType: "account", resourceType: "cloudflare_ai_gateway", testdataFilename: "cloudflare_ai_gateway"},
+		"cloudflare ai search namespace":                           {identiferType: "account", resourceType: "cloudflare_ai_search_namespace", testdataFilename: "cloudflare_ai_search_namespace"},
+		"cloudflare ai search instance":                            {identiferType: "account", resourceType: "cloudflare_ai_search_instance", testdataFilename: "cloudflare_ai_search_instance"},
+		"cloudflare ai search token":                               {identiferType: "account", resourceType: "cloudflare_ai_search_token", testdataFilename: "cloudflare_ai_search_token"},
 		"cloudflare account member":                                {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},
 		"cloudflare api shield operation":                          {identiferType: "zone", resourceType: "cloudflare_api_shield_operation", testdataFilename: "cloudflare_api_shield_operation"},
 		"cloudflare bot management":                                {identiferType: "zone", resourceType: "cloudflare_bot_management", testdataFilename: "cloudflare_bot_management"},

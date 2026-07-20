@@ -241,6 +241,10 @@ Any resources not listed may have known issues. The HCL config may still be gene
 | cloudflare_account_member                                          | account         |                                                                                                                        |
 | cloudflare_account_subscription                                    | account         |                                                                                                                        |
 | cloudflare_address_map                                             | account         |                                                                                                                        |
+| cloudflare_ai_gateway                                              | account         |                                                                                                                        |
+| cloudflare_ai_search_instance                                      | account         |                                                                                                                        |
+| cloudflare_ai_search_namespace                                     | account         |                                                                                                                        |
+| cloudflare_ai_search_token                                         | account         |                                                                                                                        |
 | cloudflare_api_shield_discovery_operation                          | zone            |                                                                                                                        |
 | cloudflare_api_shield_operation                                    | zone            |                                                                                                                        |
 | cloudflare_api_shield_operation_schema_validation_settings         | zone            | cloudflare_api_shield_operation_schema_validation_settings=8255d5da-5a46-4928-ad00-01de7d48c1e7                        |
@@ -386,6 +390,10 @@ Any resources not listed may have known issues or may not yet support import.
 | cloudflare_account                                      | account         |                                                                    |
 | cloudflare_account_member                               | account         |                                                                    |
 | cloudflare_address_map                                  | account         |                                                                    |
+| cloudflare_ai_gateway                                   | account         |                                                                    |
+| cloudflare_ai_search_instance                           | account         |                                                                    |
+| cloudflare_ai_search_namespace                          | account         |                                                                    |
+| cloudflare_ai_search_token                              | account         |                                                                    |
 | cloudflare_api_shield_operation                         | zone            |                                                                    |
 | cloudflare_bot_management                               | zone            |                                                                    |
 | cloudflare_certificate_pack                             | zone            |                                                                    |

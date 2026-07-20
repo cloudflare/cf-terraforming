@@ -30,8 +30,7 @@ interactions:
           "messages": [],
           "result": [
             {
-              "name": "my-namespace",
-              "description": "Test namespace",
+              "name": "default",
               "created_at": "2025-06-15T10:30:00.000Z"
             }
           ],

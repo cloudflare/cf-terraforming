@@ -1,0 +1,25 @@
+testdata/terraform/v5/cloudflare_ai_gateway_dynamic_routing/provider.tf
+  s_8fa7636404c7cb::t_abb6c0eb5bdbf3 1-8
+testdata/terraform/v5/cloudflare_ai_search_instance/provider.tf
+  s_8fa7636404c7cb::t_a4910d5e7d5d7f 1-8
+testdata/terraform/v5/cloudflare_ai_search_namespace/provider.tf
+  s_8fa7636404c7cb::t_84c9bab64c7f37 1-8
+testdata/terraform/v5/cloudflare_ai_search_token/provider.tf
+  s_8fa7636404c7cb::t_cf30a0d60e766e 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "dfb9da0d84e8a9238eb143f2863cdfbeaee56400",
+  "prompts": {},
+  "sessions": {
+    "s_8fa7636404c7cb": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_07f9bdc99ffen4cOSZyuZ3evu5",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Sarah Sicard <ssicard@cloudflare.com>"
+    }
+  }
+}

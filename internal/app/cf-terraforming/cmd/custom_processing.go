@@ -612,8 +612,6 @@ func replacePathParams(params []string, endpoint string, rType string) []string 
 		return endpoints
 	case "cloudflare_zero_trust_dlp_custom_profile":
 		placeholder = "{profile_id}"
-	case "cloudflare_ai_gateway_dynamic_routing":
-		placeholder = "{gateway_id}"
 	default:
 		return endpoints
 	}

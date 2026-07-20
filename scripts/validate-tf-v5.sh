@@ -28,7 +28,6 @@ SKIP_DIRS=(
 "testdata/terraform/v5/cloudflare_magic_wan_ipsec_tunnel"
 "testdata/terraform/v5/cloudflare_firewall_rule"
 "testdata/terraform/v5/cloudflare_ai_gateway"
-"testdata/terraform/v5/cloudflare_ai_gateway_dynamic_routing"
 "testdata/terraform/v5/cloudflare_ai_search_instance"
 "testdata/terraform/v5/cloudflare_image"
 "testdata/terraform/v5/cloudflare_image_variant"

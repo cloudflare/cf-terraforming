@@ -53,7 +53,7 @@ all of their existing Cloudflare configuration into Terraform.`,
 		"cloudflare_api_shield_operation_schema_validation_settings": make([]string, 0),
 		"cloudflare_observatory_scheduled_test":                      make([]string, 0),
 		"cloudflare_zero_trust_dlp_custom_profile":                   make([]string, 0),
-		"cloudflare_ai_gateway_dynamic_routing":                      make([]string, 0),
+
 	}
 )
 

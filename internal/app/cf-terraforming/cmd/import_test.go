@@ -28,7 +28,6 @@ func TestResourceImportV5(t *testing.T) {
 		"cloudflare account":                                       {identiferType: "account", resourceType: "cloudflare_account", testdataFilename: "cloudflare_account"},
 		"cloudflare address map":                                   {identiferType: "account", resourceType: "cloudflare_address_map", testdataFilename: "cloudflare_address_map"},
 		"cloudflare ai gateway":                                    {identiferType: "account", resourceType: "cloudflare_ai_gateway", testdataFilename: "cloudflare_ai_gateway"},
-		"cloudflare ai gateway dynamic routing":                    {identiferType: "account", resourceType: "cloudflare_ai_gateway_dynamic_routing", testdataFilename: "cloudflare_ai_gateway_dynamic_routing", cliFlags: "cloudflare_ai_gateway_dynamic_routing=my-ai-gateway"},
 		"cloudflare ai search namespace":                           {identiferType: "account", resourceType: "cloudflare_ai_search_namespace", testdataFilename: "cloudflare_ai_search_namespace"},
 		"cloudflare ai search instance":                            {identiferType: "account", resourceType: "cloudflare_ai_search_instance", testdataFilename: "cloudflare_ai_search_instance"},
 		"cloudflare ai search token":                               {identiferType: "account", resourceType: "cloudflare_ai_search_token", testdataFilename: "cloudflare_ai_search_token"},

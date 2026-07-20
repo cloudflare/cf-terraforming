@@ -751,4 +751,20 @@ var resourceToEndpoint = map[string]map[string]string{
 		"list": "/accounts/{account_id}/ai-gateway/gateways",
 		"get":  "/accounts/{account_id}/ai-gateway/gateways/{id}",
 	},
+	"cloudflare_ai_gateway_dynamic_routing": {
+		"list": "/accounts/{account_id}/ai-gateway/gateways/{gateway_id}/routes",
+		"get":  "/accounts/{account_id}/ai-gateway/gateways/{gateway_id}/routes/{id}",
+	},
+	"cloudflare_ai_search_namespace": {
+		"list": "/accounts/{account_id}/ai-search/namespaces",
+		"get":  "/accounts/{account_id}/ai-search/namespaces/{name}",
+	},
+	"cloudflare_ai_search_instance": {
+		"list": "/accounts/{account_id}/ai-search/instances",
+		"get":  "/accounts/{account_id}/ai-search/instances/{id}",
+	},
+	"cloudflare_ai_search_token": {
+		"list": "/accounts/{account_id}/ai-search/tokens",
+		"get":  "/accounts/{account_id}/ai-search/tokens/{id}",
+	},
 }

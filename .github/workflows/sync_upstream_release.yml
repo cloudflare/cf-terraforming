@@ -98,6 +98,8 @@ jobs:
 
           # Keep fork-owned workflows as-is so this automation never tries to
           # push upstream workflow changes and does not need workflows:write.
+          git reset origin/master -- .github/workflows
+          rm -rf .github/workflows
           git checkout origin/master -- .github/workflows
 
           sed "s/VERSION/${TAG}/g" snap/local/snapcraft.yaml.template > snap/snapcraft.yaml

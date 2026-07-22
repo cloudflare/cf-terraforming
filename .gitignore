@@ -18,9 +18,6 @@
 # ignore for testing locally
 main.tf
 
-# Snap outputs
-*.snap
-cf-terraforming
-/parts/
-/stage/
-/prime/
+# build artifacts
+/cf-terraforming
+/terraform

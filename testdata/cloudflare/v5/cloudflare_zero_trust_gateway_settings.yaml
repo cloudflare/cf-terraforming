@@ -1,0 +1,106 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/configuration
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "created_at": "2021-08-30T23:25:40Z",
+            "settings": {
+              "activity_log": {
+                "enabled": true
+              },
+              "antivirus": {
+                "enabled_download_phase": true,
+                "enabled_upload_phase": false,
+                "fail_closed": true,
+                "notification_settings": {
+                  "enabled": true,
+                  "msg": "msg",
+                  "support_url": "https://hello.com/"
+                }
+              },
+              "block_page": {
+                "background_color": "#000000",
+                "enabled": true,
+                "footer_text": "hello",
+                "header_text": "hello",
+                "include_context": false,
+                "logo_path": "https://example.com",
+                "mailto_address": "test@cloudflare.com",
+                "mailto_subject": "hello",
+                "mode": "",
+                "name": "iddghecuxq",
+                "suppress_footer": false,
+                "target_uri": ""
+              },
+              "body_scanning": {
+                "inspection_mode": "deep"
+              },
+              "browser_isolation": {
+                "non_identity_enabled": false,
+                "url_browser_isolation_enabled": true
+              },
+              "custom_certificate": {
+                "binding_status": "",
+                "created_at": "0001-01-01T00:00:00Z",
+                "enabled": false,
+                "expires_on": "0001-01-01T00:00:00Z",
+                "id": "00000000-0000-0000-0000-000000000000",
+                "qs_pack_id": "00000000-0000-0000-0000-000000000000",
+                "updated_at": "0001-01-01T00:00:00Z",
+                "uploaded_on": "0001-01-01T00:00:00Z"
+              },
+              "extended_email_matching": {
+                "enabled": true
+              },
+              "fips": {
+                "tls": true
+              },
+              "protocol_detection": {
+                "enabled": true
+              },
+              "tls_decrypt": {
+                "enabled": true
+              }
+            },
+            "updated_at": "2025-03-03T17:07:38Z"
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

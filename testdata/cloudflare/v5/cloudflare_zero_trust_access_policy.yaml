@@ -1,0 +1,93 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/access/policies
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "app_count": 0,
+              "created_at": "2025-01-23T22:38:54Z",
+              "decision": "non_identity",
+              "exclude": [],
+              "id": "f6066357-c8e1-42af-80a4-2ec908a4138b",
+              "include": [
+                {
+                  "ip": {
+                    "ip": "127.0.0.1/32"
+                  }
+                }
+              ],
+              "name": "dryjkmkfpz",
+              "require": [],
+              "reusable": true,
+              "session_duration": "24h",
+              "uid": "f6066357-c8e1-42af-80a4-2ec908a4138b",
+              "updated_at": "2025-01-23T22:38:54Z"
+            },
+            {
+              "app_count": 0,
+              "created_at": "2025-01-23T22:38:54Z",
+              "decision": "non_identity",
+              "exclude": [],
+              "id": "97903f89-01b2-44a7-9d85-2a6d1ae3578a",
+              "include": [
+                {
+                  "ip": {
+                    "ip": "127.0.0.1/32"
+                  }
+                }
+              ],
+              "name": "dryjkmkfpz",
+              "require": [],
+              "reusable": true,
+              "session_duration": "24h",
+              "uid": "97903f89-01b2-44a7-9d85-2a6d1ae3578a",
+              "updated_at": "2025-01-23T22:38:54Z"
+            }            
+          ],
+          "result_info": {
+            "count": 2,
+            "page": 1,
+            "per_page": 100,
+            "total_count": 2,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

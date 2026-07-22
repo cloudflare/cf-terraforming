@@ -1,28 +1,65 @@
 package cmd
 
 import (
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	"strings"
+
+	cfv0 "github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/v4"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-var log = logrus.New()
-var cfgFile, zoneID, hostname, apiEmail, apiKey, apiToken, accountID, terraformInstallPath, terraformBinaryPath, providerRegistryHostname string
-var verbose, useModernImportBlock bool
-var api *cloudflare.API
-var terraformImportCmdPrefix = "terraform import"
-var terraformResourceNamePrefix = "terraform_managed_resource"
+var (
+	log = logrus.New()
 
-// rootCmd represents the base command when called without any subcommands.
-var rootCmd = &cobra.Command{
-	Use:   "cf-terraforming",
-	Short: "Bootstrapping Terraform from existing Cloudflare account",
-	Long: `cf-terraforming is an application that allows Cloudflare users
+	cfgFile, zoneID, hostname, apiEmail                                 string
+	apiKey, apiToken, accountID                                         string
+	terraformInstallPath, terraformBinaryPath, providerRegistryHostname string
+
+	verbose, useModernImportBlock bool
+
+	apiV0 *cfv0.API
+	api   *cloudflare.Client
+
+	// rootCmd represents the base command when called without any subcommands.
+	rootCmd = &cobra.Command{
+		Use:   "cf-terraforming",
+		Short: "Bootstrapping Terraform from existing Cloudflare account",
+		Long: `cf-terraforming is an application that allows Cloudflare users
 to be able to adopt Terraform by giving them a feasible way to get
 all of their existing Cloudflare configuration into Terraform.`,
-}
+	}
+
+	// Resources for which path params are supported.
+	settingsMap = map[string][]string{
+		"cloudflare_zone_setting":                                    make([]string, 0),
+		"cloudflare_hostname_tls_setting":                            make([]string, 0),
+		"cloudflare_waiting_room_event":                              make([]string, 0),
+		"cloudflare_r2_managed_domain":                               make([]string, 0),
+		"cloudflare_r2_custom_domain":                                make([]string, 0),
+		"cloudflare_pages_domain":                                    make([]string, 0),
+		"cloudflare_list_item":                                       make([]string, 0),
+		"cloudflare_zero_trust_dlp_predefined_profile":               make([]string, 0),
+		"cloudflare_web_analytics_rule":                              make([]string, 0),
+		"cloudflare_waiting_room_rules":                              make([]string, 0),
+		"cloudflare_zero_trust_tunnel_cloudflared_config":            make([]string, 0),
+		"cloudflare_workers_script_subdomain":                        make([]string, 0),
+		"cloudflare_workers_deployment":                              make([]string, 0),
+		"cloudflare_workers_cron_trigger":                            make([]string, 0),
+		"cloudflare_authenticated_origin_pulls":                      make([]string, 0),
+		"cloudflare_queue_consumer":                                  make([]string, 0),
+		"cloudflare_api_shield_operation_schema_validation_settings": make([]string, 0),
+		"cloudflare_observatory_scheduled_test":                      make([]string, 0),
+		"cloudflare_zero_trust_dlp_custom_profile":                   make([]string, 0),
+	}
+)
+
+const (
+	terraformImportCmdPrefix    = "terraform import"
+	terraformResourceNamePrefix = "terraform_managed_resource"
+)
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
@@ -111,13 +148,14 @@ func init() {
 		log.Fatal(err)
 	}
 
-	rootCmd.PersistentFlags().StringVarP(&providerRegistryHostname, "provider-registry-hostname", "", "registry.terraform.io", "Hostname to use for provider registry lookups")
+	rootCmd.PersistentFlags().StringVarP(&providerRegistryHostname, "provider-registry-hostname", "", "", "Hostname to use for provider registry lookups. Deprecated: this is no longer needed to be configured for custom registries.")
 	if err = viper.BindPFlag("provider-registry-hostname", rootCmd.PersistentFlags().Lookup("provider-registry-hostname")); err != nil {
 		log.Fatal(err)
 	}
 	if err = viper.BindEnv("provider-registry-hostname", "CLOUDFLARE_PROVIDER_REGISTRY_HOSTNAME"); err != nil {
 		log.Fatal(err)
 	}
+	rootCmd.PersistentFlags().StringSliceVar(&resourceIDFlags, "resource-id", []string{}, "Resource type and IDs mapping in the format of `key` to comma separated values. Example: `cloudflare_zone_setting=always_online,cache_level,...`")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -151,4 +189,22 @@ func initConfig() {
 	}
 
 	log.SetLevel(cfgLogLevel)
+}
+
+func getResourceMappings() map[string][]string {
+	var rType string
+	for _, flag := range resourceIDFlags {
+		if strings.Contains(flag, "=") {
+			flagParts := strings.Split(flag, "=")
+			rType = strings.TrimSpace(flagParts[0])
+			_, ok := settingsMap[rType]
+			if !ok {
+				log.Fatalf("unsupported resource type: %s", rType)
+			}
+			settingsMap[rType] = append(settingsMap[rType], strings.TrimSpace(flagParts[1]))
+		} else {
+			settingsMap[rType] = append(settingsMap[rType], strings.TrimSpace(flag))
+		}
+	}
+	return settingsMap
 }

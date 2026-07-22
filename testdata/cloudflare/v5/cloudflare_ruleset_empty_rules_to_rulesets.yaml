@@ -1,0 +1,92 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rulesets
+      method: GET
+    response:
+      body: |
+        {
+          "result": [
+            {
+              "id": "e9b4f3e2a1c54d8b9f7e6d5c4b3a2918",
+              "name": "Account WAF Ruleset",
+              "description": "Account-level WAF configuration",
+              "source": "firewall_managed",
+              "kind": "root",
+              "version": "1",
+              "last_updated": "2024-01-15T10:30:00.123456Z",
+              "phase": "http_request_firewall_managed"
+            }
+          ],
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rulesets/e9b4f3e2a1c54d8b9f7e6d5c4b3a2918
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "id": "e9b4f3e2a1c54d8b9f7e6d5c4b3a2918",
+            "name": "Account WAF Ruleset",
+            "description": "Account-level WAF configuration",
+            "source": "firewall_managed",
+            "kind": "root",
+            "version": "1",
+            "rules": [
+              {
+                "id": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+                "version": "1",
+                "action": "skip",
+                "expression": "(http.host eq \"api.example.com\")",
+                "description": "Skip all managed rules for API subdomain",
+                "last_updated": "2024-01-15T10:30:00.123456Z",
+                "ref": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
+                "enabled": true,
+                "logging": {
+                  "enabled": true
+                },
+                "action_parameters": {
+                  "rules": {
+                    "4814384a9e5d4991b9815dcfc25d2f1f": [],
+                    "c2e184081120413c86c3ab7e14069605": []
+                  }
+                }
+              }
+            ],
+            "last_updated": "2024-01-15T10:30:00.123456Z",
+            "phase": "http_request_firewall_managed"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

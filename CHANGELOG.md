@@ -1,5 +1,7 @@
 ## Unreleased
 
+- deps: bump `cloudflare-go` to v0.117.0 to pick up `asset_name` support for `cloudflare_ruleset` `http_custom_errors` `serve_error` rules ([APIX-861](https://jira.cfdata.org/browse/APIX-861))
+
 ## 0.6.0 (2021-12-14)
 
 - generate: add support for nested map interfaces in request ([#332](https://github.com/cloudflare/cf-terraforming/pull/332))

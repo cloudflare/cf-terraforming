@@ -1,0 +1,69 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/pages/projects/ykfjmcgpfs/domains
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "certificate_authority": "google",
+              "created_on": "2022-10-12T00:45:49.648331Z",
+              "domain_id": "5f7b2c9c-b121-453f-92e6-1bbf71b763e9",
+              "id": "5f7b2c9c-b121-453f-92e6-1bbf71b763e9",
+              "name": "ykfjmcgpfs.terraform.cfapi.net",
+              "status": "deactivated",
+              "validation_data": {
+                "method": "http",
+                "status": "deactivated"
+              },
+              "verification_data": {
+                "status": "deactivated"
+              },
+              "zone_tag": "0da42c8d2132a9ddaf714f9e7c920711"
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 20,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

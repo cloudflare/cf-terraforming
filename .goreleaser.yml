@@ -1,5 +1,5 @@
 changelog:
-  skip: true
+  disable: true
 checksum:
   name_template: 'checksums.txt'
 snapshot:

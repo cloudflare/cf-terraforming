@@ -6,7 +6,7 @@ CLOUDFLARE_ZONE_ID    ?= 00deadb33f000000000000000000000000000
 CLOUDFLARE_ACCOUNT_ID ?= 00deadb33f000000000000000000000000000
 VERSION               ?= $$(git describe --tags --abbrev=0)-dev+$$(git rev-parse --short=12 HEAD)
 ROOT_DIR               = $$PWD
-CLOUDFLARE_TERRAFORM_INSTALL_PATH=$$PWD
+CLOUDFLARE_TERRAFORM_INSTALL_PATH ?= $$PWD
 
 HASHICORP_CHECKPOINT_TIMEMOUT ?= 30000
 
@@ -33,4 +33,7 @@ fmt:
 validate-tf:
 	@bash scripts/validate-tf.sh
 
-.PHONY: build test fmt validate-tf
+validate-tf-v5:
+	@bash scripts/validate-tf-v5.sh
+
+.PHONY: build test fmt validate-tf validate-tf-v5

@@ -1,0 +1,68 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/teamnet/virtual_networks
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "comment": "dtlglmvlsk-updated",
+              "created_at": "2024-11-15T22:37:03.640168Z",
+              "deleted_at": "2024-11-15T22:37:07.451616Z",
+              "id": "10df08a4-7b66-48ef-a9a9-c7d185e64dc7",
+              "is_default_network": false,
+              "name": "dtlglmvlsk"
+            },
+            {
+              "comment": "dxsvakysmh-updated",
+              "created_at": "2024-11-15T22:36:01.176004Z",
+              "deleted_at": "2024-11-15T22:36:05.121375Z",
+              "id": "854ea583-2e9b-436e-b3b9-e36e39a25762",
+              "is_default_network": false,
+              "name": "dxsvakysmh"
+            }            
+          ],
+          "result_info": {
+            "count": 2,
+            "page": 1,
+            "per_page": 1000,
+            "total_count": 2
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

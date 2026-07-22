@@ -1,0 +1,76 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/devices/policy
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "allow_mode_switch": true,
+            "allow_updates": true,
+            "allowed_to_leave": true,
+            "auto_connect": 0,
+            "captive_portal": 5,
+            "default": true,
+            "disable_auto_fallback": true,
+            "doh_in_tunnel": false,
+            "enabled": true,
+            "exclude": [],
+            "exclude_office_ips": true,
+            "fallback_domains": [
+              {
+                "description": "example domain",
+                "dns_server": [
+                  "1.0.0.1"
+                ],
+                "suffix": "example.com"
+              }
+            ],
+            "gateway_unique_id": "f037e56e89293a057740de681ac9abbe",
+            "lan_allow_minutes": 120,
+            "lan_allow_subnet_size": 31,
+            "register_interface_ip_with_dns": true,
+            "service_mode_v2": {
+              "mode": "warp"
+            },
+            "support_url": "https://cloudflare.com",
+            "switch_locked": true,
+            "tunnel_protocol": "wireguard"
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

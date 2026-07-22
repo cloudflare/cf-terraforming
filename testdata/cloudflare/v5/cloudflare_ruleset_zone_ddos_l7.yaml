@@ -1,0 +1,88 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+           {
+            "id": "76d07b645c674faba69eff8d8451992c",
+            "name": "zone",
+            "description": "",
+            "kind": "zone",
+            "version": "1",
+            "last_updated": "2021-08-30T02:38:50.39057Z",
+            "phase": "ddos_l7"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/76d07b645c674faba69eff8d8451992c
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "76d07b645c674faba69eff8d8451992c",
+          "name": "zone",
+          "description": "",
+          "kind": "zone",
+          "version": "1",
+          "rules": [
+            {
+              "id": "c6893ad10fb344e9b8be3c0c3575adc9",
+              "version": "1",
+              "action": "execute",
+              "action_parameters": {
+                "id": "4d21379b4f9f4bb088e0729962c8b3cf",
+                "version": "latest",
+                "overrides": {
+                  "sensitivity_level": "medium"
+                }
+              },
+              "expression": "true",
+              "description": "zone",
+              "last_updated": "2021-08-30T02:38:50.39057Z",
+              "ref": "c6893ad10fb344e9b8be3c0c3575adc9",
+              "enabled": true
+            }
+          ],
+          "last_updated": "2021-08-30T02:38:50.39057Z",
+          "phase": "ddos_l7"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

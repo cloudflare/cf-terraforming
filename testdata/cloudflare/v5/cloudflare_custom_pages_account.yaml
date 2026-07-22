@@ -1,0 +1,52 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/custom_pages
+    method: GET
+  response:
+    body: |
+      {
+        "success": true,
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "id": "basic_challenge",
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "url": "https://example.com/challenge.html",
+            "state": "customized",
+            "required_tokens": [
+              "::CAPTCHA_BOX::"
+            ],
+            "preview_target": "preview:target",
+            "description": "example"
+          },
+          {
+            "id": "basic_challenge",
+            "created_on": "2014-01-01T05:20:00.12345Z",
+            "modified_on": "2014-01-01T05:20:00.12345Z",
+            "url": null,
+            "state": "customized",
+            "required_tokens": [
+              "::CAPTCHA_BOX::"
+            ],
+            "preview_target": "preview:target",
+            "description": "example"
+          }
+        ]
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

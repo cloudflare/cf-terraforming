@@ -1,0 +1,40 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/dnssec
+    method: GET
+  response:
+    body: '{"result":{"algorithm":"13","digest":"14D14E8D2B307281E0E61C6C76F96DCEF440193321DD76ACB614349D17A0EF7F","digest_algorithm":"SHA256","digest_type":"2","ds":"example.com.
+      3600 IN DS 2371 13 2 14D14E8D2B307281E0E61C6C76F96DCEF440193321DD76ACB614349D17A0EF7F","flags":257,"key_tag":2371,"key_type":"ECDSAP256SHA256","modified_on":"2025-02-19T21:46:49.562912+00:00","public_key":"mdsswUyr3DPW132mOi8V9xESWE8jTo0dxCjjnopKl+GqJxpVXckHAeF+KkxLbxILfDLUT0rAK9iUzy1L53eKGQ==","status":"active"},"success":true,"errors":[],"messages":[]}'
+    headers:
+      Cf-Auditlog-Id:
+      - 0195202f-11af-7d2f-983a-921c0a690945
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

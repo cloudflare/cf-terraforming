@@ -1,0 +1,107 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/stream
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "allowedOrigins": [],
+              "clippedFrom": null,
+              "created": "2025-03-13T16:57:16.288418Z",
+              "creator": null,
+              "duration": 0,
+              "input": {
+                "height": 253,
+                "width": 1272
+              },
+              "maxDurationSeconds": null,
+              "maxSizeBytes": null,
+              "meta": {
+                "filename": "Screenshot 2025-02-19 at 7.57.08 PM.png",
+                "filetype": "image/png",
+                "name": "Screenshot 2025-02-19 at 7.57.08 PM.png",
+                "relativePath": "null",
+                "type": "image/png"
+              },
+              "modified": "2025-03-13T16:57:26.457651Z",
+              "playback": {
+                "dash": "https://customer-4ihp3rdqow750t95.cloudflarestream.com/114a2ce1d6404540ebf02d6dae9fe867/manifest/video.mpd",
+                "hls": "https://customer-4ihp3rdqow750t95.cloudflarestream.com/114a2ce1d6404540ebf02d6dae9fe867/manifest/video.m3u8"
+              },
+              "preview": "https://customer-4ihp3rdqow750t95.cloudflarestream.com/114a2ce1d6404540ebf02d6dae9fe867/watch",
+              "publicDetails": {
+                "channel_link": null,
+                "logo": null,
+                "share_link": null,
+                "title": null
+              },
+              "readyToStream": false,
+              "readyToStreamAt": null,
+              "requireSignedURLs": false,
+              "scheduledDeletion": null,
+              "size": 105293,
+              "status": {
+                "errorReasonCode": "ERR_NON_VIDEO",
+                "errorReasonText": "The file was not recognized as a valid video file.",
+                "state": "error",
+                "step": "encoding"
+              },
+              "thumbnail": "https://customer-4ihp3rdqow750t95.cloudflarestream.com/114a2ce1d6404540ebf02d6dae9fe867/thumbnails/thumbnail.jpg",
+              "thumbnailTimestampPct": 0,
+              "uid": "114a2ce1d6404540ebf02d6dae9fe867",
+              "uploadExpiry": "2025-03-14T16:57:16.28841Z",
+              "uploaded": "2025-03-13T16:57:16.288414Z",
+              "watermark": null
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

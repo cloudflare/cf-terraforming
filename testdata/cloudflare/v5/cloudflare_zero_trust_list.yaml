@@ -1,0 +1,64 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/lists
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "count": 2,
+              "created_at": "2021-12-11T06:21:34Z",
+              "description": "My description",
+              "id": "b765686e-c5b9-46de-9ecf-e295d21e1d49",
+              "name": "zghnfpwgng",
+              "type": "SERIAL",
+              "updated_at": "2021-12-11T06:21:34Z"
+            },
+            {
+              "count": 2,
+              "created_at": "2021-12-11T06:23:58Z",
+              "description": "My description",
+              "id": "42582e38-1709-4754-8b4d-385520247970",
+              "name": "ozoscmnfcy",
+              "type": "SERIAL",
+              "updated_at": "2021-12-11T06:23:58Z"
+            }            
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

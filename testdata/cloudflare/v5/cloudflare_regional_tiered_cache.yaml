@@ -1,0 +1,50 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/cache/regional_tiered_cache
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "editable": true,
+            "id": "tc_regional",
+            "modified_on": "2025-02-24T21:36:20.842892Z",
+            "value": "on"
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 0195202f-11af-7d2f-983a-921c0a690945
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=utf-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

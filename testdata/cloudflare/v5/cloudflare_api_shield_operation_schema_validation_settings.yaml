@@ -1,0 +1,338 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+      method: GET
+    response:
+      body: |
+        {
+          "result": [
+            {
+              "id": "a624c23f94c84994815636e827d17937",
+              "name": "Zone sanitize ruleset",
+              "description": "",
+              "kind": "zone",
+              "version": "3",
+              "last_updated": "2021-08-19T23:41:34.985519Z",
+              "phase": "http_request_sanitize"
+            }
+          ],
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/a624c23f94c84994815636e827d17937
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "id": "a624c23f94c84994815636e827d17937",
+            "name": "Zone sanitize ruleset",
+            "description": "",
+            "kind": "zone",
+            "version": "3",
+            "rules": [
+              {
+                "id": "0789dc4343054d1e981f8c44bedc6fbd",
+                "version": "1",
+                "action": "execute",
+                "action_parameters": {
+                  "id": "70339d97bdb34195bbf054b1ebe81f76",
+                  "version": "latest",
+                  "overrides": {
+                    "rules": [
+                      {
+                        "id": "78723a9e0c7c4c6dbec5684cb766231d",
+                        "enabled": true
+                      }
+                    ]
+                  }
+                },
+                "expression": "true",
+                "last_updated": "2021-08-19T23:41:34.985519Z",
+                "ref": "0789dc4343054d1e981f8c44bedc6fbd",
+                "enabled": true
+              }
+            ],
+            "last_updated": "2021-08-19T23:41:34.985519Z",
+            "phase": "http_request_sanitize"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/bf47a1e2d1f1402aa85eb8f507e3ff5b
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "id": "bf47a1e2d1f1402aa85eb8f507e3ff5b",
+            "name": "default",
+            "description": "",
+            "source": "rate_limit",
+            "kind": "zone",
+            "version": "1",
+            "rules": [
+              {
+                "id": "549e64153ff14d2cb5a5ef88c1f5bdbc",
+                "version": "1",
+                "action": "block",
+                "ratelimit": {
+                  "characteristics": [
+                    "ip.src",
+                    "cf.colo.id"
+                  ],
+                  "period": 60,
+                  "requests_per_period": 100,
+                  "mitigation_timeout": 30,
+                  "mitigation_expression": ""
+                },
+                "expression": "(http.cookie eq \"namwe=value\")",
+                "description": "fwewe",
+                "last_updated": "2021-08-29T21:59:21.447624Z",
+                "ref": "549e64153ff14d2cb5a5ef88c1f5bdbc",
+                "enabled": false
+              }
+            ],
+            "last_updated": "2021-08-29T21:59:21.447624Z",
+            "phase": "http_ratelimit"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/76d07b645c674faba69eff8d8451992c
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "id": "76d07b645c674faba69eff8d8451992c",
+            "name": "zone",
+            "description": "",
+            "kind": "zone",
+            "version": "1",
+            "rules": [
+              {
+                "id": "c6893ad10fb344e9b8be3c0c3575adc9",
+                "version": "1",
+                "action": "execute",
+                "action_parameters": {
+                  "id": "4d21379b4f9f4bb088e0729962c8b3cf",
+                  "version": "latest",
+                  "overrides": {
+                    "sensitivity_level": "medium"
+                  }
+                },
+                "expression": "true",
+                "description": "zone",
+                "last_updated": "2021-08-30T02:38:50.39057Z",
+                "ref": "c6893ad10fb344e9b8be3c0c3575adc9",
+                "enabled": true
+              }
+            ],
+            "last_updated": "2021-08-30T02:38:50.39057Z",
+            "phase": "ddos_l7"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/4c971a697dd249939460f4520dcd7184
+      method: GET
+    response:
+      body: |
+        {
+          "result": {
+            "id": "4c971a697dd249939460f4520dcd7184",
+            "name": "zone",
+            "description": "",
+            "source": "firewall_managed",
+            "kind": "zone",
+            "version": "2",
+            "rules": [
+              {
+                "id": "6c41b21b852a4c89a0eaaf5a7ac560a8",
+                "version": "2",
+                "action": "execute",
+                "action_parameters": {
+                  "id": "efb7b8c949ac4650a09736fc376e9aee",
+                  "version": "latest",
+                  "overrides": {
+                    "rules": [
+                      {
+                        "id": "5de7edfa648c4d6891dc3e7f84534ffa",
+                        "action": "block"
+                      },
+                      {
+                        "id": "d52aa57408a144afa35e0fd96e3897dc",
+                        "action": "block"
+                      },
+                      {
+                        "id": "7994335d116849f7a0ab6b771d1d0db7",
+                        "action": "block"
+                      },
+                      {
+                        "id": "20e34d3164a340dbb5c5d29203ccff90",
+                        "action": "block"
+                      },
+                      {
+                        "id": "8d9f209f35df412ba4bafe5156335ab1",
+                        "action": "block"
+                      },
+                      {
+                        "id": "8840c3fa2c7947f6b10176ceb8f65558",
+                        "action": "block"
+                      },
+                      {
+                        "id": "48e06376fc6347c0bf08b8ccf82d008b",
+                        "action": "block"
+                      },
+                      {
+                        "id": "8ea0937695984040b528c80a4e6df495",
+                        "action": "block"
+                      },
+                      {
+                        "id": "b777ce009bb346b39be4886055a71165",
+                        "action": "block"
+                      },
+                      {
+                        "id": "cb5b6de178d3488d8649da8608b7b3a2",
+                        "action": "block"
+                      },
+                      {
+                        "id": "390b6273c8dc4366b36e52fc6f35c356",
+                        "action": "block"
+                      },
+                      {
+                        "id": "8ac6964456494da6b098a93c35f86fc9",
+                        "action": "block"
+                      },
+                      {
+                        "id": "5ac122b3972c4247a247f3271045f374",
+                        "action": "block"
+                      },
+                      {
+                        "id": "b1efd337665d49f5950f892971120c4b",
+                        "action": "block"
+                      },
+                      {
+                        "id": "34158d546873469a8f8ccee19139627b",
+                        "action": "block"
+                      }
+                    ]
+                  }
+                },
+                "expression": "(http.cookie eq \"jb_testing=true\")",
+                "description": "zone",
+                "last_updated": "2021-09-03T06:42:41.341405Z",
+                "ref": "6c41b21b852a4c89a0eaaf5a7ac560a8",
+                "enabled": false
+              }
+            ],
+            "last_updated": "2021-09-03T06:42:41.341405Z",
+            "phase": "http_request_firewall_managed"
+          },
+          "success": true,
+          "errors": [],
+          "messages": []
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/api_gateway/operations/8255d5da-5a46-4928-ad00-01de7d48c1e7/schema_validation
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "mitigation_action": "log",
+            "operation_id": "8255d5da-5a46-4928-ad00-01de7d48c1e7"
+          },
+          "success": true
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

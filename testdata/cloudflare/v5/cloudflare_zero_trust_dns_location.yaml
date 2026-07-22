@@ -1,0 +1,62 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/locations
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "anonymized_logs_enabled": false,
+              "client_default": true,
+              "created_at": "2021-09-01T20:46:46Z",
+              "dns_destination_ips_id": "0e4a32c6-6fb8-4858-9296-98f51631e8e6",
+              "dns_destination_ipv6_block_id": null,
+              "doh_subdomain": "097l11gmlq",
+              "ecs_support": false,
+              "id": "1c3fceb15ae24a998ef161c88efad1cd",
+              "ip": "2a06:98c1:54::1:1b84",
+              "ipv4_destination": "172.64.36.1",
+              "ipv4_destination_backup": "172.64.36.2",
+              "name": "bbltsfpzao",
+              "networks": [],
+              "updated_at": "2021-09-01T20:46:46Z"
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

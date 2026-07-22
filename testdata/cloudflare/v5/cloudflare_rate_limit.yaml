@@ -1,0 +1,98 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rate_limits
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "action": {
+                "mode": "ban",
+                "response": {
+                  "body": "{\"response\":\"your request has been rate limited\"}",
+                  "content_type": "application/json"
+                },
+                "timeout": 3600
+              },
+              "disabled": false,
+              "id": "45c6e7a567074ed4b1fa55316a30aa84",
+              "login_protect": false,
+              "match": {
+                "request": {
+                  "methods": [
+                    "POST"
+                  ],
+                  "schemes": [
+                    "_ALL_"
+                  ],
+                  "url": "example.com"
+                },
+                "response": {
+                  "headers": [
+                    {
+                      "name": "My_origin_field",
+                      "op": "eq",
+                      "value": "block_request"
+                    },
+                    {
+                      "name": "Other",
+                      "op": "eq",
+                      "value": "block_request"
+                    }
+                  ],
+                  "origin_traffic": false,
+                  "status": [
+                    401,
+                    403
+                  ]
+                }
+              },
+              "period": 900,
+              "threshold": 60
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 25,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a27-9b97-7290-9dde-22beca17ccc8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

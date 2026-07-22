@@ -1,0 +1,38 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/bot_management
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": {
+            "ai_bots_protection": "disabled",
+            "enable_js": true,
+            "is_robots_txt_managed": false,
+            "optimize_wordpress": true,
+            "sbfm_definitely_automated": "managed_challenge",
+            "sbfm_likely_automated": "block",
+            "sbfm_static_resource_protection": false,
+            "sbfm_verified_bots": "allow",
+            "suppress_session_score": false,
+            "using_latest_model": true
+          },
+          "success": true
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

@@ -1,0 +1,79 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.1.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.24.0
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/queues
+      method: GET
+    response:
+      body: |
+        {
+          "errors": null,
+          "messages": null,
+          "result": [
+            {
+              "consumers": [],
+              "consumers_total_count": 0,
+              "created_on": "2025-03-13T18:14:27.307048Z",
+              "modified_on": "2025-03-13T18:14:27.307048Z",
+              "producers": [],
+              "producers_total_count": 0,
+              "queue_id": "5c03bec8d113492ba229a671f22235dd",
+              "queue_name": "test-q",
+              "settings": {
+                "delivery_delay": 0,
+                "message_retention_period": 345600
+              }
+            }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": 100,
+            "total_count": 1,
+            "total_pages": 1
+          },
+          "success": true
+        }
+      headers:
+        Cache-Control:
+          - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+        Cf-Auditlog-Id:
+          - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Expires:
+          - Sun, 25 Jan 1981 05:00:00 GMT
+        Pragma:
+          - no-cache
+        Strict-Transport-Security:
+          - max-age=31536000
+        Vary:
+          - accept-encoding
+        X-Content-Type-Options:
+          - nosniff
+        X-Frame-Options:
+          - SAMEORIGIN
+      status: 200 OK
+      code: 200
+      duration: ""

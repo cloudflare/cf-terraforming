@@ -1,0 +1,76 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/gateway/certificates
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "binding_status": "available",
+              "certificate": "-----BEGIN CERTIFICATE-----\nMIIDHzCCAsWgAc7K7WA+k=\n-----END CERTIFICATE-----\n",
+              "created_at": "1024-09-04T22:52:30.310385Z",
+              "expires_on": "1029-09-04T22:48:00Z",
+              "fingerprint": "AF:69:63:12:5E:LK:9:54:C1:CC:4D:31:9:C0:4B:20:50:33:95:56:CB:RR:9F:44:F1:A3:2D:52:D3:A3:44:5F",
+              "id": "bd33638d-5336-4fd8-a7e5-059d90a2c6ed",
+              "in_use": false,
+              "issuer_org": "Cloudflare, Inc.",
+              "issuer_raw": "CN=Gateway CA - Cloudflare Managed G13 f037e56e89293a057740de681ac9abbe,OU=www.cloudflare.com,O=Cloudflare\\, Inc.,L=San Francisco,ST=California,C=US",
+              "qs_pack_id": "00000000-0000-0000-0000-000000000000",
+              "type": "gateway_managed",
+              "updated_at": "0001-01-01T00:00:00Z",
+              "uploaded_on": "0001-01-01T00:00:00Z"
+            },
+            {
+              "binding_status": "available",
+              "certificate": "-----BEGIN CERTIFICATE-----\nMIIDHzCCAsWgAwIBAgIUYHnzyR4QYHyvWxyZM=\n-----END CERTIFICATE-----\n",
+              "created_at": "1024-09-04T23:07:14.46176Z",
+              "expires_on": "1029-09-04T23:02:00Z",
+              "fingerprint": "AF:69:63:12:5E:LK:9:54:C1:CC:4D:31:9:C0:4B:20:50:33:95:56:CB:RR:9F:44:F1:A3:2D:52:D3:A3:44:5F",
+              "id": "5d083f37-f9f9-4e75-9459-2682a07ab79e",
+              "in_use": false,
+              "issuer_org": "Cloudflare, Inc.",
+              "issuer_raw": "CN=Gateway CA - Cloudflare Managed G15 f037e56e89293a057740de681ac9abbe,OU=www.cloudflare.com,O=Cloudflare\\, Inc.,L=San Francisco,ST=California,C=US",
+              "qs_pack_id": "00000000-0000-0000-0000-000000000000",
+              "type": "gateway_managed",
+              "updated_at": "0001-01-01T00:00:00Z",
+              "uploaded_on": "0001-01-01T00:00:00Z"
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

@@ -1,0 +1,98 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/api_gateway/discovery/operations
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "endpoint": "/api/products/{var1}",
+              "features": {
+                "traffic_stats": {
+                  "last_updated": "2025-04-15T16:49:45.819434Z",
+                  "period_seconds": 3600,
+                  "requests": 7170.659722222223
+                }
+              },
+              "host": "limbo-test-0.cfbotszone.com",
+              "id": "38e124f5-fb1c-4235-a726-9471e1bd0161",
+              "last_updated": "2025-04-15T17:19:47.285963Z",
+              "method": "GET",
+              "origin": [
+                "SessionIdentifier",
+                "ML"
+              ],
+              "state": "review"
+            },
+            {
+              "endpoint": "/api/brands/{var1}",
+              "features": {
+                "traffic_stats": {
+                  "last_updated": "2025-04-15T16:49:45.819434Z",
+                  "period_seconds": 3600,
+                  "requests": 3525.8680555555557
+                }
+              },
+              "host": "limbo-test-0.cfbotszone.com",
+              "id": "1299ce1a-4f00-4ae7-bed1-658df4369f97",
+              "last_updated": "2025-04-15T17:19:47.285963Z",
+              "method": "GET",
+              "origin": [
+                "SessionIdentifier",
+                "ML"
+              ],
+              "state": "ignored"
+            }            
+          ],
+          "result_info": {
+            "count": 2,
+            "discovery_state": 200,
+            "page": 0,
+            "per_page": 0,
+            "total_count": 2,
+            "zero_conf_discovery_state": 200
+          },
+          "success": true
+        }
+      headers:
+        Allow:
+          - GET, POST
+        Cache-Control:
+          - private,no-cache,no-store
+        Cf-Auditlog-Id:
+          - 01951b40-03ef-736b-b60f-86e9bf38f85c
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json
+        Pragma:
+          - no-cache
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

@@ -1,0 +1,72 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rules/lists
+      method: GET
+    response:
+      body: |
+        {
+          "success": true,
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "created_on": "2020-01-01T08:00:00Z",
+              "description": "This is a note",
+              "id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
+              "kind": "hostname",
+              "modified_on": "2020-01-10T14:00:00Z",
+              "name": "hostname_list",
+              "num_items": 1,
+              "num_referencing_filters": 2
+            }
+          ]
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Content-Type:
+          - application/json
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/rules/lists/2c0fc9fa937b11eaa1b71c4d701ab86e/items
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "comment": "one",
+              "created_on": "2020-01-01T08:00:00Z",
+              "id": "2c0fc9fa937b11eaa1b71c4d701ab86e",
+              "hostname": {
+                "url_hostname": "example.com"
+              },
+              "modified_on": "2020-01-10T14:00:00Z"
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Content-Type:
+          - application/json
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

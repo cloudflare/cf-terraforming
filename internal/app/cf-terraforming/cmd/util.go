@@ -4,22 +4,43 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
 
-	cloudflare "github.com/cloudflare/cloudflare-go"
+	cfv0 "github.com/cloudflare/cloudflare-go"
+	"github.com/cloudflare/cloudflare-go/v4"
+	"github.com/cloudflare/cloudflare-go/v4/option"
 	"github.com/hashicorp/hcl/v2/hclwrite"
 	tfjson "github.com/hashicorp/terraform-json"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/tidwall/gjson"
 	"github.com/zclconf/go-cty/cty"
 )
 
 var hasNumber = regexp.MustCompile("[0-9]+").MatchString
+
+// userAgentTransport is an http.RoundTripper that appends a cf-terraforming
+// product token to the outgoing User-Agent header so that API requests
+// originating from this tool are identifiable in Cloudflare's logs.
+type userAgentTransport struct {
+	rt http.RoundTripper
+}
+
+func (t *userAgentTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	req = req.Clone(req.Context())
+	ua := fmt.Sprintf("cf-terraforming/%s", versionString)
+	if existing := req.Header.Get("User-Agent"); existing != "" {
+		ua = existing + " " + ua
+	}
+	req.Header.Set("User-Agent", ua)
+	return t.rt.RoundTrip(req)
+}
 
 func contains(slice []string, item string) bool {
 	set := make(map[string]struct{}, len(slice))
@@ -44,7 +65,7 @@ func executeCommandC(root *cobra.Command, args ...string) (output string, err er
 
 // testDataFile slurps a local test case into memory and returns it while
 // encapsulating the logic for finding it.
-func testDataFile(filename string) string {
+func testDataFile(version, filename string) string {
 	filename = strings.TrimSuffix(filename, "/")
 
 	dirname, err := os.Getwd()
@@ -52,7 +73,7 @@ func testDataFile(filename string) string {
 		panic(err)
 	}
 
-	dir, err := os.Open(filepath.Join(dirname, "../../../../testdata/terraform"))
+	dir, err := os.Open(filepath.Join(dirname, fmt.Sprintf("../../../../testdata/terraform/%s", version)))
 	if err != nil {
 		panic(err)
 	}
@@ -97,17 +118,22 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		}).Debug("initializing cloudflare-go with API Token")
 	}
 
-	var options []cloudflare.Option
+	var options []cfv0.Option
 
 	if hostname != "" {
-		options = append(options, cloudflare.BaseURL("https://"+hostname+"/client/v4"))
+		options = append(options, cfv0.BaseURL("https://"+hostname+"/client/v4"))
 	}
 
 	if verbose {
-		options = append(options, cloudflare.Debug(true))
+		options = append(options, cfv0.Debug(true))
 	}
 
 	var err error
+
+	httpClient := &http.Client{
+		Transport: &userAgentTransport{rt: http.DefaultTransport},
+	}
+	options = append(options, cfv0.HTTPClient(httpClient))
 
 	// Don't initialise a client in CI as this messes with VCR and the ability to
 	// mock out the HTTP interactions.
@@ -115,9 +141,11 @@ func sharedPreRun(cmd *cobra.Command, args []string) {
 		var useToken = apiToken != ""
 
 		if useToken {
-			api, err = cloudflare.NewWithAPIToken(apiToken, options...)
+			apiV0, err = cfv0.NewWithAPIToken(apiToken, options...)
+			api = cloudflare.NewClient(option.WithAPIToken(apiToken), option.WithHTTPClient(httpClient))
 		} else {
-			api, err = cloudflare.New(apiKey, apiEmail, options...)
+			apiV0, err = cfv0.New(apiKey, apiEmail, options...)
+			api = cloudflare.NewClient(option.WithAPIKey(apiKey), option.WithAPIEmail(apiEmail), option.WithHTTPClient(httpClient))
 		}
 
 		if err != nil {
@@ -133,7 +161,7 @@ func sanitiseTerraformResourceName(s string) string {
 	return re.ReplaceAllString(s, "_")
 }
 
-// flattenAttrMap takes a list of attributes defined as a list of maps comprising of {"id": "attrId", "value": "attrValue"}
+// flattenAttrMap takes a list of attributes defined as a list of maps comprising {"id": "attrId", "value": "attrValue"}
 // and flattens it to a single map of {"attrId": "attrValue"}.
 func flattenAttrMap(l []interface{}) map[string]interface{} {
 	result := make(map[string]interface{})
@@ -219,94 +247,176 @@ func processBlocks(schemaBlock *tfjson.SchemaBlock, structData map[string]interf
 // writeAttrLine outputs a line of HCL configuration with a configurable depth
 // for known types.
 func writeAttrLine(key string, value interface{}, parentName string, body *hclwrite.Body) {
+	if body == nil || value == nil {
+		log.Debug("body or value is nil")
+		return
+	}
+
 	switch values := value.(type) {
 	case []map[string]interface{}:
-		var childCty []cty.Value
-		for _, item := range value.([]map[string]interface{}) {
+		// Use tuple approach for heterogeneous maps
+		var tupleValues []cty.Value
+		for _, item := range values {
 			mapCty := make(map[string]cty.Value)
 			for k, v := range item {
-				mapCty[k] = cty.StringVal(v.(string))
+				mapCty[k] = processExpression(v)
 			}
-			childCty = append(childCty, cty.MapVal(mapCty))
+			tupleValues = append(tupleValues, cty.ObjectVal(mapCty))
 		}
-		body.SetAttributeValue(key, cty.ListVal(childCty))
+		body.SetAttributeValue(key, cty.TupleVal(tupleValues))
 	case map[string]interface{}:
+		ctyMap := make(map[string]cty.Value)
 
+		// Sort keys for consistent output
 		sortedKeys := make([]string, 0, len(values))
 		for k := range values {
 			sortedKeys = append(sortedKeys, k)
 		}
 		sort.Strings(sortedKeys)
 
-		ctyMap := make(map[string]cty.Value)
-		for _, v := range sortedKeys {
-			switch val := values[v].(type) {
-			case string:
-				ctyMap[v] = cty.StringVal(val)
-			case float64:
-				ctyMap[v] = cty.NumberFloatVal(val)
-			}
+		for _, k := range sortedKeys {
+			ctyMap[k] = processExpression(values[k])
 		}
 		body.SetAttributeValue(key, cty.ObjectVal(ctyMap))
 	case []interface{}:
-		var stringItems []string
-		var intItems []int
-		var interfaceItems []map[string]interface{}
-
-		for _, item := range value.([]interface{}) {
-			switch item := item.(type) {
-			case string:
-				stringItems = append(stringItems, item)
-			case map[string]interface{}:
-				interfaceItems = append(interfaceItems, item)
-			case float64:
-				intItems = append(intItems, int(item))
-			}
-		}
-		if len(stringItems) > 0 {
-			writeAttrLine(key, stringItems, parentName, body)
+		if len(values) == 0 {
+			body.SetAttributeValue(key, cty.EmptyTupleVal)
+			return
 		}
 
-		if len(intItems) > 0 {
-			writeAttrLine(key, intItems, parentName, body)
+		// Convert all slice elements using processExpression for consistency
+		var tupleValues []cty.Value
+		for _, item := range values {
+			tupleValues = append(tupleValues, processExpression(item))
 		}
-
-		if len(interfaceItems) > 0 {
-			writeAttrLine(key, interfaceItems, parentName, body)
-		}
+		body.SetAttributeValue(key, cty.TupleVal(tupleValues))
 	case []int:
 		var vals []cty.Value
-		for _, i := range value.([]int) {
+		for _, i := range values {
 			vals = append(vals, cty.NumberIntVal(int64(i)))
 		}
-		body.SetAttributeValue(key, cty.ListVal(vals))
+		body.SetAttributeValue(key, cty.TupleVal(vals))
 	case []string:
-		var items []string
-		items = append(items, value.([]string)...)
-		if len(items) > 0 {
+		if len(values) > 0 {
 			var vals []cty.Value
-			for _, item := range items {
+			for _, item := range values {
 				vals = append(vals, cty.StringVal(item))
 			}
-			body.SetAttributeValue(key, cty.ListVal(vals))
+			body.SetAttributeValue(key, cty.TupleVal(vals))
 		} else {
-			body.SetAttributeValue(key, cty.ListValEmpty(cty.String))
+			body.SetAttributeValue(key, cty.EmptyTupleVal)
 		}
 	case string:
 		if parentName == "query" && key == "value" && value == "" {
 			body.SetAttributeValue(key, cty.StringVal(""))
 		}
-
 		if value != "" {
-			body.SetAttributeValue(key, cty.StringVal(value.(string)))
+			body.SetAttributeValue(key, cty.StringVal(values))
 		}
 	case int:
-		body.SetAttributeValue(key, cty.NumberIntVal(int64(value.(int))))
+		body.SetAttributeValue(key, cty.NumberIntVal(int64(values)))
 	case float64:
-		body.SetAttributeValue(key, cty.NumberFloatVal(value.(float64)))
+		body.SetAttributeValue(key, cty.NumberFloatVal(values))
 	case bool:
-		body.SetAttributeValue(key, cty.BoolVal(value.(bool)))
+		body.SetAttributeValue(key, cty.BoolVal(values))
 	default:
-		log.Debugf("got unknown attribute configuration: key %s, value %v, value type %T", key, value, value)
+		fmt.Printf("Warning: Unknown attribute type: key %s, value %v, value type %T\n", key, value, value)
+		// Convert unknown types to string representation
+		body.SetAttributeValue(key, cty.StringVal(fmt.Sprintf("%v", value)))
 	}
+}
+
+// Process any expression into its appropriate cty.Value and also modified to use TupleVal consistently.
+func processExpression(val interface{}) cty.Value {
+	if val == nil {
+		return cty.NullVal(cty.DynamicPseudoType)
+	}
+
+	switch v := val.(type) {
+	case string:
+		return cty.StringVal(v)
+	case int:
+		return cty.NumberIntVal(int64(v))
+	case float64:
+		return cty.NumberFloatVal(v)
+	case bool:
+		return cty.BoolVal(v)
+	case []string:
+		var vals []cty.Value
+		for _, s := range v {
+			vals = append(vals, cty.StringVal(s))
+		}
+		return cty.TupleVal(vals)
+	case []int:
+		var vals []cty.Value
+		for _, i := range v {
+			vals = append(vals, cty.NumberIntVal(int64(i)))
+		}
+		return cty.TupleVal(vals)
+	case []interface{}:
+		if len(v) == 0 {
+			return cty.EmptyTupleVal
+		}
+
+		var vals []cty.Value
+		for _, item := range v {
+			vals = append(vals, processExpression(item))
+		}
+		return cty.TupleVal(vals)
+	case map[string]interface{}:
+		ctyMap := make(map[string]cty.Value)
+		// Sort keys for consistent output
+		sortedKeys := make([]string, 0, len(v))
+		for k := range v {
+			sortedKeys = append(sortedKeys, k)
+		}
+		sort.Strings(sortedKeys)
+
+		for _, k := range sortedKeys {
+			ctyMap[k] = processExpression(v[k])
+		}
+		return cty.ObjectVal(ctyMap)
+	case []map[string]interface{}:
+		var vals []cty.Value
+		for _, m := range v {
+			// Convert map to object
+			objMap := make(map[string]cty.Value)
+			for mk, mv := range m {
+				objMap[mk] = processExpression(mv)
+			}
+			vals = append(vals, cty.ObjectVal(objMap))
+		}
+		return cty.TupleVal(vals)
+	default:
+		return cty.StringVal(fmt.Sprintf("%v", val))
+	}
+}
+
+// boolToEnabledOrDisabled outputs a string representation of a boolean in the form of `enabled` or `disabled`.
+func boolToEnabledOrDisabled(value bool) string {
+	if value {
+		return "enabled"
+	}
+	return "disabled"
+}
+
+// transformToCollection takes a JSON payload that is a singlular resource but
+// operates as a `list` endpoint and transforms it into a JSON to correctly
+// handle the output.
+func transformToCollection(value string) string {
+	return fmt.Sprintf("[%s]", value)
+}
+
+// modifyResponsePayload takes the current resource and the `gjson.Result`
+// to run arbitrary modifications to the JSON before passing it to be overlayed
+// the provider schema.
+func modifyResponsePayload(resourceName string, value gjson.Result) string {
+	output := value.String()
+
+	switch resourceName {
+	case "cloudflare_zero_trust_organization":
+		output = transformToCollection(output)
+	}
+
+	return output
 }

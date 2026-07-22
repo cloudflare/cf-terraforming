@@ -1,0 +1,39 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/acm/total_tls
+    method: GET
+  response:
+    body: '{"success":true,"errors":[],"messages":[],"result":{"enabled":true,"certificate_authority":"google","validity_period":90,"status":"enabled"}}'
+    headers:
+      Cf-Auditlog-Id:
+      - 01952023-d57a-7bdd-b95b-bf1583f09a6e
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

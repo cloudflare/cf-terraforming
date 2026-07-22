@@ -1,0 +1,211 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/registrar/domains
+      method: GET
+    response:
+      body: |
+        {
+          "actionable": false,
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "actionable_metadata": [],
+              "administrator_contact_id": 25846,
+              "auto_renew": true,
+              "available": false,
+              "billing_contact_id": 25848,
+              "can_register": false,
+              "cloudflare_dns": false,
+              "cloudflare_registration": true,
+              "contacts": {
+                "administrator_id": 25846,
+                "billing_id": 25848,
+                "registrant_id": 25845,
+                "technical_id": 25847
+              },
+              "contacts_updated_at": "2024-07-16T21:37:34.967Z",
+              "cor_changes": null,
+              "cor_locked": false,
+              "cor_locked_until": null,
+              "cor_responses_pending": 0,
+              "current_registrar": "Cloudflare",
+              "domain_move": {
+                "ineligibility_reasons": [
+                  "domain_expired"
+                ]
+              },
+              "ds_records": [],
+              "email_verified": true,
+              "expires_at": "2026-04-10T16:07:59.347Z",
+              "fees": {
+                "currency": "USD",
+                "redemption_fee": 44.0,
+                "registration_fee": 7.5,
+                "renewal_fee": 10.11,
+                "transfer_fee": 10.11
+              },
+              "last_known_status": "registrationActive",
+              "locked": true,
+              "name": "12345678dnstest.org",
+              "name_servers": [
+                "art.ns.cloudflare.com",
+                "jean.ns.cloudflare.com"
+              ],
+              "payment_expires_at": "2025-04-10T16:07:59.347Z",
+              "pending_transfer": false,
+              "permissions": [
+                "contact_read",
+                "contact_write",
+                "domain_renew",
+                "domain_transfer_out",
+                "nameserver_write",
+                "domain_delete"
+              ],
+              "policies": {
+                "suspension": {
+                  "parked": false,
+                  "parking_reason": null,
+                  "payment_expired": true
+                }
+              },
+              "premium_type": "not_premium",
+              "privacy": true,
+              "registered_at": "2024-04-10T16:07:59.503Z",
+              "registered_billing_version": "V3",
+              "registrant_contact_id": 25845,
+              "registry": "PIR",
+              "registry_object_id": "004c12dc59ef44c1b212d20dd930e409-LROR",
+              "registry_statuses": "clienttransferprohibited,autorenewperiod",
+              "supported_tld": true,
+              "technical_contact_id": 25847,
+              "transfer_conditions": {
+                "exists": true,
+                "not_premium": true,
+                "not_secure": true,
+                "not_started": true,
+                "not_waiting": true,
+                "supported_tld": true
+              }
+            },
+            {
+              "actionable_metadata": [],
+              "administrator_contact_id": 25732,
+              "auto_renew": true,
+              "available": false,
+              "billing_contact_id": 25734,
+              "can_register": false,
+              "cloudflare_dns": false,
+              "cloudflare_registration": true,
+              "contacts": {
+                "administrator_id": 25732,
+                "billing_id": 25734,
+                "registrant_id": 25731,
+                "technical_id": 25733
+              },
+              "contacts_updated_at": "2024-04-05T18:31:07.283Z",
+              "cor_changes": null,
+              "cor_locked": false,
+              "cor_locked_until": null,
+              "cor_responses_pending": 0,
+              "current_registrar": "Cloudflare",
+              "domain_move": {
+                "ineligibility_reasons": [
+                  "domain_expired"
+                ]
+              },
+              "ds_records": [],
+              "email_verified": true,
+              "expires_at": "2025-04-05T18:31:02.000Z",
+              "fees": {
+                "currency": "USD",
+                "redemption_fee": 55.0,
+                "registration_fee": 12.18,
+                "renewal_fee": 12.18,
+                "transfer_fee": 12.18
+              },
+              "last_known_status": "registrationActive",
+              "locked": true,
+              "name": "1234test.dev",
+              "name_servers": [
+                "art.ns.cloudflare.com",
+                "jean.ns.cloudflare.com"
+              ],
+              "payment_expires_at": "2025-04-05T18:31:02.000Z",
+              "pending_transfer": false,
+              "permissions": [
+                "contact_read",
+                "contact_write",
+                "domain_renew",
+                "domain_transfer_out",
+                "nameserver_write",
+                "domain_delete"
+              ],
+              "policies": {
+                "suspension": {
+                  "parked": false,
+                  "parking_reason": null,
+                  "payment_expired": true
+                }
+              },
+              "premium_type": "not_premium",
+              "privacy": true,
+              "registered_at": "2024-04-05T18:31:02.735Z",
+              "registered_billing_version": "V3",
+              "registrant_contact_id": 25731,
+              "registry": "GoogleRegistry",
+              "registry_object_id": "DFFD6922D-DEV",
+              "registry_statuses": "clienttransferprohibited",
+              "supported_tld": true,
+              "technical_contact_id": 25733,
+              "transfer_conditions": {
+                "exists": true,
+                "not_premium": true,
+                "not_secure": true,
+                "not_started": true,
+                "not_waiting": true,
+                "supported_tld": true
+              }
+            }                    
+          ],
+          "result_info": {
+            "count": 2,
+            "page": 0,
+            "per_page": 50,
+            "total_count": 2
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

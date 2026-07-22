@@ -1,0 +1,107 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+           {
+            "id": "4b9724cc601c443c9dfa506d8b566dc2",
+            "name": "zone",
+            "description": "",
+            "kind": "zone",
+            "version": "1",
+            "last_updated": "2021-08-30T02:38:50.39057Z",
+            "phase": "http_log_custom_fields"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/4b9724cc601c443c9dfa506d8b566dc2
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "4b9724cc601c443c9dfa506d8b566dc2",
+          "name": "zone",
+          "description": "",
+          "kind": "zone",
+          "version": "1",
+          "rules": [
+            {
+              "id": "17a0d1e23a3444ccbd5e58fc7793649a",
+              "version": "1",
+              "action": "log_custom_field",
+              "expression": "true",
+              "description": "zone",
+              "last_updated": "2022-07-22T12:34:45.479429Z",
+              "ref": "17a0d1e23a3444ccbd5e58fc7793649a",
+              "enabled": true,
+              "action_parameters": {
+                "cookie_fields": [
+                  {
+                    "name": "cookie"
+                  },
+                  {
+                    "name": "fields"
+                  }
+                ],
+                "request_fields": [
+                  {
+                    "name": "request"
+                  },
+                  {
+                    "name": "fields"
+                  }
+                ],
+                "response_fields": [
+                  {
+                    "name": "response"
+                  },
+                  {
+                    "name": "fields"
+                  }
+                ]
+              }
+            }
+          ],
+          "last_updated": "2021-08-30T02:38:50.39057Z",
+          "phase": "http_log_custom_fields"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

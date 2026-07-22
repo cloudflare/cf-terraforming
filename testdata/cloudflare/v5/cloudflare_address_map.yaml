@@ -1,0 +1,66 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/addressing/address_maps
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "can_delete": true,
+              "can_modify_ips": true,
+              "created_at": "2023-07-10T02:07:13.06175Z",
+              "default_sni": "*.terraform.cfapi.net",
+              "description": "qvkynjoxpz",
+              "enabled": true,
+              "id": "5425914c83244b0fafb14e5662f0d8a8",
+              "modified_at": "2023-07-10T02:07:14.636818Z"
+            },
+            {
+              "can_delete": true,
+              "can_modify_ips": true,
+              "created_at": "2023-07-07T01:57:01.526149Z",
+              "default_sni": "*.terraform.cfapi.net",
+              "description": "tlrcfnztky",
+              "enabled": true,
+              "id": "666bdc47c60849dd921c4737574dbeaf",
+              "modified_at": "2023-07-07T01:57:04.246736Z"
+            }            
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

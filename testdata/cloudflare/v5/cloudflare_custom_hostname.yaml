@@ -1,0 +1,65 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/custom_hostnames
+    method: GET
+  response:
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "created_at": "2025-02-27T16:01:49.720192Z",
+            "hostname": "okwyujswsc.terraform.cfapi.net",
+            "id": "234e5416-89bd-44ae-adea-93082b3a88ed",
+            "ssl": {
+              "bundle_method": "ubiquitous",
+              "certificate_authority": "google",
+              "dcv_delegation_records": [
+                {
+                  "cname": "_acme-challenge.okwyujswsc.terraform.cfapi.net",
+                  "cname_target": "okwyujswsc.terraform.cfapi.net.9dbb86635115718e.dcv.cloudflare.com"
+                }
+              ],
+              "id": "aa4bd600-4144-46a1-82b8-8ef525922877",
+              "method": "txt",
+              "status": "pending_validation",
+              "txt_name": "_acme-challenge.okwyujswsc.terraform.cfapi.net",
+              "txt_value": "28Rth8iqNkhKk8sPwpdkanLg5xMoVaEdiHsOzKHemUE",
+              "type": "dv",
+              "validation_records": [
+                {
+                  "status": "pending",
+                  "txt_name": "_acme-challenge.okwyujswsc.terraform.cfapi.net",
+                  "txt_value": "28Rth8iqNkhKk8sPwpdkanLg5xMoVaEdiHsOzKHemUE"
+                }
+              ],
+              "wildcard": false
+            },
+            "status": "active"
+          }
+        ],
+        "result_info": {
+          "count": 1,
+          "page": 1,
+          "per_page": 20,
+          "total_count": 1,
+          "total_pages": 1
+        },
+        "success": true
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

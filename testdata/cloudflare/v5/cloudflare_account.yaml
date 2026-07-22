@@ -1,0 +1,132 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.1.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.24.0
+    url: https://api.cloudflare.com/client/v4/accounts
+    method: GET
+  response:
+    body: |
+      {
+         "result":[
+            {
+               "id":"d781e89412e1965584dc2a65a43b7fce",
+               "name":"Foo Production",
+               "type":"enterprise",
+               "settings":{
+                  "enforce_twofactor":true,
+                  "api_access_enabled":null,
+                  "access_approval_expiry":null,
+                  "use_account_custom_ns_by_default":false,
+                  "default_nameservers":"cloudflare.standard",
+                  "abuse_contact_email":null
+               },
+               "legacy_flags":{
+                  "enterprise_zone_quota":{
+                     "maximum":30,
+                     "current":24,
+                     "available":6
+                  }
+               },
+               "created_on":"2018-04-03T20:55:02.113290Z"
+            },
+            {
+               "id":"725379064ae74b03c3e3058pokhdv",
+               "name":"Foo Staging",
+               "type":"enterprise",
+               "settings":{
+                  "enforce_twofactor":false,
+                  "api_access_enabled":null,
+                  "access_approval_expiry":null,
+                  "use_account_custom_ns_by_default":false,
+                  "default_nameservers":"cloudflare.standard",
+                  "abuse_contact_email":null
+               },
+               "legacy_flags":{
+                  "enterprise_zone_quota":{
+                     "maximum":10,
+                     "current":2,
+                     "available":8
+                  }
+               },
+               "created_on":"2023-05-10T22:38:36.254757Z"
+            },
+            {
+               "id":"725379064ae74b03c3e3058dbgcfe",
+               "name":"Foo Acceptance Testing",
+               "type":"enterprise",
+               "settings":{
+                  "enforce_twofactor":false,
+                  "api_access_enabled":null,
+                  "access_approval_expiry":null,
+                  "use_account_custom_ns_by_default":false,
+                  "default_nameservers":"cloudflare.standard",
+                  "abuse_contact_email":null
+               },
+               "legacy_flags":{
+                  "enterprise_zone_quota":{
+                     "maximum":1000,
+                     "current":2,
+                     "available":998
+                  }
+               },
+               "created_on":"2019-04-17T21:34:12.768127Z"
+            }
+         ],
+         "result_info":{
+            "page":1,
+            "per_page":20,
+            "total_pages":1,
+            "count":3,
+            "total_count":3
+         },
+         "success":true,
+         "errors":[
+
+         ],
+         "messages":[
+
+         ]
+      }
+    headers:
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+      Cf-Auditlog-Id:
+      - 01954e0f-e6fe-797b-8524-123d9e9cdb2f
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Expires:
+      - Sun, 25 Jan 1981 05:00:00 GMT
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000
+      Vary:
+      - accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+    status: 200 OK
+    code: 200
+    duration: ""

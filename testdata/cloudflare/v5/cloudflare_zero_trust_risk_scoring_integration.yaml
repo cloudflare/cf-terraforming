@@ -1,0 +1,56 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/zt_risk_scoring/integrations
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+            {
+              "account_tag": "f037e56e89293a057740de681ac9abbe",
+              "active": true,
+              "created_at": "2025-03-19T19:53:56Z",
+              "id": "4cfe8442-664b-4915-acd4-b39cd65c4314",
+              "integration_type": "Okta",
+              "reference_id": "3701e70b-5de4-4d9d-8972-f5aa994d9057",
+              "tenant_url": "https://example.oktapreview.com",
+              "well_known_url": "https://ssf.risk-score.teams.cloudflare.com/.well-known/sse-configuration/4cfe8442-664b-4915-acd4-b39cd65c4314"
+            }
+          ],
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

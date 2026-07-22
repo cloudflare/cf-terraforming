@@ -1,0 +1,327 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Accept:
+      - application/json
+      X-Stainless-Arch:
+      - arm64
+      X-Stainless-Lang:
+      - go
+      X-Stainless-Os:
+      - MacOS
+      X-Stainless-Package-Version:
+      - 4.0.0
+      X-Stainless-Retry-Count:
+      - "0"
+      X-Stainless-Runtime:
+      - go
+      X-Stainless-Runtime-Version:
+      - go1.23.5
+    url: https://api.cloudflare.com/client/v4/zones
+    method: GET
+  response:
+    body: |
+      {
+        "errors": [],
+        "messages": [],
+        "result": [
+          {
+            "account": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "Foo Team Production"
+            },
+            "activated_on": "2023-06-20T09:43:50.808668Z",
+            "created_on": "2023-06-20T09:37:09.971592Z",
+            "development_mode": 0,
+            "id": "d3d821f17e8a0f09b58be826091540db",
+            "meta": {
+              "custom_certificate_quota": 1,
+              "page_rule_quota": 100,
+              "phishing_detected": false,
+              "step": 2
+            },
+            "modified_on": "2023-06-20T09:43:50.808668Z",
+            "name": "api.cloudflarecn.net",
+            "name_servers": [
+              "linda.ns.cloudflare.com",
+              "merlin.ns.cloudflare.com"
+            ],
+            "original_dnshost": null,
+            "original_name_servers": [
+              "ns79.dns.cf-ns.com",
+              "ns90.dns.cf-ns.com"
+            ],
+            "original_registrar": "22net, inc. (id: 1555)",
+            "owner": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "API Team Production",
+              "type": "organization"
+            },
+            "paused": false,
+            "permissions": [              
+              "#page_shield:edit",
+              "#zone:edit",
+              "#zone:read",
+              "#teams:report",
+              "#subscription:edit",
+              "#app:edit",
+              "#subscription:read",
+              "#cache_purge:edit",
+              "#auditlogs:read",
+              "#member:read",
+              "#legal:read"
+            ],
+            "plan": {
+              "can_subscribe": true,
+              "currency": "USD",
+              "externally_managed": true,
+              "frequency": "",
+              "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+              "is_subscribed": true,
+              "legacy_discount": false,
+              "legacy_id": "enterprise",
+              "name": "Enterprise Website",
+              "price": 0
+            },
+            "status": "active",
+            "tenant": {
+              "id": "46f0a1ce86ec3d91fae00db3b8b48cee",
+              "name": "Cloudflare, Inc."
+            },
+            "tenant_unit": {
+              "id": "7381208746ee42cbaf7ca36ea7f80144"
+            },
+            "type": "full",
+            "vanity_name_servers": [],
+            "vanity_name_servers_ips": null
+          },
+          {
+            "account": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "API Team Production"
+            },
+            "activated_on": "2019-09-24T20:04:12.794834Z",
+            "created_on": "2019-08-16T20:28:05.207385Z",
+            "development_mode": 0,
+            "id": "fad922598557ed97dcba616080c80f15",
+            "meta": {
+              "custom_certificate_quota": 1,
+              "page_rule_quota": 100,
+              "phishing_detected": false,
+              "step": 3
+            },
+            "modified_on": "2024-02-14T18:39:26.897528Z",
+            "name": "api.cloudflare.com",
+            "name_servers": [
+              "linda.ns.cloudflare.com",
+              "merlin.ns.cloudflare.com"
+            ],
+            "original_dnshost": null,
+            "original_name_servers": [
+              "ns3.cloudflare.com",
+              "ns4.cloudflare.com",
+              "ns5.cloudflare.com",
+              "ns6.cloudflare.com",
+              "ns7.cloudflare.com"
+            ],
+            "original_registrar": "cloudflare, inc. (id: 1910)",
+            "owner": {
+              "id": "d781e89412e1965584dc2a65a43b7fce",
+              "name": "API Team Production",
+              "type": "organization"
+            },
+            "paused": false,
+            "permissions": [
+              "#worker:edit",
+              "#worker:read",
+              "#teams:read",          
+              "#dns_records:read",
+              "#ces_integration:edit",
+              "#ces_integration:read",
+              "#ces_search:action",
+              "#ces_search:read",
+              "#ces_search:preview",
+              "#ces_search:raw",
+              "#ces_search:trace",
+              "#ces_phishguard:read",
+              "#ces_settings:edit",
+              "#ces_settings:read",
+              "#ces_analytics:read",
+              "#lb:edit",
+              "#lb:read",
+              "#vectorize:read",
+              "#vectorize:edit",
+              "#query_cache:read",
+              "#query_cache:edit",
+              "#integration:edit",
+              "#access:read",
+              "#access:edit",
+              "#r2_bucket_item:read",
+              "#r2_bucket_item:edit",
+              "#integration:read",
+              "#integration:install",
+              "#dex:read",
+              "#analytics:read",
+              "#dex:edit",
+              "#zone_versioning:read",
+              "#zone_versioning:edit",              
+              "#cache_purge:edit",
+              "#auditlogs:read",
+              "#member:read",
+              "#legal:read"
+            ],
+            "plan": {
+              "can_subscribe": true,
+              "currency": "USD",
+              "externally_managed": true,
+              "frequency": "",
+              "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+              "is_subscribed": true,
+              "legacy_discount": false,
+              "legacy_id": "enterprise",
+              "name": "Enterprise Website",
+              "price": 0
+            },
+            "status": "active",
+            "tenant": {
+              "id": "46f0a1ce86ec3d91fae00db3b8b48cee",
+              "name": "Cloudflare, Inc."
+            },
+            "tenant_unit": {
+              "id": "7381208746ee42cbaf7ca36ea7f80144"
+            },
+            "type": "full",
+            "vanity_name_servers": [],
+            "vanity_name_servers_ips": null
+          },
+          {
+            "account": {
+              "id": "d98242917a12ae74b03c3e3058dbacbd",
+              "name": "Foo Team Staging"
+            },
+            "activated_on": "2023-06-20T10:28:59.347922Z",
+            "created_on": "2023-06-20T10:22:50.775531Z",
+            "development_mode": 0,
+            "id": "f14e5e7b2001238aaef9de1309b69b63",
+            "meta": {
+              "custom_certificate_quota": 1,
+              "page_rule_quota": 100,
+              "phishing_detected": false,
+              "step": 2
+            },
+            "modified_on": "2023-06-20T22:06:15.039072Z",
+            "name": "api.staging.cloudflarecn.net",
+            "name_servers": [
+              "dane.ns.cloudflare.com",
+              "leah.ns.cloudflare.com"
+            ],
+            "original_dnshost": null,
+            "original_name_servers": [
+              "ns79.dns.cf-ns.com",
+              "ns90.dns.cf-ns.com"
+            ],
+            "original_registrar": "22net, inc. (id: 1555)",
+            "owner": {
+              "id": "d98242917a12ae74b03c3e3058dbacbd",
+              "name": "API Team Staging",
+              "type": "organization"
+            },
+            "paused": false,
+            "permissions": [
+              "#worker:edit",
+              "#worker:read",
+              "#teams:read",
+              "#teams:edit",
+              "#waitingroom:read",
+              "#waitingroom:edit",
+              "#fbm:edit",
+              "#organization:read",
+              "#organization:edit",
+              "#magic:read",
+              "#magic:edit",
+              "#logs:edit",
+              "#blocks:read",
+              "#blocks:edit",
+              "#cfone_read",
+              "#cfone_edit",
+              "#billing:read",
+              "#zone_settings:read",
+              "#zone_settings:edit",
+              "#cds_compute_account:edit",
+              "#cds_compute_account:read",              
+              "#page_shield:edit",
+              "#zone:edit",
+              "#zone:read",
+              "#teams:report",
+              "#subscription:edit",
+              "#app:edit",
+              "#subscription:read",
+              "#cache_purge:edit",
+              "#auditlogs:read",
+              "#member:edit",
+              "#member:read",
+              "#legal:read",
+              "#legal:edit"
+            ],
+            "plan": {
+              "can_subscribe": true,
+              "currency": "USD",
+              "externally_managed": true,
+              "frequency": "",
+              "id": "94f3b7b768b0458b56d2cac4fe5ec0f9",
+              "is_subscribed": true,
+              "legacy_discount": false,
+              "legacy_id": "enterprise",
+              "name": "Enterprise Website",
+              "price": 0
+            },
+            "status": "active",
+            "tenant": {
+              "id": "46f0a1ce86ec3d91fae00db3b8b48cee",
+              "name": "Cloudflare, Inc."
+            },
+            "tenant_unit": {
+              "id": "7381208746ee42cbaf7ca36ea7f80144"
+            },
+            "type": "full",
+            "vanity_name_servers": [],
+            "vanity_name_servers_ips": null
+          }               
+        ],
+        "result_info": {
+          "count": 2,
+          "page": 1,
+          "per_page": 2,
+          "total_count": 2,
+          "total_pages": 1
+        },
+        "success": true
+      }
+    headers:
+      Cache-Control:
+      - no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+      Cf-Auditlog-Id:
+      - 0195060d-02f1-7e32-9ce1-a4fe3839e12e
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Expires:
+      - Sun, 25 Jan 1981 05:00:00 GMT
+      Pragma:
+      - no-cache
+      Strict-Transport-Security:
+      - max-age=31536000
+      Vary:
+      - accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+    status: 200 OK
+    code: 200
+    duration: ""

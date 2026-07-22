@@ -1,0 +1,296 @@
+---
+version: 1
+interactions:
+  - request:
+      body: ""
+      form: {}
+      headers:
+        Accept:
+          - application/json
+        X-Stainless-Arch:
+          - arm64
+        X-Stainless-Lang:
+          - go
+        X-Stainless-Os:
+          - MacOS
+        X-Stainless-Package-Version:
+          - 4.0.0
+        X-Stainless-Retry-Count:
+          - "0"
+        X-Stainless-Runtime:
+          - go
+        X-Stainless-Runtime-Version:
+          - go1.23.5
+      url: https://api.cloudflare.com/client/v4/accounts/f037e56e89293a057740de681ac9abbe/devices/policies
+      method: GET
+    response:
+      body: |
+        {
+          "errors": [],
+          "messages": [],
+          "result": [
+              {
+                "allow_mode_switch": true,
+                "allow_updates": true,
+                "allowed_to_leave": true,
+                "auto_connect": 0,
+                "captive_portal": 5,
+                "default": false,
+                "description": "xocmddmeyz",
+                "disable_auto_fallback": true,
+                "doh_in_tunnel": false,
+                "enabled": true,
+                "exclude": [
+                  {
+                    "address": "10.0.0.0/8"
+                  },
+                  {
+                    "address": "100.64.0.0/10"
+                  },
+                  {
+                    "address": "169.254.0.0/16",
+                    "description": "DHCP Unspecified"
+                  },
+                  {
+                    "address": "172.16.0.0/12"
+                  },
+                  {
+                    "address": "192.0.0.0/24"
+                  },
+                  {
+                    "address": "192.168.0.0/16"
+                  },
+                  {
+                    "address": "224.0.0.0/24"
+                  },
+                  {
+                    "address": "240.0.0.0/4"
+                  },
+                  {
+                    "address": "255.255.255.255/32",
+                    "description": "DHCP Broadcast"
+                  },
+                  {
+                    "address": "fe80::/10",
+                    "description": "IPv6 Link Local"
+                  },
+                  {
+                    "address": "fd00::/8"
+                  },
+                  {
+                    "address": "ff01::/16"
+                  },
+                  {
+                    "address": "ff02::/16"
+                  },
+                  {
+                    "address": "ff03::/16"
+                  },
+                  {
+                    "address": "ff04::/16"
+                  },
+                  {
+                    "address": "ff05::/16"
+                  }
+                ],
+                "exclude_office_ips": false,
+                "fallback_domains": [
+                  {
+                    "suffix": "home.arpa"
+                  },
+                  {
+                    "suffix": "intranet"
+                  },
+                  {
+                    "suffix": "internal"
+                  },
+                  {
+                    "suffix": "private"
+                  },
+                  {
+                    "suffix": "localdomain"
+                  },
+                  {
+                    "suffix": "domain"
+                  },
+                  {
+                    "suffix": "lan"
+                  },
+                  {
+                    "suffix": "home"
+                  },
+                  {
+                    "suffix": "host"
+                  },
+                  {
+                    "suffix": "corp"
+                  },
+                  {
+                    "suffix": "local"
+                  },
+                  {
+                    "suffix": "localhost"
+                  },
+                  {
+                    "suffix": "invalid"
+                  },
+                  {
+                    "suffix": "test"
+                  }
+                ],
+                "gateway_unique_id": "f037e56e89293a057740de681ac9abbe",
+                "match": "identity.email == \"foo@example.com\"",
+                "name": "xocmddmeyz",
+                "policy_id": "61816005-1544-4f75-8475-d6258cdede81",
+                "precedence": 5,
+                "register_interface_ip_with_dns": true,
+                "service_mode_v2": {
+                  "mode": "warp"
+                },
+                "support_url": "support_url",
+                "switch_locked": true,
+                "tunnel_protocol": ""
+              },
+              {
+                "allow_mode_switch": true,
+                "allow_updates": true,
+                "allowed_to_leave": true,
+                "auto_connect": 0,
+                "captive_portal": 5,
+                "default": false,
+                "description": "xeqtpkxdkw",
+                "disable_auto_fallback": true,
+                "doh_in_tunnel": false,
+                "enabled": true,
+                "exclude": [
+                  {
+                    "address": "10.0.0.0/8"
+                  },
+                  {
+                    "address": "100.64.0.0/10"
+                  },
+                  {
+                    "address": "169.254.0.0/16",
+                    "description": "DHCP Unspecified"
+                  },
+                  {
+                    "address": "172.16.0.0/12"
+                  },
+                  {
+                    "address": "192.0.0.0/24"
+                  },
+                  {
+                    "address": "192.168.0.0/16"
+                  },
+                  {
+                    "address": "224.0.0.0/24"
+                  },
+                  {
+                    "address": "240.0.0.0/4"
+                  },
+                  {
+                    "address": "255.255.255.255/32",
+                    "description": "DHCP Broadcast"
+                  },
+                  {
+                    "address": "fe80::/10",
+                    "description": "IPv6 Link Local"
+                  },
+                  {
+                    "address": "fd00::/8"
+                  },
+                  {
+                    "address": "ff01::/16"
+                  },
+                  {
+                    "address": "ff02::/16"
+                  },
+                  {
+                    "address": "ff03::/16"
+                  },
+                  {
+                    "address": "ff04::/16"
+                  },
+                  {
+                    "address": "ff05::/16"
+                  }
+                ],
+                "exclude_office_ips": false,
+                "fallback_domains": [
+                  {
+                    "suffix": "home.arpa"
+                  },
+                  {
+                    "suffix": "intranet"
+                  },
+                  {
+                    "suffix": "internal"
+                  },
+                  {
+                    "suffix": "private"
+                  },
+                  {
+                    "suffix": "localdomain"
+                  },
+                  {
+                    "suffix": "domain"
+                  },
+                  {
+                    "suffix": "lan"
+                  },
+                  {
+                    "suffix": "home"
+                  },
+                  {
+                    "suffix": "host"
+                  },
+                  {
+                    "suffix": "corp"
+                  },
+                  {
+                    "suffix": "local"
+                  },
+                  {
+                    "suffix": "localhost"
+                  },
+                  {
+                    "suffix": "invalid"
+                  },
+                  {
+                    "suffix": "test"
+                  }
+                ],
+                "gateway_unique_id": "f037e56e89293a057740de681ac9abbe",
+                "match": "identity.email == \"foo@example.com\"",
+                "name": "xeqtpkxdkw",
+                "policy_id": "2c11d308-55c1-4b42-96e6-7259a3ee1e70",
+                "precedence": 10,
+                "register_interface_ip_with_dns": true,
+                "service_mode_v2": {
+                  "mode": "warp"
+                },
+                "support_url": "support_url",
+                "switch_locked": true,
+                "tunnel_protocol": ""
+              }
+          ],
+          "result_info": {
+            "count": 1,
+            "page": 1,
+            "per_page": ,
+            "total_count": 6
+          },
+          "success": true
+        }
+      headers:
+        Cf-Auditlog-Id:
+          - 01952a70-d78b-7d73-9be2-7241f4a11fd8
+        Connection:
+          - keep-alive
+        Content-Type:
+          - application/json; charset=UTF-8
+        Vary:
+          - Accept-Encoding
+      status: 200 OK
+      code: 200
+      duration: ""

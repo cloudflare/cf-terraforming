@@ -1,0 +1,70 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "0800fc577294c34e0b28ad2839435945",
+            "name": "default",
+            "description": "Some ruleset",
+            "kind": "zone",
+            "version": "2",
+            "last_updated": "2022-04-07T16:58:54.317608Z",
+            "phase": "http_request_late_transform"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/0800fc577294c34e0b28ad2839435945
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "a624c23f94c84994815636e827d17937",
+          "name": "defautl",
+          "description": "Zone late transform ruleset",
+          "kind": "zone",
+          "version": "3",
+          "rules": [],
+          "last_updated": "2021-08-19T23:41:34.985519Z",
+          "phase": "http_request_late_transform"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+      Vary:
+      - Accept-Encoding
+    status: 200 OK
+    code: 200
+    duration: ""

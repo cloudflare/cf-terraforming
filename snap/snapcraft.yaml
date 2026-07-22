@@ -4,7 +4,7 @@ contact: https://github.com/tingdahl/cf-terraforming
 website: https://github.com/tingdahl/cf-terraforming
 license: MPL-2.0
 summary: Terraform tools for Cloudflare.
-version: v0.20.0
+version: v0.28.0
 description: >
       The cf-terraforming tool from https://github.com/cloudflare/cf-terraforming
       The the snap should follow the upstream project.

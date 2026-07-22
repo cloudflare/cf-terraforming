@@ -73,6 +73,17 @@ if ! git tag -d ${TAG}  &> /dev/null; then
     exit 1
 fi
 
+echo "Setting version in snapcraft.yaml"
+if ! sed "s/VERSION/${TAG}/g" snap/local/snapcraft.yaml.template > snap/snapcraft.yaml; then
+    echo "Could not set version of snapcraft.yaml"
+    exit 1
+fi
+
+if ! git commit snap/snapcraft.yaml -m "Setting version ${TAG} in snapcraft.yaml"; then
+    echo "Could not commit snapcraft.yaml"
+    exit 1
+fi
+
 echo "Adding local tag ${TAG} to HEAD"
 if ! git tag -a ${TAG} -m "Added tag ${TAG}" &> /dev/null; then
     echo "Could not add local tag ${TAG} to HEAD"

@@ -1,0 +1,218 @@
+name: Sync upstream release tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Optional upstream tag (e.g. v0.28.0). If omitted, use latest upstream release tag."
+        required: false
+        type: string
+  schedule:
+    - cron: "17 3 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  merge-upstream-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          if ! git remote get-url upstream >/dev/null 2>&1; then
+            git remote add upstream https://github.com/cloudflare/cf-terraforming.git
+          fi
+
+      - name: Resolve tag
+        id: resolve_tag
+        env:
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+
+          if [[ -n "${INPUT_TAG}" ]]; then
+            tag="${INPUT_TAG}"
+          else
+            tag="$(curl -sSfL https://api.github.com/repos/cloudflare/cf-terraforming/releases/latest | jq -r '.tag_name')"
+          fi
+
+          if [[ -z "${tag}" || "${tag}" == "null" ]]; then
+            echo "Failed to resolve upstream tag"
+            exit 1
+          fi
+
+          if [[ ! "${tag}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag ${tag} does not match required format vX.Y.Z"
+            exit 1
+          fi
+
+          if ! git ls-remote --exit-code --tags upstream "refs/tags/${tag}" >/dev/null 2>&1; then
+            echo "Tag ${tag} was not found on upstream"
+            exit 1
+          fi
+
+          # Keep upstream tag refs isolated to avoid collisions with this fork's local tags.
+          tag_ref="refs/tags/upstream/${tag}"
+          git fetch upstream "refs/tags/${tag}:${tag_ref}"
+
+          echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
+          echo "branch=sync-upstream-${tag}" >> "${GITHUB_OUTPUT}"
+          echo "tag_ref=${tag_ref}" >> "${GITHUB_OUTPUT}"
+
+      - name: Decide whether sync is needed
+        id: needs_sync
+        env:
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+        run: |
+          current_version="$(awk '/^version:/ { print $2 }' snap/snapcraft.yaml)"
+
+          if [[ "${current_version}" == "${TAG}" ]]; then
+            echo "Snap version already set to ${TAG}; nothing to do"
+            echo "skip=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "skip=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Merge upstream tag on sync branch
+        if: steps.needs_sync.outputs.skip != 'true'
+        env:
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+          TAG_REF: ${{ steps.resolve_tag.outputs.tag_ref }}
+          BRANCH: ${{ steps.resolve_tag.outputs.branch }}
+        run: |
+          set -euo pipefail
+
+          git checkout -B "${BRANCH}" origin/master
+          git merge "${TAG_REF}" -m "Merging upstream tag ${TAG}"
+
+          # Keep fork-owned workflows as-is so this automation never tries to
+          # push upstream workflow changes and does not need workflows:write.
+          git checkout origin/master -- .github/workflows
+
+          sed "s/VERSION/${TAG}/g" snap/local/snapcraft.yaml.template > snap/snapcraft.yaml
+
+          if ! git diff --quiet -- snap/snapcraft.yaml; then
+            git add snap/snapcraft.yaml
+            git commit -m "Setting version ${TAG} in snapcraft.yaml"
+          fi
+
+      - name: Push sync branch
+        if: steps.needs_sync.outputs.skip != 'true'
+        env:
+          BRANCH: ${{ steps.resolve_tag.outputs.branch }}
+        run: |
+          git push --force-with-lease origin "${BRANCH}"
+
+      - name: Create or update pull request
+        if: steps.needs_sync.outputs.skip != 'true'
+        uses: actions/github-script@v8
+        env:
+          TAG: ${{ steps.resolve_tag.outputs.tag }}
+          BRANCH: ${{ steps.resolve_tag.outputs.branch }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const base = 'master';
+            const head = `${owner}:${process.env.BRANCH}`;
+            const title = `Merge upstream tag ${process.env.TAG}`;
+            const body = [
+              `Automated sync for upstream release tag ${process.env.TAG}.`,
+              '',
+              '- Merges upstream tag into this fork',
+              '- Updates snap/snapcraft.yaml version from template',
+            ].join('\n');
+
+            async function ensureAutoMergeEnabled(number) {
+              const prData = await github.graphql(
+                `query($owner: String!, $repo: String!, $number: Int!) {
+                  repository(owner: $owner, name: $repo) {
+                    pullRequest(number: $number) {
+                      id
+                      autoMergeRequest {
+                        enabledAt
+                      }
+                    }
+                  }
+                }`,
+                { owner, repo, number }
+              );
+
+              const pr = prData.repository.pullRequest;
+              if (!pr) {
+                core.setFailed(`Pull request #${number} not found`);
+                return;
+              }
+
+              if (pr.autoMergeRequest) {
+                core.info(`Auto-merge already enabled for PR #${number}`);
+                return;
+              }
+
+              try {
+                await github.graphql(
+                  `mutation($pullRequestId: ID!, $mergeMethod: PullRequestMergeMethod!) {
+                    enablePullRequestAutoMerge(input: {
+                      pullRequestId: $pullRequestId,
+                      mergeMethod: $mergeMethod
+                    }) {
+                      clientMutationId
+                    }
+                  }`,
+                  {
+                    pullRequestId: pr.id,
+                    mergeMethod: 'MERGE',
+                  }
+                );
+
+                core.info(`Enabled auto-merge for PR #${number}`);
+              } catch (error) {
+                const message = error?.errors?.[0]?.message || error?.message || String(error);
+                if (
+                  message.includes('Protected branch rules not configured for this branch') ||
+                  message.includes('Auto merge is not allowed for this repository')
+                ) {
+                  core.warning(`Auto-merge not enabled for PR #${number}: ${message}`);
+                  return;
+                }
+
+                throw error;
+              }
+            }
+
+            const existing = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: 'open',
+              base,
+              head,
+              per_page: 100,
+            });
+
+            if (existing.length > 0) {
+              core.info(`PR already open: #${existing[0].number}`);
+              await ensureAutoMergeEnabled(existing[0].number);
+              return;
+            }
+
+            const created = await github.rest.pulls.create({
+              owner,
+              repo,
+              title,
+              head: process.env.BRANCH,
+              base,
+              body,
+            });
+
+            core.info(`Created PR #${created.data.number}`);
+            await ensureAutoMergeEnabled(created.data.number);

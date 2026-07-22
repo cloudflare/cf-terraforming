@@ -1,0 +1,83 @@
+name: Snapcraft PR check
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapcraft-pack:
+    # Always run when manually dispatched, and only for sync branches on PR events.
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.head_ref, 'sync-upstream-')
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install snapcraft
+        run: |
+          sudo snap install snapcraft --classic
+
+      - name: Build snap package
+        run: |
+          # Use destructive mode on GitHub-hosted runners.
+          sudo snapcraft pack --destructive-mode
+
+      - name: Install built snap
+        run: |
+          set -euo pipefail
+
+          snap_file="$(ls -1 ./*.snap | head -n1)"
+          sudo snap install --dangerous "${snap_file}"
+
+      - name: Run basic smoke tests
+        run: |
+          set -euo pipefail
+
+          CMD=""
+          for candidate in tingdahl-cf-terraforming.cf-terraforming cf-terraforming /snap/bin/tingdahl-cf-terraforming.cf-terraforming /snap/bin/cf-terraforming; do
+            if command -v "$candidate" >/dev/null 2>&1 || [ -x "$candidate" ]; then
+              CMD="$candidate"
+              break
+            fi
+          done
+
+          if [ -z "$CMD" ]; then
+            echo "Error: Could not locate installed snap binary"
+            exit 1
+          fi
+
+          echo "Running basic tests using binary: ${CMD}"
+
+          echo "=== Testing version ==="
+          "${CMD}" version
+
+          echo "=== Testing --help ==="
+          "${CMD}" --help
+
+      - name: Print snapcraft execution log on failure
+        if: failure()
+        run: |
+          set -euo pipefail
+
+          log_dir="$HOME/.local/state/snapcraft/log"
+          latest_log="$(ls -1t "${log_dir}"/snapcraft-*.log 2>/dev/null | head -n1 || true)"
+
+          if [[ -z "${latest_log}" ]]; then
+            echo "No snapcraft execution log file found in ${log_dir}"
+            exit 0
+          fi
+
+          cp "${latest_log}" snapcraft-execution.log
+          echo "::group::Snapcraft execution log"
+          cat snapcraft-execution.log
+          echo "::endgroup::"

@@ -1,0 +1,59 @@
+name: Disable inherited workflows
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  disable:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Disable all workflows except allowlist
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const keep = new Set([
+              '.github/workflows/sync_upstream_release.yml',
+              '.github/workflows/snapcraft_pr_check.yml',
+              '.github/workflows/disable_inherited_workflows.yml',
+            ]);
+
+            const { owner, repo } = context.repo;
+            const workflows = await github.paginate(github.rest.actions.listRepoWorkflows, {
+              owner,
+              repo,
+              per_page: 100,
+            });
+
+            const failed = [];
+
+            for (const workflow of workflows) {
+              if (keep.has(workflow.path)) {
+                core.info(`Keeping enabled: ${workflow.name} (${workflow.path})`);
+                continue;
+              }
+
+              core.info(`Disabling: ${workflow.name} (${workflow.path})`);
+              try {
+                await github.rest.actions.disableWorkflow({
+                  owner,
+                  repo,
+                  workflow_id: workflow.id,
+                });
+              } catch (error) {
+                const status = error.status || 'unknown';
+                const message = error.message || 'unknown error';
+                core.warning(`Could not disable ${workflow.name} (${workflow.path}): [${status}] ${message}`);
+                failed.push(`${workflow.path}: [${status}] ${message}`);
+              }
+            }
+
+            if (failed.length > 0) {
+              core.warning('Some workflows could not be disabled automatically.');
+              for (const item of failed) {
+                core.warning(`- ${item}`);
+              }
+            }

@@ -21,3 +21,6 @@ main.tf
 # Snap outputs
 *.snap
 cf-terraforming
+/parts/
+/stage/
+/prime/

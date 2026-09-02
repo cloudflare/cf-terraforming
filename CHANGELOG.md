@@ -1,7 +1,9 @@
 ## Unreleased
 
-- deps: bump `cloudflare-go` to v0.118.0 to preserve `content_converter` for `cloudflare_ruleset` `http_config_settings` `set_config` rules
-- deps: bump `cloudflare-go` to v0.117.0 to pick up `asset_name` support for `cloudflare_ruleset` `http_custom_errors` `serve_error` rules ([APIX-861](https://jira.cfdata.org/browse/APIX-861))
+## 0.29.0 (September 1st, 2026)
+
+- deps: bump `cloudflare-go` to v0.118.0 to preserve `content_converter` for `cloudflare_ruleset` `http_config_settings` `set_config` rules ([#995](https://github.com/cloudflare/cf-terraforming/pull/995), [#996](https://github.com/cloudflare/cf-terraforming/pull/996))
+- deps: bump `cloudflare-go` to v0.117.0 to pick up `asset_name` support for `cloudflare_ruleset` `http_custom_errors` `serve_error` rules
 
 ## 0.6.0 (2021-12-14)
 

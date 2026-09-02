@@ -1,0 +1,81 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets
+    method: GET
+  response:
+    body: |
+      {
+        "result": [
+          {
+            "id": "a6905ff86d3844cebc1a88dd80c659e7",
+            "name": "default",
+            "description": "",
+            "source": "zone",
+            "kind": "zone",
+            "version": "1",
+            "last_updated": "2026-08-29T00:00:00Z",
+            "phase": "http_config_settings"
+          }
+        ],
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+    status: 200 OK
+    code: 200
+    duration: ""
+- request:
+    body: ""
+    form: {}
+    headers:
+      Content-Type:
+      - application/json
+    url: https://api.cloudflare.com/client/v4/zones/0da42c8d2132a9ddaf714f9e7c920711/rulesets/a6905ff86d3844cebc1a88dd80c659e7
+    method: GET
+  response:
+    body: |
+      {
+        "result": {
+          "id": "a6905ff86d3844cebc1a88dd80c659e7",
+          "name": "default",
+          "description": "",
+          "kind": "zone",
+          "version": "1",
+          "phase": "http_config_settings",
+          "rules": [
+            {
+              "id": "0f24aab3002347a9a4ac01520e6893d0",
+              "version": "1",
+              "action": "set_config",
+              "expression": "true",
+              "description": "convert HTML to Markdown",
+              "last_updated": "2026-08-29T00:00:00Z",
+              "ref": "0f24aab3002347a9a4ac01520e6893d0",
+              "enabled": true,
+              "action_parameters": {
+                "content_converter": false
+              }
+            }
+          ],
+          "last_updated": "2026-08-29T00:00:00Z"
+        },
+        "success": true,
+        "errors": [],
+        "messages": []
+      }
+    headers:
+      Content-Type:
+      - application/json
+    status: 200 OK
+    code: 200
+    duration: ""

@@ -22,6 +22,102 @@ import (
 
 // resourceImportStringFormats contains a mapping of the resource type to the
 // composite ID that is compatible with performing an import.
+// resourceIDFieldOverrides names the field holding a resource's own identifier
+// for API responses that do not use "id".
+//
+// Without these, the entries fall through to the account or zone ID (see the
+// fallback in the import loop), which gives every object of the type the same
+// import id and the same generated resource name. The result passes a parity
+// check -- one import block per resource -- while pointing all of them at one
+// object.
+var resourceIDFieldOverrides = map[string]string{
+	"cloudflare_r2_bucket":                        "name",
+	"cloudflare_web_analytics_site":               "site_tag",
+	"cloudflare_zero_trust_device_custom_profile": "policy_id",
+	"cloudflare_zero_trust_dex_test":              "test_id",
+}
+
+// identifierFromResponse returns the resource's own identifier from an API
+// response object whose identifier is not named "id", or "" when there is none.
+// Shared by generate and import so a resource's name and its import id are
+// always derived the same way.
+func identifierFromResponse(resourceType string, data map[string]interface{}) string {
+	field, ok := resourceIDFieldOverrides[resourceType]
+	if !ok {
+		return ""
+	}
+	v, present := data[field]
+	if !present || v == nil {
+		return ""
+	}
+	str, isStr := v.(string)
+	if !isStr {
+		return ""
+	}
+	return str
+}
+
+// scopeAddressedIdentifier returns the scope id a resource is addressed by when
+// its endpoint carries only a scope placeholder, or "" when it is not such a
+// resource.
+//
+// Used for naming as well as for the import id: a scope-addressed resource takes
+// its object's own identifier from the API (a setting name, say), and naming
+// every zone's copy after that produces the same Terraform address in all of
+// them. Terraform rejects a repeated address, so the output does not parse even
+// before the import ids are considered.
+func scopeAddressedIdentifier(endpoint string) string {
+	e := endpoint
+	if strings.Contains(e, "{accounts_or_zones}") {
+		if accountID != "" {
+			e = strings.Replace(e, "/{accounts_or_zones}/{account_or_zone_id}/", "/accounts/{account_id}/", 1)
+		} else {
+			e = strings.Replace(e, "/{accounts_or_zones}/{account_or_zone_id}/", "/zones/{zone_id}/", 1)
+		}
+	}
+	matches := regexp.MustCompile("({[a-z0-9_]*})").FindAllString(e, -1)
+	if len(matches) != 1 || !isScopePlaceholder(matches[0]) {
+		return ""
+	}
+	if matches[0] == "{account_id}" {
+		return accountID
+	}
+	return zoneID
+}
+
+// isScopePlaceholder reports whether an endpoint placeholder names the account or
+// zone the request is scoped to, rather than an object within it.
+func isScopePlaceholder(p string) bool {
+	return p == "{account_id}" || p == "{zone_id}"
+}
+
+// hclSafeIdentifier makes a value safe to embed in a Terraform resource name.
+// Identifiers taken from fields such as an R2 bucket name are not restricted to
+// the characters HCL allows in an identifier -- a bucket may contain a dot, for
+// example -- and a resource name is not a quoted string, so an unsanitised value
+// produces a file that will not parse. Previously this position only ever held a
+// hex or UUID id, so the problem was unreachable.
+func hclSafeIdentifier(s string) string {
+	var b strings.Builder
+	for _, r := range s {
+		switch {
+		case r >= 'a' && r <= 'z', r >= 'A' && r <= 'Z', r >= '0' && r <= '9', r == '_', r == '-':
+			b.WriteRune(r)
+		default:
+			b.WriteRune('_')
+		}
+	}
+	return b.String()
+}
+
+// idFieldHint describes which alternative field was tried, for the error message.
+func idFieldHint(resourceType string) string {
+	if field, ok := resourceIDFieldOverrides[resourceType]; ok {
+		return fmt.Sprintf(" and %q", field)
+	}
+	return ""
+}
+
 var resourceImportStringFormats = map[string]string{
 	"cloudflare_access_application":                            ":account_id/:id",
 	"cloudflare_access_group":                                  ":account_id/:id",
@@ -725,16 +821,45 @@ func runImport() func(cmd *cobra.Command, args []string) {
 
 		importFile := hclwrite.NewEmptyFile()
 		importBody := importFile.Body()
+		skippedForMissingID := 0
 		for i, data := range jsonStructData {
 			var id string
 
 			if data.(map[string]interface{})["id"] == nil {
-				if accountID != "" {
-					id = accountID
-				}
+				// Not every API object names its identifier "id". Where the
+				// resource's identifier lives under a different key, use it.
+				id = identifierFromResponse(resourceType, data.(map[string]interface{}))
 
-				if zoneID != "" {
-					id = zoneID
+				if id == "" {
+					// Falling back to the account or zone ID is only correct when
+					// that IS the resource's import id -- a per-account or
+					// per-zone singleton such as cloudflare_account or
+					// cloudflare_email_routing_dns. When the import format
+					// contains :id, the scope id is definitionally the wrong
+					// value, and emitting it produces an import block that is
+					// individually plausible and collectively wrong: every object
+					// of the type gets the same id, and because the resource name
+					// is derived from the same value, they collide too.
+					//
+					// Skip rather than emit a known-bad id. A missing import block
+					// is visible; a wrong one silently adopts the wrong object.
+					if format, known := resourceImportStringFormats[resourceType]; known && strings.Contains(format, ":id") {
+						skippedForMissingID++
+						log.Errorf("%s: no identifier found in the API response for entry %d "+
+							"(looked for \"id\"%s). Import format is %q, which requires one, so "+
+							"skipping this resource rather than emitting the account or zone ID in "+
+							"its place. Please report this resource type as a bug.",
+							resourceType, i, idFieldHint(resourceType), format)
+						continue
+					}
+
+					if accountID != "" {
+						id = accountID
+					}
+
+					if zoneID != "" {
+						id = zoneID
+					}
 				}
 			} else {
 				switch data.(map[string]interface{})["id"].(type) {
@@ -744,15 +869,32 @@ func runImport() func(cmd *cobra.Command, args []string) {
 					id = data.(map[string]interface{})["id"].(string)
 				}
 			}
+			// Name scope-addressed resources after their scope, not after the
+			// object's own identifier, or every zone produces the same address.
+			nameID := id
+			if scoped := scopeAddressedIdentifier(resourceToEndpoint[resourceType]["get"]); scoped != "" {
+				nameID = scoped
+			}
+
 			if useModernImportBlock {
 				idvalue := buildRawImportAddress(resourceType, id, resourceToEndpoint[resourceType]["get"])
 				imp := importBody.AppendNewBlock("import", []string{}).Body()
-				imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%s_%d", terraformResourceNamePrefix, id, i))))
+				imp.SetAttributeRaw("to", hclwrite.TokensForIdentifier(fmt.Sprintf("%s.%s", resourceType, fmt.Sprintf("%s_%s_%d", terraformResourceNamePrefix, hclSafeIdentifier(nameID), i))))
 				imp.SetAttributeValue("id", cty.StringVal(idvalue))
 				importFile.Body().AppendNewline()
 			} else {
 				_, _ = fmt.Fprint(cmd.OutOrStdout(), buildTerraformImportCommand(i, resourceType, id, resourceToEndpoint[resourceType]["get"]))
 			}
+		}
+
+		if skippedForMissingID > 0 {
+			// A scripted `cf-terraforming import > import.tf` would otherwise produce
+			// a file quietly missing resources, with a zero exit status. The per-entry
+			// errors above go to stderr; this makes the omission impossible to miss
+			// when stderr is being skimmed rather than read.
+			log.Errorf("%s: skipped %d resource(s) whose identifier could not be determined. "+
+				"The generated import blocks are INCOMPLETE for this resource type.",
+				resourceType, skippedForMissingID)
 		}
 
 		if useModernImportBlock {
@@ -795,6 +937,21 @@ func buildRawImportAddress(resourceType, resourceID, endpoint string) string {
 		matches := r.FindAllString(endpoint, -1)
 
 		if len(matches) > 0 {
+			// A resource whose endpoint carries only a scope placeholder is addressed
+			// by that scope and nothing else: /zones/{zone_id}/argo/tiered_caching is
+			// one object per zone, and the provider imports it as "<zone_id>". Filling
+			// the placeholder with the resource ID yields the object's own identifier
+			// -- a setting name such as "tiered_cache_smart_topology_enable", or a
+			// rule id -- which is not a zone, so every zone emits the same value and
+			// the import adopts the wrong object. The prefix is dropped for the same
+			// reason: the import format is the bare scope id, not "accounts/<id>".
+			if len(matches) == 1 && isScopePlaceholder(matches[0]) {
+				if matches[0] == "{account_id}" {
+					return accountID
+				}
+				return zoneID
+			}
+
 			// Naive assumptions below but if we only have a single placeholder (`{}`)
 			// we can replace that with the `resourceID` however, if we have more than
 			// a single one, we assume it is the second match since that is our URL

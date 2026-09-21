@@ -12,12 +12,43 @@ import (
 	"sort"
 	"strings"
 
+	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
 
 	"github.com/sirupsen/logrus"
 
 	"github.com/tidwall/gjson"
 )
+
+// dropUnmanageableResources removes objects the API returns but the provider cannot
+// manage, so that `import` enumerates the same set as `generate`.
+//
+// Cloudflare's managed rulesets -- DDoS L7, Managed Rules, OWASP -- are read-only.
+// `generate` has excluded them since the v4 SDK path was written, and `import` has
+// the same filter, but under provider v5 that filter sits in the legacy branch and
+// is never reached: v5 goes through getAPIResponse instead. The result is an import
+// block for every managed ruleset, naming a resource address that `generate` never
+// wrote.
+//
+// The test is a positive match on the managed kind rather than a negative one on
+// every other kind, so a payload that omits `kind` keeps its rows instead of having
+// them all dropped.
+func dropUnmanageableResources(response *[]interface{}, resourceType string) {
+	if resourceType != "cloudflare_ruleset" {
+		return
+	}
+
+	filtered := make([]interface{}, 0, len(*response))
+	for _, r := range *response {
+		if obj, ok := r.(map[string]interface{}); ok {
+			if kind, ok := obj["kind"].(string); ok && kind == string(cfv0.RulesetKindManaged) {
+				continue
+			}
+		}
+		filtered = append(filtered, r)
+	}
+	*response = filtered
+}
 
 func processCustomCasesV5(response *[]interface{}, resourceType string, pathParam string) {
 	resourceCount := len(*response)
@@ -548,6 +579,7 @@ func getAPIResponse(result *http.Response, pathParams []string, endpoints ...str
 				log.Fatalf("failed to unmarshal result: %s", err)
 			}
 
+			dropUnmanageableResources(&jsonStructData, resourceType)
 			processCustomCasesV5(&jsonStructData, resourceType, param)
 			allResults = append(allResults, jsonStructData...)
 

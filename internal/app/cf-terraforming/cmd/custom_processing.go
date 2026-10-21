@@ -159,7 +159,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 	case "cloudflare_api_shield_schema":
 		remapProperty(response, resourceCount, "source", "file")
 	case "cloudflare_api_shield_discovery_operation":
-		remapProperty(response, resourceCount, "id", "operation_id")
+		remapProperty(response, resourceCount, "id", "discovery_id")
 	case "cloudflare_zero_trust_dlp_predefined_profile":
 		addAttributeKeyValue(response, resourceCount, "profile_id", pathParam)
 	case "cloudflare_zero_trust_access_identity_provider":

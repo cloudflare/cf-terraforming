@@ -1,5 +1,7 @@
 ## Unreleased
 
+- deps: build with Go 1.27.3, which distrusts a set of intermediate certificate authorities that have been revoked for CA compromise. The distrust list is compiled into the binary, so affected chains are rejected regardless of the host's system trust store.
+
 ## 0.29.0 (September 1st, 2026)
 
 - deps: bump `cloudflare-go` to v0.118.0 to preserve `content_converter` for `cloudflare_ruleset` `http_config_settings` `set_config` rules ([#995](https://github.com/cloudflare/cf-terraforming/pull/995), [#996](https://github.com/cloudflare/cf-terraforming/pull/996))

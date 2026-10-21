@@ -52,6 +52,10 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			(*response)[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
 				"payload": payload,
 			}}
+			// provider v5.28.0 added a top-level 'payload' attribute to the
+			// schema, so the original is no longer filtered out and would be
+			// emitted alongside 'body'.
+			delete((*response)[i].(map[string]interface{}), "payload")
 		}
 	case "cloudflare_zero_trust_device_default_profile_local_domain_fallback":
 		// wrap the response in 'domains' for tf

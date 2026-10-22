@@ -334,7 +334,6 @@ func TestResourceGenerationV5(t *testing.T) {
 		"cloudflare pages domain":                            {identiferType: "account", resourceType: "cloudflare_pages_domain", testdataFilename: "cloudflare_pages_domain", cliFlags: "cloudflare_pages_domain=ykfjmcgpfs"},
 		"cloudflare pages project":                           {identiferType: "account", resourceType: "cloudflare_pages_project", testdataFilename: "cloudflare_pages_project"},
 		"cloudflare page shield policy":                      {identiferType: "zone", resourceType: "cloudflare_page_shield_policy", testdataFilename: "cloudflare_page_shield_policy"},
-		"cloudflare registrar domain":                        {identiferType: "account", resourceType: "cloudflare_registrar_domain", testdataFilename: "cloudflare_registrar_domain"},
 		"cloudflare rate limit":                              {identiferType: "zone", resourceType: "cloudflare_rate_limit", testdataFilename: "cloudflare_rate_limit"},
 		"cloudflare r2 bucket":                               {identiferType: "account", resourceType: "cloudflare_r2_bucket", testdataFilename: "cloudflare_r2_bucket"},
 		"cloudflare r2 managed domain":                       {identiferType: "account", resourceType: "cloudflare_r2_managed_domain", testdataFilename: "cloudflare_r2_managed_domain", cliFlags: "cloudflare_r2_managed_domain=jb-test-bucket,bnfywlzwpt"},

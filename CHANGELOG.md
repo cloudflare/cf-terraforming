@@ -1,5 +1,9 @@
 ## Unreleased
 
+- deps: build with Go 1.27.3, which distrusts a set of intermediate certificate authorities that have been revoked for CA compromise. The distrust list is compiled into the binary, so affected chains are rejected regardless of the host's system trust store.
+- generate: emit `discovery_id` instead of `operation_id` for `cloudflare_api_shield_discovery_operation`, matching the attribute rename in provider v5.28.0. Generated configuration for this resource was rejected by `terraform validate` against provider v5.28.0 and later.
+- generate: drop v5 support for `cloudflare_registrar_domain`. Provider v5.28.0 removed the resource, so there is no schema to generate against. v4 output is unaffected.
+
 ## 0.29.0 (September 1st, 2026)
 
 - deps: bump `cloudflare-go` to v0.118.0 to preserve `content_converter` for `cloudflare_ruleset` `http_config_settings` `set_config` rules ([#995](https://github.com/cloudflare/cf-terraforming/pull/995), [#996](https://github.com/cloudflare/cf-terraforming/pull/996))

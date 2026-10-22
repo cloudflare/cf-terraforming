@@ -52,6 +52,10 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 			(*response)[i].(map[string]interface{})["body"] = []interface{}{map[string]interface{}{
 				"payload": payload,
 			}}
+			// provider v5.28.0 added a top-level 'payload' attribute to the
+			// schema, so the original is no longer filtered out and would be
+			// emitted alongside 'body'.
+			delete((*response)[i].(map[string]interface{}), "payload")
 		}
 	case "cloudflare_zero_trust_device_default_profile_local_domain_fallback":
 		// wrap the response in 'domains' for tf
@@ -130,8 +134,6 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 		remapProperty(response, resourceCount, "id", "setting_id")
 	case "cloudflare_hostname_tls_setting":
 		addAttributeKeyValue(response, resourceCount, "setting_id", pathParam)
-	case "cloudflare_registrar_domain":
-		remapProperty(response, resourceCount, "name", "domain_name")
 	case "cloudflare_r2_managed_domain":
 		addAttributeKeyValue(response, resourceCount, "bucket_name", pathParam)
 	case "cloudflare_r2_custom_domain":
@@ -159,7 +161,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 	case "cloudflare_api_shield_schema":
 		remapProperty(response, resourceCount, "source", "file")
 	case "cloudflare_api_shield_discovery_operation":
-		remapProperty(response, resourceCount, "id", "operation_id")
+		remapProperty(response, resourceCount, "id", "discovery_id")
 	case "cloudflare_zero_trust_dlp_predefined_profile":
 		addAttributeKeyValue(response, resourceCount, "profile_id", pathParam)
 	case "cloudflare_zero_trust_access_identity_provider":

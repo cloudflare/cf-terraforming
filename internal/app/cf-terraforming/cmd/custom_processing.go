@@ -157,7 +157,7 @@ func processCustomCasesV5(response *[]interface{}, resourceType string, pathPara
 	case "cloudflare_pages_domain":
 		addAttributeKeyValue(response, resourceCount, "project_name", pathParam)
 	case "cloudflare_list_item":
-		remapProperty(response, resourceCount, "id", "list_id")
+		addAttributeKeyValue(response, resourceCount, "list_id", pathParam)
 	case "cloudflare_api_shield_schema":
 		remapProperty(response, resourceCount, "source", "file")
 	case "cloudflare_api_shield_discovery_operation":

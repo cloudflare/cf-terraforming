@@ -975,16 +975,20 @@ func generateResources() func(cmd *cobra.Command, args []string) {
 						}
 					}
 
-					sort.Slice(jsonPayload, func(i, j int) bool {
-						return jsonPayload[i].Phase < jsonPayload[j].Phase
-					})
-
 					resourceCount = len(jsonPayload)
 					m, _ := json.Marshal(jsonPayload)
 					err = json.Unmarshal(m, &jsonStructData)
 					if err != nil {
 						log.Fatal(err)
 					}
+
+					// Sort after unmarshalling rather than on the typed slice so
+					// that this is the same comparator `import` applies, rather
+					// than a second implementation of it that can drift.
+					// Ordering is position-independent for everything below:
+					// ruleHeaders is keyed by rule ID, and resourceCount is a
+					// length, which sorting does not change.
+					sortResourcesForStableNaming(&jsonStructData, resourceType)
 
 					if strings.HasPrefix(providerVersionString, "5") {
 						for i := 0; i < resourceCount; i++ {

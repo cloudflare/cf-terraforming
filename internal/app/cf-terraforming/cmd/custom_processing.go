@@ -66,8 +66,19 @@ func dropUnmanageableResources(response *[]interface{}, resourceType string) {
 
 	filtered := make([]interface{}, 0, len(*response))
 	for _, r := range *response {
-		if stringAttr(r, "kind") == string(cfv0.RulesetKindManaged) {
+		kind := stringAttr(r, "kind")
+		if kind == string(cfv0.RulesetKindManaged) {
 			continue
+		}
+		if kind == "" {
+			// Failing open means an unexpected payload keeps its rows, but a
+			// managed ruleset that reaches here would be given an import
+			// address that `generate` does not emit. Say so rather than
+			// letting it pass silently.
+			log.WithFields(logrus.Fields{
+				"resource": resourceType,
+				"id":       stringAttr(r, "id"),
+			}).Warn(`ruleset has no usable "kind"; keeping it, but if it is Cloudflare-managed it cannot be imported and will not appear in generated configuration`)
 		}
 		filtered = append(filtered, r)
 	}

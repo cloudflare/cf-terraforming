@@ -1,10 +1,13 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 
+	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDropUnmanageableResources(t *testing.T) {
@@ -58,13 +61,16 @@ func TestSortResourcesForStableNaming(t *testing.T) {
 	}
 
 	t.Run("orders by phase", func(t *testing.T) {
+		// IDs are deliberately anti-correlated with phase order: sorting by id
+		// alone would give [a b c], so this fails if the phase key is ever lost
+		// and the comparator silently falls through to the tiebreak.
 		response := []interface{}{
-			map[string]interface{}{"id": "c", "phase": "http_response_headers_transform"},
-			map[string]interface{}{"id": "a", "phase": "http_request_firewall_custom"},
+			map[string]interface{}{"id": "a", "phase": "http_response_headers_transform"},
+			map[string]interface{}{"id": "c", "phase": "http_request_firewall_custom"},
 			map[string]interface{}{"id": "b", "phase": "http_request_late_transform"},
 		}
 		sortResourcesForStableNaming(&response, "cloudflare_ruleset")
-		assert.Equal(t, []string{"a", "b", "c"}, ids(response))
+		assert.Equal(t, []string{"c", "b", "a"}, ids(response))
 	})
 
 	t.Run("breaks ties on id so phase need not be unique", func(t *testing.T) {
@@ -117,6 +123,68 @@ func TestSortResourcesForStableNaming(t *testing.T) {
 		})
 		assert.Len(t, response, 3)
 	})
+}
+
+// TestSortOperatesOnMarshalledRulesetShape pins the contract between the
+// cloudflare-go Ruleset struct and sortResourcesForStableNaming.
+//
+// `generate` sorts jsonStructData after a marshal/unmarshal round-trip of
+// []cfv0.Ruleset, whereas `import` sorts the raw API JSON. The helper is only
+// genuinely shared if the sort keys survive both routes under the same names:
+// if the SDK ever renames or restructures these fields, stringAttr would return
+// "" for every row, the generate-side sort would silently become a no-op, and
+// the two subcommands would drift apart again with no test failing.
+//
+// No cassette currently contains more than one non-managed ruleset, so this is
+// the only coverage of ordering against the real payload shape.
+func TestSortOperatesOnMarshalledRulesetShape(t *testing.T) {
+	ids := func(response []interface{}) []string {
+		out := make([]string, 0, len(response))
+		for _, r := range response {
+			out = append(out, stringAttr(r, "id"))
+		}
+		return out
+	}
+
+	// IDs are deliberately anti-correlated with phase order. Sorting by id
+	// alone yields [aaa bbb ccc], so if the phase key stopped resolving the
+	// comparator would fall through to the tiebreak and produce a different
+	// result than the assertion below. Without this the test would pass
+	// vacuously on a broken sort.
+	//
+	// The generate path: typed SDK structs through a JSON round-trip.
+	typed := []cfv0.Ruleset{
+		{ID: "aaa", Phase: "http_request_late_transform", Kind: "zone"},
+		{ID: "ccc", Phase: "http_request_firewall_custom", Kind: "zone"},
+		{ID: "bbb", Phase: "http_request_firewall_custom", Kind: "zone"},
+	}
+	var generateSide []interface{}
+	m, err := json.Marshal(typed)
+	require.NoError(t, err)
+	require.NoError(t, json.Unmarshal(m, &generateSide))
+
+	// The keys the helper reads must exist after the round-trip. Without this
+	// the ordering assertion below could pass vacuously on an unsorted list.
+	first, ok := generateSide[0].(map[string]interface{})
+	require.True(t, ok)
+	require.Contains(t, first, "id", "sort key must survive the SDK round-trip")
+	require.Contains(t, first, "phase", "sort key must survive the SDK round-trip")
+
+	// The import path: the same objects as raw API JSON, in a different order.
+	var importSide []interface{}
+	require.NoError(t, json.Unmarshal([]byte(`[
+		{"id":"bbb","kind":"zone","phase":"http_request_firewall_custom"},
+		{"id":"aaa","kind":"zone","phase":"http_request_late_transform"},
+		{"id":"ccc","kind":"zone","phase":"http_request_firewall_custom"}
+	]`), &importSide))
+
+	sortResourcesForStableNaming(&generateSide, "cloudflare_ruleset")
+	sortResourcesForStableNaming(&importSide, "cloudflare_ruleset")
+
+	// Phase primary, id tiebreak - and crucially, identical across both shapes.
+	assert.Equal(t, []string{"bbb", "ccc", "aaa"}, ids(generateSide))
+	assert.Equal(t, ids(generateSide), ids(importSide),
+		"generate and import must order the same rulesets identically despite arriving via different clients")
 }
 
 // TestImportGenerateParity is the regression test for the reported bug: the two

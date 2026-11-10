@@ -1,3 +1,17 @@
+## 0.31.0 (November 10th, 2026)
+
+- fix(import): align `cloudflare_ruleset` enumeration with `generate`. Under provider v5, the
+  managed-ruleset filter in `import` was unreachable — the v5 path returned early into a generic
+  REST branch, leaving the filter stranded in the v4 branch as dead code. `import` therefore
+  emitted one block per row of the raw `/rulesets` listing, including read-only Cloudflare-managed
+  rulesets that cannot be managed in Terraform. Independently, `generate` sorted rulesets by phase
+  before assigning the `_<n>` address suffix while `import` never sorted, so addresses diverged
+  even when the two agreed on the set. Both defects are fixed with shared helpers
+  (`dropUnmanageableResources`, `sortResourcesForStableNaming`) called from both code paths, so
+  the set and ordering have a single definition and cannot drift again. The sort is stable and uses
+  the ruleset ID as a tiebreak, which also makes `generate` output deterministic at account scope
+  where multiple rulesets can share a phase. ([#1008](https://github.com/cloudflare/cf-terraforming/pull/1008), fixes [#938](https://github.com/cloudflare/cf-terraforming/issues/938), [#970](https://github.com/cloudflare/cf-terraforming/issues/970), [#985](https://github.com/cloudflare/cf-terraforming/issues/985))
+
 ## 0.30.0 (October 22nd, 2026)
 
 - deps: build with Go 1.27.3, which distrusts a set of intermediate certificate authorities that have been revoked for CA compromise. The distrust list is compiled into the binary, so affected chains are rejected regardless of the host's system trust store.

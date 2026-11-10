@@ -12,12 +12,102 @@ import (
 	"sort"
 	"strings"
 
+	cfv0 "github.com/cloudflare/cloudflare-go"
 	"github.com/cloudflare/cloudflare-go/v4"
 
 	"github.com/sirupsen/logrus"
 
 	"github.com/tidwall/gjson"
 )
+
+// `generate` and `import` must agree on two things for the import blocks they
+// emit to be usable: *which* objects exist, and in *what order* they are
+// enumerated. The generated resource address embeds the list position
+// (`terraform_managed_resource_<id>_<n>`), so any disagreement on either point
+// renames every resource after the first divergence and the import blocks end
+// up pointing at addresses that `generate` never wrote.
+//
+// Both subcommands derive that set and that order independently, which is how
+// they drifted apart. The helpers below are the single definition of both, so
+// the two paths cannot disagree again without someone deleting a call site.
+
+// stringAttr reads a string attribute from an unmarshalled API object,
+// returning "" when the row is not an object or the key is absent or not a
+// string.
+func stringAttr(v interface{}, key string) string {
+	obj, ok := v.(map[string]interface{})
+	if !ok {
+		return ""
+	}
+	s, _ := obj[key].(string)
+	return s
+}
+
+// dropUnmanageableResources removes objects the API returns but the provider
+// cannot manage, so that `import` enumerates the same set as `generate`.
+//
+// Cloudflare's managed rulesets (DDoS L7, Managed Rules, OWASP) are read-only.
+// `generate` has excluded them since the v4 SDK path was written, and `import`
+// has the same filter, but under provider v5 that filter sits in the legacy
+// branch and is never reached: v5 returns early into getAPIResponse instead.
+// The result is an import block for every managed ruleset, naming a resource
+// address that `generate` never emitted.
+//
+// The test is a positive match on the managed kind rather than a negative match
+// on every other kind, so a payload that omits `kind` keeps its rows instead of
+// losing all of them. It fails open, not closed.
+//
+// Calling this on already-filtered data (the v4 path, which filters in its own
+// switch) is a no-op, so it is safe on both provider versions.
+func dropUnmanageableResources(response *[]interface{}, resourceType string) {
+	if resourceType != "cloudflare_ruleset" {
+		return
+	}
+
+	filtered := make([]interface{}, 0, len(*response))
+	for _, r := range *response {
+		kind := stringAttr(r, "kind")
+		if kind == string(cfv0.RulesetKindManaged) {
+			continue
+		}
+		if kind == "" {
+			// Failing open means an unexpected payload keeps its rows, but a
+			// managed ruleset that reaches here would be given an import
+			// address that `generate` does not emit. Say so rather than
+			// letting it pass silently.
+			log.WithFields(logrus.Fields{
+				"resource": resourceType,
+				"id":       stringAttr(r, "id"),
+			}).Warn(`ruleset has no usable "kind"; keeping it, but if it is Cloudflare-managed it cannot be imported and will not appear in generated configuration`)
+		}
+		filtered = append(filtered, r)
+	}
+	*response = filtered
+}
+
+// sortResourcesForStableNaming imposes a deterministic total order on the
+// response so that both subcommands assign the same `_<n>` suffix to the same
+// object.
+//
+// `generate` has always sorted rulesets by phase; `import` never sorted at all,
+// so even where the two agreed on the set they disagreed on the numbering. Phase
+// is kept as the primary key to preserve the existing `generate` output order,
+// with the ruleset ID as a tiebreak: phase is not unique at account scope, and
+// the previous sort.Slice is not stable, so `generate` was also capable of
+// renaming its own resources between runs.
+func sortResourcesForStableNaming(response *[]interface{}, resourceType string) {
+	if resourceType != "cloudflare_ruleset" {
+		return
+	}
+
+	sort.SliceStable(*response, func(i, j int) bool {
+		a, b := (*response)[i], (*response)[j]
+		if pa, pb := stringAttr(a, "phase"), stringAttr(b, "phase"); pa != pb {
+			return pa < pb
+		}
+		return stringAttr(a, "id") < stringAttr(b, "id")
+	})
+}
 
 func processCustomCasesV5(response *[]interface{}, resourceType string, pathParam string) {
 	resourceCount := len(*response)

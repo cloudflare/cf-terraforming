@@ -723,6 +723,14 @@ func runImport() func(cmd *cobra.Command, args []string) {
 			}
 		}
 
+		// Bring the enumeration into line with `generate` before any resource
+		// addresses are derived from it. Under provider v5 the managed-ruleset
+		// filter in the v4 branch above is unreachable, and `import` has never
+		// sorted, so both the set and the ordering have to be corrected here or
+		// the `_<n>` suffixes below will not match the generated config.
+		dropUnmanageableResources(&jsonStructData, resourceType)
+		sortResourcesForStableNaming(&jsonStructData, resourceType)
+
 		importFile := hclwrite.NewEmptyFile()
 		importBody := importFile.Body()
 		for i, data := range jsonStructData {

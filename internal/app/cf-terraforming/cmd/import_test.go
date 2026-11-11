@@ -231,3 +231,167 @@ func TestResourceImportV5(t *testing.T) {
 		})
 	}
 }
+
+// TestIdentifierFromResponse covers API responses whose identifier is not named
+// "id". Before these overrides existed such entries fell through to the account
+// or zone ID, so every object of the type produced the same import id and the
+// same resource name -- a set of import blocks that is individually plausible and
+// collectively wrong.
+func TestIdentifierFromResponse(t *testing.T) {
+	for name, tc := range map[string]struct {
+		resourceType string
+		data         map[string]interface{}
+		want         string
+	}{
+		"r2 bucket uses name": {
+			"cloudflare_r2_bucket",
+			map[string]interface{}{"name": "carnival-storage"},
+			"carnival-storage",
+		},
+		"device profile uses policy_id": {
+			"cloudflare_zero_trust_device_custom_profile",
+			map[string]interface{}{"policy_id": "d7d8f9", "name": "figge Barracuda"},
+			"d7d8f9",
+		},
+		"web analytics site uses site_tag": {
+			"cloudflare_web_analytics_site",
+			map[string]interface{}{"site_tag": "abc123"},
+			"abc123",
+		},
+		"dex test uses test_id": {
+			"cloudflare_zero_trust_dex_test",
+			map[string]interface{}{"test_id": "t-1"},
+			"t-1",
+		},
+		"no override for the type": {
+			"cloudflare_healthcheck",
+			map[string]interface{}{"name": "should-not-be-used"},
+			"",
+		},
+		"override field absent": {
+			"cloudflare_r2_bucket",
+			map[string]interface{}{"creation_date": "2024-01-01"},
+			"",
+		},
+		"override field is nil": {
+			"cloudflare_r2_bucket",
+			map[string]interface{}{"name": nil},
+			"",
+		},
+		"override field is not a string": {
+			"cloudflare_r2_bucket",
+			map[string]interface{}{"name": 42},
+			"",
+		},
+	} {
+		t.Run(name, func(t *testing.T) {
+			if got := identifierFromResponse(tc.resourceType, tc.data); got != tc.want {
+				t.Fatalf("identifierFromResponse(%q) = %q, want %q", tc.resourceType, got, tc.want)
+			}
+		})
+	}
+}
+
+// TestResourceIDFieldOverridesHaveImportFormats guards against an override being
+// added for a type that has no import format, which would make the override
+// unreachable.
+func TestResourceIDFieldOverridesHaveImportFormats(t *testing.T) {
+	for resourceType := range resourceIDFieldOverrides {
+		format, ok := resourceImportStringFormats[resourceType]
+		if !ok {
+			t.Errorf("%s has an id-field override but no import format", resourceType)
+			continue
+		}
+		if !strings.Contains(format, ":id") {
+			t.Errorf("%s has an id-field override but its import format %q does not use :id, "+
+				"so the override can never be needed", resourceType, format)
+		}
+	}
+}
+
+// TestHCLSafeIdentifier covers identifiers taken from fields that are not
+// restricted to HCL identifier syntax. An R2 bucket name may contain a dot; a
+// resource name is not a quoted string, so an unsanitised value produces a file
+// that will not parse.
+func TestHCLSafeIdentifier(t *testing.T) {
+	for in, want := range map[string]string{
+		"carnival-storage":   "carnival-storage",
+		"my.bucket.name":     "my_bucket_name",
+		"with space":         "with_space",
+		"weird/slash":        "weird_slash",
+		"unicode-ü":          "unicode-_",
+		"d7d8f9":             "d7d8f9",
+		"already_underscore": "already_underscore",
+	} {
+		if got := hclSafeIdentifier(in); got != want {
+			t.Errorf("hclSafeIdentifier(%q) = %q, want %q", in, got, want)
+		}
+	}
+}
+
+// TestScopeAddressedImportAddress covers resources whose endpoint carries only a
+// scope placeholder. They are addressed by that scope -- one object per zone or
+// per account -- so the import id is the scope id, not the object's own
+// identifier. Filling the placeholder with the resource id gave every zone the
+// same value (a setting name such as "tiered_cache_smart_topology_enable"), so
+// all 71 zones emitted an identical import block pointing at the wrong object.
+func TestScopeAddressedImportAddress(t *testing.T) {
+	origZone, origAccount, origVer := zoneID, accountID, providerVersionString
+	defer func() { zoneID, accountID, providerVersionString = origZone, origAccount, origVer }()
+	providerVersionString = "5.25.0"
+
+	t.Run("zone-scoped endpoint yields the zone id", func(t *testing.T) {
+		zoneID, accountID = "1667ec320268781cb9093ce7c26671a1", ""
+		got := buildRawImportAddress(
+			"cloudflare_tiered_cache",
+			"tiered_cache_smart_topology_enable", // the object's own id, not a zone
+			"/zones/{zone_id}/argo/tiered_caching",
+		)
+		if got != zoneID {
+			t.Errorf("got %q, want the zone id %q", got, zoneID)
+		}
+	})
+
+	t.Run("account-scoped endpoint yields the bare account id", func(t *testing.T) {
+		zoneID, accountID = "", "26623f66627d356f8c299268bc81465b"
+		got := buildRawImportAddress(
+			"cloudflare_zero_trust_organization",
+			accountID,
+			"/{accounts_or_zones}/{account_or_zone_id}/access/organizations",
+		)
+		// The provider's format is "{account_id}" -- one segment. An
+		// "accounts/<id>" prefix is two and is rejected outright.
+		if got != accountID {
+			t.Errorf("got %q, want the bare account id %q with no prefix", got, accountID)
+		}
+	})
+
+	t.Run("an endpoint with a real object placeholder is unaffected", func(t *testing.T) {
+		zoneID, accountID = "", "26623f66627d356f8c299268bc81465b"
+		got := buildRawImportAddress(
+			"cloudflare_zero_trust_device_custom_profile",
+			"policy-123",
+			"/accounts/{account_id}/devices/policy/{policy_id}",
+		)
+		want := accountID + "/policy-123"
+		if got != want {
+			t.Errorf("got %q, want %q", got, want)
+		}
+	})
+}
+
+// TestScopeAddressedIdentifier covers the naming half: a scope-addressed resource
+// must be named after its scope, or every zone produces the same Terraform
+// address and the output will not parse regardless of the import ids.
+func TestScopeAddressedIdentifier(t *testing.T) {
+	origZone, origAccount := zoneID, accountID
+	defer func() { zoneID, accountID = origZone, origAccount }()
+
+	zoneID, accountID = "1667ec320268781cb9093ce7c26671a1", ""
+	if got := scopeAddressedIdentifier("/zones/{zone_id}/argo/tiered_caching"); got != zoneID {
+		t.Errorf("zone-scoped: got %q, want %q", got, zoneID)
+	}
+	if got := scopeAddressedIdentifier("/zones/{zone_id}/rulesets/{ruleset_id}"); got != "" {
+		t.Errorf("object placeholder present: got %q, want \"\"", got)
+	}
+}

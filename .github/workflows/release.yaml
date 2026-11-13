@@ -27,3 +27,28 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ env.VERSION }}
+      - name: Notify GChat
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GCHAT_WEBHOOK: ${{ secrets.GCHAT_RELEASE_WEBHOOK }}
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          RELEASE=$(gh api repos/${{ github.repository }}/releases/tags/$TAG)
+          URL=$(echo "$RELEASE" | jq -r '.html_url')
+          AUTHOR=$(echo "$RELEASE" | jq -r '.author.login')
+          BODY=$(echo "$RELEASE" | jq -r '.body' \
+            | tr -d '\r' \
+            | sed 's/^## \(.*\)$/\*\1\*/' \
+            | sed 's/^### \(.*\)$/\*\1\*/' \
+            | sed 's/\*\*\([^*]*\)\*\*/\*\1\*/' \
+            | sed 's/^\* /• /' \
+            | sed 's/^- /• /')
+          printf '%s' "🚀 *A new release was published:*
+*${{ github.repository }}* ${TAG} — ${URL}
+${BODY}
+Released by @${AUTHOR}" \
+            | jq -Rs '{"text": .}' \
+            | curl -s -X POST "$GCHAT_WEBHOOK" \
+              -H 'Content-Type: application/json' \
+              -d @-

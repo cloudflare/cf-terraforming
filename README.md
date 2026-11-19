@@ -79,6 +79,9 @@ cf-terraforming generate \
   --zone $CLOUDFLARE_ZONE_ID
 ```
 
+> [!NOTE]
+> Examples in this README target v5 of the Cloudflare Terraform provider. If you are using v4, use `cloudflare_record` instead of `cloudflare_dns_record`.
+
 cf-terraforming supports the following environment variables:
 
 - CLOUDFLARE_API_TOKEN - API Token based authentication

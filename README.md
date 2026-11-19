@@ -75,9 +75,12 @@ export CLOUDFLARE_ZONE_ID='81b06ss3228f488fh84e5e993c2dc17'
 
 # now call cf-terraforming, e.g.
 cf-terraforming generate \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --zone $CLOUDFLARE_ZONE_ID
 ```
+
+> [!NOTE]
+> Examples in this README target v5 of the Cloudflare Terraform provider. If you are using v4, use `cloudflare_record` instead of `cloudflare_dns_record`.
 
 cf-terraforming supports the following environment variables:
 
@@ -100,20 +103,22 @@ token: "<token>"
 ```bash
 cf-terraforming generate \
   --zone $CLOUDFLARE_ZONE_ID \
-  --resource-type "cloudflare_record"
+  --resource-type "cloudflare_dns_record"
 ```
 
 will contact the Cloudflare API on your behalf and result in a valid Terraform
 configuration representing the **resource** you requested:
 
 ```hcl
-resource "cloudflare_record" "terraform_managed_resource" {
-  name = "example.com"
-  proxied = false
-  ttl = 120
-  type = "A"
-  value = "198.51.100.4"
-  zone_id = "0da42c8d2132a9ddaf714f9e7c920711"
+resource "cloudflare_dns_record" "terraform_managed_resource" {
+  content  = "198.51.100.4"
+  name     = "example.com"
+  proxied  = false
+  tags     = []
+  ttl      = 120
+  type     = "A"
+  zone_id  = "0da42c8d2132a9ddaf714f9e7c920711"
+  settings = {}
 }
 ```
 
@@ -178,7 +183,7 @@ output your resources.
 ```
 # All versions of Terraform
 cf-terraforming import \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --email $CLOUDFLARE_EMAIL \
   --key $CLOUDFLARE_API_KEY \
   --zone $CLOUDFLARE_ZONE_ID
@@ -187,7 +192,7 @@ cf-terraforming import \
 ```
 # Terraform 1.5+ only
 cf-terraforming import \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --modern-import-block \
   --email $CLOUDFLARE_EMAIL \
   --key $CLOUDFLARE_API_KEY \
@@ -217,7 +222,7 @@ Example:
 
 ```
 cf-terraforming generate \
-  --resource-type "cloudflare_record" \
+  --resource-type "cloudflare_dns_record" \
   --zone "0da42c8d2132a9ddaf714f9e7c920711" \
 | cdktf convert --language "typescript" --provider "cloudflare/cloudflare"
 ```

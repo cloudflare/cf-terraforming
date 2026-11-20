@@ -1,7 +1,7 @@
 resource "cloudflare_list_item" "terraform_managed_resource" {
   account_id = "f037e56e89293a057740de681ac9abbe"
   comment    = "okhejrsmza"
-  list_id    = "6cafa626bdb6453fac7a9be3aacf73ca"
+  list_id    = "2a4b8b2017aa4b3cb9e1151b52c81d22"
   redirect = {
     include_subdomains    = false
     preserve_path_suffix  = false
